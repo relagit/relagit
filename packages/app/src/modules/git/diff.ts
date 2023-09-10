@@ -1,5 +1,5 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import parseGitDiff from 'parse-git-diff';
 

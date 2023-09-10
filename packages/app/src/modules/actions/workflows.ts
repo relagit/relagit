@@ -1,6 +1,6 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
-const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
 
 const swc = window.Native.libraries.swc;
 

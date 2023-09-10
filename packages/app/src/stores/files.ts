@@ -1,6 +1,6 @@
 import { GenericStore } from '.';
 
-const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export interface IFile {
 	id: number;

@@ -1,8 +1,8 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-import { Git } from './core';
 import { ERROR_IDENTIFIERS } from './constants';
+import { Git } from './core';
 
 export const Content = async (file: string, repoPath: string, source?: string) => {
 	if (!file || !repoPath) {

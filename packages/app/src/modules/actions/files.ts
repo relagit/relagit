@@ -1,6 +1,7 @@
-const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs').promises;
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs')
+	.promises as typeof import('fs').promises;
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import RepositoryStore, { IRepository } from '@stores/repository';
 import LocationStore from '@stores/location';

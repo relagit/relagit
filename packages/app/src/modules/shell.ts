@@ -1,5 +1,6 @@
-const shell: typeof import('electron').shell =
-	window.Native.DANGEROUS__NODE__REQUIRE('electron:shell');
+const shell = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:shell'
+) as typeof import('electron').shell;
 
 export const openExternal = (url: string) => {
 	shell.openExternal(url);

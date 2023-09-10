@@ -1,5 +1,6 @@
-const ipcRenderer: typeof import('electron/renderer').ipcRenderer =
-	window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:ipcRenderer'
+) as typeof import('electron').ipcRenderer;
 
 import { Show, createEffect, createSignal, JSX } from 'solid-js';
 

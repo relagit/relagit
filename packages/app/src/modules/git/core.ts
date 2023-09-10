@@ -1,7 +1,9 @@
 import { ExecException } from 'child_process';
 
-const child_process = window.Native.DANGEROUS__NODE__REQUIRE('child_process');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+const child_process = window.Native.DANGEROUS__NODE__REQUIRE(
+	'child_process'
+) as typeof import('child_process');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 export interface IGitParams {
 	directory: string;

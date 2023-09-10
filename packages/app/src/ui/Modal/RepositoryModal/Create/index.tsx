@@ -1,4 +1,4 @@
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import { Signal, createEffect, createSignal } from 'solid-js';
 

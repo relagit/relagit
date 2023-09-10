@@ -1,4 +1,4 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
