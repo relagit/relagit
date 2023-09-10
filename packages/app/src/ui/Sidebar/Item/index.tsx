@@ -3,8 +3,8 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
 import LocationStore from '@stores/location';
+import { debug } from '@modules/logger';
 import FileStore from '@stores/files';
-import { log } from '@modules/logger';
 
 import type { IFile } from '@stores/files';
 
@@ -28,8 +28,6 @@ export default (props: IFile) => {
 					label: `${props.staged ? 'Unstage' : 'Stage'} Changes`,
 					type: 'item',
 					onClick: () => {
-						log('Toggling staged status for', props.name, 'in', props.path);
-
 						FileStore.toggleStaged(selected().path, props);
 					}
 				},
@@ -78,7 +76,7 @@ export default (props: IFile) => {
 				data-active={selectedFile() === props}
 				data-status={props.status}
 				onClick={() => {
-					log('Transitioning to file', props.name, 'in', props.path);
+					debug('Transitioning to file', props.name, 'in', props.path);
 					LocationStore.setSelectedFile(props);
 				}}
 			>
@@ -93,8 +91,6 @@ export default (props: IFile) => {
 				</div>
 				<button
 					onClick={() => {
-						log('Toggling staged status for', props.name, 'in', props.path);
-
 						FileStore.toggleStaged(selected().path, props);
 					}}
 					class={`sidebar__item__status ${props.status} ${props.staged ? 'staged' : ''}`}

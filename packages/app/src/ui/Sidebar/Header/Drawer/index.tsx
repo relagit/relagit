@@ -6,9 +6,9 @@ import { showItemInFolder } from '@modules/shell';
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
 import { renderDate } from '@modules/time';
+import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
-import { log } from '@modules/logger';
 
 import RepositoryModal from '@ui/Modal/RepositoryModal';
 import Button from '@ui/Common/Button';
@@ -108,14 +108,16 @@ export default (props: IHeaderDrawerProps) => {
 										}}
 										onClick={() => {
 											props.open[1](false);
-											log('Transitioning to repository: ' + repository.name);
+											debug(
+												'Transitioning to repository: ' + repository.name
+											);
 											LocationStore.setSelectedRepository(repository);
 										}}
 									>
 										{repository.name}
 										<div class="sidebar__drawer__body__content__item__details">
 											{repository.branch} -{' '}
-											{renderDate(repository.lastFetched)}
+											{renderDate(repository.lastFetched)()}
 										</div>
 									</button>
 								</Menu>

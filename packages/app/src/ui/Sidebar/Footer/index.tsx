@@ -46,18 +46,10 @@ export default () => {
 				value={summary()}
 				placeholder={commitMessage().message || 'Summary'}
 				onChange={(value) => {
-					console.log(commitMessage().style, settings().get('enforceCommitMessageStyle'));
-
 					if (
 						settings().get('enforceCommitMessageStyle') === true &&
 						commitMessage().style !== 'none'
 					) {
-						console.log(commitMessage().style);
-						console.log(value);
-						console.log(
-							validateCommitMessage(value, commitMessage().style as CommitStyle)
-						);
-
 						const allowed = validateCommitMessage(
 							value,
 							commitMessage().style as CommitStyle

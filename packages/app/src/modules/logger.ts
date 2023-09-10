@@ -9,3 +9,9 @@ export const error = (...message: unknown[]) => {
 export const warn = (...message: unknown[]) => {
 	console.warn(`%c[RelaGit] ${message.join(' ')}`, 'color: #e5c062;');
 };
+
+export const debug = (...message: unknown[]) => {
+	if (__NODE_ENV__ === 'development') {
+		log(...message);
+	}
+};

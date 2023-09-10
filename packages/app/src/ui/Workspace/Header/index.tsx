@@ -4,12 +4,12 @@ import { refetchRepository } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import { renderDate } from '@modules/time';
-import Tooltip from '@ui/Common/Tooltip';
+import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
-import { log } from '@modules/logger';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
+import Tooltip from '@ui/Common/Tooltip';
 
 import './index.scss';
 
@@ -78,7 +78,7 @@ export default () => {
 	return (
 		<div class="workspace__header">
 			<PanelButton
-				detail={renderDate(repository()?.lastFetched)}
+				detail={renderDate(repository()?.lastFetched)()}
 				label="Sync"
 				icon="sync"
 				id="workspace-fetch-changes-and-remote"
@@ -138,11 +138,11 @@ export default () => {
 					const aob = repository()?.aheadOrBehind || 0;
 
 					if (aob < 0) {
-						return log('Pulling changes');
+						return debug('Pulling changes');
 					}
 
 					if (aob > 0) {
-						log('Pushing changes');
+						debug('Pushing changes');
 
 						await Git.Push(LocationStore.selectedRepository);
 
