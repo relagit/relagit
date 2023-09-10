@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import babelPresetEnv from '@babel/preset-env';
 import * as starryNight from '@wooorm/starry-night';
-import * as babel from '@babel/core';
+import * as swc from '@swc/core';
+
 import { Workflow } from '~/app/src/modules/actions';
 
 export const Native = {
@@ -16,8 +16,7 @@ export const Native = {
 	},
 	libraries: {
 		starryNight,
-		babel,
-		babelPresetEnv
+		swc
 	},
 	listeners: {
 		SETTINGS: (fn: () => void) => {

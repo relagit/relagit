@@ -2,8 +2,7 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
-const babelPresetEnv = window.Native.libraries.babelPresetEnv;
-const babel = window.Native.libraries.babel;
+const swc = window.Native.libraries.swc;
 
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
@@ -126,9 +125,8 @@ export const loadWorkflows = () => {
 				'exports',
 				'module',
 				'console',
-				babel.transformSync(data, {
-					presets: [babelPresetEnv]
-				}).code + '\n\nreturn module.exports || exports.default || exports || null;'
+				swc.transformSync(data, {}).code +
+					'\n\nreturn module.exports || exports.default || exports || null;'
 			);
 
 			const workflow = fn(require, {}, {}, makeConsole(path.basename(workflowPath)));

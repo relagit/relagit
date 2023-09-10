@@ -21,7 +21,7 @@ export default defineConfig({
 		format: 'cjs',
 		dir: path.resolve('dist')
 	},
-	external: Module.builtinModules.concat(['electron']),
+	external: Module.builtinModules.concat(['electron', '@swc/core']),
 	plugins: [
 		commonjs(),
 		replace({
