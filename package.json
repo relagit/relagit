@@ -3,6 +3,7 @@
 	"description": "Take back control over your git workflow.",
 	"main": "./dist/main.js",
 	"type": "module",
+	"packageManager": "pnpm@7.29.1",
 	"scripts": {
 		"dev": "rollup -c -w",
 		"build": "rollup -c",
