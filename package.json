@@ -5,6 +5,7 @@
 	"type": "module",
 	"version": "0.0.0",
 	"packageManager": "pnpm@7.29.1",
+	"license": "LUCEL",
 	"scripts": {
 		"dev": "rollup -c -w",
 		"build": "rollup -c",
