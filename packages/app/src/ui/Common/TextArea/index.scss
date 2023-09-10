@@ -1,0 +1,44 @@
+.textarea {
+    background-color: var(--bg-primary);
+    color: var(--color-primary);
+    max-height: 36px;
+    min-height: 36px;
+    border-radius: 2px;
+    padding: 10px;
+    font-size: 13px;
+    resize: none;
+    font-family: var(--font-primary);
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    &.expanded {
+        overflow-y: auto;
+        white-space: normal;
+        max-height: 100%;
+        min-height: 36px;
+        height: auto;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &::placeholder {
+        color: var(--color-primary);
+        opacity: 0.3;
+    }
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--bg-hover);
+        border-radius: 4px;
+    }
+}

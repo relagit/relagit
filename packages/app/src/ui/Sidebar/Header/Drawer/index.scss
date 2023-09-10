@@ -1,0 +1,100 @@
+.sidebar__drawer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: var(--bg-tertiary);
+    border-right: 1px solid var(--separator-primary);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: calc(100% - 72px);
+    width: 350px;
+    justify-content: space-between;
+    padding-top: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out;
+    margin-top: 72px;
+
+    &.open {
+        transform: translateX(0);
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+
+        &__header {
+            font-weight: 450;
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--color-primary);
+
+            &__button {
+                height: 16px;
+                font-size: 14px;
+                background-color: transparent;
+                color: var(--color-secondary);
+                transition: color 0.2s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--color-primary);
+                }
+            }
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            overflow-y: auto;
+
+            &::-webkit-scrollbar {
+                width: 0;
+            }
+
+            &__item {
+                background-color: transparent;
+                border: none;
+                color: var(--color-primary);
+                font-size: 14px;
+                font-weight: 400;
+                padding: 10px 20px;
+                width: 100%;
+                display: flex;
+                gap: 4px;
+                flex-direction: column;
+                cursor: pointer;
+                transition: background-color 0.2s ease-in-out;
+
+                &:not(:last-child) {
+                    border-bottom: 1px solid var(--separator-secondary);
+                }
+
+                &:hover {
+                    background-color: var(--bg-hover);
+                }
+
+                &.selected {
+                    background-color: var(--bg-active);
+                }
+
+                &__details {
+                    font-size: 12px;
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+
+    &__footer {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

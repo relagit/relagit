@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"baseUrl": "src",
+		"jsx": "preserve",
+		"target": "es2022",
+		"jsxImportSource": "solid-js",
+		"esModuleInterop": true,
+		"paths": {
+			"@app/*": ["./*"],
+			"@ui/*": ["./ui/*"],
+			"@stores/*": ["./stores/*"],
+			"@modules/*": ["./modules/*"],
+			"~/*": ["../../*"]
+		}
+	}
+}

@@ -1,0 +1,177 @@
+@use 'illyrica/primitives' as illyrica;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+@mixin lightTheme {
+	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
+	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
+
+	--color-primary: #{illyrica.$base-dark-grey};
+	--color-secondary: #{illyrica.$base-grey};
+	--color-label: #{illyrica.$base-grey};
+	--color-link: #{illyrica.$color-blue-500};
+	--color-error: #{illyrica.$color-red-500};
+	--color-success: #{illyrica.$color-green-500};
+	--color-warning: #{illyrica.$color-yellow-500};
+
+	--status-added: #{illyrica.$color-green-500};
+	--status-modified: #{illyrica.$color-yellow-500};
+	--status-deleted: #{illyrica.$color-red-500};
+	--status-untracked: #{illyrica.$color-blue-500};
+
+	--bg-primary: #{illyrica.$material-primary};
+	--bg-secondary: #{illyrica.$material-secondary};
+	--bg-tertiary: #{illyrica.$material-tertiary};
+	--bg-quaternary: #{illyrica.$material-quaternary};
+	--bg-quinary: #{illyrica.$material-quinary};
+	--bg-senary: #{illyrica.$material-senary};
+	--bg-material: var(--bg-tertiary);
+	--bg-floating: var(--bg-secondary);
+	--bg-brand: #{illyrica.$color-blue-500};
+	--bg-hover: #{illyrica.$base-lighter-grey};
+	--bg-active: #{illyrica.$base-light-grey};
+	--bg-error: rgba(227, 83, 83, 0.05);
+	--bg-error-solid: rgba(227, 83, 83, 0.2);
+	--bg-success: rgba(82, 228, 82, 0.05);
+	--bg-success-solid: rgba(82, 228, 82, 0.2);
+	--bg-warning: rgba(236, 197, 118, 0.05);
+	--bg-warning-solid: rgba(236, 197, 118, 0.2);
+	--bg-diff-add: var(--bg-success);
+	--bg-diff-add-solid: var(--bg-success-solid);
+	--bg-diff-del: var(--bg-error);
+	--bg-diff-del-solid: var(--bg-error-solid);
+
+	--separator-primary: #{illyrica.$base-light-grey};
+	--separator-secondary: #{illyrica.$base-lighter-grey};
+}
+
+@mixin darkTheme {
+	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
+	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
+
+	--color-primary: #{illyrica.$dark-base-dark-grey};
+	--color-secondary: #{illyrica.$dark-base-grey};
+	--color-label: #{illyrica.$dark-base-grey};
+	--color-link: #{illyrica.$color-blue-500};
+	--color-error: #{illyrica.$color-red-500};
+	--color-success: #{illyrica.$color-green-500};
+	--color-warning: #{illyrica.$color-yellow-500};
+
+	--status-added: #{illyrica.$color-green-800};
+	--status-modified: #{illyrica.$color-yellow-800};
+	--status-deleted: #{illyrica.$color-red-800};
+	--status-untracked: #{illyrica.$color-blue-800};
+
+	--bg-primary: #{illyrica.$dark-material-primary};
+	--bg-secondary: #{illyrica.$dark-material-secondary};
+	--bg-tertiary: #{illyrica.$dark-material-tertiary};
+	--bg-quaternary: #{illyrica.$dark-material-quaternary};
+	--bg-quinary: #{illyrica.$dark-material-quinary};
+	--bg-senary: #{illyrica.$dark-material-senary};
+	--bg-material: var(--bg-tertiary);
+	--bg-floating: var(--bg-secondary);
+	--bg-brand: #{illyrica.$color-blue-500};
+	--bg-hover: #{illyrica.$dark-base-lighter-grey};
+	--bg-active: #{illyrica.$dark-base-light-grey};
+	--bg-error: rgba(227, 83, 83, 0.05);
+	--bg-error-solid: rgba(227, 83, 83, 0.2);
+	--bg-success: rgba(82, 228, 82, 0.05);
+	--bg-success-solid: rgba(82, 228, 82, 0.2);
+	--bg-warning: rgba(236, 197, 118, 0.05);
+	--bg-warning-solid: rgba(236, 197, 118, 0.2);
+
+	--bg-diff-add: var(--bg-success);
+	--bg-diff-add-solid: var(--bg-success-solid);
+	--bg-diff-del: var(--bg-error);
+	--bg-diff-del-solid: var(--bg-error-solid);
+
+	--separator-primary: #{illyrica.$dark-base-light-grey};
+	--separator-secondary: #{illyrica.$dark-base-lighter-grey};
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+.theme-dark {
+	@include darkTheme;
+}
+
+.theme-light {
+	@include lightTheme;
+}
+
+@media (prefers-color-scheme: dark) {
+	.theme-system {
+		@include darkTheme;
+	}
+}
+
+@media (prefers-color-scheme: light) {
+	.theme-system {
+		@include lightTheme;
+	}
+}
+
+html {
+	overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+#app-container {
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	color: var(--color-primary);
+	font-family: var(--font-primary);
+}
+
+.scroller {
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--bg-secondary) var(--bg-floating);
+
+	&.hide-bar {
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+
+	&::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: var(--bg-primary);
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--bg-secondary);
+		border-radius: 6px;
+		border: 3px solid var(--bg-primary);
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background-color: var(--bg-secondary-hover);
+	}
+
+	&::-webkit-scrollbar-thumb:active {
+		background-color: var(--bg-secondary-active);
+	}
+}
