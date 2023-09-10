@@ -1,6 +1,6 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/relagit/.github/main/assets/relagit-light.svg#gh-dark-mode-only" height="200" alt="Logo">
-    <img src="https://raw.githubusercontent.com/relagit/.github/main/assets/relagit-dark.svg#gh-light-mode-only" height="200" alt="Logo">
+    <img src="https://rela.dev/assets/projects/client-dark.png#gh-dark-mode-only" alt="RelaGit Client (dark)">
+    <img src="https://rela.dev/assets/projects/client-light.png#gh-light-mode-only" alt="RelaGit Client (light)">
 </p>
 
 # relagit
