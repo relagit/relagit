@@ -67,10 +67,12 @@ const extnames = (str: string) => {
 	const extenstions = str.split('.');
 	extenstions.shift();
 
-	return `.${extenstions.join('.')}`;
+	return `${extenstions.join('.')}`;
 };
 
 export const loadWorkflows = () => {
+	console.log('Loading workflows');
+
 	if (!fs.existsSync(__WORKFLOWS_PATH__)) {
 		fs.mkdirSync(__WORKFLOWS_PATH__);
 	}
@@ -81,7 +83,11 @@ export const loadWorkflows = () => {
 
 	let _workflows = fs.readdirSync(__WORKFLOWS_PATH__);
 
-	_workflows = _workflows.filter((workflow) => extnames(workflow) === '.js');
+	_workflows = _workflows.filter(
+		(workflow) => ['ts', 'js'].includes(extnames(workflow)) && !workflow.endsWith('.d.ts')
+	);
+
+	console.log(_workflows);
 
 	for (const workflowPath of _workflows) {
 		try {
@@ -125,8 +131,18 @@ export const loadWorkflows = () => {
 				'exports',
 				'module',
 				'console',
-				swc.transformSync(data, {}).code +
-					'\n\nreturn module.exports || exports.default || exports || null;'
+				swc.transformSync(data, {
+					jsc: {
+						parser: {
+							syntax: 'typescript'
+						}
+					},
+					filename: workflowPath,
+					sourceMaps: true,
+					module: {
+						type: 'commonjs'
+					}
+				}).code + '\n\nreturn module.exports || exports.default || exports || null;'
 			);
 
 			const workflow = fn(require, {}, {}, makeConsole(path.basename(workflowPath)));
