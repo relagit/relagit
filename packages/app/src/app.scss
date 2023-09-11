@@ -89,6 +89,10 @@
 
 	--separator-primary: #{illyrica.$dark-base-light-grey};
 	--separator-secondary: #{illyrica.$dark-base-lighter-grey};
+
+	.switch label .check .slider {
+		background-color: transparent !important;
+	}
 }
 
 * {

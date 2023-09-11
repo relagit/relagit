@@ -70,15 +70,6 @@
 			flex-direction: column;
 			gap: 10px;
 		}
-
-		&__textarea {
-			margin-inline: 1px;
-			outline: var(--separator-secondary) solid 1px;
-
-			&:focus {
-				outline: var(--separator-primary) solid 1px;
-			}
-		}
 	}
 }
 
@@ -177,11 +168,30 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 40px;
-			height: 20px;
+			min-width: 40px;
+			max-width: 40px;
+			height: 22px;
 			border-radius: 20px;
 			transition: background-color 0.2s ease-in-out;
-			border: 1px solid var(--separator-secondary);
+
+			color: var(--switch-color);
+			background: var(--switch-bg);
+			border: 1px solid var(--switch-stroke);
+
+			--switch-color: var(--color-primary);
+			--switch-bg: var(--bg-tertiary);
+			--switch-thumb: var(--bg-senary);
+			--switch-stroke: var(--separator-primary);
+			--switch-focus: #{illyrica.$color-blue-500};
+
+			&:focus {
+				border-color: transparent;
+				outline: 1px solid var(--switch-focus);
+			}
+
+			&:hover {
+				--switch-bg: var(--bg-quaternary);
+			}
 
 			input {
 				position: absolute;
@@ -193,20 +203,20 @@
 				position: absolute;
 				top: 3px;
 				left: 3px;
-				width: 12px;
-				height: 12px;
-				border: 1px solid var(--separator-primary);
+				width: 14px;
+				height: 14px;
+				border: 1px solid var(--switch-stroke);
+				background-color: var(--switch-thumb);
 				border-radius: 50%;
 				transition: 0.2s cubic-bezier(0, 0, 0.52, 0.96);
 			}
 
 			&.selected {
-				background-color: var(--bg-active);
+				--switch-stroke: #{illyrica.$color-blue-500};
+				--switch-thumb: #{illyrica.$color-blue-300};
 
 				.slider {
-					border-color: transparent;
-					transform: translateX(20px);
-					background-color: rgb(255 255 255 / 0.5);
+					transform: translateX(18px);
 				}
 			}
 		}
