@@ -70,15 +70,13 @@ const extnames = (str: string) => {
 	return `${extenstions.join('.')}`;
 };
 
-export const loadWorkflows = () => {
-	console.log('Loading workflows');
-
+export const loadWorkflows = async () => {
 	if (!fs.existsSync(__WORKFLOWS_PATH__)) {
 		fs.mkdirSync(__WORKFLOWS_PATH__);
 	}
 
 	if (!fs.existsSync(path.join(__WORKFLOWS_PATH__, 'index.d.ts'))) {
-		fs.writeFileSync(path.join(__WORKFLOWS_PATH__, 'index.d.ts'), defFile);
+		await fs.promises.writeFile(path.join(__WORKFLOWS_PATH__, 'index.d.ts'), defFile);
 	}
 
 	let _workflows = fs.readdirSync(__WORKFLOWS_PATH__);
@@ -86,8 +84,6 @@ export const loadWorkflows = () => {
 	_workflows = _workflows.filter(
 		(workflow) => ['ts', 'js'].includes(extnames(workflow)) && !workflow.endsWith('.d.ts')
 	);
-
-	console.log(_workflows);
 
 	for (const workflowPath of _workflows) {
 		try {
@@ -124,7 +120,10 @@ export const loadWorkflows = () => {
 				}
 			};
 
-			const data = fs.readFileSync(path.join(__WORKFLOWS_PATH__, workflowPath), 'utf8');
+			const data = await fs.promises.readFile(
+				path.join(__WORKFLOWS_PATH__, workflowPath),
+				'utf8'
+			);
 
 			const fn = new Function(
 				'require',
