@@ -5,7 +5,6 @@ import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import { renderDate } from '@modules/time';
 import { debug } from '@modules/logger';
-import LayerStore from '@stores/layer';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
@@ -148,14 +147,6 @@ export default () => {
 				}}
 			/>
 			<div class="workspace__header__spacer" />
-			<PanelButton
-				icon="gear"
-				iconVariant={24}
-				id="app-settings"
-				onClick={() => {
-					LayerStore.setVisible('settings', true);
-				}}
-			/>
 		</div>
 	);
 };

@@ -97,9 +97,7 @@ export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const close = () => LayerStore.setVisible('settings', false);
-	const expand = () => {
-		SettingsStore.setSetting('expandedSettings', !settings().get('expandedSettings'));
-	};
+
 	const listener = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
 			close();
@@ -119,17 +117,6 @@ export default () => {
 			<div class="settings-layer__title">
 				<h1>Settings</h1>
 				<div class="settings-layer__title__buttons">
-					<button class="settings-layer__title__buttons__expand" onClick={expand}>
-						<Icon
-							size={24}
-							variant={24}
-							name={
-								settings().get('expandedSettings')
-									? 'arrow-down-left'
-									: 'arrow-up-right'
-							}
-						/>
-					</button>
 					<button class="settings-layer__title__buttons__close" onClick={close}>
 						<Icon size={24} variant={24} name="x-circle" />
 					</button>
