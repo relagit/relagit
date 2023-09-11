@@ -1,78 +1,78 @@
 .sidebar__item {
-    height: 36px;
-    display: flex;
-    font-weight: 400;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px 0 8px;
-    border-bottom: 1px solid var(--separator-secondary);
-    transition: background-color 0.2s ease-in-out;
-    overflow: hidden;
+	height: 36px;
+	display: flex;
+	font-weight: 400;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 16px 0 8px;
+	border-bottom: 1px solid var(--separator-secondary);
+	transition: background-color 0.2s ease-in-out;
+	overflow: hidden;
 
-    &:hover {
-        background-color: var(--bg-hover);
-    }
+	&:hover {
+		background-color: var(--bg-hover);
+	}
 
-    &.active {
-        background-color: var(--bg-active);
-    }
+	&.active {
+		background-color: var(--bg-active);
+	}
 
-    &[data-status="untracked"] {
-        .sidebar__item__filename {
-            opacity: 0.6;
-        }
-    }
+	&[data-status='untracked'] {
+		.sidebar__item__filename {
+			opacity: 0.6;
+		}
+	}
 
-    &__filename {
-        color: var(--color-primary);
-        font-size: 14px;
-        font-weight: 400;
-        margin-left: 8px;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        width: 100%;
+	&__filename {
+		color: var(--color-primary);
+		font-size: 14px;
+		font-weight: 400;
+		margin-left: 8px;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		width: 100%;
 
-        &__path {
-            opacity: 0.6;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+		&__path {
+			opacity: 0.6;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-        &__name {
-            &__separator {
-                opacity: 0.6;
-            }
-        }
-    }
+		&__name {
+			&__separator {
+				opacity: 0.6;
+			}
+		}
+	}
 
-    &__status {
-        font-family: var(--font-mono);
-        background: transparent;
-        margin-left: 20px;
-        opacity: 0.3;
-        cursor: pointer;
+	&__status {
+		font-family: var(--font-mono);
+		background: transparent;
+		margin-left: 20px;
+		opacity: 0.3;
+		cursor: pointer;
 
-        &.staged {
-            opacity: 1;
-        }
+		&.staged {
+			opacity: 1;
+		}
 
-        &.added {
-            color: var(--status-added);
-        }
+		&.added {
+			color: var(--status-added);
+		}
 
-        &.modified {
-            color: var(--status-modified);
-        }
+		&.modified {
+			color: var(--status-modified);
+		}
 
-        &.deleted {
-            color: var(--status-deleted);
-        }
+		&.deleted {
+			color: var(--status-deleted);
+		}
 
-        &.untracked,
-        &.unknown {
-            color: var(--status-untracked);
-        }
-    }
+		&.untracked,
+		&.unknown {
+			color: var(--status-untracked);
+		}
+	}
 }

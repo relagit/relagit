@@ -1,21 +1,23 @@
 .sidebar__footer {
-    padding: 20px;
-    height: 265px;
-    border-top: 1px solid var(--separator-primary);
-    flex-direction: column;
-    display: flex;
-    gap: 10px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: 1;
-    background-color: transparent;
-    transition: bottom 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	padding: 20px;
+	height: 265px;
+	border-top: 1px solid var(--separator-primary);
+	flex-direction: column;
+	display: flex;
+	gap: 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 1;
+	background-color: transparent;
+	transition:
+		bottom 0.5s ease-in-out,
+		opacity 0.5s ease-in-out;
 
-    &.hidden {
-        bottom: -225px;
-        opacity: 0.5;
-        pointer-events: none;
-    }
+	&.hidden {
+		bottom: -225px;
+		opacity: 0.5;
+		pointer-events: none;
+	}
 }

@@ -1,45 +1,45 @@
 .sidebar {
-    min-width: 350px;
-    width: 350px;
-    height: 100vh;
-    background-color: var(--bg-material);
-    position: relative;
-    overflow: hidden;
-    border-right: 1px solid var(--separator-primary);
+	min-width: 350px;
+	width: 350px;
+	height: 100vh;
+	background-color: var(--bg-material);
+	position: relative;
+	overflow: hidden;
+	border-right: 1px solid var(--separator-primary);
 
-    &__items {
-        height: calc(100% - 350px);
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 0;
-        margin: 0;
+	&__items {
+		height: calc(100% - 350px);
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding: 0;
+		margin: 0;
 
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
 }
 
 .theme-dark.vibrancy .sidebar {
-    background-color: #1a1b1cab;
+	background-color: #1a1b1cab;
 }
 
 .theme-light.vibrancy .sidebar {
-    background-color: #f6f8fad4;
+	background-color: #f6f8fad4;
 }
 
 @media (prefers-color-scheme: dark) {
-    .theme-system.vibrancy .sidebar {
-        background-color: #1a1b1cab;
-    }
+	.theme-system.vibrancy .sidebar {
+		background-color: #1a1b1cab;
+	}
 }
 
 @media (prefers-color-scheme: light) {
-    .theme-system.vibrancy .sidebar {
-        background-color: transparent;
-    }
+	.theme-system.vibrancy .sidebar {
+		background-color: transparent;
+	}
 
-    .theme-light.vibrancy .sidebar {
-        background-color: transparent;
-    }
+	.theme-light.vibrancy .sidebar {
+		background-color: transparent;
+	}
 }

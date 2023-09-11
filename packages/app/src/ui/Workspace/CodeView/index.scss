@@ -1,104 +1,104 @@
 .codeview {
-    overflow: hidden auto;
-    display: flex;
-    font-family: var(--font-mono);
-    font-variant-ligatures: none;
-    font-size: 11px;
-    width: 100%;
-    height: 100%;
-    overflow-x: auto;
-    flex-direction: column;
+	overflow: hidden auto;
+	display: flex;
+	font-family: var(--font-mono);
+	font-variant-ligatures: none;
+	font-size: 11px;
+	width: 100%;
+	height: 100%;
+	overflow-x: auto;
+	flex-direction: column;
 
-    &-image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        gap: 40px;
-    }
+	&-image {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		gap: 40px;
+	}
 
-    &::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-        border-left: 1px solid var(--separator-primary);
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+		border-left: 1px solid var(--separator-primary);
 
-        &-track {
-            background: #1e1e1e;
-        }
+		&-track {
+			background: #1e1e1e;
+		}
 
-        &-thumb {
-            background: #2e2e2e;
-            border-radius: 10px;
-            border: 3px solid #1e1e1e;
-        }
+		&-thumb {
+			background: #2e2e2e;
+			border-radius: 10px;
+			border: 3px solid #1e1e1e;
+		}
 
-        &-thumb:hover {
-            background: #3e3e3e;
-        }
-    }
+		&-thumb:hover {
+			background: #3e3e3e;
+		}
+	}
 
-    &__line {
-        width: 100%;
-        position: relative;
-        display: flex;
-        align-items: center;
-        height: 20px;
-        z-index: 2;
-        background-color: var(--bg-c);
+	&__line {
+		width: 100%;
+		position: relative;
+		display: flex;
+		align-items: center;
+		height: 20px;
+		z-index: 2;
+		background-color: var(--bg-c);
 
-        &.deleted {
-            --bg-c: var(--bg-diff-del);
-            --bg-c-hover: var(--bg-diff-del-solid);
-        }
+		&.deleted {
+			--bg-c: var(--bg-diff-del);
+			--bg-c-hover: var(--bg-diff-del-solid);
+		}
 
-        &.added {
-            --bg-c: var(--bg-diff-add);
-            --bg-c-hover: var(--bg-diff-add-solid);
-        }
+		&.added {
+			--bg-c: var(--bg-diff-add);
+			--bg-c-hover: var(--bg-diff-add-solid);
+		}
 
-        &:hover {
-            background-color: var(--bg-c-hover);
-        }
+		&:hover {
+			background-color: var(--bg-c-hover);
+		}
 
-        &__content {
-            padding-left: 10px;
-            z-index: 1;
-            font-family: var(--font-mono);
-            font-variant-ligatures: none;
-            height: fit-content;
-            width: 100%;
-        }
+		&__content {
+			padding-left: 10px;
+			z-index: 1;
+			font-family: var(--font-mono);
+			font-variant-ligatures: none;
+			height: fit-content;
+			width: 100%;
+		}
 
-        &__number {
-            height: 20px;
-            min-width: 35px;
-            display: flex;
-            align-items: center;
-            padding-right: 5px;
-            opacity: 0.5;
-            justify-content: flex-end;
-            background-color: var(--bg-c-hover);
-            border-right: 1px solid var(--separator-secondary);
-        }
+		&__number {
+			height: 20px;
+			min-width: 35px;
+			display: flex;
+			align-items: center;
+			padding-right: 5px;
+			opacity: 0.5;
+			justify-content: flex-end;
+			background-color: var(--bg-c-hover);
+			border-right: 1px solid var(--separator-secondary);
+		}
 
-        &.message {
-            min-height: 30px;
-            --bg-c: var(--bg-secondary);
-            --bg-c-hover: var(--bg-secondary);
+		&.message {
+			min-height: 30px;
+			--bg-c: var(--bg-secondary);
+			--bg-c-hover: var(--bg-secondary);
 
-            .codeview__line__number {
-                min-width: 70px;
-                justify-content: center;
-                padding: 0;
-                border-right: none;
-                background-color: transparent;
-            }
+			.codeview__line__number {
+				min-width: 70px;
+				justify-content: center;
+				padding: 0;
+				border-right: none;
+				background-color: transparent;
+			}
 
-            .codeview__line__content {
-                opacity: 0.5;
-            }
-        }
-    }
+			.codeview__line__content {
+				opacity: 0.5;
+			}
+		}
+	}
 }
 
 /* This is a theme distributed by `starry-night`.
@@ -106,166 +106,166 @@
 * See <https://github.com/wooorm/starry-night> for more info. */
 
 .theme-dark {
-    --color-prettylights-syntax-comment: #8b949e;
-    --color-prettylights-syntax-constant: #79c0ff;
-    --color-prettylights-syntax-entity: #d2a8ff;
-    --color-prettylights-syntax-storage-modifier-import: #c9d1d9;
-    --color-prettylights-syntax-entity-tag: #7ee787;
-    --color-prettylights-syntax-keyword: #ff7b72;
-    --color-prettylights-syntax-string: #a5d6ff;
-    --color-prettylights-syntax-variable: #ffa657;
-    --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
-    --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
-    --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
-    --color-prettylights-syntax-carriage-return-text: #f0f6fc;
-    --color-prettylights-syntax-carriage-return-bg: #b62324;
-    --color-prettylights-syntax-string-regexp: #7ee787;
-    --color-prettylights-syntax-markup-list: #f2cc60;
-    --color-prettylights-syntax-markup-heading: #1f6feb;
-    --color-prettylights-syntax-markup-italic: #c9d1d9;
-    --color-prettylights-syntax-markup-bold: #c9d1d9;
-    --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
-    --color-prettylights-syntax-markup-deleted-bg: #67060c;
-    --color-prettylights-syntax-markup-inserted-text: #aff5b4;
-    --color-prettylights-syntax-markup-inserted-bg: #033a16;
-    --color-prettylights-syntax-markup-changed-text: #ffdfb6;
-    --color-prettylights-syntax-markup-changed-bg: #5a1e02;
-    --color-prettylights-syntax-markup-ignored-text: #c9d1d9;
-    --color-prettylights-syntax-markup-ignored-bg: #1158c7;
-    --color-prettylights-syntax-meta-diff-range: #d2a8ff;
-    --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
-    --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
-    --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
+	--color-prettylights-syntax-comment: #8b949e;
+	--color-prettylights-syntax-constant: #79c0ff;
+	--color-prettylights-syntax-entity: #d2a8ff;
+	--color-prettylights-syntax-storage-modifier-import: #c9d1d9;
+	--color-prettylights-syntax-entity-tag: #7ee787;
+	--color-prettylights-syntax-keyword: #ff7b72;
+	--color-prettylights-syntax-string: #a5d6ff;
+	--color-prettylights-syntax-variable: #ffa657;
+	--color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
+	--color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
+	--color-prettylights-syntax-invalid-illegal-bg: #8e1519;
+	--color-prettylights-syntax-carriage-return-text: #f0f6fc;
+	--color-prettylights-syntax-carriage-return-bg: #b62324;
+	--color-prettylights-syntax-string-regexp: #7ee787;
+	--color-prettylights-syntax-markup-list: #f2cc60;
+	--color-prettylights-syntax-markup-heading: #1f6feb;
+	--color-prettylights-syntax-markup-italic: #c9d1d9;
+	--color-prettylights-syntax-markup-bold: #c9d1d9;
+	--color-prettylights-syntax-markup-deleted-text: #ffdcd7;
+	--color-prettylights-syntax-markup-deleted-bg: #67060c;
+	--color-prettylights-syntax-markup-inserted-text: #aff5b4;
+	--color-prettylights-syntax-markup-inserted-bg: #033a16;
+	--color-prettylights-syntax-markup-changed-text: #ffdfb6;
+	--color-prettylights-syntax-markup-changed-bg: #5a1e02;
+	--color-prettylights-syntax-markup-ignored-text: #c9d1d9;
+	--color-prettylights-syntax-markup-ignored-bg: #1158c7;
+	--color-prettylights-syntax-meta-diff-range: #d2a8ff;
+	--color-prettylights-syntax-brackethighlighter-angle: #8b949e;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
+	--color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --color-prettylights-syntax-comment: #8b949e;
-        --color-prettylights-syntax-constant: #79c0ff;
-        --color-prettylights-syntax-entity: #d2a8ff;
-        --color-prettylights-syntax-storage-modifier-import: #c9d1d9;
-        --color-prettylights-syntax-entity-tag: #7ee787;
-        --color-prettylights-syntax-keyword: #ff7b72;
-        --color-prettylights-syntax-string: #a5d6ff;
-        --color-prettylights-syntax-variable: #ffa657;
-        --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
-        --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
-        --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
-        --color-prettylights-syntax-carriage-return-text: #f0f6fc;
-        --color-prettylights-syntax-carriage-return-bg: #b62324;
-        --color-prettylights-syntax-string-regexp: #7ee787;
-        --color-prettylights-syntax-markup-list: #f2cc60;
-        --color-prettylights-syntax-markup-heading: #1f6feb;
-        --color-prettylights-syntax-markup-italic: #c9d1d9;
-        --color-prettylights-syntax-markup-bold: #c9d1d9;
-        --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
-        --color-prettylights-syntax-markup-deleted-bg: #67060c;
-        --color-prettylights-syntax-markup-inserted-text: #aff5b4;
-        --color-prettylights-syntax-markup-inserted-bg: #033a16;
-        --color-prettylights-syntax-markup-changed-text: #ffdfb6;
-        --color-prettylights-syntax-markup-changed-bg: #5a1e02;
-        --color-prettylights-syntax-markup-ignored-text: #c9d1d9;
-        --color-prettylights-syntax-markup-ignored-bg: #1158c7;
-        --color-prettylights-syntax-meta-diff-range: #d2a8ff;
-        --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
-        --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
-        --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
-    }
+	:root {
+		--color-prettylights-syntax-comment: #8b949e;
+		--color-prettylights-syntax-constant: #79c0ff;
+		--color-prettylights-syntax-entity: #d2a8ff;
+		--color-prettylights-syntax-storage-modifier-import: #c9d1d9;
+		--color-prettylights-syntax-entity-tag: #7ee787;
+		--color-prettylights-syntax-keyword: #ff7b72;
+		--color-prettylights-syntax-string: #a5d6ff;
+		--color-prettylights-syntax-variable: #ffa657;
+		--color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
+		--color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
+		--color-prettylights-syntax-invalid-illegal-bg: #8e1519;
+		--color-prettylights-syntax-carriage-return-text: #f0f6fc;
+		--color-prettylights-syntax-carriage-return-bg: #b62324;
+		--color-prettylights-syntax-string-regexp: #7ee787;
+		--color-prettylights-syntax-markup-list: #f2cc60;
+		--color-prettylights-syntax-markup-heading: #1f6feb;
+		--color-prettylights-syntax-markup-italic: #c9d1d9;
+		--color-prettylights-syntax-markup-bold: #c9d1d9;
+		--color-prettylights-syntax-markup-deleted-text: #ffdcd7;
+		--color-prettylights-syntax-markup-deleted-bg: #67060c;
+		--color-prettylights-syntax-markup-inserted-text: #aff5b4;
+		--color-prettylights-syntax-markup-inserted-bg: #033a16;
+		--color-prettylights-syntax-markup-changed-text: #ffdfb6;
+		--color-prettylights-syntax-markup-changed-bg: #5a1e02;
+		--color-prettylights-syntax-markup-ignored-text: #c9d1d9;
+		--color-prettylights-syntax-markup-ignored-bg: #1158c7;
+		--color-prettylights-syntax-meta-diff-range: #d2a8ff;
+		--color-prettylights-syntax-brackethighlighter-angle: #8b949e;
+		--color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
+		--color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
+	}
 }
 
 .theme-light {
-    --color-prettylights-syntax-comment: #6e7781;
-    --color-prettylights-syntax-constant: #0550ae;
-    --color-prettylights-syntax-entity: #8250df;
-    --color-prettylights-syntax-storage-modifier-import: #24292f;
-    --color-prettylights-syntax-entity-tag: #116329;
-    --color-prettylights-syntax-keyword: #cf222e;
-    --color-prettylights-syntax-string: #0a3069;
-    --color-prettylights-syntax-variable: #953800;
-    --color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
-    --color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
-    --color-prettylights-syntax-invalid-illegal-bg: #82071e;
-    --color-prettylights-syntax-carriage-return-text: #f6f8fa;
-    --color-prettylights-syntax-carriage-return-bg: #cf222e;
-    --color-prettylights-syntax-string-regexp: #116329;
-    --color-prettylights-syntax-markup-list: #3b2300;
-    --color-prettylights-syntax-markup-heading: #0550ae;
-    --color-prettylights-syntax-markup-italic: #24292f;
-    --color-prettylights-syntax-markup-bold: #24292f;
-    --color-prettylights-syntax-markup-deleted-text: #82071e;
-    --color-prettylights-syntax-markup-deleted-bg: #ffebe9;
-    --color-prettylights-syntax-markup-inserted-text: #116329;
-    --color-prettylights-syntax-markup-inserted-bg: #dafbe1;
-    --color-prettylights-syntax-markup-changed-text: #953800;
-    --color-prettylights-syntax-markup-changed-bg: #ffd8b5;
-    --color-prettylights-syntax-markup-ignored-text: #eaeef2;
-    --color-prettylights-syntax-markup-ignored-bg: #0550ae;
-    --color-prettylights-syntax-meta-diff-range: #8250df;
-    --color-prettylights-syntax-brackethighlighter-angle: #57606a;
-    --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
-    --color-prettylights-syntax-constant-other-reference-link: #0a3069;
+	--color-prettylights-syntax-comment: #6e7781;
+	--color-prettylights-syntax-constant: #0550ae;
+	--color-prettylights-syntax-entity: #8250df;
+	--color-prettylights-syntax-storage-modifier-import: #24292f;
+	--color-prettylights-syntax-entity-tag: #116329;
+	--color-prettylights-syntax-keyword: #cf222e;
+	--color-prettylights-syntax-string: #0a3069;
+	--color-prettylights-syntax-variable: #953800;
+	--color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
+	--color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
+	--color-prettylights-syntax-invalid-illegal-bg: #82071e;
+	--color-prettylights-syntax-carriage-return-text: #f6f8fa;
+	--color-prettylights-syntax-carriage-return-bg: #cf222e;
+	--color-prettylights-syntax-string-regexp: #116329;
+	--color-prettylights-syntax-markup-list: #3b2300;
+	--color-prettylights-syntax-markup-heading: #0550ae;
+	--color-prettylights-syntax-markup-italic: #24292f;
+	--color-prettylights-syntax-markup-bold: #24292f;
+	--color-prettylights-syntax-markup-deleted-text: #82071e;
+	--color-prettylights-syntax-markup-deleted-bg: #ffebe9;
+	--color-prettylights-syntax-markup-inserted-text: #116329;
+	--color-prettylights-syntax-markup-inserted-bg: #dafbe1;
+	--color-prettylights-syntax-markup-changed-text: #953800;
+	--color-prettylights-syntax-markup-changed-bg: #ffd8b5;
+	--color-prettylights-syntax-markup-ignored-text: #eaeef2;
+	--color-prettylights-syntax-markup-ignored-bg: #0550ae;
+	--color-prettylights-syntax-meta-diff-range: #8250df;
+	--color-prettylights-syntax-brackethighlighter-angle: #57606a;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+	--color-prettylights-syntax-constant-other-reference-link: #0a3069;
 }
 
 @media (prefers-color-scheme: light) {
-    :root {
-        --color-prettylights-syntax-comment: #6e7781;
-        --color-prettylights-syntax-constant: #0550ae;
-        --color-prettylights-syntax-entity: #8250df;
-        --color-prettylights-syntax-storage-modifier-import: #24292f;
-        --color-prettylights-syntax-entity-tag: #116329;
-        --color-prettylights-syntax-keyword: #cf222e;
-        --color-prettylights-syntax-string: #0a3069;
-        --color-prettylights-syntax-variable: #953800;
-        --color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
-        --color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
-        --color-prettylights-syntax-invalid-illegal-bg: #82071e;
-        --color-prettylights-syntax-carriage-return-text: #f6f8fa;
-        --color-prettylights-syntax-carriage-return-bg: #cf222e;
-        --color-prettylights-syntax-string-regexp: #116329;
-        --color-prettylights-syntax-markup-list: #3b2300;
-        --color-prettylights-syntax-markup-heading: #0550ae;
-        --color-prettylights-syntax-markup-italic: #24292f;
-        --color-prettylights-syntax-markup-bold: #24292f;
-        --color-prettylights-syntax-markup-deleted-text: #82071e;
-        --color-prettylights-syntax-markup-deleted-bg: #ffebe9;
-        --color-prettylights-syntax-markup-inserted-text: #116329;
-        --color-prettylights-syntax-markup-inserted-bg: #dafbe1;
-        --color-prettylights-syntax-markup-changed-text: #953800;
-        --color-prettylights-syntax-markup-changed-bg: #ffd8b5;
-        --color-prettylights-syntax-markup-ignored-text: #eaeef2;
-        --color-prettylights-syntax-markup-ignored-bg: #0550ae;
-        --color-prettylights-syntax-meta-diff-range: #8250df;
-        --color-prettylights-syntax-brackethighlighter-angle: #57606a;
-        --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
-        --color-prettylights-syntax-constant-other-reference-link: #0a3069;
-    }
+	:root {
+		--color-prettylights-syntax-comment: #6e7781;
+		--color-prettylights-syntax-constant: #0550ae;
+		--color-prettylights-syntax-entity: #8250df;
+		--color-prettylights-syntax-storage-modifier-import: #24292f;
+		--color-prettylights-syntax-entity-tag: #116329;
+		--color-prettylights-syntax-keyword: #cf222e;
+		--color-prettylights-syntax-string: #0a3069;
+		--color-prettylights-syntax-variable: #953800;
+		--color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
+		--color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
+		--color-prettylights-syntax-invalid-illegal-bg: #82071e;
+		--color-prettylights-syntax-carriage-return-text: #f6f8fa;
+		--color-prettylights-syntax-carriage-return-bg: #cf222e;
+		--color-prettylights-syntax-string-regexp: #116329;
+		--color-prettylights-syntax-markup-list: #3b2300;
+		--color-prettylights-syntax-markup-heading: #0550ae;
+		--color-prettylights-syntax-markup-italic: #24292f;
+		--color-prettylights-syntax-markup-bold: #24292f;
+		--color-prettylights-syntax-markup-deleted-text: #82071e;
+		--color-prettylights-syntax-markup-deleted-bg: #ffebe9;
+		--color-prettylights-syntax-markup-inserted-text: #116329;
+		--color-prettylights-syntax-markup-inserted-bg: #dafbe1;
+		--color-prettylights-syntax-markup-changed-text: #953800;
+		--color-prettylights-syntax-markup-changed-bg: #ffd8b5;
+		--color-prettylights-syntax-markup-ignored-text: #eaeef2;
+		--color-prettylights-syntax-markup-ignored-bg: #0550ae;
+		--color-prettylights-syntax-meta-diff-range: #8250df;
+		--color-prettylights-syntax-brackethighlighter-angle: #57606a;
+		--color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+		--color-prettylights-syntax-constant-other-reference-link: #0a3069;
+	}
 }
 
 .pl-c {
-    color: var(--color-prettylights-syntax-comment);
+	color: var(--color-prettylights-syntax-comment);
 }
 
 .pl-c1,
 .pl-s .pl-v {
-    color: var(--color-prettylights-syntax-constant);
+	color: var(--color-prettylights-syntax-constant);
 }
 
 .pl-e,
 .pl-en {
-    color: var(--color-prettylights-syntax-entity);
+	color: var(--color-prettylights-syntax-entity);
 }
 
 .pl-smi,
 .pl-s .pl-s1 {
-    color: var(--color-prettylights-syntax-storage-modifier-import);
+	color: var(--color-prettylights-syntax-storage-modifier-import);
 }
 
 .pl-ent {
-    color: var(--color-prettylights-syntax-entity-tag);
+	color: var(--color-prettylights-syntax-entity-tag);
 }
 
 .pl-k {
-    color: var(--color-prettylights-syntax-keyword);
+	color: var(--color-prettylights-syntax-keyword);
 }
 
 .pl-s,
@@ -275,88 +275,88 @@
 .pl-sr .pl-cce,
 .pl-sr .pl-sre,
 .pl-sr .pl-sra {
-    color: var(--color-prettylights-syntax-string);
+	color: var(--color-prettylights-syntax-string);
 }
 
 .pl-v,
 .pl-smw {
-    color: var(--color-prettylights-syntax-variable);
+	color: var(--color-prettylights-syntax-variable);
 }
 
 .pl-bu {
-    color: var(--color-prettylights-syntax-brackethighlighter-unmatched);
+	color: var(--color-prettylights-syntax-brackethighlighter-unmatched);
 }
 
 .pl-ii {
-    color: var(--color-prettylights-syntax-invalid-illegal-text);
-    background-color: var(--color-prettylights-syntax-invalid-illegal-bg);
+	color: var(--color-prettylights-syntax-invalid-illegal-text);
+	background-color: var(--color-prettylights-syntax-invalid-illegal-bg);
 }
 
 .pl-c2 {
-    color: var(--color-prettylights-syntax-carriage-return-text);
-    background-color: var(--color-prettylights-syntax-carriage-return-bg);
+	color: var(--color-prettylights-syntax-carriage-return-text);
+	background-color: var(--color-prettylights-syntax-carriage-return-bg);
 }
 
 .pl-sr .pl-cce {
-    font-weight: bold;
-    color: var(--color-prettylights-syntax-string-regexp);
+	font-weight: bold;
+	color: var(--color-prettylights-syntax-string-regexp);
 }
 
 .pl-ml {
-    color: var(--color-prettylights-syntax-markup-list);
+	color: var(--color-prettylights-syntax-markup-list);
 }
 
 .pl-mh,
 .pl-mh .pl-en,
 .pl-ms {
-    font-weight: bold;
-    color: var(--color-prettylights-syntax-markup-heading);
+	font-weight: bold;
+	color: var(--color-prettylights-syntax-markup-heading);
 }
 
 .pl-mi {
-    font-style: italic;
-    color: var(--color-prettylights-syntax-markup-italic);
+	font-style: italic;
+	color: var(--color-prettylights-syntax-markup-italic);
 }
 
 .pl-mb {
-    font-weight: bold;
-    color: var(--color-prettylights-syntax-markup-bold);
+	font-weight: bold;
+	color: var(--color-prettylights-syntax-markup-bold);
 }
 
 .pl-md {
-    color: var(--color-prettylights-syntax-markup-deleted-text);
-    background-color: var(--color-prettylights-syntax-markup-deleted-bg);
+	color: var(--color-prettylights-syntax-markup-deleted-text);
+	background-color: var(--color-prettylights-syntax-markup-deleted-bg);
 }
 
 .pl-mi1 {
-    color: var(--color-prettylights-syntax-markup-inserted-text);
-    background-color: var(--color-prettylights-syntax-markup-inserted-bg);
+	color: var(--color-prettylights-syntax-markup-inserted-text);
+	background-color: var(--color-prettylights-syntax-markup-inserted-bg);
 }
 
 .pl-mc {
-    color: var(--color-prettylights-syntax-markup-changed-text);
-    background-color: var(--color-prettylights-syntax-markup-changed-bg);
+	color: var(--color-prettylights-syntax-markup-changed-text);
+	background-color: var(--color-prettylights-syntax-markup-changed-bg);
 }
 
 .pl-mi2 {
-    color: var(--color-prettylights-syntax-markup-ignored-text);
-    background-color: var(--color-prettylights-syntax-markup-ignored-bg);
+	color: var(--color-prettylights-syntax-markup-ignored-text);
+	background-color: var(--color-prettylights-syntax-markup-ignored-bg);
 }
 
 .pl-mdr {
-    font-weight: bold;
-    color: var(--color-prettylights-syntax-meta-diff-range);
+	font-weight: bold;
+	color: var(--color-prettylights-syntax-meta-diff-range);
 }
 
 .pl-ba {
-    color: var(--color-prettylights-syntax-brackethighlighter-angle);
+	color: var(--color-prettylights-syntax-brackethighlighter-angle);
 }
 
 .pl-sg {
-    color: var(--color-prettylights-syntax-sublimelinter-gutter-mark);
+	color: var(--color-prettylights-syntax-sublimelinter-gutter-mark);
 }
 
 .pl-corl {
-    text-decoration: underline;
-    color: var(--color-prettylights-syntax-constant-other-reference-link);
+	text-decoration: underline;
+	color: var(--color-prettylights-syntax-constant-other-reference-link);
 }

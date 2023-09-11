@@ -1,21 +1,21 @@
 .create__repo__modal__body__input {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 15px;
 
-    &__label {
-        font-size: 14px;
-        font-weight: 400;
-        color: var(--color-primary);
-    }
+	&__label {
+		font-size: 14px;
+		font-weight: 400;
+		color: var(--color-primary);
+	}
 
-    textarea {
-        width: 100%;
-        outline: var(--separator-secondary) solid 1px;
+	textarea {
+		width: 100%;
+		outline: var(--separator-secondary) solid 1px;
 
-        &:focus {
-            outline: var(--separator-primary) solid 1px;
-        }
-    }
+		&:focus {
+			outline: var(--separator-primary) solid 1px;
+		}
+	}
 }

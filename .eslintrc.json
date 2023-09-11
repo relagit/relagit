@@ -1,25 +1,35 @@
 {
-    "$schema": "http://json.schemastore.org/eslintrc",
-    "root": true,
-    "ignorePatterns": ["node_modules", "dist"],
-    "extends": ["plugin:@typescript-eslint/recommended", "prettier", "plugin:editorconfig/noconflict"],
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["editorconfig", "path-alias", "unused-imports", "simple-import-sort", "@typescript-eslint"],
-    "settings": {
-        "import/resolver": {
-            "alias": {
-                "map": [
-                    ["~/*", "./packages/*"],
-                    ["@app/*", "./packages/src/*"],
-                    ["@ui/*", "./packages/src/ui/*"],
-                    ["@stores/*", "./packages/src/stores/*"],
-                    ["@modules/*", "modules/*"]
-                ]
-            }
-        }
-    },
-    "rules": {
-        "quotes": ["error", "single", { "avoidEscape": true }],
-        "semi": ["error", "always"]
-    }
+	"$schema": "http://json.schemastore.org/eslintrc",
+	"root": true,
+	"ignorePatterns": ["node_modules", "dist"],
+	"extends": [
+		"plugin:@typescript-eslint/recommended",
+		"prettier",
+		"plugin:editorconfig/noconflict"
+	],
+	"parser": "@typescript-eslint/parser",
+	"plugins": [
+		"editorconfig",
+		"path-alias",
+		"unused-imports",
+		"simple-import-sort",
+		"@typescript-eslint"
+	],
+	"settings": {
+		"import/resolver": {
+			"alias": {
+				"map": [
+					["~/*", "./packages/*"],
+					["@app/*", "./packages/src/*"],
+					["@ui/*", "./packages/src/ui/*"],
+					["@stores/*", "./packages/src/stores/*"],
+					["@modules/*", "modules/*"]
+				]
+			}
+		}
+	},
+	"rules": {
+		"quotes": ["error", "single", { "avoidEscape": true }],
+		"semi": ["error", "always"]
+	}
 }

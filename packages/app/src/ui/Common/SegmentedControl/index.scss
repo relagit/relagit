@@ -21,7 +21,9 @@
 		width: 100%;
 		padding: 0 10px;
 		cursor: pointer;
-		transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		transition:
+			border-color 0.2s ease-in-out,
+			color 0.2s ease-in-out;
 
 		&:hover {
 			border-color: var(--separator-primary);

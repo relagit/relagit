@@ -1,13 +1,13 @@
 .anchor {
-    background: none;
-    border: none;
-    color: var(--color-link);
-    cursor: pointer;
-    font-size: inherit;
-    font-weight: inherit;
-    padding: 0;
+	background: none;
+	border: none;
+	color: var(--color-link);
+	cursor: pointer;
+	font-size: inherit;
+	font-weight: inherit;
+	padding: 0;
 
-    &:hover {
-        text-decoration: underline;
-    }
+	&:hover {
+		text-decoration: underline;
+	}
 }

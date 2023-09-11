@@ -1,107 +1,107 @@
 .modal-container {
-    position: absolute;
-    inset: 0;
-    z-index: 98;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    transition: background-color 0.2s ease-in-out;
+	position: absolute;
+	inset: 0;
+	z-index: 98;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	transition: background-color 0.2s ease-in-out;
 
-    &.visible {
-        background-color: rgba(0, 0, 0, 0.5);
-        pointer-events: all;
-    }
+	&.visible {
+		background-color: rgba(0, 0, 0, 0.5);
+		pointer-events: all;
+	}
 
-    .modal {
-        width: 100%;
-        height: 100%;
-        max-width: 800px;
-        min-height: 600px;
-        max-height: 80%;
-        height: fit-content;
-        border-radius: 4px;
-        border: 1px solid var(--separator-secondary);
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        background-color: var(--bg-primary);
-        color: var(--color-primary);
+	.modal {
+		width: 100%;
+		height: 100%;
+		max-width: 800px;
+		min-height: 600px;
+		max-height: 80%;
+		height: fit-content;
+		border-radius: 4px;
+		border: 1px solid var(--separator-secondary);
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		background-color: var(--bg-primary);
+		color: var(--color-primary);
 
-        &.small {
-            max-width: 400px;
-            min-height: 300px;
-            max-height: 60%;
-            height: fit-content;
-        }
+		&.small {
+			max-width: 400px;
+			min-height: 300px;
+			max-height: 60%;
+			height: fit-content;
+		}
 
-        &.medium {
-            max-width: 600px;
-            min-height: 400px;
-            max-height: 70%;
-            height: fit-content;
-        }
+		&.medium {
+			max-width: 600px;
+			min-height: 400px;
+			max-height: 70%;
+			height: fit-content;
+		}
 
-        &.large {
-            max-width: 800px;
-            min-height: 600px;
-            max-height: 80%;
-            height: fit-content;
-        }
+		&.large {
+			max-width: 800px;
+			min-height: 600px;
+			max-height: 80%;
+			height: fit-content;
+		}
 
-        &__close {
-            width: 32px;
-            height: 32px;
-            color: var(--color-primary);
-            background-color: transparent;
-            opacity: 0.6;
-            cursor: pointer;
-            transition: opacity 0.2s ease-in-out;
+		&__close {
+			width: 32px;
+			height: 32px;
+			color: var(--color-primary);
+			background-color: transparent;
+			opacity: 0.6;
+			cursor: pointer;
+			transition: opacity 0.2s ease-in-out;
 
-            &:hover {
-                opacity: 1;
-            }
-        }
+			&:hover {
+				opacity: 1;
+			}
+		}
 
-        &__header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 40px 20px 40px;
-            border-bottom: 1px solid var(--separator-secondary);
+		&__header {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding: 40px 40px 20px 40px;
+			border-bottom: 1px solid var(--separator-secondary);
 
-            &__title {
-                font-size: 24px;
-                font-weight: 500;
-            }
-        }
+			&__title {
+				font-size: 24px;
+				font-weight: 500;
+			}
+		}
 
-        &__body {
-            padding-inline: 40px;
-            padding-block: 20px;
-            flex: 1;
-            overflow-y: auto;
-        }
+		&__body {
+			padding-inline: 40px;
+			padding-block: 20px;
+			flex: 1;
+			overflow-y: auto;
+		}
 
-        &__footer {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 20px 40px;
-            border-top: 1px solid var(--separator-secondary);
+		&__footer {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			align-items: center;
+			padding: 20px 40px;
+			border-top: 1px solid var(--separator-secondary);
 
-            &__buttons {
-                display: flex;
-                gap: 10px;
+			&__buttons {
+				display: flex;
+				gap: 10px;
 
-                button {
-                    padding-inline: 30px;
-                }
-            }
-        }
-    }
+				button {
+					padding-inline: 30px;
+				}
+			}
+		}
+	}
 }

@@ -1,26 +1,28 @@
 .layer {
-    position: absolute;
-    inset: 0;
-    z-index: 98;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    transition: background-color 0.2s ease-in-out, padding 0.2s ease-in-out;
+	position: absolute;
+	inset: 0;
+	z-index: 98;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	transition:
+		background-color 0.2s ease-in-out,
+		padding 0.2s ease-in-out;
 
-    &-rich {
-        padding: 10% 15%;
+	&-rich {
+		padding: 10% 15%;
 
-        &.visible {
-            background-color: rgba(0, 0, 0, 0.5);
-            pointer-events: all;
-        }
-    }
+		&.visible {
+			background-color: rgba(0, 0, 0, 0.5);
+			pointer-events: all;
+		}
+	}
 
-    &-bare {
-        padding: 0;
+	&-bare {
+		padding: 0;
 
-        &.visible {
-            pointer-events: all;
-        }
-    }
+		&.visible {
+			pointer-events: all;
+		}
+	}
 }

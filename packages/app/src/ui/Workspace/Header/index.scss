@@ -19,7 +19,9 @@
 		cursor: pointer;
 		padding-inline: 35px;
 		gap: 16px;
-		transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+		transition:
+			background-color 0.2s ease-in-out,
+			opacity 0.2s ease-in-out;
 
 		&.disabled {
 			opacity: 0.4;
