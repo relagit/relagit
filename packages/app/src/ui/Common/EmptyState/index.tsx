@@ -3,8 +3,9 @@ import { For, Show } from 'solid-js';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
-import './index.scss';
 import Button from '../Button';
+
+import './index.scss';
 
 export enum EMPTY_STATE_IMAGES {
 	D_NOTHING_HERE = 'Cube_dark',
@@ -36,7 +37,13 @@ export default (props: IEmptyStateProps) => {
 			<Show when={props.image}>
 				<img
 					src={`assets/empty_state/${
-						settings().get('theme') === 'dark' ? props.image.dark : props.image.light
+						settings().get('theme') === 'dark'
+							? props.image.dark
+							: settings().get('theme') === 'light'
+							? props.image.light
+							: matchMedia('(prefers-color-scheme: dark)').matches
+							? props.image.dark
+							: props.image.light
 					}.svg`}
 					alt="Nothing here"
 					style={{ opacity: props.opacity || 1 }}
