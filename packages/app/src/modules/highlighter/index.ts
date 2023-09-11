@@ -37,20 +37,10 @@ export default (code: string, language: string) => {
 	}
 };
 
-const known = new Map([
-	['md', 'text.md'],
-	['markdown', 'text.md'],
-	['html', 'text.html.basic'],
-	['mjs', 'source.js'],
-	['cjs', 'source.js']
-]);
-
 export const langFrom = (filename: string) => {
-	const ext = filename.split('.').pop();
+	const ext = '.' + filename.split('.').pop();
 
-	if (known.has(ext)) {
-		return known.get(ext);
-	}
-
-	return `source.${ext}`;
+	return StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ?? 'text.plain';
 };
+
+window.langFrom = langFrom;
