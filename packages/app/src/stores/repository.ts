@@ -2,7 +2,7 @@ import { GenericStore } from '.';
 
 export interface IRepository {
 	draft?: boolean;
-	id: number;
+	id: string;
 	path: string;
 	name: string;
 	remote: string;
@@ -11,6 +11,7 @@ export interface IRepository {
 	aheadOrBehind: number;
 	lastFetched?: number;
 }
+
 const RepositoryStore = new (class Repository extends GenericStore {
 	#record: IRepository[] = [];
 	constructor() {

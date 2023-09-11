@@ -63,7 +63,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 		return FileStore.addFile(directory, {
 			staged: true,
-			id: Math.random(),
+			id: Math.random().toString(16).split('.')[1],
 			name: path.basename(file),
 			path: file.replace(path.basename(file), '').replace(/[\/\\]$/, ''),
 			status: Git.statusFrom(stat)
@@ -101,7 +101,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 		FileStore.addFile(directory, {
 			staged: true,
-			id: Math.random(),
+			id: Math.random().toString(16).split('.')[1],
 			name: path.basename(p),
 			path: p.replace(path.basename(p), '').replace(/[\/\\]$/, ''),
 			status: Git.statusFrom(status)
@@ -114,7 +114,7 @@ export const getRepositoryStatus = async (directory: string, files?: boolean, re
 		const info = await Git.Analyse(directory);
 
 		RepositoryStore.addRepository({
-			id: Math.random(),
+			id: Math.random().toString(16).split('.')[1],
 			path: directory,
 			name: path.basename(directory),
 			remote: info.remote,
@@ -126,7 +126,7 @@ export const getRepositoryStatus = async (directory: string, files?: boolean, re
 	} catch (error) {
 		RepositoryStore.addRepository({
 			draft: true,
-			id: Math.random(),
+			id: Math.random().toString(16).split('.')[1],
 			path: directory,
 			name: path.basename(directory),
 			remote: null,

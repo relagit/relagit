@@ -1,88 +1,88 @@
 .button {
-    display: inline-flex;
-    padding: 6px 16px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
+	display: inline-flex;
+	padding: 6px 16px;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
 
-    border-radius: 4px;
-    color: var(--button-color);
-    background: var(--button-bg);
-    border: 1px solid var(--button-stroke);
+	border-radius: 4px;
+	color: var(--button-color);
+	background: var(--button-bg);
+	border: 1px solid var(--button-stroke);
 
-    transition: background-color 0.2s ease;
-    cursor: pointer;
+	transition: background-color 0.2s ease;
+	cursor: pointer;
 
-    &:hover {
-        background-color: var(--button-hover, var(--bg-quaternary));
-        color: var(--button-hover-text, var(--color-primary));
-    }
+	&:hover {
+		background-color: var(--button-hover, var(--bg-quaternary));
+		color: var(--button-hover-text, var(--color-primary));
+	}
 
-    &:active {
-        background-color: var(--button-active, var(--bg-quinary));
-        color: var(--button-active-text, var(--color-primary));
-    }
+	&:active {
+		background-color: var(--button-active, var(--bg-quinary));
+		color: var(--button-active-text, var(--color-primary));
+	}
 
-    &:focus {
-        border: none;
-        outline: 2px solid var(--button-focus);
-    }
+	&:focus {
+		border-color: transparent;
+		outline: 2px solid var(--button-focus);
+	}
 
-    &:disabled {
-        pointer-events: none;
-        opacity: 0.3;
-    }
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.3;
+	}
 
-    &.default {
-        --button-bg: var(--bg-tertiary);
-        --button-color: var(--color-primary);
-        --button-stroke: var(--separator-primary);
-        --button-hover: var(--bg-quaternary);
-        --button-active: var(--bg-quinary);
-        --button-focus: #{illyrica.$color-blue-500};
-    }
+	&.default {
+		--button-bg: var(--bg-tertiary);
+		--button-color: var(--color-primary);
+		--button-stroke: var(--separator-primary);
+		--button-hover: var(--bg-quaternary);
+		--button-active: var(--bg-quinary);
+		--button-focus: #{illyrica.$color-blue-500};
+	}
 
-    &.brand {
-        --button-bg: #{illyrica.$color-blue-500};
-        --button-color: #{illyrica.$base-white};
-        --button-stroke: #{illyrica.$color-blue-800};
-        --button-hover: #{illyrica.$color-blue-600};
-        --button-hover-text: #{illyrica.$base-white};
-        --button-active: #{illyrica.$color-blue-700};
-        --button-active-text: #{illyrica.$base-white};
-        --button-focus: #{illyrica.$color-blue-500};
-    }
+	&.brand {
+		--button-bg: #{illyrica.$color-blue-500};
+		--button-color: #{illyrica.$base-white};
+		--button-stroke: #{illyrica.$color-blue-800};
+		--button-hover: #{illyrica.$color-blue-600};
+		--button-hover-text: #{illyrica.$base-white};
+		--button-active: #{illyrica.$color-blue-700};
+		--button-active-text: #{illyrica.$base-white};
+		--button-focus: #{illyrica.$color-blue-500};
+	}
 
-    &.danger {
-        --button-bg: var(--bg-tertiary);
-        --button-color: #{illyrica.$color-red-500};
-        --button-stroke: var(--separator-primary);
-        --button-hover: #{illyrica.$color-red-500};
-        --button-hover-text: #{illyrica.$base-white};
-        --button-active: #{illyrica.$color-red-600};
-        --button-active-text: #{illyrica.$base-white};
-        --button-focus: #{illyrica.$color-blue-500};
-    }
+	&.danger {
+		--button-bg: var(--bg-tertiary);
+		--button-color: #{illyrica.$color-red-500};
+		--button-stroke: var(--separator-primary);
+		--button-hover: #{illyrica.$color-red-500};
+		--button-hover-text: #{illyrica.$base-white};
+		--button-active: #{illyrica.$color-red-600};
+		--button-active-text: #{illyrica.$base-white};
+		--button-focus: #{illyrica.$color-blue-500};
+	}
 
-    &.outline {
-        --button-bg: var(--bg-tertiary);
-        --button-color: #{illyrica.$color-blue-500};
-        --button-stroke: var(--separator-primary);
-        --button-hover: #{illyrica.$color-blue-500};
-        --button-hover-text: #{illyrica.$base-white};
-        --button-active: #{illyrica.$color-blue-600};
-        --button-active-text: #{illyrica.$base-white};
-        --button-focus: #{illyrica.$color-blue-500};
-    }
+	&.outline {
+		--button-bg: var(--bg-tertiary);
+		--button-color: #{illyrica.$color-blue-500};
+		--button-stroke: var(--separator-primary);
+		--button-hover: #{illyrica.$color-blue-500};
+		--button-hover-text: #{illyrica.$base-white};
+		--button-active: #{illyrica.$color-blue-600};
+		--button-active-text: #{illyrica.$base-white};
+		--button-focus: #{illyrica.$color-blue-500};
+	}
 
-    &.positive {
-        --button-bg: var(--bg-tertiary);
-        --button-color: #{illyrica.$color-green-500};
-        --button-stroke: var(--separator-primary);
-        --button-hover: #{illyrica.$color-green-500};
-        --button-hover-text: #{illyrica.$base-white};
-        --button-active: #{illyrica.$color-green-600};
-        --button-active-text: #{illyrica.$base-white};
-        --button-focus: #{illyrica.$color-blue-500};
-    }
+	&.positive {
+		--button-bg: var(--bg-tertiary);
+		--button-color: #{illyrica.$color-green-500};
+		--button-stroke: var(--separator-primary);
+		--button-hover: #{illyrica.$color-green-500};
+		--button-hover-text: #{illyrica.$base-white};
+		--button-active: #{illyrica.$color-green-600};
+		--button-active-text: #{illyrica.$base-white};
+		--button-focus: #{illyrica.$color-blue-500};
+	}
 }

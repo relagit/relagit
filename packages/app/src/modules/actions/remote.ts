@@ -6,7 +6,9 @@ import * as Git from '@modules/git';
 export const remoteStatus = async (repository: string) => {
 	const status = await Git.Remote(repository);
 
-	triggerWorkflow('remote_fetch', status);
+	const repo = RepositoryStore.getByPath(repository);
+
+	triggerWorkflow('remote_fetch', status, repo);
 
 	for (const remote of status) {
 		const { name, url, type } = remote;
@@ -15,7 +17,7 @@ export const remoteStatus = async (repository: string) => {
 			url,
 			name,
 			type: type as 'fetch' | 'push',
-			repository: RepositoryStore.getByPath(repository)
+			repository: repo
 		});
 	}
 };

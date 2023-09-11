@@ -3,7 +3,7 @@ import { GenericStore } from '.';
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export interface IFile {
-	id: number;
+	id: string;
 	name: string;
 	staged: boolean;
 	path: string;

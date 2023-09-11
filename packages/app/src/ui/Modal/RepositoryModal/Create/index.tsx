@@ -14,7 +14,7 @@ import './index.scss';
 
 export interface ICreateRepositoryModalProps {
 	pathSignal: Signal<string>;
-	tabSignal: Signal<number | string>;
+	tabSignal: Signal<number>;
 	modalProps: {
 		close: () => void;
 	};
@@ -31,7 +31,9 @@ export default (props: ICreateRepositoryModalProps) => {
 		let isDirectory = false;
 
 		try {
-			fs.opendirSync(p);
+			const dir = fs.opendirSync(p);
+
+			dir.close();
 
 			isDirectory = true;
 		} catch (e) {

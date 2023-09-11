@@ -29,8 +29,8 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{illyrica.$base-lighter-grey};
-	--bg-active: #{illyrica.$base-light-grey};
+	--bg-hover: #{illyrica.$material-secondary};
+	--bg-active: #{illyrica.$material-primary};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
 	--bg-success: rgba(82, 228, 82, 0.05);

@@ -13,7 +13,7 @@ import Button from '@ui/Common/Button';
 
 export interface IAddRepositoryModalProps {
 	pathSignal: Signal<string>;
-	tabSignal: Signal<number | string>;
+	tabSignal: Signal<number>;
 	modalProps: {
 		close: () => void;
 	};
@@ -30,7 +30,9 @@ export default (props: IAddRepositoryModalProps) => {
 		let isDirectory = false;
 
 		try {
-			fs.opendirSync(p);
+			const dir = fs.opendirSync(p);
+
+			dir.close();
 
 			isDirectory = true;
 		} catch (e) {

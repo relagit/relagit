@@ -1,75 +1,63 @@
 .filepicker {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 
-    &__input {
-        width: 100%;
-        display: flex;
-        gap: 10px;
-        height: 40px;
+	&__input {
+		width: 100%;
+		display: flex;
+		gap: 10px;
+		height: 40px;
 
-        &.invalid {
-            textarea {
-                outline: var(--bg-error-solid) solid 1px;
+		&.invalid {
+			textarea {
+				--input-stroke: var(--bg-error-solid);
+				--input-focus: var(--bg-error-solid);
+			}
+		}
 
-                &:focus {
-                    outline: var(--bg-error-solid) solid 1px;
-                }
-            }
-        }
+		&.valid {
+			textarea {
+				--input-stroke: var(--bg-success-solid);
+				--input-focus: var(--bg-success-solid);
+			}
+		}
 
-        &.valid {
-            textarea {
-                outline: var(--bg-success-solid) solid 1px;
+		textarea {
+			width: 100%;
+		}
 
-                &:focus {
-                    outline: var(--bg-success-solid) solid 1px;
-                }
-            }
-        }
+		&__button {
+			height: 32px;
+			min-width: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-        textarea {
-            width: 100%;
-            outline: var(--separator-secondary) solid 1px;
+			border-radius: 4px;
+			color: var(--color-secondary);
+			background: var(--bg-tertiary);
+			border: 1px solid var(--separator-primary);
 
-            &:focus {
-                outline: var(--separator-primary) solid 1px;
-            }
-        }
+			&:focus {
+				border-color: transparent;
+				outline: 2px solid #{illyrica.$color-blue-500};
+			}
+		}
+	}
 
-        &__button {
-            height: 36px;
-            min-width: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-primary);
-            background-color: transparent;
-            border: 1px solid var(--separator-primary);
-            border-radius: 2px;
-            opacity: 0.6;
-            cursor: pointer;
-            transition: opacity 0.2s ease-in-out;
+	&__alert {
+		font-size: 14px;
+		font-weight: 400;
+		display: flex;
+		gap: 5px;
 
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
+		&.invalid {
+			color: var(--color-error);
+		}
 
-    &__alert {
-        font-size: 14px;
-        font-weight: 400;
-        display: flex;
-        gap: 5px;
-
-        &.invalid {
-            color: var(--color-error);
-        }
-
-        &.valid {
-            color: var(--color-success);
-        }
-    }
+		&.valid {
+			color: var(--color-success);
+		}
+	}
 }

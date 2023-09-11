@@ -1,3 +1,5 @@
+import { IconName, customIcons } from '../Icon';
+
 import './index.scss';
 
 interface ITextareaProps {
@@ -9,6 +11,7 @@ interface ITextareaProps {
 	disabled?: boolean;
 	expanded?: boolean;
 	wysiwyg?: boolean;
+	icon?: IconName | keyof typeof customIcons;
 }
 
 export default (props: ITextareaProps) => {
