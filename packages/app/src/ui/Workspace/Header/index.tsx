@@ -19,7 +19,6 @@ export interface IPanelButtonProps {
 	iconVariant?: 12 | 16 | 24 | 32;
 	onClick: () => void;
 	size?: 'small' | 'medium' | 'large';
-	margin?: boolean;
 	label?: string;
 	detail?: JSX.Element | string;
 	tooltip?: string;
@@ -41,7 +40,6 @@ const PanelButton = (props: IPanelButtonProps) => {
 						{...p}
 						classList={{
 							workspace__header__panelbutton: true,
-							'workspace__header__panelbutton-margin': props.margin,
 							'workspace__header__panelbutton-small': props.size === 'small',
 							'workspace__header__panelbutton-medium': props.size === 'medium',
 							'workspace__header__panelbutton-large': props.size === 'large',
@@ -133,7 +131,6 @@ export default () => {
 
 					return 'Nothing to see here';
 				})()}
-				margin
 				onClick={async () => {
 					const aob = repository()?.aheadOrBehind || 0;
 
