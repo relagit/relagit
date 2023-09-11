@@ -40,7 +40,9 @@ export default (code: string, language: string) => {
 const known = new Map([
 	['md', 'text.md'],
 	['markdown', 'text.md'],
-	['html', 'text.html.basic']
+	['html', 'text.html.basic'],
+	['mjs', 'source.js'],
+	['cjs', 'source.js']
 ]);
 
 export const langFrom = (filename: string) => {

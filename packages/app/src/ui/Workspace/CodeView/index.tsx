@@ -163,10 +163,10 @@ export default (props: ICodeViewProps) => {
 							fallback={
 								<For each={content().split('\n')}>
 									{(line, index) => {
-										const status = diff() ? 'added' : 'deleted';
+										const status = () => (diff() ? 'added' : 'deleted');
 
 										return (
-											<div class={`codeview__line ${status}`}>
+											<div class={`codeview__line ${status()}`}>
 												<div class="codeview__line__number">{index()}</div>
 												<div
 													class="codeview__line__content"
