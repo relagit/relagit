@@ -42,5 +42,3 @@ export const langFrom = (filename: string) => {
 
 	return StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ?? 'text.plain';
 };
-
-window.langFrom = langFrom;
