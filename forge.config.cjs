@@ -2,7 +2,8 @@ module.exports = {
 	packagerConfig: {
 		name: 'RelaGit',
 		appBundleId: 'com.rela.git',
-		icon: './icons/dark'
+		icon: './icons/dark',
+		asar: true
 	},
 	makers: [
 		{
