@@ -29,14 +29,15 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{illyrica.$material-secondary};
-	--bg-active: #{illyrica.$material-primary};
+	--bg-hover: #{illyrica.$base-lighter-grey};
+	--bg-active: #{illyrica.$base-light-grey};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
 	--bg-success: rgba(82, 228, 82, 0.05);
 	--bg-success-solid: rgba(82, 228, 82, 0.2);
 	--bg-warning: rgba(236, 197, 118, 0.05);
 	--bg-warning-solid: rgba(236, 197, 118, 0.2);
+
 	--bg-diff-add: var(--bg-success);
 	--bg-diff-add-solid: var(--bg-success-solid);
 	--bg-diff-del: var(--bg-error);
