@@ -68,32 +68,5 @@
 		"thena": "^0.0.9",
 		"typescript": "^5.2.2",
 		"ws": "^8.14.1"
-	},
-	"config": {
-		"forge": {
-			"packagerConfig": {},
-			"makers": [
-				{
-					"name": "@electron-forge/maker-squirrel",
-					"config": {
-						"name": "electron_quick_start"
-					}
-				},
-				{
-					"name": "@electron-forge/maker-zip",
-					"platforms": [
-						"darwin"
-					]
-				},
-				{
-					"name": "@electron-forge/maker-deb",
-					"config": {}
-				},
-				{
-					"name": "@electron-forge/maker-rpm",
-					"config": {}
-				}
-			]
-		}
 	}
 }
