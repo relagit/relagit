@@ -2,7 +2,7 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
 
-const swc = window.Native.libraries.swc;
+const sucrase = window.Native.libraries.sucrase;
 
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
@@ -131,17 +131,8 @@ export const loadWorkflows = () => {
 				'exports',
 				'module',
 				'console',
-				swc.transformSync(data, {
-					jsc: {
-						parser: {
-							syntax: 'typescript'
-						}
-					},
-					filename: workflowPath,
-					sourceMaps: true,
-					module: {
-						type: 'commonjs'
-					}
+				sucrase.transform(data, {
+					transforms: ['typescript', 'imports']
 				}).code + '\n\nreturn module.exports || exports.default || exports || null;'
 			);
 

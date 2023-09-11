@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 import * as starryNight from '@wooorm/starry-night';
-import * as swc from '@swc/core';
+import * as sucrase from 'sucrase';
 
 import { Workflow } from '~/app/src/modules/actions';
 
@@ -16,7 +16,7 @@ export const Native = {
 	},
 	libraries: {
 		starryNight,
-		swc
+		sucrase
 	},
 	listeners: {
 		SETTINGS: (fn: () => void) => {

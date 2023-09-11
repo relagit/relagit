@@ -21,9 +21,8 @@ export default defineConfig({
 		format: 'cjs',
 		dir: path.resolve('dist')
 	},
-	external: Module.builtinModules.concat(['electron', '@swc/core']),
+	external: Module.builtinModules.concat(['electron']),
 	plugins: [
-		commonjs(),
 		replace({
 			preventAssignment: true,
 			values: {
@@ -36,9 +35,15 @@ export default defineConfig({
 			tsConfigPath: path.resolve(__dirname, '../../tsconfig.json')
 		}),
 		nodeResolve({
-			extensions: ['.ts', '.json']
+			extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.sass', '.css'],
+			browser: true,
+			exportConditions: ['development', 'browser']
 		}),
-		esbuild(),
+		commonjs(),
+		esbuild({
+			minify: false,
+			sourceMap: true
+		}),
 		json({
 			compact: true
 		})
