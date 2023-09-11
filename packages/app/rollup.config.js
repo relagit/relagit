@@ -10,11 +10,14 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import esbuild from 'rollup-plugin-esbuild';
+import terser from '@rollup/plugin-terser';
 import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+const IS_DEV = process.env.npm_lifecycle_event === 'dev';
 
 export default defineConfig({
 	input: path.join(__dirname, 'src', 'index.tsx'),
@@ -26,13 +29,11 @@ export default defineConfig({
 	},
 	external: Module.builtinModules.concat(['electron']),
 	plugins: [
-		sourcemaps(),
+		IS_DEV && sourcemaps(),
 		replace({
 			preventAssignment: true,
 			values: {
-				__NODE_ENV__: JSON.stringify(
-					process.env.ROLLUP_WATCH ? 'development' : 'production'
-				)
+				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production')
 			}
 		}),
 		json(),
@@ -57,6 +58,7 @@ export default defineConfig({
 			presets: ['babel-preset-solid'],
 			extensions: ['.tsx'],
 			babelHelpers: 'bundled'
-		})
+		}),
+		!IS_DEV && terser()
 	].filter(Boolean)
 });

@@ -35,6 +35,7 @@
 		"@rollup/plugin-json": "^6.0.0",
 		"@rollup/plugin-node-resolve": "^15.2.1",
 		"@rollup/plugin-replace": "^5.0.2",
+		"@rollup/plugin-terser": "^0.4.3",
 		"@solid-devtools/overlay": "^0.4.3",
 		"@solidjs/meta": "^0.28.6",
 		"@solidjs/router": "^0.7.1",
@@ -67,6 +68,7 @@
 		"solid-js": "^1.7.11",
 		"solid-transition-group": "^0.2.3",
 		"sucrase": "^3.34.0",
+		"terser": "^5.19.4",
 		"thena": "^0.0.9",
 		"typescript": "^5.2.2",
 		"ws": "^8.14.1"
