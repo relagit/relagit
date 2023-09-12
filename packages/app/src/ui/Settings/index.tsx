@@ -157,13 +157,13 @@ export default () => {
 											]}
 											disabled={!LocationStore.selectedRepository}
 											value={
-												settings()?.get('commitStyles')[
+												settings()?.get?.('commitStyles')?.[
 													LocationStore.selectedRepository?.path
 												]
 											}
 											onChange={(value) => {
 												SettingsStore.setSetting('commitStyles', {
-													...(settings()?.get('commitStyles') as Record<
+													...(settings()?.get?.('commitStyles') as Record<
 														string,
 														string
 													>),
@@ -177,7 +177,7 @@ export default () => {
 											label="Enforce Commit Message Style"
 											note="This will prevent you from committing if your commit message does not match the style selected for a repository."
 											value={
-												settings()?.get(
+												settings()?.get?.(
 													'enforceCommitMessageStyle'
 												) as boolean
 											}
@@ -202,7 +202,7 @@ export default () => {
 											label="Vibrancy (MacOS)"
 											note="Enable Under-Window Vibrancy. This may impact performance. Requires Restart."
 											disabled={window.Native.platform !== 'darwin'}
-											value={settings()?.get('vibrancy') as boolean}
+											value={settings()?.get?.('vibrancy') as boolean}
 											onChange={(value) => {
 												SettingsStore.setSetting('vibrancy', value);
 											}}
@@ -230,7 +230,7 @@ export default () => {
 													value: 'system'
 												}
 											]}
-											value={settings()?.get('theme') as string}
+											value={settings()?.get?.('theme') as string}
 											onChange={(value) => {
 												SettingsStore.setSetting('theme', value);
 											}}
@@ -249,7 +249,9 @@ export default () => {
 										</p>
 										<TextArea
 											className="settings-layer__setting__textarea"
-											value={(settings()?.get('fontFamily') as string) || ''}
+											value={
+												(settings()?.get?.('fontFamily') as string) || ''
+											}
 											onChange={(value) => {
 												SettingsStore.setSetting('fontFamily', value);
 											}}

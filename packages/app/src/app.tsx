@@ -17,8 +17,8 @@ export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	createStoreListener([SettingsStore], async () => {
-		for (const repo of (SettingsStore.settings.get('repositories') as string[]).sort((a, b) =>
-			path.basename(a).localeCompare(path.basename(b))
+		for (const repo of (SettingsStore.settings?.get?.('repositories') as string[]).sort(
+			(a, b) => path.basename(a).localeCompare(path.basename(b))
 		)) {
 			if (RepositoryStore.getByPath(repo)) continue;
 
@@ -30,16 +30,16 @@ export default () => {
 		<>
 			<div
 				id="app-container"
-				class={`platform-${window.Native.platform} theme-${settings()?.get('theme')} ${
-					settings()?.get('vibrancy') ? 'vibrancy' : ''
-				}`}
+				class={`platform-${window.Native.platform} theme-${
+					settings()?.get?.('theme') || 'system'
+				} ${settings()?.get?.('vibrancy') ? 'vibrancy' : ''}`}
 				style={{
-					'--settings-font-family': settings()?.get('fontFamily') as string,
-					'--settings-accent-color': settings()?.get('accentColor') as string
+					'--settings-font-family': settings()?.get?.('fontFamily') as string,
+					'--settings-accent-color': settings()?.get?.('accentColor') as string
 				}}
 			>
 				<Layer
-					type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
+					type={settings()?.get?.('expandedSettings') ? 'bare' : 'rich'}
 					key="settings"
 					dismissable
 					transitions={Layer.Transitions.Fade}

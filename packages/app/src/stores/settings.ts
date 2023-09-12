@@ -78,6 +78,10 @@ const SettingsStore = new (class Settings extends GenericStore {
 			for (const [key, value] of Object.entries(settings)) {
 				this.#record.set(key as keyof ISettings, value as ISettings[keyof ISettings]);
 			}
+
+			if (!this.#record.has('theme')) {
+				this.#record.set('theme', 'system');
+			}
 		}
 
 		if (fs.existsSync(__REPOSITORIES_PATH__)) {
