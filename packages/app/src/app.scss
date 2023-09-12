@@ -102,22 +102,30 @@
 	border: none;
 }
 
-.theme-dark {
+.theme-dark,
+.theme-dark ::after,
+.theme-dark ::before {
 	@include darkTheme;
 }
 
-.theme-light {
+.theme-light,
+.theme-light ::after,
+.theme-light ::before {
 	@include lightTheme;
 }
 
 @media (prefers-color-scheme: dark) {
-	.theme-system {
+	.theme-system,
+	.theme-system ::after,
+	.theme-system ::before {
 		@include darkTheme;
 	}
 }
 
 @media (prefers-color-scheme: light) {
-	.theme-system {
+	.theme-system,
+	.theme-system ::after,
+	.theme-system ::before {
 		@include lightTheme;
 	}
 }

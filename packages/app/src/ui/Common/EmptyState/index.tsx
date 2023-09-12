@@ -11,7 +11,9 @@ export enum EMPTY_STATE_IMAGES {
 	D_NOTHING_HERE = 'Cube_dark',
 	L_NOTHING_HERE = 'Cube_light',
 	D_POWER = 'Power_dark',
-	L_POWER = 'Power_light'
+	L_POWER = 'Power_light',
+	D_ERROR = 'Error_dark',
+	L_ERROR = 'Error_light'
 }
 
 export interface IEmptyStateProps {

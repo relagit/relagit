@@ -9,6 +9,10 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 		return '';
 	}
 
+	if (!file.includes(repoPath)) {
+		return '';
+	}
+
 	let result: string;
 
 	if (!fs.existsSync(file)) {

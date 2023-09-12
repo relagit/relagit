@@ -40,5 +40,9 @@ export default (code: string, language: string) => {
 export const langFrom = (filename: string) => {
 	const ext = '.' + filename.split('.').pop();
 
-	return StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ?? 'text.plain';
+	return (
+		StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ??
+		StarryNight.all.find((g) => g.scopeName.includes(ext))?.scopeName ?? // some grammars do not have their main file extension in the extensions array (*cough* YAML *cough*)
+		'text'
+	);
 };
