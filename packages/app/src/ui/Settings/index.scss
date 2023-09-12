@@ -191,7 +191,9 @@
 			max-width: 40px;
 			height: 22px;
 			border-radius: 20px;
-			transition: background-color 0.2s ease-in-out;
+			transition:
+				background-color 0.2s ease-in-out,
+				transform 0.1s ease-in;
 
 			color: var(--switch-color);
 			background: var(--switch-bg);

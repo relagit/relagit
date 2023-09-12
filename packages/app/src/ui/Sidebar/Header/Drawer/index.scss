@@ -22,6 +22,8 @@
 	&__body {
 		display: flex;
 		flex-direction: column;
+		max-height: 100%;
+		overflow: hidden;
 
 		&__header {
 			font-weight: 450;
