@@ -6,10 +6,10 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 import RepositoryStore, { IRepository } from '@stores/repository';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
+import RemoteStore from '@stores/remote';
 import { remoteStatus } from './remote';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
-import RemoteStore from '@stores/remote';
 
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(
