@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import Module from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -14,6 +15,8 @@ import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+const GIT_COMMIT_HASH = execSync('git rev-parse HEAD').toString().trim().substring(0, 7);
 
 const IS_DEV = process.env.npm_lifecycle_event === 'dev';
 
@@ -51,7 +54,8 @@ export default defineConfig({
 		replace({
 			preventAssignment: true,
 			values: {
-				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production')
+				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production'),
+				__COMMIT_HASH__: JSON.stringify(GIT_COMMIT_HASH)
 			}
 		}),
 		tsconfig({
