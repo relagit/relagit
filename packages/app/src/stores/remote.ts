@@ -30,6 +30,8 @@ const RemoteStore = new (class Remote extends GenericStore {
 	}
 
 	removeByRepoPath(path: string) {
+		if (!this.remotes.some((f) => f.repository?.path === path)) return;
+
 		this.#record = this.remotes.filter((f) => f.repository.path !== path);
 		this.emit();
 	}
