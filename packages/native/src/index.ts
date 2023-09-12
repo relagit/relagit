@@ -51,7 +51,9 @@ app.once('ready', async () => {
 	log('Version: ' + pkj.version);
 	log('Running on: ' + process.platform + ' ' + process.arch);
 
-	win.setWindowButtonVisibility(false);
+	if (typeof win['setWindowButtonVisibility'] === 'function') {
+		win.setWindowButtonVisibility(false);
+	}
 
 	win.loadFile(path.join(__dirname, '..', 'public', 'index.html'));
 
