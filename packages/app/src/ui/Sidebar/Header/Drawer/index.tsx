@@ -75,7 +75,7 @@ export default (props: IHeaderDrawerProps) => {
 					</Menu>
 				</div>
 				<div class="sidebar__drawer__body__content">
-					<For each={repositories()}>
+					<For each={repositories().sort((a, b) => a.name.localeCompare(b.name))}>
 						{(repository) => (
 							<>
 								<Menu

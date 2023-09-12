@@ -17,9 +17,7 @@ export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	createStoreListener([SettingsStore], async () => {
-		for (const repo of (SettingsStore.settings?.get('repositories') as string[]).sort((a, b) =>
-			path.basename(a).localeCompare(path.basename(b))
-		)) {
+		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
 			if (RepositoryStore.getByPath(repo)) continue;
 
 			await getRepositoryStatus(repo, true, true);
