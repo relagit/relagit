@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import Module from 'node:module';
 import path from 'node:path';
 import sass from 'sass';
@@ -15,7 +16,7 @@ import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const IS_DEV = process.env.npm_lifecycle_event === 'dev';
 

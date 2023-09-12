@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import Module from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -14,17 +15,13 @@ import esbuild from 'rollup-plugin-esbuild';
 import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const GIT_COMMIT_HASH = execSync('git rev-parse HEAD').toString().trim().substring(0, 7);
 
 const IS_DEV = process.env.npm_lifecycle_event === 'dev';
 
-let dist = path.join(__dirname, '../../dist');
-
-if (process.platform === 'win32') {
-	dist = dist.replace(/^\\/g, '');
-}
+const dist = path.join(__dirname, '../../dist');
 
 if (!fs.existsSync(path.join(dist, 'package.json'))) {
 	if (!fs.existsSync(dist)) {
@@ -59,7 +56,7 @@ export default defineConfig({
 			}
 		}),
 		tsconfig({
-			tsConfigPath: path.resolve(__dirname, '../../tsconfig.json')
+			tsConfigPath: path.resolve(__dirname, './tsconfig.json')
 		}),
 		nodeResolve({
 			extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.sass', '.css'],
