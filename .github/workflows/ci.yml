@@ -24,6 +24,9 @@ jobs:
 
             - run: pnpm install --frozen-lockfile
             - run: pnpm build
+            - name: log dist size
+              run: |
+                  echo $(du -sh dist | cut -f1)
     lint:
         name: Lint
         runs-on: ubuntu-latest
