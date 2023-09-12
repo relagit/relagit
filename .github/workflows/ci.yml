@@ -4,6 +4,12 @@ on:
         branches:
             - main
     push:
+        paths:
+            - packages/**
+            - rollup.config.js
+            - package.json
+            - pnpm-lock.yaml
+            - .github/workflows/**
     workflow_dispatch:
 
 jobs:
