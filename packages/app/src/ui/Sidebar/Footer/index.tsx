@@ -30,7 +30,9 @@ export default () => {
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
 		const files = FilesStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path);
 
-		const style = settings().get('commitStyles')[selected()?.path];
+		const style = settings()?.get('commitStyles')[selected()?.path];
+
+		if (!style) return { message: '', style: 'none' };
 
 		const message = getCommitStyledMessage(
 			{ files: files?.map((f) => f?.path) },
@@ -44,15 +46,15 @@ export default () => {
 		<div class={`sidebar__footer ${selected() && changes() && staged() ? '' : 'hidden'}`}>
 			<TextArea
 				value={summary()}
-				placeholder={commitMessage().message || 'Summary'}
+				placeholder={commitMessage()?.message || 'Summary'}
 				onChange={(value) => {
 					if (
-						settings().get('enforceCommitMessageStyle') === true &&
-						commitMessage().style !== 'none'
+						settings()?.get('enforceCommitMessageStyle') === true &&
+						commitMessage()?.style !== 'none'
 					) {
 						const allowed = validateCommitMessage(
 							value,
-							commitMessage().style as CommitStyle
+							commitMessage()?.style as CommitStyle
 						);
 
 						if (allowed) {

@@ -30,16 +30,16 @@ export default () => {
 		<>
 			<div
 				id="app-container"
-				class={`platform-${window.Native.platform} theme-${settings().get('theme')} ${
-					settings().get('vibrancy') ? 'vibrancy' : ''
+				class={`platform-${window.Native.platform} theme-${settings()?.get('theme')} ${
+					settings()?.get('vibrancy') ? 'vibrancy' : ''
 				}`}
 				style={{
-					'--settings-font-family': settings().get('fontFamily') as string,
-					'--settings-accent-color': settings().get('accentColor') as string
+					'--settings-font-family': settings()?.get('fontFamily') as string,
+					'--settings-accent-color': settings()?.get('accentColor') as string
 				}}
 			>
 				<Layer
-					type={settings().get('expandedSettings') ? 'bare' : 'rich'}
+					type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
 					key="settings"
 					dismissable
 					transitions={Layer.Transitions.Fade}

@@ -37,9 +37,9 @@ export default (props: IEmptyStateProps) => {
 			<Show when={props.image}>
 				<img
 					src={`assets/empty_state/${
-						settings().get('theme') === 'dark'
+						settings()?.get('theme') === 'dark'
 							? props.image.dark
-							: settings().get('theme') === 'light'
+							: settings()?.get('theme') === 'light'
 							? props.image.light
 							: matchMedia('(prefers-color-scheme: dark)').matches
 							? props.image.dark
