@@ -27,13 +27,17 @@ app.once('ready', async () => {
 		width: 1200,
 		minWidth: 800,
 		minHeight: 500,
-		show: true,
+		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
 			preload: path.resolve(__dirname, 'preload.js'),
 			nodeIntegration: true,
 			contextIsolation: true
 		}
+	});
+
+	win.once('ready-to-show', () => {
+		win.show();
 	});
 
 	win.webContents.on('before-input-event', (event, input) => {
