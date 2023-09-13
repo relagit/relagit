@@ -1,0 +1,40 @@
+name: Bug Report
+description: File a bug report
+title: '(bug) '
+labels: ['bug', 'triage']
+projects: ['relagit/2']
+assignees:
+    - TheCommieAxolotl
+
+body:
+    - type: textarea
+      id: what-happened
+      attributes:
+          label: What happened?
+          description: Also tell us what you expected to happen (but didn't).
+          placeholder: Tell us what you see!
+      validations:
+          required: true
+    - type: textarea
+      id: version
+      attributes:
+          label: Version
+          description: What version of RelaGit are you running?
+      validations:
+          required: true
+    - type: dropdown
+      id: system
+      attributes:
+          label: What systems are you seeing the problem on?
+          multiple: true
+          options:
+              - MacOS (OSX)
+              - Windows
+              - Linux
+              - Other
+    - type: textarea
+      id: logs
+      attributes:
+          label: Relevant log output
+          description: Please copy and paste any relevant log output.
+          render: shell
