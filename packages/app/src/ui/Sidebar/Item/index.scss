@@ -4,7 +4,7 @@
 	font-weight: 400;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 16px 0 8px;
+	padding: 0 12px 0 8px;
 	border-bottom: 1px solid var(--separator-secondary);
 	transition: background-color 0.2s ease-in-out;
 	overflow: hidden;
@@ -57,6 +57,12 @@
 		margin-left: 20px;
 		opacity: 0.3;
 		cursor: pointer;
+		padding: 4px;
+		border-radius: 4px;
+
+		&:focus {
+			outline: 2px solid #{illyrica.$color-blue-500};
+		}
 
 		&.staged {
 			opacity: 1;

@@ -45,6 +45,7 @@ export default () => {
 	return (
 		<div class={`sidebar__footer ${selected() && changes() && staged() ? '' : 'hidden'}`}>
 			<TextArea
+				disabled={!(selected() && changes() && staged())}
 				value={summary()}
 				placeholder={commitMessage()?.message || 'Summary'}
 				onChange={(value) => {
@@ -79,6 +80,7 @@ export default () => {
 				}}
 			/>
 			<TextArea
+				disabled={!(selected() && changes() && staged())}
 				value={description()}
 				placeholder="Description"
 				onChange={setDescription}
