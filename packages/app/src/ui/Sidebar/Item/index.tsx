@@ -73,6 +73,7 @@ export default (props: IFile) => {
 			<div
 				aria-role="button"
 				aria-label={`Open ${props.name}`}
+				aria-selected={selectedFile() === props}
 				class={`sidebar__item ${selectedFile() === props ? 'active' : ''}`}
 				data-id={props.id}
 				data-active={selectedFile() === props}
