@@ -29,6 +29,7 @@ export default (props: IHeaderDrawerProps) => {
 
 	return (
 		<div
+			aria-hidden={!props.open[0]()}
 			classList={{
 				sidebar__drawer: true,
 				open: props.open[0]()
