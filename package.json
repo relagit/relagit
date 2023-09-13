@@ -21,7 +21,7 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
-		"vscode-oniguruma": "1.7.0"
+		"vscode-oniguruma": "^1.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.22.17",
