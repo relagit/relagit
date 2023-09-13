@@ -32,7 +32,10 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 			<For each={props.options}>
 				{(option) => {
 					return (
-						<label classList={{ selected: value() === option.value }}>
+						<label
+							aria-selected={value() === option.value}
+							classList={{ selected: value() === option.value }}
+						>
 							<input
 								type="radio"
 								value={option.value}
@@ -67,6 +70,8 @@ export const Switch = (props: ISwitchProps) => {
 		>
 			<label
 				aria-label={props.label}
+				aria-selected={props.value}
+				aria-disabled={props.disabled}
 				classList={{ selected: props.value }}
 				onClick={(e) => {
 					e.preventDefault();
@@ -81,6 +86,8 @@ export const Switch = (props: ISwitchProps) => {
 					</Show>
 				</div>
 				<div
+					aria-label={props.label}
+					aria-selected={props.value}
 					classList={{
 						check: true,
 						selected: props.value

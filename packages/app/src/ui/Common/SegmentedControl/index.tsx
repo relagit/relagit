@@ -25,6 +25,8 @@ export default (props: ISenmentedControlProps) => {
 				<div
 					aria-role="button"
 					aria-label={item.label}
+					aria-selected={value() === item.value}
+					aria-disabled={item.disabled || props.disabled}
 					class={`segmented-control__item ${value() === item.value ? 'selected' : ''} ${
 						item.disabled ? 'disabled' : ''
 					}`}
