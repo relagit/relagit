@@ -264,12 +264,12 @@
 	}
 
 	&::before {
-		left: 25%;
+		left: 15%;
 		transform: translateX(-50%) translateY(-0.15em);
 	}
 
 	&::after {
-		right: 25%;
+		right: 35%;
 		transform: translateX(50%) translateY(-0.15em);
 	}
 }

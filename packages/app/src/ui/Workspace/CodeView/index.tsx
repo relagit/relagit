@@ -61,9 +61,13 @@ export default (props: ICodeViewProps) => {
 			setSwitching(true);
 
 			setShowOverridden(false);
+			setShouldShow(true);
 
 			const contents = await Git.Content(props.file, props.repository);
+
 			const _diff = await Git.Diff(props.file);
+
+			setSwitching(false);
 
 			setContent(highlighter(contents, langFrom(props.file || '')));
 
@@ -81,8 +85,6 @@ export default (props: ICodeViewProps) => {
 			} else {
 				setShouldShow((diff() as GitDiff)?.files?.[0]?.chunks.length < 10);
 			}
-
-			setSwitching(false);
 		} catch (e) {
 			setThrew(e);
 
