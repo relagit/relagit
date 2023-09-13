@@ -51,7 +51,11 @@ specifiers:
   terser: ^5.19.4
   thena: ^0.0.9
   typescript: ^5.2.2
+  vscode-oniguruma: 1.7.0
   ws: ^8.14.1
+
+dependencies:
+  vscode-oniguruma: 1.7.0
 
 devDependencies:
   '@babel/core': 7.22.17
@@ -7333,7 +7337,6 @@ packages:
 
   /vscode-oniguruma/1.7.0:
     resolution: {integrity: sha512-L9WMGRfrjOhgHSdOYgCt/yRMsXzLDJSL7BPrOZt73gU0iWO4mpqzqQzOz5srxqTvMBaR0XZTSrVWo4j55Rc6cA==}
-    dev: true
 
   /vscode-textmate/9.0.0:
     resolution: {integrity: sha512-Cl65diFGxz7gpwbav10HqiY/eVYTO1sjQpmRmV991Bj7wAoOAjGQ97PpQcXorDE2Uc4hnGWLY17xme+5t6MlSg==}

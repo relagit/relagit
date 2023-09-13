@@ -29,7 +29,7 @@ app.once('ready', async () => {
 		minHeight: 500,
 		show: true,
 		webPreferences: {
-			devTools: __NODE_ENV__ === 'development',
+			devTools: true,
 			preload: path.resolve(__dirname, 'preload.js'),
 			nodeIntegration: true,
 			contextIsolation: true

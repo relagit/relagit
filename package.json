@@ -20,6 +20,9 @@
 		"make:windows": "electron-forge make --platform=win32"
 	},
 	"author": "TheCommieAxolotl",
+	"dependencies": {
+		"vscode-oniguruma": "1.7.0"
+	},
 	"devDependencies": {
 		"@babel/core": "^7.22.17",
 		"@babel/preset-env": "^7.22.15",
