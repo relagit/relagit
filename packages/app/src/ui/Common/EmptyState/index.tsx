@@ -61,7 +61,11 @@ export default (props: IEmptyStateProps) => {
 				<div class="empty-state__actions">
 					<For each={props.actions}>
 						{(action) => (
-							<Button onClick={action.onClick} type={action.type}>
+							<Button
+								label={action.label}
+								onClick={action.onClick}
+								type={action.type}
+							>
 								{action.label}
 							</Button>
 						)}

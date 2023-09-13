@@ -66,6 +66,7 @@ export const Switch = (props: ISwitchProps) => {
 			classList={{ 'settings-layer__setting__input switch': true, disabled: props.disabled }}
 		>
 			<label
+				aria-label={props.label}
 				classList={{ selected: props.value }}
 				onClick={(e) => {
 					e.preventDefault();
@@ -117,7 +118,12 @@ export default () => {
 			<div class="settings-layer__title">
 				<h1>Settings</h1>
 				<div class="settings-layer__title__buttons">
-					<button class="settings-layer__title__buttons__close" onClick={close}>
+					<button
+						aria-role="button"
+						aria-label="Close Settings"
+						class="settings-layer__title__buttons__close"
+						onClick={close}
+					>
 						<Icon size={24} variant={24} name="x-circle" />
 					</button>
 				</div>

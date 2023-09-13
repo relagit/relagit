@@ -77,10 +77,6 @@
 				cursor: pointer;
 				transition: background-color 0.2s ease-in-out;
 
-				&:focus {
-					outline: 2px solid #{illyrica.$color-blue-500};
-				}
-
 				&:not(:last-child) {
 					border-bottom: 1px solid var(--separator-secondary);
 				}

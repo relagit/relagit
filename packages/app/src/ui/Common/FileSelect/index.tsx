@@ -83,6 +83,9 @@ export default (props: IFileSelectProps) => {
 					/>
 				</Show>
 				<button
+					aria-role="button"
+					aria-label="Select a file"
+					aria-disabled={props.disabled}
 					class="filepicker__input__button"
 					onClick={openDialog}
 					disabled={props.disabled}

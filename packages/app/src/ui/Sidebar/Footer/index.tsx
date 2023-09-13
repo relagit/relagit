@@ -87,6 +87,7 @@ export default () => {
 				expanded={true}
 			/>
 			<Button
+				label={`Commit to ${selected()?.branch || 'Remote'}`}
 				type={error() ? 'danger' : 'brand'}
 				onClick={async () => {
 					await Git.Commit(selected(), summary(), description());

@@ -69,7 +69,11 @@ export default (props: IHeaderDrawerProps) => {
 							}
 						]}
 					>
-						<button class="sidebar__drawer__body__header__button">
+						<button
+							aria-role="button"
+							aria-label="Add Repository"
+							class="sidebar__drawer__body__header__button"
+						>
 							<Icon name="plus" />
 						</button>
 					</Menu>
@@ -102,15 +106,19 @@ export default (props: IHeaderDrawerProps) => {
 									]}
 								>
 									<button
+										aria-role="button"
+										aria-label={`Switch to ${repository.name}`}
 										classList={{
 											sidebar__drawer__body__content__item: true,
 											selected: selected()?.name === repository.name
 										}}
 										onClick={() => {
 											props.open[1](false);
+
 											debug(
 												'Transitioning to repository: ' + repository.name
 											);
+
 											LocationStore.setSelectedRepository(repository);
 										}}
 									>
@@ -128,6 +136,7 @@ export default (props: IHeaderDrawerProps) => {
 			</div>
 			<div class="sidebar__drawer__footer">
 				<Button
+					label="Open Settings"
 					type="default"
 					onClick={() => {
 						props.open[1](false);

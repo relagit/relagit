@@ -94,6 +94,8 @@ export default (props: IMenu) => {
 									case 'item':
 										return (
 											<div
+												aria-role="button"
+												aria-label={item.label}
 												class={`menu__item ${item.color || ''} ${
 													item.disabled ? 'disabled' : ''
 												}`}

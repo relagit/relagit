@@ -104,10 +104,11 @@ export default (props: IAddRepositoryModalProps) => {
 			</ModalBody>
 			<ModalFooter>
 				<div class="modal__footer__buttons">
-					<Button type="default" onClick={props.modalProps.close}>
+					<Button label="Cancel" type="default" onClick={props.modalProps.close}>
 						Cancel
 					</Button>
 					<Button
+						label="Add Repository"
 						type="brand"
 						onClick={() => {
 							SettingsStore.setSetting('repositories', [

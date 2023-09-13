@@ -7,11 +7,15 @@ interface IButtonProps {
 	onClick: () => void;
 	className?: string;
 	disabled?: boolean;
+	label: string;
 }
 
 export default (props: IButtonProps) => {
 	return (
 		<button
+			aria-role="button"
+			aria-label={props.label}
+			aria-disabled={props.disabled}
 			class={`button ${props.type} ${props.className || ''}`}
 			onClick={props.onClick}
 			disabled={props.disabled}

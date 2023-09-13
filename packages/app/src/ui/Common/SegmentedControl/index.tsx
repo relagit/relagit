@@ -23,6 +23,8 @@ export default (props: ISenmentedControlProps) => {
 		>
 			{props.items.map((item) => (
 				<div
+					aria-role="button"
+					aria-label={item.label}
 					class={`segmented-control__item ${value() === item.value ? 'selected' : ''} ${
 						item.disabled ? 'disabled' : ''
 					}`}

@@ -67,7 +67,12 @@ const Modal = (props: IModalProps) => {
 
 export const ModalCloseButton = (props: { close: () => void }) => {
 	return (
-		<button class="modal__close" onClick={props.close}>
+		<button
+			aria-role="button"
+			aria-label="Close Modal"
+			class="modal__close"
+			onClick={props.close}
+		>
 			<Icon size={24} variant={24} name="x-circle" />
 		</button>
 	);

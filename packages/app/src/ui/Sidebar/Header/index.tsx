@@ -23,7 +23,12 @@ export default () => {
 	return (
 		<>
 			<Drawer open={[open, setOpen]} />
-			<div class="sidebar__header" onClick={() => setOpen(!open())}>
+			<div
+				aria-role="button"
+				aria-label="Open Repository Drawer"
+				class="sidebar__header"
+				onClick={() => setOpen(!open())}
+			>
 				<div class="sidebar__header__info">
 					<div class="sidebar__header__repository">
 						{selected()?.name || 'No Repository Selected'}
