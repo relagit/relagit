@@ -36,7 +36,7 @@ export interface ICodeViewProps {
 }
 
 const dealWithTabs = (line: string) => {
-	return line.replaceAll(/(?<!\S)(\t|    )/g, '<span class="pl-tab">  </span>');
+	return line.replaceAll(/(?<!\S)(\t|  )/g, '<span class="pl-tab">  </span>');
 };
 
 export default (props: ICodeViewProps) => {
@@ -62,10 +62,11 @@ export default (props: ICodeViewProps) => {
 
 			setShowOverridden(false);
 			setShouldShow(true);
+			setThrew(null);
 
 			const contents = await Git.Content(props.file, props.repository);
 
-			const _diff = await Git.Diff(props.file);
+			const _diff = await Git.Diff(props.file, props.repository);
 
 			setSwitching(false);
 

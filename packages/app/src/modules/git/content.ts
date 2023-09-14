@@ -1,4 +1,3 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import { ERROR_IDENTIFIERS } from './constants';
@@ -17,7 +16,7 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 
 	if (!fs.existsSync(file)) {
 		return await Git({
-			directory: path.dirname(file),
+			directory: repoPath,
 			command: 'show',
 			args: [`${source || 'HEAD'}:` + file.replace(repoPath, '').replace(/^[\/\\]/, '')]
 		});
@@ -25,7 +24,7 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 
 	try {
 		result = await Git({
-			directory: path.dirname(file),
+			directory: repoPath,
 			command: 'show',
 			args: [`${source || ':0'}:` + file]
 		});
