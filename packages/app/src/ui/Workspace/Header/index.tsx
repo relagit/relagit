@@ -2,9 +2,9 @@ import { JSX, Show } from 'solid-js';
 
 import { refetchRepository } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
+import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
 import { renderDate } from '@modules/time';
-import { debug } from '@modules/logger';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
@@ -142,9 +142,13 @@ export default () => {
 					if (aob > 0) {
 						debug('Pushing changes');
 
-						await Git.Push(LocationStore.selectedRepository);
+						try {
+							await Git.Push(LocationStore.selectedRepository);
 
-						return refetchRepository(LocationStore.selectedRepository);
+							return refetchRepository(LocationStore.selectedRepository);
+						} catch (e) {
+							error(e);
+						}
 					}
 				}}
 			/>
