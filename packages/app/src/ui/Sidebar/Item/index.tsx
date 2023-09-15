@@ -84,7 +84,9 @@ export default (props: IFile) => {
 				}}
 			>
 				<div class="sidebar__item__filename">
-					<span class="sidebar__item__filename__path">{props.path}</span>
+					<span class="sidebar__item__filename__path" title={props.path}>
+						{props.path}
+					</span>
 					<span class="sidebar__item__filename__name">
 						<span class="sidebar__item__filename__name__separator">
 							{props.path.length ? '/' : ''}
