@@ -250,27 +250,28 @@
 
 .pl-tab {
 	display: inline-block;
+	position: relative;
 
 	&::after,
 	&::before {
 		content: '';
 		width: 2px;
 		height: 2px;
+		position: absolute;
 		background: var(--color-label);
 		opacity: 0.4;
-		position: relative;
 		display: inline-block;
 		border-radius: 50%;
 	}
 
 	&::before {
 		left: 15%;
-		transform: translateX(-50%) translateY(-0.15em);
+		transform: translateX(-50%) translateY(0.75em);
 	}
 
 	&::after {
 		right: 35%;
-		transform: translateX(50%) translateY(-0.15em);
+		transform: translateX(50%) translateY(0.75em);
 	}
 }
 
