@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { For, createSignal } from 'solid-js';
 
 import './index.scss';
 
@@ -21,26 +21,38 @@ export default (props: ISenmentedControlProps) => {
 		<div
 			class={`segmented-control ${props.disabled ? 'disabled' : ''} ${props.className || ''}`}
 		>
-			{props.items.map((item) => (
-				<div
-					aria-role="button"
-					aria-label={item.label}
-					aria-selected={value() === item.value}
-					aria-disabled={item.disabled || props.disabled}
-					class={`segmented-control__item ${value() === item.value ? 'selected' : ''} ${
-						item.disabled ? 'disabled' : ''
-					}`}
-					onClick={() => {
-						if (item.disabled || props.disabled) return;
+			<For each={props.items}>
+				{(item) => (
+					<div
+						aria-role="button"
+						aria-label={item.label}
+						aria-selected={value() === item.value}
+						aria-disabled={item.disabled || props.disabled}
+						class={`segmented-control__item ${
+							value() === item.value ? 'selected' : ''
+						} ${item.disabled ? 'disabled' : ''}`}
+						tabIndex={0}
+						onClick={() => {
+							if (item.disabled || props.disabled) return;
 
-						setValue(item.value);
+							setValue(item.value);
 
-						props.onChange(item.value);
-					}}
-				>
-					{item.label}
-				</div>
-			))}
+							props.onChange(item.value);
+						}}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								if (item.disabled || props.disabled) return;
+
+								setValue(item.value);
+
+								props.onChange(item.value);
+							}
+						}}
+					>
+						{item.label}
+					</div>
+				)}
+			</For>
 		</div>
 	);
 };
