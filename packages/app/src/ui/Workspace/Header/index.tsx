@@ -144,11 +144,11 @@ export default () => {
 
 						try {
 							await Git.Push(LocationStore.selectedRepository);
-
-							return refetchRepository(LocationStore.selectedRepository);
 						} catch (e) {
 							error(e);
 						}
+
+						refetchRepository(LocationStore.selectedRepository);
 					}
 				}}
 			/>
