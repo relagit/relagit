@@ -26,8 +26,14 @@ export default () => {
 			<div
 				aria-role="button"
 				aria-label="Open Repository Drawer"
+				tabIndex={0}
 				class="sidebar__header"
 				onClick={() => setOpen(!open())}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						setOpen(!open());
+					}
+				}}
 			>
 				<div class="sidebar__header__info">
 					<div class="sidebar__header__repository">
