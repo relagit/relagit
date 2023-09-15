@@ -43,7 +43,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 			(_, filename) => {
 				if (fsTimeout) return;
 
-				if (filename.startsWith('.git')) return; // Ignore git files
+				if (filename.startsWith('.git/index.lock')) return; // Ignore git files
 
 				window._refetchRepository(this.getByPath(path));
 
