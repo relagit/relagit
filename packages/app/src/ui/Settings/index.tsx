@@ -1,4 +1,4 @@
-import { Accessor, createEffect, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
+import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
@@ -112,10 +112,6 @@ export default () => {
 		}
 	};
 
-	createEffect(() => {
-		console.log(settings(), settings()?.get('vibrancy'));
-	});
-
 	onMount(() => {
 		window.addEventListener('keydown', listener);
 	});
@@ -167,6 +163,16 @@ export default () => {
 					value={() => settings()?.get('enforceCommitMessageStyle') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('enforceCommitMessageStyle', value);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<Switch
+					label="Prefer Parentheses"
+					note="Use parentheses instead of brackets for commit message styles."
+					value={() => settings()?.get('preferParens') as boolean}
+					onChange={(value) => {
+						SettingsStore.setSetting('preferParens', value);
 					}}
 				/>
 			</div>

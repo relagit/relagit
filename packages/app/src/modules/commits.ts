@@ -36,6 +36,7 @@ const getScope = (files: string[]): string => {
 export const getCommitStyledMessage = (
 	commit: IDraftCommit,
 	style?: CommitStyle,
+	parens?: boolean,
 	type?: string
 ): ICommit => {
 	if (!commit.files?.length) return;
@@ -60,7 +61,9 @@ export const getCommitStyledMessage = (
 			};
 		case CommitStyle.relational:
 			return {
-				message: `[${scope}] ${type ? `${type}: ` : ''}`,
+				message: `${parens ? '(' : '['}${scope}${parens ? ')' : ']'} ${
+					type ? `${type}: ` : ''
+				}`,
 				description: '',
 				files: commit.files
 			};

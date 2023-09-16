@@ -12,6 +12,7 @@ export interface ISettings {
 		[repo: string]: string;
 	};
 	enforceCommitMessageStyle: boolean;
+	preferParens: boolean;
 	theme: 'light' | 'dark' | 'system';
 	vibrancy: string | boolean;
 	expandedSettings: boolean;

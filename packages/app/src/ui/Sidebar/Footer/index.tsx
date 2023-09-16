@@ -36,7 +36,8 @@ export default () => {
 
 		const message = getCommitStyledMessage(
 			{ files: files?.map((f) => f?.path) },
-			style as CommitStyle
+			style as CommitStyle,
+			settings()?.get('preferParens') as boolean
 		)?.message;
 
 		return { message, style };
