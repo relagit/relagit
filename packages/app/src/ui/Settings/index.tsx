@@ -1,4 +1,4 @@
-import { createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
+import { Accessor, createEffect, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
@@ -56,7 +56,7 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 };
 
 export interface ISwitchProps {
-	value: boolean;
+	value: Accessor<boolean>;
 	label: string;
 	onChange: (value: boolean) => void;
 	disabled?: boolean;
@@ -70,13 +70,13 @@ export const Switch = (props: ISwitchProps) => {
 		>
 			<label
 				aria-label={props.label}
-				aria-selected={props.value}
+				aria-selected={props.value()}
 				aria-disabled={props.disabled}
-				classList={{ selected: props.value }}
+				classList={{ selected: props.value() }}
 				onClick={(e) => {
 					e.preventDefault();
 
-					props.onChange(!props.value);
+					props.onChange(!props.value());
 				}}
 			>
 				<div class="label">
@@ -87,13 +87,13 @@ export const Switch = (props: ISwitchProps) => {
 				</div>
 				<div
 					aria-label={props.label}
-					aria-selected={props.value}
+					aria-selected={props.value()}
 					classList={{
 						check: true,
-						selected: props.value
+						selected: props.value()
 					}}
 				>
-					<input type="checkbox" checked={props.value} />
+					<input type="checkbox" checked={props.value()} />
 					<span class="slider"></span>
 				</div>
 			</label>
@@ -112,6 +112,10 @@ export default () => {
 		}
 	};
 
+	createEffect(() => {
+		console.log(settings(), settings()?.get('vibrancy'));
+	});
+
 	onMount(() => {
 		window.addEventListener('keydown', listener);
 	});
@@ -119,6 +123,113 @@ export default () => {
 	onCleanup(() => {
 		window.removeEventListener('keydown', listener);
 	});
+
+	const General = (
+		<>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-commit-style">
+					Commit Message Style
+				</label>
+				<p class="settings-layer__setting__description">
+					This only effects the currently selected repository.
+				</p>
+				<RadioGroup
+					options={[
+						{
+							element: <>Conventional</>,
+							value: 'conventional'
+						},
+						{
+							element: <>Relational</>,
+							value: 'relational'
+						},
+						{
+							element: <>None</>,
+							value: 'none'
+						}
+					]}
+					disabled={!LocationStore.selectedRepository}
+					value={
+						settings()?.get('commitStyles')?.[LocationStore.selectedRepository?.path]
+					}
+					onChange={(value) => {
+						SettingsStore.setSetting('commitStyles', {
+							...(settings()?.get('commitStyles') as Record<string, string>),
+							[LocationStore.selectedRepository?.path]: value
+						});
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<Switch
+					label="Enforce Commit Message Style"
+					note="This will prevent you from committing if your commit message does not match the style selected for a repository."
+					value={() => settings()?.get('enforceCommitMessageStyle') as boolean}
+					onChange={(value) => {
+						SettingsStore.setSetting('enforceCommitMessageStyle', value);
+					}}
+				/>
+			</div>
+		</>
+	);
+
+	const Appearance = (
+		<>
+			<div class="settings-layer__setting">
+				<Switch
+					label="Vibrancy (MacOS)"
+					note="Enable Under-Window Vibrancy. This may impact performance. Requires Restart."
+					disabled={window.Native.platform !== 'darwin'}
+					value={() => settings()?.get('vibrancy') as boolean}
+					onChange={(value) => {
+						SettingsStore.setSetting('vibrancy', value);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-theme">
+					Theme
+				</label>
+				<RadioGroup
+					options={[
+						{
+							element: <>Light</>,
+							value: 'light'
+						},
+						{
+							element: <>Dark</>,
+							value: 'dark'
+						},
+						{
+							element: <>System</>,
+							value: 'system'
+						}
+					]}
+					value={settings()?.get('theme') as string}
+					onChange={(value) => {
+						SettingsStore.setSetting('theme', value);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-font">
+					Custom Font
+				</label>
+				<p class="settings-layer__setting__description">
+					This will override the default code font. You can use any font that is installed
+					on your system.
+				</p>
+				<TextArea
+					className="settings-layer__setting__textarea"
+					value={(settings()?.get('fontFamily') as string) || ''}
+					onChange={(value) => {
+						SettingsStore.setSetting('fontFamily', value);
+					}}
+					placeholder="e.g. 'JetBrains Mono', monospace"
+				/>
+			</div>
+		</>
+	);
 
 	return (
 		<div class="settings-layer">
@@ -141,136 +252,12 @@ export default () => {
 						{
 							label: 'General',
 							value: 'general',
-							element: (
-								<>
-									<div class="settings-layer__setting">
-										<label
-											class="settings-layer__setting__label"
-											id="settings-commit-style"
-										>
-											Commit Message Style
-										</label>
-										<p class="settings-layer__setting__description">
-											This only effects the currently selected repository.
-										</p>
-										<RadioGroup
-											options={[
-												{
-													element: <>Conventional</>,
-													value: 'conventional'
-												},
-												{
-													element: <>Relational</>,
-													value: 'relational'
-												},
-												{
-													element: <>None</>,
-													value: 'none'
-												}
-											]}
-											disabled={!LocationStore.selectedRepository}
-											value={
-												settings()?.get('commitStyles')?.[
-													LocationStore.selectedRepository?.path
-												]
-											}
-											onChange={(value) => {
-												SettingsStore.setSetting('commitStyles', {
-													...(settings()?.get('commitStyles') as Record<
-														string,
-														string
-													>),
-													[LocationStore.selectedRepository?.path]: value
-												});
-											}}
-										/>
-									</div>
-									<div class="settings-layer__setting">
-										<Switch
-											label="Enforce Commit Message Style"
-											note="This will prevent you from committing if your commit message does not match the style selected for a repository."
-											value={
-												settings()?.get(
-													'enforceCommitMessageStyle'
-												) as boolean
-											}
-											onChange={(value) => {
-												SettingsStore.setSetting(
-													'enforceCommitMessageStyle',
-													value
-												);
-											}}
-										/>
-									</div>
-								</>
-							)
+							element: General
 						},
 						{
 							label: 'Appearance',
 							value: 'appearance',
-							element: (
-								<>
-									<div class="settings-layer__setting">
-										<Switch
-											label="Vibrancy (MacOS)"
-											note="Enable Under-Window Vibrancy. This may impact performance. Requires Restart."
-											disabled={window.Native.platform !== 'darwin'}
-											value={settings()?.get('vibrancy') as boolean}
-											onChange={(value) => {
-												SettingsStore.setSetting('vibrancy', value);
-											}}
-										/>
-									</div>
-									<div class="settings-layer__setting">
-										<label
-											class="settings-layer__setting__label"
-											id="settings-theme"
-										>
-											Theme
-										</label>
-										<RadioGroup
-											options={[
-												{
-													element: <>Light</>,
-													value: 'light'
-												},
-												{
-													element: <>Dark</>,
-													value: 'dark'
-												},
-												{
-													element: <>System</>,
-													value: 'system'
-												}
-											]}
-											value={settings()?.get('theme') as string}
-											onChange={(value) => {
-												SettingsStore.setSetting('theme', value);
-											}}
-										/>
-									</div>
-									<div class="settings-layer__setting">
-										<label
-											class="settings-layer__setting__label"
-											id="settings-font"
-										>
-											Custom Font
-										</label>
-										<p class="settings-layer__setting__description">
-											This will override the default code font. You can use
-											any font that is installed on your system.
-										</p>
-										<TextArea
-											className="settings-layer__setting__textarea"
-											value={(settings()?.get('fontFamily') as string) || ''}
-											onChange={(value) => {
-												SettingsStore.setSetting('fontFamily', value);
-											}}
-											placeholder="e.g. 'JetBrains Mono', monospace"
-										/>
-									</div>
-								</>
-							)
+							element: Appearance
 						}
 					]}
 				/>

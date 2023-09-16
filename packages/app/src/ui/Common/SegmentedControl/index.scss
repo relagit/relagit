@@ -30,6 +30,12 @@
 			color: var(--color-primary);
 		}
 
+		&:focus {
+			outline: none;
+			border-color: #{illyrica.$color-blue-500} !important;
+			color: var(--color-primary);
+		}
+
 		&.selected {
 			border-color: var(--separator-primary);
 			color: var(--color-primary);

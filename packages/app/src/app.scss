@@ -89,10 +89,6 @@
 
 	--separator-primary: #{illyrica.$dark-base-light-grey};
 	--separator-secondary: #{illyrica.$dark-base-lighter-grey};
-
-	.switch label .check .slider {
-		background-color: transparent !important;
-	}
 }
 
 * {
@@ -108,6 +104,10 @@
 	@include darkTheme;
 }
 
+.theme-dark .switch label .check .slider {
+	background-color: transparent !important;
+}
+
 .theme-light,
 .theme-light ::after,
 .theme-light ::before {
@@ -119,6 +119,10 @@
 	.theme-system ::after,
 	.theme-system ::before {
 		@include darkTheme;
+	}
+
+	.theme-system .switch label .check .slider {
+		background-color: transparent !important;
 	}
 }
 

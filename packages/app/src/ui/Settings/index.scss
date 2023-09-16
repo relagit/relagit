@@ -54,14 +54,13 @@
 		&__label {
 			font-size: 14px;
 			font-weight: 400;
-			color: var(--color-label);
+			color: var(--color-primary);
 		}
 
 		&__description {
 			font-size: 14px;
 			font-weight: 400;
 			color: var(--color-label);
-			opacity: 0.6;
 		}
 
 		&__input {
@@ -166,7 +165,7 @@
 		align-items: center;
 		cursor: pointer;
 		font-size: 14px;
-		color: var(--color-label);
+		color: var(--color-primary);
 		font-weight: 400;
 
 		.label {
@@ -178,7 +177,6 @@
 				font-size: 14px;
 				font-weight: 400;
 				color: var(--color-label);
-				opacity: 0.6;
 			}
 		}
 
