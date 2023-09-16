@@ -16,21 +16,27 @@ export interface ICommit {
 }
 
 const getScope = (files: string[]): string => {
-	if (!files.length) return;
+	const directories = files.map((file: string) => file.split('/'));
 
-	const levels = files.map((file) => file.split('/'));
+	let out = '';
 
-	let scope = levels[0][0];
+	for (let i = 0; i < directories[0].length; i++) {
+		const directory = directories[0][i];
+		if (
+			directories.every((directoryList: string[]) => {
+				const current = directoryList[i];
 
-	for (let i = 1; i < levels.length; i++) {
-		if (levels[i][0] !== scope) return '';
+				return (
+					current === directory &&
+					!['node_modules', 'packages', 'app', 'src', 'lib'].includes(current)
+				);
+			})
+		) {
+			out += `${directory}/`;
+		}
 	}
 
-	if (['node_modules', 'packages', 'app', 'src'].includes(scope)) {
-		scope = levels[0][1];
-	}
-
-	return scope;
+	return out.endsWith('/') ? out.slice(0, -1) : out;
 };
 
 export const getCommitStyledMessage = (

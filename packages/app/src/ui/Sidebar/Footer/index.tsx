@@ -28,14 +28,14 @@ export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
-		const files = FilesStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path);
+		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
 		const style = settings()?.get('commitStyles')?.[selected()?.path];
 
 		if (!style) return { message: '', style: 'none' };
 
 		const message = getCommitStyledMessage(
-			{ files: files?.map((f) => f?.path) },
+			{ files },
 			style as CommitStyle,
 			settings()?.get('preferParens') as boolean
 		)?.message;
