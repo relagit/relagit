@@ -7,7 +7,11 @@ import Add from './Add';
 
 import './index.scss';
 
-export default (props: { tab: 'add' | 'create' }) => {
+export interface IRepositoryModalProps {
+	tab: 'add' | 'create';
+}
+
+export default (props: IRepositoryModalProps) => {
 	const [tab, setTab] = createSignal(props.tab ? (props.tab === 'add' ? 0 : 1) : 0);
 	const draftPath = createSignal('');
 

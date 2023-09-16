@@ -11,13 +11,15 @@ export const customIcons = {
 	cPull: Pull
 };
 
-export default (props: {
+export interface IIconProps {
 	name: IconName | keyof typeof customIcons;
 	variant?: 12 | 16 | 24 | 32;
 	className?: string;
 	size?: number;
 	style?: JSX.HTMLAttributes<HTMLSpanElement>['style'];
-}) => {
+}
+
+export default (props: IIconProps) => {
 	return (
 		<Show
 			when={customIcons.hasOwnProperty(props.name)}

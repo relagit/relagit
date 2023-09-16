@@ -12,7 +12,11 @@ import Footer from './Footer';
 
 import './index.scss';
 
-export default (props: { sidebar: boolean }) => {
+export interface ISidebarProps {
+	sidebar: boolean;
+}
+
+export default (props: ISidebarProps) => {
 	const files = createStoreListener([FileStore, LocationStore], () =>
 		FileStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
 	);

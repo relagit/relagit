@@ -8,7 +8,11 @@ import CodeView from './CodeView';
 
 import './index.scss';
 
-export default (props: { sidebar: boolean }) => {
+export interface IWorkspaceProps {
+	sidebar: boolean;
+}
+
+export default (props: IWorkspaceProps) => {
 	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository?.path);
 	const file = createStoreListener([LocationStore], () => {
 		const repo = LocationStore.selectedRepository;
