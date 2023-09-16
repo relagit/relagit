@@ -55,8 +55,9 @@
 		}
 
 		&:focus {
+			background-color: var(--bg-active);
 			border-color: transparent;
-			outline: 2px solid #{illyrica.$color-blue-500};
+			outline: none;
 		}
 
 		svg {
