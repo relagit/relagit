@@ -1,3 +1,5 @@
+import { createSignal } from 'solid-js';
+
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import RepositoryStore from '@stores/repository';
@@ -13,6 +15,11 @@ import './app.scss';
 
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
+	const [sidebar, setSidebar] = createSignal(true);
+
+	window.Native.listeners.SIDEBAR((_, value) => {
+		setSidebar((o) => value ?? !o);
+	});
 
 	createStoreListener([SettingsStore], async () => {
 		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
@@ -43,8 +50,8 @@ export default () => {
 					<Settings />
 				</Layer>
 				<Modal.Layer />
-				<Sidebar />
-				<Workspace />
+				<Sidebar sidebar={sidebar()} />
+				<Workspace sidebar={sidebar()} />
 			</div>
 		</>
 	);

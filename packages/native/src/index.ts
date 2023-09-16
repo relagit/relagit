@@ -1,11 +1,13 @@
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
-import { log } from './modules/logger';
-import { getSettings } from './modules/settings';
-import initIPC, { dispatch } from './modules/ipc';
-
+import pkj from '../../../package.json' assert { type: 'json' };
 import * as path from 'path';
 
-import pkj from '../../../package.json' assert { type: 'json' };
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+
+import initIPC, { dispatch } from './modules/ipc';
+import { getSettings } from './modules/settings';
+import { log } from './modules/logger';
+
+import * as ipc from '~/common/ipc';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',
@@ -25,7 +27,7 @@ app.once('ready', async () => {
 		visualEffectState: settings.get('vibrancy') ? 'active' : undefined,
 		height: 850,
 		width: 1200,
-		minWidth: 800,
+		minWidth: 500,
 		minHeight: 500,
 		show: false,
 		webPreferences: {
@@ -45,7 +47,17 @@ app.once('ready', async () => {
 			(process.platform === 'darwin' && input.meta && input.key === 'k') ||
 			(input.control && input.key === 'k')
 		) {
-			win.webContents.send('open-switcher');
+			win.webContents.send(ipc.OPEN_SWITCHER);
+			win.webContents.send(ipc.OPEN_SIDEBAR, true);
+
+			event.preventDefault();
+		}
+
+		if (
+			(process.platform === 'darwin' && input.meta && input.key === 's') ||
+			(input.control && input.key === 's')
+		) {
+			win.webContents.send(ipc.OPEN_SIDEBAR);
 
 			event.preventDefault();
 		}

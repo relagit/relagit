@@ -12,13 +12,13 @@ import Footer from './Footer';
 
 import './index.scss';
 
-export default () => {
+export default (props: { sidebar: boolean }) => {
 	const files = createStoreListener([FileStore, LocationStore], () =>
 		FileStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 
 	return (
-		<div class="sidebar">
+		<div classList={{ sidebar: true, 'sidebar-active': props.sidebar }}>
 			<Header />
 			<div class="sidebar__items">
 				<Show

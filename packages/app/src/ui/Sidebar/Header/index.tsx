@@ -12,8 +12,8 @@ import './index.scss';
 export default () => {
 	const [open, setOpen] = createSignal(false);
 
-	window.Native.listeners.SWITCHER(() => {
-		setOpen((o) => !o);
+	window.Native.listeners.SWITCHER((_, value) => {
+		setOpen((o) => value ?? !o);
 	});
 
 	const selected = createStoreListener([LocationStore, RespositoryStore], () =>

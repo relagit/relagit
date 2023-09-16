@@ -4,6 +4,7 @@ import * as starryNight from '@wooorm/starry-night';
 import * as sucrase from 'sucrase';
 
 import { Workflow } from '~/app/src/modules/actions';
+import * as ipc from '~/common/ipc';
 
 export const Native = {
 	DANGEROUS__NODE__REQUIRE: (id: string) => {
@@ -20,13 +21,16 @@ export const Native = {
 	},
 	listeners: {
 		SETTINGS: (fn: () => void) => {
-			ipcRenderer.on('open-settings', fn);
+			ipcRenderer.on(ipc.OPEN_SETTINGS, fn);
 		},
-		SWITCHER: (fn: () => void) => {
-			ipcRenderer.on('open-switcher', fn);
+		SIDEBAR: (fn: (e: Event, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_SIDEBAR, fn);
+		},
+		SWITCHER: (fn: (e: Event, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_SWITCHER, fn);
 		},
 		LOAD_WORKFLOW: (fn: (e: Event, wf: Workflow) => void) => {
-			ipcRenderer.on('load-workflow', fn);
+			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		}
 	},
 	platform: process.platform

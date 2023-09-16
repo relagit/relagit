@@ -1,11 +1,22 @@
 .sidebar {
+	position: absolute;
 	min-width: 350px;
 	width: 350px;
 	height: 100vh;
 	background-color: var(--bg-material);
-	position: relative;
 	overflow: hidden;
 	border-right: 1px solid var(--separator-primary);
+	transform: translateX(-100%);
+	transition: transform 0.2s ease-in-out;
+	z-index: 9;
+
+	&.sidebar-active {
+		transform: translateX(0);
+
+		@media screen and (max-width: 800px) {
+			backdrop-filter: blur(10px);
+		}
+	}
 
 	&__items {
 		height: calc(100% - 350px);

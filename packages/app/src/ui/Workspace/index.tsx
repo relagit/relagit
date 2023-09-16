@@ -8,7 +8,7 @@ import CodeView from './CodeView';
 
 import './index.scss';
 
-export default () => {
+export default (props: { sidebar: boolean }) => {
 	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository?.path);
 	const file = createStoreListener([LocationStore], () => {
 		const repo = LocationStore.selectedRepository;
@@ -21,7 +21,7 @@ export default () => {
 	});
 
 	return (
-		<div class="workspace">
+		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
 			<Header />
 			<div class="workspace__file">
 				<div class="workspace__file__path">{file().file?.path}/</div>
