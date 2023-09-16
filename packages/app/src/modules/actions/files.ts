@@ -47,9 +47,7 @@ const fileSort = (
 
 const isDirectory = async (file: string) => {
 	try {
-		const dir = await promises.opendir(file);
-
-		dir.close();
+		await promises.opendir(file); // we are specifically NOT closing this, it will be picked up by the gc.
 
 		return true;
 	} catch (error) {
