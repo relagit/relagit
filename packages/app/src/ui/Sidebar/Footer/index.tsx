@@ -92,9 +92,9 @@ export default () => {
 				onClick={async () => {
 					await Git.Commit(selected(), summary(), description());
 
-					await refetchRepository(selected());
-
 					setSummary('');
+
+					await refetchRepository(selected());
 				}}
 				disabled={!Boolean(summary().length)}
 			>
