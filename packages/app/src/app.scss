@@ -104,8 +104,12 @@
 	@include darkTheme;
 }
 
-.theme-dark .switch label .check .slider {
-	background-color: transparent !important;
+.theme-dark .switch label .check.selected .slider {
+	background-color: #{illyrica.$color-blue-700} !important;
+}
+
+.theme-dark .switch label .check.selected {
+	--switch-bg: var(--bg-quaternary);
 }
 
 .theme-light,
@@ -121,8 +125,12 @@
 		@include darkTheme;
 	}
 
-	.theme-system .switch label .check .slider {
-		background-color: transparent !important;
+	.theme-system .switch label .check.selected .slider {
+		background-color: #{illyrica.$color-blue-700} !important;
+	}
+
+	.theme-system .switch label .check.selected {
+		--switch-bg: var(--bg-quaternary);
 	}
 }
 

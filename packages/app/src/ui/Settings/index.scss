@@ -201,6 +201,7 @@
 			--switch-bg: var(--bg-tertiary);
 			--switch-thumb: var(--bg-senary);
 			--switch-stroke: var(--separator-primary);
+			--switch-slider-stroke: var(--switch-stroke);
 			--switch-focus: #{illyrica.$color-blue-500};
 
 			&:focus {
@@ -224,15 +225,16 @@
 				left: 3px;
 				width: 14px;
 				height: 14px;
-				border: 1px solid var(--switch-stroke);
+				border: 1px solid var(--switch-slider-stroke);
 				background-color: var(--switch-thumb);
 				border-radius: 50%;
 				transition: 0.2s cubic-bezier(0, 0, 0.52, 0.96);
 			}
 
 			&.selected {
-				--switch-stroke: #{illyrica.$color-blue-500};
+				--switch-slider-stroke: #{illyrica.$color-blue-500};
 				--switch-thumb: #{illyrica.$color-blue-300};
+				--switch-bg: #{illyrica.$color-blue-100};
 
 				.slider {
 					transform: translateX(18px);
