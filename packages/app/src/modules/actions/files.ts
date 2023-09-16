@@ -156,7 +156,7 @@ export const refetchRepository = async (repository: IRepository, transitionTo = 
 
 	if (transitionTo) LocationStore.setSelectedRepository(repo);
 
-	if (!FileStore.getFilesByRepositoryName(repo.name).includes(currentFile)) {
+	if (!FileStore.getFilesByRepositoryName(repo.name)?.includes(currentFile)) {
 		LocationStore.setSelectedFile(undefined);
 	}
 };
