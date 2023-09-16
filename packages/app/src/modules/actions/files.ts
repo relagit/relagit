@@ -146,6 +146,8 @@ export const getRepositoryStatus = async (directory: string, files?: boolean, re
 export const refetchRepository = async (repository: IRepository, transitionTo = false) => {
 	if (!repository) return;
 
+	const currentFile = LocationStore.selectedFile;
+
 	FileStore.removeFiles(repository.path);
 	RemoteStore.removeByRepoPath(repository.path);
 	RepositoryStore.removeRepository(repository);
@@ -153,6 +155,10 @@ export const refetchRepository = async (repository: IRepository, transitionTo = 
 	const repo = await getRepositoryStatus(repository.path, true, true);
 
 	if (transitionTo) LocationStore.setSelectedRepository(repo);
+
+	if (!FileStore.getFilesByRepositoryName(repo.name).includes(currentFile)) {
+		LocationStore.setSelectedFile(undefined);
+	}
 };
 
 window._refetchRepository = refetchRepository;
