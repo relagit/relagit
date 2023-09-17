@@ -14,7 +14,7 @@
 		transform: translateX(0);
 
 		@media screen and (max-width: 800px) {
-			backdrop-filter: blur(10px);
+			background-color: var(--bg-quaternary) !important;
 		}
 	}
 
