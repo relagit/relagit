@@ -1,0 +1,99 @@
+.github-modal {
+	&__logo {
+		gap: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.mark {
+			svg {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		.logo {
+			svg {
+				width: 80px;
+				height: 24px;
+			}
+		}
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		grid-gap: 8px;
+
+		&__item {
+			background-color: var(--bg-tertiary);
+			border: 1px solid var(--separator-primary);
+			border-radius: 8px;
+			padding: 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			height: 150px;
+			transition: background-color 0.2s ease-in-out;
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--bg-quaternary);
+			}
+
+			&:focus {
+				border-color: transparent;
+				outline: 2px solid #{illyrica.$color-blue-500};
+			}
+
+			&__name {
+				font-size: 18px;
+				font-weight: 600;
+				margin: 0;
+				color: var(--color-primary);
+			}
+
+			&__description {
+				font-size: 14px;
+				margin: 0;
+				color: var(--color-secondary);
+			}
+
+			&__details {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 16px;
+				margin-top: auto;
+				color: var(--color-secondary);
+				font-size: 12px;
+
+				&__social {
+					display: flex;
+					gap: 8px;
+
+					&__stars,
+					&__forks {
+						display: flex;
+						align-items: center;
+						gap: 4px;
+					}
+				}
+
+				&__language {
+					display: flex;
+					gap: 8px;
+					align-items: center;
+					justify-content: center;
+
+					&__indicator {
+						width: 12px;
+						height: 12px;
+						border-radius: 50%;
+						border: 1px solid var(--separator-secondary);
+					}
+				}
+			}
+		}
+	}
+}

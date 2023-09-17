@@ -78,7 +78,10 @@ export const ModalCloseButton = (props: { close: () => void }) => {
 	);
 };
 
-export const ModalHeader = (props: { title?: string; children: JSX.Element | JSX.Element[] }) => {
+export const ModalHeader = (props: {
+	title?: JSX.Element;
+	children: JSX.Element | JSX.Element[];
+}) => {
 	return (
 		<div class="modal__header">
 			{props.title && <h2 class="modal__header__title">{props.title}</h2>}

@@ -11,6 +11,7 @@ import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
 
 import RepositoryModal from '@ui/Modal/RepositoryModal';
+import GithubModal from '@ui/Modal/GithubModal';
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
 import Menu from '@ui/Menu';
@@ -65,6 +66,16 @@ export default (props: IHeaderDrawerProps) => {
 									ModalStore.addModal({
 										type: 'create-repository',
 										element: <RepositoryModal tab="create" />
+									});
+								}
+							},
+							{
+								type: 'item',
+								label: 'Clone from GitHub',
+								onClick: () => {
+									ModalStore.addModal({
+										type: 'github-repository',
+										element: <GithubModal />
 									});
 								}
 							}
