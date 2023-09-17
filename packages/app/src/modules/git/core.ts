@@ -28,8 +28,10 @@ export const Git = async (params: IGitParams): Promise<string> => {
 				hasError = error;
 				reject(error);
 			} else if (stderr) {
-				hasError = stderr;
-				reject(stderr);
+				if (!(cmd.startsWith('git push ') && stderr.startsWith('To '))) {
+					hasError = stderr;
+					reject(stderr);
+				}
 			} else {
 				resolve(stdout.trim());
 			}
