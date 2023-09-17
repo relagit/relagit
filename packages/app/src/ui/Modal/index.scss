@@ -51,6 +51,14 @@
 			height: fit-content;
 		}
 
+		&.x-large {
+			margin: 10% 12%;
+			max-width: 100%;
+			min-height: 70%;
+			max-height: 80%;
+			height: fit-content;
+		}
+
 		&__close {
 			width: 32px;
 			height: 32px;

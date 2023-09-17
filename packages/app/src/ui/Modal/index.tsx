@@ -17,7 +17,7 @@ interface IModalProps {
 	};
 	dismissable?: boolean;
 	children: (props: { close: () => void }) => JSX.Element | JSX.Element[];
-	size: 'small' | 'medium' | 'large';
+	size: 'small' | 'medium' | 'large' | 'x-large';
 }
 
 const Modal = (props: IModalProps) => {
