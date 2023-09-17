@@ -95,6 +95,8 @@ export default () => {
 
 					setSummary('');
 
+					LocationStore.setSelectedFile(null);
+
 					await refetchRepository(selected());
 				}}
 				disabled={!Boolean(summary().length)}
