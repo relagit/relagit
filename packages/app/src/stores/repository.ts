@@ -49,7 +49,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 
 				fsTimeout = setTimeout(() => {
 					fsTimeout = null;
-				}, 2000);
+				}, 5000);
 			}
 		);
 	}
