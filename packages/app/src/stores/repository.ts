@@ -45,7 +45,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 
 				if (filename.startsWith('.git/index.lock')) return; // Ignore git files
 
-				window._refetchRepository(this.getByPath(path));
+				window._refetchRepository(this.getByPath(path), true);
 
 				fsTimeout = setTimeout(() => {
 					fsTimeout = null;

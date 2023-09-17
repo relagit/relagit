@@ -11,7 +11,7 @@ declare global {
 		};
 		Native: typeof _Native;
 
-		_refetchRepository: (repo: IRepository) => Promise<void>;
+		_refetchRepository: (repo: IRepository, transitionTo?: boolean) => Promise<void>;
 	}
 
 	export const __NODE_ENV__: 'development' | 'production' | 'test';
