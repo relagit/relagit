@@ -31,9 +31,7 @@ export default (props: ICreateRepositoryModalProps) => {
 		let isDirectory = false;
 
 		try {
-			const dir = fs.opendirSync(p);
-
-			dir.close();
+			fs.opendirSync(p);
 
 			isDirectory = true;
 		} catch (e) {
