@@ -22,17 +22,34 @@ const getScope = (files: string[]): string => {
 
 	for (let i = 0; i < directories[0].length; i++) {
 		const directory = directories[0][i];
+
 		if (
 			directories.every((directoryList: string[]) => {
 				const current = directoryList[i];
 
-				return (
-					current === directory &&
-					!['node_modules', 'packages', 'app', 'src', 'lib'].includes(current)
-				);
+				if (current !== directory) return false;
+
+				if (
+					[
+						'node_modules',
+						'packages',
+						'app',
+						'src',
+						'lib',
+						'index.js',
+						'index.ts',
+						'index.tsx',
+						'index.jsx',
+						'index.mjs',
+						'index.cjs'
+					].includes(current)
+				)
+					return false;
+
+				return true;
 			})
 		) {
-			out += `${directory}/`;
+			out += `${directory.split('.')[0]}/`;
 		}
 	}
 
@@ -61,7 +78,7 @@ export const getCommitStyledMessage = (
 	switch (style) {
 		case CommitStyle.conventional:
 			return {
-				message: `${type ? `${type}(` : ''}${scope}${type ? '): ' : ':'} `,
+				message: `${type || ''}(${scope}): `,
 				description: '',
 				files: commit.files
 			};
