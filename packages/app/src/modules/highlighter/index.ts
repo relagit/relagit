@@ -24,6 +24,13 @@ export default (code: string, language: string) => {
 			.join('\n');
 	}
 
+	if (language === 'text') {
+		return code
+			.split('\n')
+			.map((line) => `<span>${line}</span>`)
+			.join('\n');
+	}
+
 	try {
 		// @ts-expect-error - missing types
 		return toHtml(highlighter.highlight(code, language));
