@@ -101,7 +101,7 @@ app.once('ready', async () => {
 					label: 'Preferences',
 					accelerator: 'CmdOrCtrl+,',
 					click: () => {
-						dispatch(win, 'open-settings');
+						dispatch(win, ipc.OPEN_SETTINGS);
 					}
 				},
 				{
