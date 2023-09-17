@@ -107,7 +107,11 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 	}
 };
 
-export const getRepositoryStatus = async (directory: string, files?: boolean, remote?: boolean) => {
+export const getRepositoryStatus = async (
+	directory: string,
+	refetchFiles?: boolean,
+	refetchRemotes?: boolean
+) => {
 	try {
 		const info = await Git.Analyse(directory);
 
@@ -135,8 +139,8 @@ export const getRepositoryStatus = async (directory: string, files?: boolean, re
 		});
 	}
 
-	if (files) getFileStatus(directory);
-	if (remote) remoteStatus(directory);
+	if (refetchFiles) await getFileStatus(directory);
+	if (refetchRemotes) await remoteStatus(directory);
 
 	return RepositoryStore.getByPath(directory);
 };
@@ -154,8 +158,12 @@ export const refetchRepository = async (repository: IRepository, transitionTo = 
 
 	if (transitionTo) LocationStore.setSelectedRepository(repo);
 
-	if (!FileStore.getFilesByRepositoryName(repo.name)?.includes(currentFile)) {
-		LocationStore.setSelectedFile(undefined);
+	const equivalent = FileStore.getFilesByRepositoryName(repository.name)?.find(
+		(f) => f.path === currentFile?.path
+	);
+
+	if (equivalent) {
+		LocationStore.setSelectedFile(equivalent);
 	}
 };
 
