@@ -43,10 +43,6 @@
 				transition: color 0.2s ease-in-out;
 				cursor: pointer;
 
-				&:focus {
-					outline: 2px solid #{illyrica.$color-blue-500};
-				}
-
 				&:hover {
 					color: var(--color-primary);
 				}
