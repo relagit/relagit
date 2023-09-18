@@ -7,7 +7,7 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
-import FilesStore from '@stores/files';
+import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
 import EmptyState, { EMPTY_STATE_IMAGES } from '@ui/Common/EmptyState';
@@ -48,11 +48,11 @@ export default (props: ICodeViewProps) => {
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 
-	const changes = createStoreListener([FilesStore], () =>
-		FilesStore.getFilesByRepositoryPath(props.repository)
+	const changes = createStoreListener([FileStore], () =>
+		FileStore.getFilesByRepositoryPath(props.repository)
 	);
 
-	createStoreListener([LocationStore, FilesStore], async () => {
+	createStoreListener([LocationStore, FileStore], async () => {
 		try {
 			if (!props.file || !props.repository) {
 				return;
