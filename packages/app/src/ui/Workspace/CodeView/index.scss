@@ -1,12 +1,11 @@
 .codeview {
-	overflow: hidden auto;
+	overflow: hidden;
 	display: flex;
 	font-family: var(--font-mono);
 	font-variant-ligatures: none;
 	font-size: 11px;
 	width: 100%;
 	height: 100%;
-	overflow-x: auto;
 	flex-direction: column;
 
 	::selection {
@@ -47,9 +46,10 @@
 		position: relative;
 		display: flex;
 		align-items: center;
-		height: 20px;
+		min-height: 20px;
 		z-index: 2;
 		background-color: var(--bg-c);
+		overflow: hidden;
 
 		&.deleted {
 			--bg-c: var(--bg-diff-del);
@@ -73,19 +73,21 @@
 			height: fit-content;
 			width: 100%;
 			line-height: 1.8;
+			white-space: break-spaces;
 		}
 
 		&__number {
 			user-select: none;
-			height: 20px;
+			min-height: 20px;
+			height: 100%;
 			min-width: 35px;
 			display: flex;
-			align-items: center;
 			padding-right: 5px;
 			opacity: 0.5;
 			justify-content: flex-end;
 			background-color: var(--bg-c-hover);
 			border-right: 1px solid var(--separator-secondary);
+			padding-block: 3px;
 		}
 
 		&.message {
