@@ -1,5 +1,6 @@
 .codeview {
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	display: flex;
 	font-family: var(--font-mono);
 	font-variant-ligatures: none;
