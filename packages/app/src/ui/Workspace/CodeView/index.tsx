@@ -7,6 +7,7 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
+import { error } from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
@@ -64,9 +65,19 @@ export default (props: ICodeViewProps) => {
 			setShouldShow(true);
 			setThrew(null);
 
-			const contents = await Git.Content(props.file, props.repository);
+			let _diff: string | null = null;
+			let contents: string | null = null;
 
-			const _diff = await Git.Diff(props.file, props.repository);
+			try {
+				contents = await Git.Content(props.file, props.repository);
+				_diff = await Git.Diff(props.file, props.repository);
+			} catch (e) {
+				setThrew(e);
+
+				setSwitching(false);
+
+				error(e);
+			}
 
 			setSwitching(false);
 

@@ -115,3 +115,19 @@
 		}
 	}
 }
+
+.error-modal {
+	&__message {
+		font-size: 16px;
+		font-weight: 400;
+		margin-bottom: 20px;
+	}
+
+	&__stack {
+		font-size: 14px;
+		font-weight: 400;
+		padding: 16px;
+		border-radius: 4px;
+		background-color: var(--bg-secondary);
+	}
+}

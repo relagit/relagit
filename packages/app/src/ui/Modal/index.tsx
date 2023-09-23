@@ -5,6 +5,7 @@ import { createStoreListener } from '@stores/index';
 import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
 
+import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
 import Layer from '@ui/Layer';
 
@@ -116,4 +117,39 @@ Modal.Layer = () => {
 			<For each={modals()}>{(modal) => modal.element}</For>
 		</Layer>
 	);
+};
+
+export const showErrorModal = (error: Error, message: string) => {
+	ModalStore.addModal({
+		type: 'error',
+		element: (
+			<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
+				{(props) => (
+					<>
+						<ModalHeader title={message}>
+							<ModalCloseButton close={props.close} />
+						</ModalHeader>
+						<ModalBody>
+							<p class="error-modal__message">{error.message}</p>
+							<pre class="error-modal__stack">{error.stack}</pre>
+						</ModalBody>
+						<ModalFooter>
+							<div class="modal__footer__buttons">
+								<Button type="default" label="Close Modal" onClick={props.close}>
+									Close
+								</Button>
+								<Button
+									type="danger"
+									label="Reload Client"
+									onClick={() => window.location.reload()}
+								>
+									Reload
+								</Button>
+							</div>
+						</ModalFooter>
+					</>
+				)}
+			</Modal>
+		)
+	});
 };

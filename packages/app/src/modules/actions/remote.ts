@@ -1,10 +1,27 @@
 import RepositoryStore from '@stores/repository';
 import { triggerWorkflow } from './workflows';
 import RemoteStore from '@stores/remote';
+import { error } from '@modules/logger';
 import * as Git from '@modules/git';
 
+import { showErrorModal } from '@app/ui/Modal';
+
 export const remoteStatus = async (repository: string) => {
-	const status = await Git.Remote(repository);
+	let status: {
+		name: string;
+		url: string;
+		type: string;
+	}[];
+
+	try {
+		status = await Git.Remote(repository);
+	} catch (e) {
+		showErrorModal(e, 'Error fetching remote status');
+
+		error(e);
+
+		return;
+	}
 
 	const repo = RepositoryStore.getByPath(repository);
 
@@ -27,7 +44,21 @@ export const updateRemoteStatus = async (repository: string) => {
 
 	if (!remote) return;
 
-	const status = await Git.Remote(repository);
+	let status: {
+		name: string;
+		url: string;
+		type: string;
+	}[];
+
+	try {
+		status = await Git.Remote(repository);
+	} catch (e) {
+		showErrorModal(e, 'Error fetching remote status');
+
+		error(e);
+
+		return;
+	}
 
 	for (const remote of status) {
 		const { name, url, type } = remote;

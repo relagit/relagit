@@ -3,8 +3,10 @@ import { createSignal } from 'solid-js';
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
 import { refetchRepository } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
+import { showErrorModal } from '@ui/Modal';
 import SettingsStore from '@stores/settings';
 import LocationStore from '@stores/location';
+import * as logger from '@modules/logger';
 import FilesStore from '@stores/files';
 import * as Git from '@modules/git';
 
@@ -91,7 +93,15 @@ export default () => {
 				label={`Commit to ${selected()?.branch || 'Remote'}`}
 				type={error() ? 'danger' : 'brand'}
 				onClick={async () => {
-					await Git.Commit(selected(), summary(), description());
+					try {
+						await Git.Commit(selected(), summary(), description());
+					} catch (e) {
+						showErrorModal(e, 'Unknown error while committing changes');
+
+						logger.error(e);
+
+						return;
+					}
 
 					setSummary('');
 

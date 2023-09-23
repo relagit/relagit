@@ -8,6 +8,7 @@ import { renderDate } from '@modules/time';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
+import { showErrorModal } from '@app/ui/Modal';
 import Tooltip from '@ui/Common/Tooltip';
 
 import './index.scss';
@@ -145,6 +146,8 @@ export default () => {
 						try {
 							await Git.Push(LocationStore.selectedRepository);
 						} catch (e) {
+							showErrorModal(e, 'Unknown error while pushing changes');
+
 							error(e);
 						}
 
