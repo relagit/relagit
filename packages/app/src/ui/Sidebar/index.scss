@@ -31,6 +31,10 @@
 	}
 }
 
+.platform-darwin .sidebar {
+	height: calc(100% - 28px);
+}
+
 .theme-dark.vibrancy .sidebar {
 	background-color: #1a1b1cab;
 }

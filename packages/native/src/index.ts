@@ -21,7 +21,7 @@ app.once('ready', async () => {
 	const settings = await getSettings();
 
 	const win = new BrowserWindow({
-		titleBarStyle: 'hidden',
+		titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
 		visualEffectState: settings.get('vibrancy') ? 'active' : undefined,
@@ -66,10 +66,6 @@ app.once('ready', async () => {
 	log('Startup' + (__NODE_ENV__ === 'development' ? ' (development)' : ' (production)'));
 	log('Version: ' + pkj.version);
 	log('Running on: ' + process.platform + ' ' + process.arch);
-
-	if (typeof win['setWindowButtonVisibility'] === 'function') {
-		win.setWindowButtonVisibility(false);
-	}
 
 	win.loadFile(path.join(__dirname, '..', 'public', 'index.html'));
 

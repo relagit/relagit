@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
@@ -41,6 +41,9 @@ export default () => {
 					'--settings-accent-color': settings()?.get('accentColor') as string
 				}}
 			>
+				<Show when={window.Native.platform === 'darwin'}>
+					<div class="window-control-bar"></div>
+				</Show>
 				<Layer
 					type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
 					key="settings"

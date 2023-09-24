@@ -161,6 +161,22 @@ textarea {
 	overflow: hidden;
 	color: var(--color-primary);
 	font-family: var(--font-primary);
+
+	&.platform-darwin {
+		padding-top: 28px;
+	}
+}
+
+.window-control-bar {
+	width: 100%;
+	height: 28px;
+	inset: 0;
+	position: absolute;
+	background: var(--bg-primary);
+	opacity: 0.8;
+	border-bottom: 1px solid var(--separator-primary);
+
+	-webkit-app-region: drag;
 }
 
 .scroller {
