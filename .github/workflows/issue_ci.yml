@@ -1,0 +1,51 @@
+name: Issue Actions
+on:
+    pull_request:
+        branches:
+            - main
+            - actions-test
+    issues:
+        types: [labeled]
+    pull_request_target:
+        types: [labeled]
+
+env:
+    TRIAGE: |
+        This issue has been labeled with the `triage` label. This means that it needs attention from a maintainer. (@${{ github.actor }})
+    DUPLICATE: |
+        This issue has been labeled with the `duplicate` label. This means that it is a duplicate of another issue or pull request, and will be closed soon. (@${{ github.actor }})
+    INFORMATION: We need some extra information to be able to help you. Please fill out the required information and we'll get back to you as soon as possible. (@${{ github.actor }})
+
+permissions:
+    contents: read
+    issues: write
+    pull-requests: write
+
+jobs:
+    triage:
+        runs-on: ubuntu-latest
+        if: github.repository == 'relagit/relagit' && (github.event.label.name == 'triage' || github.event.issue.labels.*.name == 'triage')
+        steps:
+            - name: Comment
+              env:
+                  NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh issue comment "$NUMBER" --repo ${{ github.repository }} --body "$TRIAGE"
+    duplicate:
+        runs-on: ubuntu-latest
+        if: github.repository == 'relagit/relagit' && (github.event.label.name == 'duplicate' || github.event.issue.labels.*.name == 'duplicate')
+        steps:
+            - name: Comment
+              env:
+                  NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh issue comment "$NUMBER" --repo ${{ github.repository }} --body "$DUPLICATE"
+    information:
+        runs-on: ubuntu-latest
+        if: github.repository == 'relagit/relagit' && (github.event.label.name == 'information' || github.event.issue.labels.*.name == 'information')
+        steps:
+            - name: Comment
+              env:
+                  NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh issue comment "$NUMBER" --repo ${{ github.repository }} --body "$INFORMATION"
