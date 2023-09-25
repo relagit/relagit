@@ -42,7 +42,7 @@ jobs:
               run: gh issue comment "$NUMBER" --repo ${{ github.repository }} --body "$DUPLICATE"
     information:
         runs-on: ubuntu-latest
-        if: github.repository == 'relagit/relagit' && (github.event.label.name == 'information' || github.event.issue.labels.*.name == 'information')
+        if: github.repository == 'relagit/relagit' && (github.event.label.name == 'information needed' || github.event.issue.labels.*.name == 'information needed')
         steps:
             - name: Comment
               env:
