@@ -36,6 +36,15 @@ if (!fs.existsSync(path.join(dist, 'package.json'))) {
 	);
 }
 
+fs.writeFileSync(
+	path.join(dist, 'build_info.json'),
+	JSON.stringify({
+		commit: GIT_COMMIT_HASH,
+		date: new Date().toISOString(),
+		env: IS_DEV ? 'development' : 'production'
+	})
+);
+
 export default defineConfig({
 	input: {
 		main: path.join(__dirname, './src/index.ts'),

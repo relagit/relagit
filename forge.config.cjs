@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const build = require('./dist/build_info.json');
+
 module.exports = {
 	packagerConfig: {
 		name: 'RelaGit',
 		appBundleId: 'com.rela.git',
-		icon: './icons/dark'
+		icon: build.env === 'development' ? './icons/gold' : './icons/dark'
 	},
 	makers: [
 		{
