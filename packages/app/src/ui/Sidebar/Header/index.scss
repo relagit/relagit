@@ -10,6 +10,11 @@
 	user-select: none;
 	-webkit-app-region: drag;
 
+	&:focus {
+		outline: none;
+		border-color: #{illyrica.$color-blue-500};
+	}
+
 	&__info {
 		display: flex;
 		align-items: flex-start;
