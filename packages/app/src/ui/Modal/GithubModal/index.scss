@@ -20,6 +20,16 @@
 		}
 	}
 
+	&__header {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 16px;
+
+		textarea {
+			width: 100%;
+		}
+	}
+
 	&__list {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

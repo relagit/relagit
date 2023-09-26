@@ -1,4 +1,4 @@
-import { Show, createResource, For } from 'solid-js';
+import { Show, For, createSignal } from 'solid-js';
 
 import { GithubResponse } from './types';
 
@@ -8,6 +8,8 @@ import Icon from '@app/ui/Common/Icon';
 import Layer from '@ui/Layer';
 
 import './index.scss';
+import TextArea from '@app/ui/Common/TextArea';
+import Button from '@app/ui/Common/Button';
 
 let languageFile;
 
@@ -20,11 +22,9 @@ const getLanguageColor = (language: string) => {
 };
 
 export default () => {
-	const [response] = createResource(async () => {
-		const response = await fetch('https://api.github.com/users/TheCommieAxolotl/repos');
-
-		return (await response.json()) as GithubResponse['user/repos'];
-	});
+	const [response, setResponse] = createSignal<GithubResponse['user/repos'] | null>(null);
+	const [searchQuery, setSearchQuery] = createSignal('');
+	const [error, setError] = createSignal(false);
 
 	const makeSorter = () => {
 		return (a: GithubResponse['user/repos'][0], b: GithubResponse['user/repos'][0]) => {
@@ -38,6 +38,26 @@ export default () => {
 
 			return 0;
 		};
+	};
+
+	const refetch = async () => {
+		try {
+			setError(false);
+
+			const response = await fetch(`https://api.github.com/users/${searchQuery()}/repos`);
+
+			if (response.status !== 200) {
+				setResponse(null);
+				setError(true);
+
+				return;
+			}
+
+			setResponse((await response.json()) as GithubResponse['user/repos']);
+		} catch (e) {
+			setResponse(null);
+			setError(true);
+		}
 	};
 
 	return (
@@ -59,13 +79,32 @@ export default () => {
 							<ModalCloseButton {...props} />
 						</ModalHeader>
 						<ModalBody>
-							<Show when={response.loading}>
+							<div class="github-modal__header">
+								<TextArea
+									placeholder="Enter a GitHub User or Organisation"
+									value={searchQuery()}
+									onChange={setSearchQuery}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											refetch();
+										}
+									}}
+								/>
+								<Button
+									onClick={refetch}
+									label="Search for Repositories"
+									type="brand"
+								>
+									Search
+								</Button>
+							</div>
+							<Show when={!response() && !error()}>
 								<EmptyState
 									detail="Loading..."
 									hint="Please wait while we fetch your repositories."
 								/>
 							</Show>
-							<Show when={response.error}>
+							<Show when={error()}>
 								<EmptyState
 									detail="Oops! Something went wrong."
 									hint="We dropped the ball while trying to gather your repositories."

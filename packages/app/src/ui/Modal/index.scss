@@ -10,6 +10,26 @@
 	pointer-events: none;
 	transition: background-color 0.2s ease-in-out;
 
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: var(--color-secondary);
+		border: 2px solid var(--bg-secondary);
+		border-radius: 4px;
+
+		&:hover {
+			background-color: var(--color-primary);
+		}
+	}
+
+	::-webkit-scrollbar-track {
+		background-color: var(--bg-secondary);
+		border-radius: 4px;
+	}
+
 	&.visible {
 		background-color: rgba(0, 0, 0, 0.5);
 		pointer-events: all;
@@ -69,6 +89,12 @@
 			transition: opacity 0.2s ease-in-out;
 
 			&:hover {
+				opacity: 1;
+			}
+
+			&:focus {
+				outline: none;
+				color: #{illyrica.$color-blue-500};
 				opacity: 1;
 			}
 		}

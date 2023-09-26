@@ -6,6 +6,7 @@ interface ITextareaProps {
 	value: string;
 	onChange: (value: string) => void;
 	onContextMenu?: (e: MouseEvent) => void;
+	onKeyDown?: (e: KeyboardEvent) => void;
 	placeholder?: string;
 	className?: string;
 	disabled?: boolean;
@@ -31,6 +32,7 @@ export default (props: ITextareaProps) => {
 				props.onChange(proposedValue);
 			}}
 			onContextMenu={props.onContextMenu}
+			onKeyDown={props.onKeyDown}
 			placeholder={props.placeholder}
 			disabled={props.disabled}
 			style={{ height: props.expanded ? '100%' : '' }}
