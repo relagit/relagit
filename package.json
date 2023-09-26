@@ -22,6 +22,7 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"chokidar": "^3.5.3",
 		"vscode-oniguruma": "^1.0.0"
 	},
 	"devDependencies": {

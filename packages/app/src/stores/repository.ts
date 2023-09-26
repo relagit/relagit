@@ -1,5 +1,3 @@
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
 import { GenericStore } from '.';
 
 export interface IRepository {
@@ -36,23 +34,19 @@ const RepositoryStore = new (class Repository extends GenericStore {
 	attachListeners(path: string) {
 		let fsTimeout: NodeJS.Timeout | null = null;
 
-		fs.watch(
-			path,
-			{
-				recursive: true
-			},
-			(_, filename) => {
-				if (fsTimeout) return;
+		window.Native.listeners.CHOKIDAR.add(path, (changepath) => {
+			if (fsTimeout) return;
 
-				if (filename.startsWith('.git/index.lock')) return; // Ignore git files
+			if (!changepath) return; // Ignore empty path
 
-				window._refetchRepository(this.getByPath(path));
+			if (changepath.includes('.git/index.lock')) return; // Ignore git files
 
-				fsTimeout = setTimeout(() => {
-					fsTimeout = null;
-				}, 5000);
-			}
-		);
+			window._refetchRepository(this.getByPath(path));
+
+			fsTimeout = setTimeout(() => {
+				fsTimeout = null;
+			}, 5000);
+		});
 	}
 
 	addRepository(repository: IRepository) {

@@ -54,7 +54,7 @@ export default defineConfig({
 		format: 'cjs',
 		dir: path.resolve(__dirname, '../../dist')
 	},
-	external: Module.builtinModules.concat(['electron']),
+	external: Module.builtinModules.concat(['electron', 'chokidar']),
 	plugins: [
 		IS_DEV && sourcemaps(),
 		replace({

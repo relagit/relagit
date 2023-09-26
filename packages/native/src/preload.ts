@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 import * as starryNight from '@wooorm/starry-night';
 import * as sucrase from 'sucrase';
+import chokidar from 'chokidar';
 
 import { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
@@ -31,6 +32,11 @@ export const Native = {
 		},
 		LOAD_WORKFLOW: (fn: (e: Event, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
+		},
+		CHOKIDAR: {
+			add: (path: string, fn: (path: string) => void) => {
+				chokidar.watch(path).on('change', fn);
+			}
 		}
 	},
 	platform: process.platform
