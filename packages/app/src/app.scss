@@ -196,23 +196,21 @@ textarea {
 
 	&::-webkit-scrollbar {
 		width: 8px;
-	}
-
-	&::-webkit-scrollbar-track {
-		background: var(--bg-primary);
+		height: 8px;
 	}
 
 	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-secondary);
+		border: 2px solid var(--bg-secondary);
+		border-radius: 4px;
+
+		&:hover {
+			background-color: var(--color-primary);
+		}
+	}
+
+	&::-webkit-scrollbar-track {
 		background-color: var(--bg-secondary);
-		border-radius: 6px;
-		border: 3px solid var(--bg-primary);
-	}
-
-	&::-webkit-scrollbar-thumb:hover {
-		background-color: var(--bg-secondary-hover);
-	}
-
-	&::-webkit-scrollbar-thumb:active {
-		background-color: var(--bg-secondary-active);
+		border-radius: 4px;
 	}
 }
