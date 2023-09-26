@@ -19,8 +19,6 @@ const LocationStore = new (class Location extends GenericStore {
 					SettingsStore.getSetting('activeRepository') as string
 				);
 
-				console.log('repo', repo);
-
 				if (repo) {
 					this.#selectedRepository = repo;
 					this.emit();
