@@ -163,7 +163,12 @@ app.once('ready', async () => {
 					role: 'close'
 				},
 				{
-					role: 'reload'
+					label: 'Reload',
+					accelerator: 'CmdOrCtrl+R',
+					click: () => {
+						app.relaunch();
+						app.exit();
+					}
 				},
 				{
 					role: 'togglefullscreen'
