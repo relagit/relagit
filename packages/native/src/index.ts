@@ -3,8 +3,8 @@ import * as path from 'path';
 
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
 
+import { getSettings, setSettings } from './modules/settings';
 import initIPC, { dispatch } from './modules/ipc';
-import { getSettings } from './modules/settings';
 import { log } from './modules/logger';
 
 import * as ipc from '~/common/ipc';
@@ -25,10 +25,12 @@ app.once('ready', async () => {
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
 		visualEffectState: settings.get('vibrancy') ? 'active' : undefined,
-		height: 850,
-		width: 1200,
+		height: (settings.get('window.height') as number) || 850,
+		width: (settings.get('window.width') as number) || 1200,
 		minWidth: 500,
 		minHeight: 500,
+		x: (settings.get('window.x') as number) || 0,
+		y: (settings.get('window.y') as number) || 0,
 		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
@@ -36,6 +38,20 @@ app.once('ready', async () => {
 			nodeIntegration: true,
 			contextIsolation: true
 		}
+	});
+
+	win.on('move', () => {
+		settings.set('window.x', win.getPosition()[0]);
+		settings.set('window.y', win.getPosition()[1]);
+
+		setSettings(settings);
+	});
+
+	win.on('resize', () => {
+		settings.set('window.width', win.getSize()[0]);
+		settings.set('window.height', win.getSize()[1]);
+
+		setSettings(settings);
 	});
 
 	win.once('ready-to-show', () => {

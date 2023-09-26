@@ -20,3 +20,10 @@ export const getSettings = async () => {
 		Object.entries(JSON.parse(await promises.readFile(__SETTINGS_PATH__, 'utf-8')))
 	);
 };
+
+export const setSettings = async (settings: Map<string, unknown>) => {
+	await promises.writeFile(
+		__SETTINGS_PATH__,
+		JSON.stringify(Object.fromEntries(settings), null, 2)
+	);
+};
