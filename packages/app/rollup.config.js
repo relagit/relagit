@@ -18,7 +18,7 @@ import scss from 'rollup-plugin-scss';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const IS_DEV = process.env.npm_lifecycle_event === 'dev';
+const IS_DEV = process.env.npm_lifecycle_event.startsWith('dev');
 
 export default defineConfig({
 	input: path.join(__dirname, 'src', 'index.tsx'),

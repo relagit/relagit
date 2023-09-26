@@ -19,7 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const GIT_COMMIT_HASH = execSync('git rev-parse HEAD').toString().trim().substring(0, 7);
 
-const IS_DEV = process.env.npm_lifecycle_event === 'dev';
+const IS_DEV = process.env.npm_lifecycle_event.startsWith('dev');
 
 const dist = path.join(__dirname, '../../dist');
 

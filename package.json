@@ -8,6 +8,7 @@
 	"license": "RLPL",
 	"scripts": {
 		"dev": "rollup -c -w",
+		"dev:once": "rollup -c",
 		"build": "rollup -c",
 		"start": "electron ./dist/main.js",
 		"start:prod": "electron-forge start",
