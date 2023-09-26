@@ -30,7 +30,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 	}
 
 	getByPath(path: string) {
-		return this.repositories.find((f) => f.path === path);
+		return this.repositories.find((f) => f?.path === path);
 	}
 
 	attachListeners(path: string) {

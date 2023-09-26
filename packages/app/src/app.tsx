@@ -3,6 +3,7 @@ import { Show, createSignal, onMount } from 'solid-js';
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
+import { debug } from './modules/logger';
 
 import Workspace from '@ui/Workspace';
 import Settings from '@ui/Settings';
@@ -38,6 +39,8 @@ export default () => {
 	createStoreListener([SettingsStore], async () => {
 		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
 			if (loaded.includes(repo)) continue;
+
+			debug('Loading', repo);
 
 			loaded.push(repo);
 
