@@ -16,6 +16,7 @@ export interface IRepository {
 
 const RepositoryStore = new (class Repository extends GenericStore {
 	#record: IRepository[] = [];
+
 	constructor() {
 		super();
 	}

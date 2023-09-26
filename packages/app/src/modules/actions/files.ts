@@ -10,6 +10,7 @@ import RemoteStore from '@stores/remote';
 import { remoteStatus } from './remote';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
+import { warn } from '../logger';
 
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(
@@ -56,6 +57,14 @@ const isDirectory = async (file: string) => {
 };
 
 export const getFileStatus = async (directory: string, file?: string, stat?: string) => {
+	if (file) {
+		if (FileStore.getByPath(file)) return;
+	} else {
+		if (FileStore.getFilesByRepositoryPath(directory)?.length) {
+			FileStore.removeFiles(directory);
+		}
+	}
+
 	if (file && stat) {
 		if (!fs.existsSync(path.join(directory, file))) return;
 
@@ -112,6 +121,12 @@ export const getRepositoryStatus = async (
 	refetchFiles?: boolean,
 	refetchRemotes?: boolean
 ) => {
+	if (RepositoryStore.getByPath(directory)) {
+		warn('Repository already exists, not adding again');
+
+		return;
+	}
+
 	try {
 		const info = await Git.Analyse(directory);
 

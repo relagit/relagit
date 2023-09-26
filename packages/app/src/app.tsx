@@ -1,8 +1,7 @@
-import { Show, createSignal } from 'solid-js';
+import { Show, createSignal, onMount } from 'solid-js';
 
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
-import RepositoryStore from '@stores/repository';
 import SettingsStore from '@stores/settings';
 
 import Workspace from '@ui/Workspace';
@@ -13,6 +12,8 @@ import Layer from '@ui/Layer';
 
 import './app.scss';
 
+const loaded = [];
+
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 	const [sidebar, setSidebar] = createSignal(true);
@@ -21,9 +22,24 @@ export default () => {
 		setSidebar((o) => value ?? !o);
 	});
 
+	onMount(async () => {
+		// we want to load the active repository first to decrease the time to load the app
+		if (
+			SettingsStore.settings?.get('activeRepository') &&
+			!loaded.includes(SettingsStore.settings?.get('activeRepository') as string)
+		)
+			await getRepositoryStatus(
+				SettingsStore.settings?.get('activeRepository') as string,
+				true,
+				true
+			);
+	});
+
 	createStoreListener([SettingsStore], async () => {
 		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
-			if (RepositoryStore.getByPath(repo)) continue;
+			if (loaded.includes(repo)) continue;
+
+			loaded.push(repo);
 
 			await getRepositoryStatus(repo, true, true);
 		}

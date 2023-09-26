@@ -19,6 +19,7 @@ export interface ISettings {
 	fontFamily: string;
 	accentColor: string;
 	repositories: string[];
+	activeRepository: string;
 }
 
 const validatePath = () => {
