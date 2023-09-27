@@ -5,14 +5,12 @@
 	padding: 16px;
 	height: 72px;
 	border-bottom: 1px solid var(--separator-primary);
-	transition: background-color 0.2s ease-in-out;
-	cursor: pointer;
 	user-select: none;
 	-webkit-app-region: drag;
 
 	&:focus {
 		outline: none;
-		border-color: #{illyrica.$color-blue-500};
+		background-color: var(--bg-hover);
 	}
 
 	&__info {
@@ -23,17 +21,14 @@
 	}
 
 	&__chevron {
-		font-size: 20px;
+		font-size: 1.5rem;
 		color: var(--color-secondary);
-		cursor: pointer;
-		transition:
-			color 0.2s ease-in-out,
-			transform 0.2s ease-in-out;
+		transition: transform 0.2s ease-in-out;
 	}
 
 	&__repository {
 		color: var(--color-primary);
-		font-size: 16px;
+		font-size: 1.25rem;
 		line-height: 20px;
 		font-weight: 500;
 	}
@@ -41,16 +36,12 @@
 	&__details {
 		display: flex;
 		gap: 4px;
-		font-size: 12px;
+		font-size: 0.85rem;
 		color: var(--color-secondary);
 	}
 
 	&:hover {
 		background-color: var(--bg-hover);
-
-		.sidebar__header__chevron {
-			color: var(--color-primary);
-		}
 	}
 
 	&.active {

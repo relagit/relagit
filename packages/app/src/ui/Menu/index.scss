@@ -10,13 +10,11 @@
 	z-index: 99;
 
 	&__item {
-		font-size: 13px;
+		font-size: 1rem;
 		font-weight: 400;
 		margin-inline: 8px;
 		padding: 10px;
 		border-radius: 2px;
-		cursor: pointer;
-		transition: background-color 0.2s ease;
 
 		&.disabled {
 			pointer-events: none;

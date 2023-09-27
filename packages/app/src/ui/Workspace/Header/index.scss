@@ -3,7 +3,6 @@
 	align-items: center;
 	min-height: 72px;
 	border-bottom: 1px solid var(--separator-primary);
-	transition: background-color 0.2s ease-in-out;
 	-webkit-app-region: drag;
 
 	&__spacer {
@@ -16,12 +15,8 @@
 		align-items: center;
 		justify-content: center;
 		background-color: transparent;
-		cursor: pointer;
 		padding-inline: 35px;
 		gap: 16px;
-		transition:
-			background-color 0.2s ease-in-out,
-			opacity 0.2s ease-in-out;
 
 		&.disabled {
 			opacity: 0.4;
@@ -36,12 +31,12 @@
 			color: var(--color-primary);
 
 			&__label {
-				font-size: 14px;
+				font-size: 1rem;
 				font-weight: 600;
 			}
 
 			&__detail {
-				font-size: 12px;
+				font-size: 0.85rem;
 				color: var(--color-secondary);
 			}
 		}

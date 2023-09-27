@@ -123,7 +123,7 @@ export default (props: IHeaderDrawerProps) => {
 										aria-selected={selected()?.id === repository.id}
 										classList={{
 											sidebar__drawer__body__content__item: true,
-											selected: selected()?.id === repository.id
+											active: selected()?.id === repository.id
 										}}
 										onClick={() => {
 											props.open[1](false);

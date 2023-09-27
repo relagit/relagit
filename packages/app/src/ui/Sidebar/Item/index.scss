@@ -6,7 +6,6 @@
 	justify-content: space-between;
 	padding: 0 12px 0 8px;
 	border-bottom: 1px solid var(--separator-secondary);
-	transition: background-color 0.2s ease-in-out;
 	overflow: hidden;
 
 	&:hover {
@@ -25,7 +24,7 @@
 
 	&__filename {
 		color: var(--color-primary);
-		font-size: 14px;
+		font-size: 1rem;
 		font-weight: 400;
 		margin-left: 8px;
 		overflow: hidden;

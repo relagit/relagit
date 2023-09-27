@@ -28,9 +28,9 @@ export default (props: ISenmentedControlProps) => {
 						aria-label={item.label}
 						aria-selected={value() === item.value}
 						aria-disabled={item.disabled || props.disabled}
-						class={`segmented-control__item ${
-							value() === item.value ? 'selected' : ''
-						} ${item.disabled ? 'disabled' : ''}`}
+						class={`segmented-control__item ${value() === item.value ? 'active' : ''} ${
+							item.disabled ? 'disabled' : ''
+						}`}
 						tabIndex={0}
 						onClick={() => {
 							if (item.disabled || props.disabled) return;

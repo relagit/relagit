@@ -85,8 +85,6 @@
 			color: var(--color-primary);
 			background-color: transparent;
 			opacity: 0.6;
-			cursor: pointer;
-			transition: opacity 0.2s ease-in-out;
 
 			&:hover {
 				opacity: 1;
@@ -108,7 +106,7 @@
 			border-bottom: 1px solid var(--separator-secondary);
 
 			&__title {
-				font-size: 24px;
+				font-size: 2rem;
 				font-weight: 500;
 				display: flex;
 				gap: 7px;
@@ -144,13 +142,13 @@
 
 .error-modal {
 	&__message {
-		font-size: 16px;
+		font-size: 1.25rem;
 		font-weight: 400;
 		margin-bottom: 20px;
 	}
 
 	&__stack {
-		font-size: 14px;
+		font-size: 1rem;
 		font-weight: 400;
 		padding: 16px;
 		border-radius: 4px;

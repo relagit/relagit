@@ -10,9 +10,6 @@
 	background: var(--button-bg);
 	border: 1px solid var(--button-stroke);
 
-	transition: background-color 0.2s ease;
-	cursor: pointer;
-
 	&:hover {
 		background-color: var(--button-hover, var(--bg-quaternary));
 		color: var(--button-hover-text, var(--color-primary));

@@ -20,7 +20,7 @@ export const relative = (ms: number) => {
 		}
 	}
 
-	return 'just now';
+	return 'Just now';
 };
 
 export const renderDate = (ms: number): (() => string) => {

@@ -6,7 +6,7 @@
 	padding: 20px 60px;
 	text-align: center;
 	color: var(--color-secondary);
-	font-size: 14px;
+	font-size: 1rem;
 	line-height: 1.5;
 	margin: 0 auto;
 
@@ -30,12 +30,12 @@
 
 	&__text {
 		margin-bottom: 10px;
-		font-size: 16px;
+		font-size: 1.25rem;
 		opacity: 0.4;
 	}
 
 	&__hint {
-		font-size: 14px;
+		font-size: 1rem;
 		opacity: 0.3;
 	}
 

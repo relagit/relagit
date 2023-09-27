@@ -27,7 +27,7 @@
 
 		&__header {
 			font-weight: 450;
-			font-size: 16px;
+			font-size: 1.25rem;
 			margin-bottom: 10px;
 			padding: 0 20px;
 			display: flex;
@@ -37,11 +37,9 @@
 
 			&__button {
 				height: 16px;
-				font-size: 14px;
+				font-size: 1rem;
 				background-color: transparent;
 				color: var(--color-secondary);
-				transition: color 0.2s ease-in-out;
-				cursor: pointer;
 
 				&:hover {
 					color: var(--color-primary);
@@ -63,15 +61,13 @@
 				background-color: transparent;
 				border: none;
 				color: var(--color-primary);
-				font-size: 14px;
+				font-size: 1rem;
 				font-weight: 400;
 				padding: 10px 20px;
 				width: 100%;
 				display: flex;
 				gap: 4px;
 				flex-direction: column;
-				cursor: pointer;
-				transition: background-color 0.2s ease-in-out;
 
 				&:not(:last-child) {
 					border-bottom: 1px solid var(--separator-secondary);
@@ -81,12 +77,12 @@
 					background-color: var(--bg-hover);
 				}
 
-				&.selected {
+				&.active {
 					background-color: var(--bg-active);
 				}
 
 				&__details {
-					font-size: 12px;
+					font-size: 0.85rem;
 					opacity: 0.6;
 				}
 			}

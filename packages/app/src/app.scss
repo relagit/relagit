@@ -3,6 +3,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
 
+@function opacify($amount, $color) {
+	$alpha: $amount;
+	@return rgba(red($color), green($color), blue($color), $alpha);
+}
+
+@function greyscale($color) {
+	$grey: calc((red($color) + green($color) + blue($color)) / 3);
+
+	@return rgba($grey, $grey, $grey, alpha($color));
+}
+
 @mixin lightTheme {
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
@@ -29,8 +40,10 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{illyrica.$base-lighter-grey};
-	--bg-active: #{illyrica.$base-light-grey};
+	--bg-hover: #{opacify(0.1, illyrica.$color-blue-500)};
+	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
+	--bg-hover-unfocused: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
+	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
 	--bg-success: rgba(82, 228, 82, 0.05);
@@ -73,8 +86,10 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{illyrica.$dark-base-lighter-grey};
-	--bg-active: #{illyrica.$dark-base-light-grey};
+	--bg-hover: #{opacify(0.1, illyrica.$color-blue-500)};
+	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
+	--bg-hover-unfocused: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
+	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
 	--bg-success: rgba(82, 228, 82, 0.05);
@@ -98,17 +113,21 @@
 	border: none;
 }
 
+html {
+	font-size: 13px; // 14px is the default font size for macOS
+}
+
 .theme-dark,
 .theme-dark ::after,
 .theme-dark ::before {
 	@include darkTheme;
 }
 
-.theme-dark .switch label .check.selected .slider {
+.theme-dark .switch label .check.active .slider {
 	background-color: #{illyrica.$color-blue-700} !important;
 }
 
-.theme-dark .switch label .check.selected {
+.theme-dark .switch label .check.active {
 	--switch-bg: var(--bg-quaternary);
 }
 
@@ -118,6 +137,13 @@
 	@include lightTheme;
 }
 
+.unfocused,
+.unfocused ::after,
+.unfocused ::before {
+	--bg-hover: var(--bg-hover-unfocused) !important;
+	--bg-active: var(--bg-active-unfocused) !important;
+}
+
 @media (prefers-color-scheme: dark) {
 	.theme-system,
 	.theme-system ::after,
@@ -125,11 +151,11 @@
 		@include darkTheme;
 	}
 
-	.theme-system .switch label .check.selected .slider {
+	.theme-system .switch label .check.active .slider {
 		background-color: #{illyrica.$color-blue-700} !important;
 	}
 
-	.theme-system .switch label .check.selected {
+	.theme-system .switch label .check.active {
 		--switch-bg: var(--bg-quaternary);
 	}
 }

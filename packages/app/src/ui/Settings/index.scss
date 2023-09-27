@@ -17,7 +17,7 @@
 		justify-content: space-between;
 
 		h1 {
-			font-size: 32px;
+			font-size: 2.5rem;
 			font-weight: 500;
 		}
 
@@ -27,8 +27,6 @@
 			color: var(--color-primary);
 			background-color: transparent;
 			opacity: 0.6;
-			cursor: pointer;
-			transition: opacity 0.2s ease-in-out;
 
 			&:hover {
 				opacity: 1;
@@ -37,7 +35,7 @@
 	}
 
 	h2 {
-		font-size: 24px;
+		font-size: 2rem;
 		font-weight: 500;
 		margin-bottom: 10px;
 	}
@@ -52,13 +50,13 @@
 		gap: 10px;
 
 		&__label {
-			font-size: 14px;
+			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-primary);
 		}
 
 		&__description {
-			font-size: 14px;
+			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-label);
 		}
@@ -75,7 +73,7 @@
 .radio {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 0;
 
 	&.disabled {
 		opacity: 0.4;
@@ -89,22 +87,29 @@
 		gap: 10px;
 		background-color: var(--bg-secondary);
 		align-items: center;
-		cursor: pointer;
-		transition: background-color 0.2s ease-in-out;
-		font-size: 14px;
+		font-size: 1rem;
 		font-weight: 400;
-
-		padding: 7px 32px;
-		border-radius: 4px;
+		padding: 12px 32px;
 		color: var(--radio-color);
 		background: var(--radio-bg);
 		border: 1px solid var(--radio-stroke);
+		border-bottom-width: 0;
+
 		--radio-bg: var(--bg-tertiary);
 		--radio-color: var(--color-primary);
 		--radio-stroke: var(--separator-primary);
 		--radio-hover: var(--bg-quaternary);
 		--radio-active: var(--bg-quinary);
 		--radio-focus: #{illyrica.$color-blue-500};
+
+		&:nth-child(1) {
+			border-radius: 4px 4px 0 0;
+		}
+
+		&:nth-last-child(1) {
+			border-radius: 0 0 4px 4px;
+			border-bottom-width: 1px;
+		}
 
 		&:hover {
 			background-color: var(--radio-hover);
@@ -119,7 +124,7 @@
 			outline: 2px solid var(--button-focus);
 		}
 
-		&.selected {
+		&.active {
 			background-color: var(--bg-senary);
 
 			.check {
@@ -130,7 +135,6 @@
 		input {
 			position: absolute;
 			opacity: 0;
-			cursor: pointer;
 		}
 
 		.check {
@@ -163,8 +167,7 @@
 		gap: 10px;
 		padding: 10px 0;
 		align-items: center;
-		cursor: pointer;
-		font-size: 14px;
+		font-size: 1rem;
 		color: var(--color-primary);
 		font-weight: 400;
 
@@ -174,7 +177,7 @@
 			gap: 5px;
 
 			.note {
-				font-size: 14px;
+				font-size: 1rem;
 				font-weight: 400;
 				color: var(--color-label);
 			}
@@ -189,9 +192,7 @@
 			max-width: 40px;
 			height: 22px;
 			border-radius: 20px;
-			transition:
-				background-color 0.2s ease-in-out,
-				transform 0.1s ease-in;
+			transition: transform 0.1s ease-in;
 
 			color: var(--switch-color);
 			background: var(--switch-bg);
@@ -216,7 +217,6 @@
 			input {
 				position: absolute;
 				opacity: 0;
-				cursor: pointer;
 			}
 
 			.slider {
@@ -228,10 +228,10 @@
 				border: 1px solid var(--switch-slider-stroke);
 				background-color: var(--switch-thumb);
 				border-radius: 50%;
-				transition: 0.2s cubic-bezier(0, 0, 0.52, 0.96);
+				transition: transform 0.2s cubic-bezier(0, 0, 0.52, 0.96);
 			}
 
-			&.selected {
+			&.active {
 				--switch-slider-stroke: #{illyrica.$color-blue-500};
 				--switch-thumb: #{illyrica.$color-blue-300};
 				--switch-bg: #{illyrica.$color-blue-100};

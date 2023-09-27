@@ -18,9 +18,14 @@ const loaded = [];
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 	const [sidebar, setSidebar] = createSignal(true);
+	const [focused, setFocused] = createSignal(false);
 
 	window.Native.listeners.SIDEBAR((_, value) => {
 		setSidebar((o) => value ?? !o);
+	});
+
+	window.Native.listeners.FOCUS((_, value) => {
+		setFocused(value);
 	});
 
 	onMount(async () => {
@@ -54,7 +59,9 @@ export default () => {
 				id="app-container"
 				class={`platform-${window.Native.platform} theme-${
 					settings()?.get('theme') || 'system'
-				} ${settings()?.get('vibrancy') ? 'vibrancy' : ''}`}
+				} ${settings()?.get('vibrancy') ? 'vibrancy' : ''} ${
+					focused() ? 'focused' : 'unfocused'
+				}`}
 				style={{
 					'--settings-font-family': settings()?.get('fontFamily') as string,
 					'--settings-accent-color': settings()?.get('accentColor') as string

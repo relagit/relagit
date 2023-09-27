@@ -21,6 +21,9 @@ export const Native = {
 		sucrase
 	},
 	listeners: {
+		FOCUS: (fn: (e: Event, value: boolean) => void) => {
+			ipcRenderer.on(ipc.FOCUS, fn);
+		},
 		SETTINGS: (fn: () => void) => {
 			ipcRenderer.on(ipc.OPEN_SETTINGS, fn);
 		},

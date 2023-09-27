@@ -58,25 +58,12 @@ app.once('ready', async () => {
 		win.show();
 	});
 
-	win.webContents.on('before-input-event', (event, input) => {
-		if (
-			(process.platform === 'darwin' && input.meta && input.key === 'k') ||
-			(input.control && input.key === 'k')
-		) {
-			win.webContents.send(ipc.OPEN_SWITCHER);
-			win.webContents.send(ipc.OPEN_SIDEBAR, true);
+	win.on('focus', () => {
+		win.webContents.send(ipc.FOCUS, true);
+	});
 
-			event.preventDefault();
-		}
-
-		if (
-			(process.platform === 'darwin' && input.meta && input.key === 's') ||
-			(input.control && input.key === 's')
-		) {
-			win.webContents.send(ipc.OPEN_SIDEBAR);
-
-			event.preventDefault();
-		}
+	win.on('blur', () => {
+		win.webContents.send(ipc.FOCUS, false);
 	});
 
 	log('Startup' + (__NODE_ENV__ === 'development' ? ' (development)' : ' (production)'));
@@ -140,6 +127,26 @@ app.once('ready', async () => {
 		},
 		{
 			role: 'editMenu'
+		},
+		{
+			label: 'View',
+			submenu: [
+				{
+					label: 'Toggle Sidebar',
+					accelerator: 'CmdOrCtrl+S',
+					click: () => {
+						win.webContents.send(ipc.OPEN_SIDEBAR);
+					}
+				},
+				{
+					label: 'Toggle Switcher',
+					accelerator: 'CmdOrCtrl+K',
+					click: () => {
+						win.webContents.send(ipc.OPEN_SWITCHER);
+						win.webContents.send(ipc.OPEN_SIDEBAR, true);
+					}
+				}
+			]
 		},
 		{
 			label: 'Window',

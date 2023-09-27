@@ -32,7 +32,7 @@
 
 		&__title {
 			color: var(--color-primary);
-			font-size: 20px;
+			font-size: 1.5rem;
 			font-weight: 600;
 			line-height: 30px;
 			margin-left: 8px;
@@ -45,7 +45,7 @@
 			align-items: center;
 			gap: 16px;
 			color: var(--color-secondary);
-			font-size: 12px;
+			font-size: 0.85rem;
 
 			&__stars,
 			&__forks {
@@ -122,8 +122,6 @@
 			flex-direction: column;
 			gap: 8px;
 			height: 150px;
-			transition: background-color 0.2s ease-in-out;
-			cursor: pointer;
 
 			&:hover {
 				background-color: var(--bg-quaternary);
@@ -135,14 +133,14 @@
 			}
 
 			&__name {
-				font-size: 18px;
+				font-size: 1.25rem;
 				font-weight: 600;
 				margin: 0;
 				color: var(--color-primary);
 			}
 
 			&__description {
-				font-size: 14px;
+				font-size: 1rem;
 				margin: 0;
 				color: var(--color-secondary);
 			}
@@ -154,7 +152,7 @@
 				gap: 16px;
 				margin-top: auto;
 				color: var(--color-secondary);
-				font-size: 12px;
+				font-size: 0.85rem;
 
 				&__social {
 					display: flex;

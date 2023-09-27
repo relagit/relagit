@@ -13,17 +13,13 @@
 		align-items: center;
 		justify-content: center;
 		border-bottom: 1px solid;
-		font-size: 14px;
+		font-size: 1rem;
 		font-weight: 400;
 		color: var(--color-secondary);
 		border-color: var(--separator-secondary);
 		height: 100%;
 		width: 100%;
 		padding: 0 10px;
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease-in-out,
-			color 0.2s ease-in-out;
 
 		&:hover {
 			border-color: var(--separator-primary);
@@ -32,11 +28,11 @@
 
 		&:focus {
 			outline: none;
-			border-color: #{illyrica.$color-blue-500} !important;
+			border-color: #{illyrica.$color-blue-500};
 			color: var(--color-primary);
 		}
 
-		&.selected {
+		&.active {
 			border-color: var(--separator-primary);
 			color: var(--color-primary);
 		}
