@@ -84,7 +84,7 @@ export default () => {
 				id="workspace-fetch-changes-and-remote"
 				disabled={repository() ? false : true}
 				onClick={() => {
-					refetchRepository(LocationStore.selectedRepository, true);
+					refetchRepository(LocationStore.selectedRepository);
 				}}
 			/>
 			<PanelButton

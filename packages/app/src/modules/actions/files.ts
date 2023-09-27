@@ -160,7 +160,7 @@ export const getRepositoryStatus = async (
 	return RepositoryStore.getByPath(directory);
 };
 
-export const refetchRepository = async (repository: IRepository, transitionTo = false) => {
+export const refetchRepository = async (repository: IRepository) => {
 	if (!repository) return;
 
 	const currentFile = LocationStore.selectedFile;
@@ -171,7 +171,9 @@ export const refetchRepository = async (repository: IRepository, transitionTo = 
 
 	const repo = await getRepositoryStatus(repository.path, true, true);
 
-	if (transitionTo) LocationStore.setSelectedRepository(repo);
+	if (LocationStore.selectedRepository?.name === repository.name) {
+		LocationStore.setSelectedRepository(repo);
+	}
 
 	const equivalent = FileStore.getFilesByRepositoryName(repository.name)?.find(
 		(f) => f.path === currentFile?.path
