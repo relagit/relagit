@@ -40,9 +40,8 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{opacify(0.1, illyrica.$color-blue-500)};
+	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
-	--bg-hover-unfocused: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
@@ -86,9 +85,8 @@
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
 	--bg-brand: #{illyrica.$color-blue-500};
-	--bg-hover: #{opacify(0.1, illyrica.$color-blue-500)};
+	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
-	--bg-hover-unfocused: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
 	--bg-error: rgba(227, 83, 83, 0.05);
 	--bg-error-solid: rgba(227, 83, 83, 0.2);
@@ -140,7 +138,6 @@ html {
 .unfocused,
 .unfocused ::after,
 .unfocused ::before {
-	--bg-hover: var(--bg-hover-unfocused) !important;
 	--bg-active: var(--bg-active-unfocused) !important;
 }
 
