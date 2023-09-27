@@ -74,6 +74,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 
 export default () => {
 	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [status, setStatus] = createSignal<string>(null);
 
 	createEffect(() => {
@@ -164,6 +165,13 @@ export default () => {
 				}}
 			/>
 			<div class="workspace__header__spacer" />
+			<PanelButton
+				icon={historyOpen() ? 'code' : 'history'}
+				id="workspace-history"
+				onClick={() => {
+					LocationStore.setHistoryOpen(!historyOpen());
+				}}
+			/>
 		</div>
 	);
 };

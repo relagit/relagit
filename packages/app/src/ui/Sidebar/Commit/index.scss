@@ -1,0 +1,67 @@
+.sidebar__commit {
+	display: flex;
+	font-weight: 400;
+	align-items: center;
+	flex-direction: column;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--separator-secondary);
+	overflow: hidden;
+	gap: 8px;
+
+	&:hover {
+		background-color: var(--bg-hover);
+	}
+
+	&.active {
+		background-color: var(--bg-active);
+	}
+
+	&__top {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		align-items: center;
+		gap: 16px;
+
+		&__message {
+			color: var(--color-primary);
+			font-size: 1rem;
+			font-weight: 500;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 70%;
+		}
+
+		&__hash {
+			color: var(--color-secondary);
+			font-size: 1rem;
+			font-weight: 400;
+			font-family: var(--font-mono);
+		}
+	}
+
+	&__bottom {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		align-items: center;
+		gap: 16px;
+
+		&__author {
+			color: var(--color-secondary);
+			font-size: 0.9rem;
+			font-weight: 400;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 70%;
+		}
+
+		&__date {
+			color: var(--color-secondary);
+			font-size: 0.9rem;
+			font-weight: 400;
+		}
+	}
+}

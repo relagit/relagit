@@ -4,9 +4,11 @@ export { Commit } from './commit';
 export { Remote } from './remote';
 export { Status } from './status';
 export { Branch } from './branch';
+export { Show } from './show';
 export { Push } from './push';
 export { Diff } from './diff';
 export { Init } from './init';
+export { Log } from './log';
 
 export { IGitParams as GitParams } from './core';
 

@@ -29,6 +29,18 @@
 			display: none;
 		}
 	}
+
+	&__commits {
+		height: calc(100% - 72px);
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding: 0;
+		margin: 0;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
 }
 
 .platform-darwin .sidebar {

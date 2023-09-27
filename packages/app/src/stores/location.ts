@@ -1,4 +1,5 @@
 import RepositoryStore, { IRepository } from './repository';
+import { ILogCommit } from '@app/modules/git/log';
 import SettingsStore from './settings';
 import { GenericStore } from '.';
 import { IFile } from './files';
@@ -6,11 +7,15 @@ import { IFile } from './files';
 const LocationStore = new (class Location extends GenericStore {
 	#selectedFile: IFile | undefined;
 	#selectedRepository: IRepository | undefined;
+	#historyOpen = false;
+	#selectedCommit: ILogCommit | undefined;
 
 	constructor() {
 		super();
 
+		this.#historyOpen = false;
 		this.#selectedFile = undefined;
+		this.#selectedCommit = undefined;
 		this.#selectedRepository = undefined;
 
 		setTimeout(() => {
@@ -35,6 +40,14 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#selectedRepository;
 	}
 
+	get selectedCommit() {
+		return this.#selectedCommit;
+	}
+
+	get historyOpen() {
+		return this.#historyOpen;
+	}
+
 	setSelectedFile(file: IFile) {
 		this.#selectedFile = file;
 		this.emit();
@@ -42,6 +55,16 @@ const LocationStore = new (class Location extends GenericStore {
 
 	clearSelectedFile() {
 		this.#selectedFile = undefined;
+		this.emit();
+	}
+
+	setHistoryOpen(open: boolean) {
+		this.#historyOpen = open;
+		this.emit();
+	}
+
+	setSelectedCommit(commit: ILogCommit) {
+		this.#selectedCommit = commit;
 		this.emit();
 	}
 
