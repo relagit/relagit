@@ -1,8 +1,9 @@
 import { createSignal, Show } from 'solid-js';
 
-import { showItemInFolder } from '@app/modules/shell';
+import { openExternal, showItemInFolder } from '@app/modules/shell';
 import { createStoreListener } from '@stores/index';
 import RespositoryStore from '@stores/repository';
+import RemoteStore from '@app/stores/remote';
 import LocationStore from '@stores/location';
 
 import Icon from '@ui/Common/Icon';
@@ -41,6 +42,19 @@ export default () => {
 						label: 'Open in Code',
 						disabled: !selected(),
 						type: 'item'
+					},
+					{
+						type: 'separator'
+					},
+					{
+						label: 'Open Remote',
+						disabled: !selected(),
+						type: 'item',
+						onClick: () => {
+							const remotes = RemoteStore.getByRepoPath(selected().path);
+
+							if (remotes[0]?.url) openExternal(remotes[0].url);
+						}
 					}
 				]}
 			>
