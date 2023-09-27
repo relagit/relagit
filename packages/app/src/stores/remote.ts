@@ -18,11 +18,11 @@ const RemoteStore = new (class Remote extends GenericStore {
 	}
 
 	getByRepoName(name: string) {
-		return this.remotes.filter((f) => f.repository.name === name);
+		return this.remotes.filter((f) => f.repository?.name === name);
 	}
 
 	getByRepoPath(path: string) {
-		return this.remotes.filter((f) => f.repository.path === path);
+		return this.remotes.filter((f) => f.repository?.path === path);
 	}
 
 	getByType(type: 'fetch' | 'push') {
@@ -32,7 +32,7 @@ const RemoteStore = new (class Remote extends GenericStore {
 	removeByRepoPath(path: string) {
 		if (!this.remotes.some((f) => f.repository?.path === path)) return;
 
-		this.#record = this.remotes.filter((f) => f.repository.path !== path);
+		this.#record = this.remotes.filter((f) => f.repository?.path !== path);
 		this.emit();
 	}
 
@@ -42,13 +42,13 @@ const RemoteStore = new (class Remote extends GenericStore {
 	}
 
 	removeRemote(repository: IRemoteRepository) {
-		this.#record = this.remotes.filter((f) => f.repository.id !== repository.repository.id);
+		this.#record = this.remotes.filter((f) => f.repository?.id !== repository.repository.id);
 		this.emit();
 	}
 
 	updateRemote(repository: IRemoteRepository) {
 		this.#record = this.remotes.map((f) => {
-			if (f.repository.id === repository.repository.id) {
+			if (f.repository?.id === repository.repository.id) {
 				return repository;
 			}
 			return f;
