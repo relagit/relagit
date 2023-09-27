@@ -93,6 +93,8 @@ export default () => {
 				label={`Commit to ${selected()?.branch || 'Remote'}`}
 				type={error() ? 'danger' : 'brand'}
 				onClick={async () => {
+					LocationStore.setSelectedFile(null);
+
 					try {
 						await Git.Commit(selected(), summary(), description());
 					} catch (e) {
@@ -104,8 +106,6 @@ export default () => {
 					}
 
 					setSummary('');
-
-					LocationStore.setSelectedFile(null);
 
 					await refetchRepository(selected());
 				}}
