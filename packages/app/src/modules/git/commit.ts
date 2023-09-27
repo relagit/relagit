@@ -17,7 +17,7 @@ export const Commit = async (repository: IRepository, message: string, body: str
 	const res = await Git({
 		directory: repository.path,
 		command: 'commit',
-		args: ['-m', `"${message}"`, '-m', `"${escape(body)}"`]
+		args: ['-m', `"${escape(message)}"`, '-m', `"${escape(body)}"`]
 	});
 
 	return res;
