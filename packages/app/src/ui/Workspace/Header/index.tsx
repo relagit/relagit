@@ -1,4 +1,4 @@
-import { JSX, Show } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { refetchRepository } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
@@ -74,6 +74,23 @@ const PanelButton = (props: IPanelButtonProps) => {
 
 export default () => {
 	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const [status, setStatus] = createSignal<string>(null);
+
+	createEffect(() => {
+		if (!repository()) return;
+
+		const aob = repository()?.aheadOrBehind || 0;
+
+		if (aob < 0) {
+			return setStatus('behind');
+		}
+
+		if (aob > 0) {
+			return setStatus('ahead');
+		}
+
+		setStatus(null);
+	});
 
 	return (
 		<div class="workspace__header">
@@ -89,69 +106,60 @@ export default () => {
 			/>
 			<PanelButton
 				icon={((): IconName | keyof typeof customIcons => {
-					const aob = repository()?.aheadOrBehind || 0;
-
-					if (aob < 0) {
-						return 'cPull';
+					switch (status()) {
+						case 'ahead':
+							return 'repo-push';
+						case 'behind':
+							return 'cPull';
+						default:
+							return 'repo';
 					}
-
-					if (aob > 0) {
-						return 'repo-push';
-					}
-
-					return 'repo';
 				})()}
 				label={(() => {
-					const aob = repository()?.aheadOrBehind || 0;
-
-					if (aob < 0) {
-						return 'Pull Changes';
+					switch (status()) {
+						case 'ahead':
+							return 'Push Changes';
+						case 'behind':
+							return 'Pull Changes';
+						default:
+							return 'No Changes';
 					}
-
-					if (aob > 0) {
-						return 'Push Changes';
-					}
-
-					return 'No Changes';
 				})()}
 				id="workspace-pull"
-				disabled={!repository()?.aheadOrBehind}
+				disabled={!repository() || status() === null}
 				detail={(() => {
 					const aob = repository()?.aheadOrBehind || 0;
 
-					if (!aob) {
-						return 'Nothing to see here';
+					switch (status()) {
+						case 'ahead':
+							return `${aob} commit${aob > 1 ? 's' : ''}`;
+						case 'behind':
+							return `${Math.abs(aob)} commit${Math.abs(aob) > 1 ? 's' : ''}`;
+						default:
+							return 'Nothing to see here';
 					}
-
-					if (aob > 0) {
-						return `${aob} commit${aob > 1 ? 's' : ''}`;
-					}
-
-					if (aob < 0) {
-						return `${Math.abs(aob)} commit${Math.abs(aob) > 1 ? 's' : ''}`;
-					}
-
-					return 'Nothing to see here';
 				})()}
 				onClick={async () => {
-					const aob = repository()?.aheadOrBehind || 0;
+					switch (status()) {
+						case 'ahead': {
+							debug('Pushing changes');
 
-					if (aob < 0) {
-						return debug('Pulling changes');
-					}
+							try {
+								await Git.Push(LocationStore.selectedRepository);
+							} catch (e) {
+								showErrorModal(e, 'Unknown error while pushing changes');
 
-					if (aob > 0) {
-						debug('Pushing changes');
+								error(e);
+							}
 
-						try {
-							await Git.Push(LocationStore.selectedRepository);
-						} catch (e) {
-							showErrorModal(e, 'Unknown error while pushing changes');
-
-							error(e);
+							refetchRepository(LocationStore.selectedRepository);
 						}
-
-						refetchRepository(LocationStore.selectedRepository);
+						case 'behind': {
+							debug('Pulling changes');
+						}
+						default: {
+							debug('No change');
+						}
 					}
 				}}
 			/>
