@@ -24,6 +24,7 @@ export interface IPanelButtonProps {
 	tooltip?: string;
 	tooltipPosition?: 'top' | 'bottom' | 'auto';
 	disabled?: boolean;
+	className?: string;
 }
 
 const PanelButton = (props: IPanelButtonProps) => {
@@ -45,7 +46,8 @@ const PanelButton = (props: IPanelButtonProps) => {
 							'workspace__header__panelbutton-small': props.size === 'small',
 							'workspace__header__panelbutton-medium': props.size === 'medium',
 							'workspace__header__panelbutton-large': props.size === 'large',
-							disabled: props.disabled
+							disabled: props.disabled,
+							[props.className]: true
 						}}
 						onClick={props.onClick}
 						id={props.id}
@@ -166,8 +168,9 @@ export default () => {
 			/>
 			<div class="workspace__header__spacer" />
 			<PanelButton
-				icon={historyOpen() ? 'code' : 'history'}
+				icon="history"
 				id="workspace-history"
+				className={historyOpen() ? 'active' : ''}
 				onClick={() => {
 					LocationStore.setHistoryOpen(!historyOpen());
 				}}
