@@ -4,10 +4,12 @@ import RepositoryStore, { IRepository } from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
 import LocationStore from '@stores/location';
+import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
 import EmptyState from '@ui/Common/EmptyState';
+import { showErrorModal } from '../Modal';
 import Header from '@ui/Sidebar/Header';
 import Item from '@ui/Sidebar/Item';
 import Commit from './Commit';
@@ -29,11 +31,17 @@ export default (props: ISidebarProps) => {
 	let lastRepository: IRepository | undefined;
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
-		if (lastRepository === LocationStore.selectedRepository) return;
+		try {
+			if (lastRepository === LocationStore.selectedRepository) return;
 
-		lastRepository = LocationStore.selectedRepository;
+			lastRepository = LocationStore.selectedRepository;
 
-		setCommits(await Git.Log(LocationStore.selectedRepository));
+			setCommits(await Git.Log(LocationStore.selectedRepository));
+		} catch (error) {
+			showErrorModal(error, 'Unknown error while fetching repository status');
+
+			logger.error(error);
+		}
 	});
 
 	return (
