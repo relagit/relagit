@@ -17,6 +17,11 @@
 		background-color: transparent;
 		padding-inline: 35px;
 		gap: 16px;
+		-webkit-app-region: no-drag;
+
+		&:not(:has(.workspace__header__panelbutton__info)) {
+			padding-inline: 20px;
+		}
 
 		&.disabled {
 			opacity: 0.4;
