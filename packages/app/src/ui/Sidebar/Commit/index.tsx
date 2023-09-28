@@ -1,8 +1,10 @@
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
+import { showErrorModal } from '@app/ui/Modal';
+import { debug, error } from '@modules/logger';
 import { renderDate } from '@app/modules/time';
 import LocationStore from '@stores/location';
-import { debug } from '@modules/logger';
+import * as Git from '@modules/git';
 
 import './index.scss';
 
@@ -17,9 +19,19 @@ export default (props: ILogCommit) => {
 			class={`sidebar__commit ${selected() === props ? 'active' : ''}`}
 			data-id={props.hash}
 			data-active={selected() === props}
-			onClick={() => {
+			onClick={async () => {
 				debug('Transitioning to commit', props.hash);
 				LocationStore.setSelectedCommit(props);
+
+				try {
+					LocationStore.setSelectedCommitFiles(
+						await Git.Show(LocationStore.selectedRepository.path, props.hash)
+					);
+				} catch (e) {
+					showErrorModal(e, 'Failed to show commit');
+
+					error('Failed to show commit', e);
+				}
 			}}
 		>
 			<div class="sidebar__commit__top">

@@ -2,8 +2,6 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 
 import parse, { GitDiff } from 'parse-git-diff';
 
-import { IRepository } from '@stores/repository';
-
 import { Git } from './core';
 
 export interface IPastCommit {
@@ -12,6 +10,16 @@ export interface IPastCommit {
 		filename: string;
 		path: string;
 		diff: GitDiff;
+		status:
+			| 'added'
+			| 'modified'
+			| 'deleted'
+			| 'untracked'
+			| 'unknown'
+			| 'unmerged'
+			| 'copied'
+			| 'renamed'
+			| 'type-changed';
 	}[];
 }
 
@@ -24,7 +32,7 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 		args: [hash, '--pretty=format:']
 	});
 
-	const commit = {
+	const commit: IPastCommit = {
 		hash,
 		files: []
 	};
@@ -41,7 +49,8 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 		commit.files.push({
 			filename: path.basename(filename.replace('a/', '').split(' b/').pop()),
 			path: path.dirname(filename.replace('a/', '').split(' b/').pop()),
-			diff: parse('diff --git ' + filename + '\n' + diff.join('\n'))
+			diff: parse('diff --git ' + filename + '\n' + diff.join('\n')),
+			status: 'unknown'
 		});
 	}
 

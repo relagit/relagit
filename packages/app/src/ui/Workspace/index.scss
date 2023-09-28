@@ -16,18 +16,113 @@
 		}
 	}
 
-	&__file {
+	&__container {
 		display: flex;
+		height: 100%;
 		width: 100%;
-		height: 36px;
-		min-height: 36px;
-		padding-inline: 10px;
-		font-size: 1rem;
-		align-items: center;
-		border-bottom: 1px solid var(--separator-secondary);
 
-		&__path {
-			opacity: 0.6;
+		&__files {
+			min-width: 300px;
+			width: 300px;
+			height: 100%;
+			background-color: var(--bg-material);
+			overflow: hidden;
+			border-right: 1px solid var(--separator-primary);
+
+			&__file {
+				height: 36px;
+				display: flex;
+				font-weight: 400;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 12px 0 8px;
+				border-bottom: 1px solid var(--separator-secondary);
+				overflow: hidden;
+
+				&:hover {
+					background-color: var(--bg-hover);
+				}
+
+				&.active {
+					background-color: var(--bg-active);
+				}
+
+				&__filename {
+					color: var(--color-primary);
+					font-size: 1rem;
+					font-weight: 400;
+					margin-left: 8px;
+					overflow: hidden;
+					display: flex;
+					align-items: center;
+					width: 100%;
+
+					&__path {
+						opacity: 0.6;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+
+					&__name {
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+
+						&__separator {
+							opacity: 0.6;
+						}
+					}
+				}
+
+				&__status {
+					font-family: var(--font-mono);
+					background: transparent;
+					margin-left: 20px;
+					opacity: 1;
+					padding: 4px;
+					border-radius: 4px;
+
+					&.added {
+						color: var(--status-added);
+					}
+
+					&.modified {
+						color: var(--status-modified);
+					}
+
+					&.deleted {
+						color: var(--status-deleted);
+					}
+
+					&.untracked,
+					&.unknown {
+						color: var(--status-untracked);
+					}
+				}
+			}
+		}
+
+		&__main {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+
+			&__file {
+				display: flex;
+				width: 100%;
+				height: 36px;
+				min-height: 36px;
+				padding-inline: 10px;
+				font-size: 1rem;
+				align-items: center;
+				border-bottom: 1px solid var(--separator-secondary);
+
+				&__path {
+					opacity: 0.6;
+				}
+			}
 		}
 	}
 }

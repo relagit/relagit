@@ -1,4 +1,5 @@
 import RepositoryStore, { IRepository } from './repository';
+import { IPastCommit } from '@app/modules/git/show';
 import { ILogCommit } from '@app/modules/git/log';
 import SettingsStore from './settings';
 import { GenericStore } from '.';
@@ -9,6 +10,7 @@ const LocationStore = new (class Location extends GenericStore {
 	#selectedRepository: IRepository | undefined;
 	#historyOpen = false;
 	#selectedCommit: ILogCommit | undefined;
+	#selectedCommitFiles: IPastCommit | undefined;
 
 	constructor() {
 		super();
@@ -17,6 +19,7 @@ const LocationStore = new (class Location extends GenericStore {
 		this.#selectedFile = undefined;
 		this.#selectedCommit = undefined;
 		this.#selectedRepository = undefined;
+		this.#selectedCommitFiles = undefined;
 
 		setTimeout(() => {
 			if (SettingsStore.getSetting('activeRepository')) {
@@ -44,6 +47,10 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#selectedCommit;
 	}
 
+	get selectedCommitFiles() {
+		return this.#selectedCommitFiles;
+	}
+
 	get historyOpen() {
 		return this.#historyOpen;
 	}
@@ -65,6 +72,11 @@ const LocationStore = new (class Location extends GenericStore {
 
 	setSelectedCommit(commit: ILogCommit) {
 		this.#selectedCommit = commit;
+		this.emit();
+	}
+
+	setSelectedCommitFiles(commit: IPastCommit) {
+		this.#selectedCommitFiles = commit;
 		this.emit();
 	}
 
