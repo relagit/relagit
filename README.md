@@ -1,3 +1,5 @@
+[![CI](https://github.com/relagit/relagit/actions/workflows/ci.yml/badge.svg)](https://github.com/relagit/relagit/actions/workflows/ci.yml)
+
 > [!NOTE]
 > RelaGit is far from stable, **DO NOT** use it for production projects yet.
 
