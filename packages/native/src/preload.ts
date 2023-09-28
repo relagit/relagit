@@ -33,6 +33,9 @@ export const Native = {
 		SWITCHER: (fn: (e: Event, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_SWITCHER, fn);
 		},
+		HISTORY: (fn: (e: Event, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
+		},
 		LOAD_WORKFLOW: (fn: (e: Event, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},

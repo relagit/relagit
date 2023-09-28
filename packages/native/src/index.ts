@@ -133,17 +133,24 @@ app.once('ready', async () => {
 			submenu: [
 				{
 					label: 'Toggle Sidebar',
-					accelerator: 'CmdOrCtrl+S',
+					accelerator: 'CmdOrCtrl+1',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SIDEBAR);
 					}
 				},
 				{
 					label: 'Toggle Switcher',
-					accelerator: 'CmdOrCtrl+K',
+					accelerator: 'CmdOrCtrl+2',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SWITCHER);
 						win.webContents.send(ipc.OPEN_SIDEBAR, true);
+					}
+				},
+				{
+					label: 'Toggle Commit History View',
+					accelerator: 'CmdOrCtrl+3',
+					click: () => {
+						win.webContents.send(ipc.OPEN_HISTORY);
 					}
 				}
 			]

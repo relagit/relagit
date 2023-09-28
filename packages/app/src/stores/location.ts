@@ -21,6 +21,11 @@ const LocationStore = new (class Location extends GenericStore {
 		this.#selectedRepository = undefined;
 		this.#selectedCommitFiles = undefined;
 
+		window.Native.listeners.HISTORY((_, value) => {
+			this.#historyOpen = value ?? !this.#historyOpen;
+			this.emit();
+		});
+
 		setTimeout(() => {
 			if (SettingsStore.getSetting('activeRepository')) {
 				const repo = RepositoryStore.getByPath(
