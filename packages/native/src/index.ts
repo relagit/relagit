@@ -24,7 +24,6 @@ app.once('ready', async () => {
 		titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
-		visualEffectState: settings.get('vibrancy') ? 'active' : undefined,
 		height: (settings.get('window.height') as number) || 850,
 		width: (settings.get('window.width') as number) || 1200,
 		minWidth: 500,
