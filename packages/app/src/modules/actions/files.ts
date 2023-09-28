@@ -7,10 +7,13 @@ import RepositoryStore, { IRepository } from '@stores/repository';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
 import RemoteStore from '@stores/remote';
+import * as logger from '@modules/logger';
 import { remoteStatus } from './remote';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 import { warn } from '../logger';
+
+import { showErrorModal } from '@app/ui/Modal';
 
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(
@@ -121,43 +124,49 @@ export const getRepositoryStatus = async (
 	refetchFiles?: boolean,
 	refetchRemotes?: boolean
 ) => {
-	if (RepositoryStore.getByPath(directory)) {
-		warn('Repository already exists, not adding again');
-
-		return;
-	}
-
 	try {
-		const info = await Git.Analyse(directory);
+		if (RepositoryStore.getByPath(directory)) {
+			warn('Repository already exists, not adding again');
 
-		RepositoryStore.addRepository({
-			id: Math.random().toString(16).split('.')[1],
-			path: directory,
-			name: path.basename(directory),
-			remote: info.remote,
-			branch: info.branch,
-			commit: info.commit,
-			aheadOrBehind: info.aheadOrBehind,
-			lastFetched: Date.now()
-		});
+			return;
+		}
+
+		try {
+			const info = await Git.Analyse(directory);
+
+			RepositoryStore.addRepository({
+				id: Math.random().toString(16).split('.')[1],
+				path: directory,
+				name: path.basename(directory),
+				remote: info.remote,
+				branch: info.branch,
+				commit: info.commit,
+				aheadOrBehind: info.aheadOrBehind,
+				lastFetched: Date.now()
+			});
+		} catch (error) {
+			RepositoryStore.addRepository({
+				draft: true,
+				id: Math.random().toString(16).split('.')[1],
+				path: directory,
+				name: path.basename(directory),
+				remote: null,
+				branch: null,
+				commit: null,
+				aheadOrBehind: null,
+				lastFetched: Date.now()
+			});
+		}
+
+		if (refetchFiles) await getFileStatus(directory);
+		if (refetchRemotes) await remoteStatus(directory);
+
+		return RepositoryStore.getByPath(directory);
 	} catch (error) {
-		RepositoryStore.addRepository({
-			draft: true,
-			id: Math.random().toString(16).split('.')[1],
-			path: directory,
-			name: path.basename(directory),
-			remote: null,
-			branch: null,
-			commit: null,
-			aheadOrBehind: null,
-			lastFetched: Date.now()
-		});
+		showErrorModal(error, 'Unknown error while fetching repository status');
+
+		logger.error(error);
 	}
-
-	if (refetchFiles) await getFileStatus(directory);
-	if (refetchRemotes) await remoteStatus(directory);
-
-	return RepositoryStore.getByPath(directory);
 };
 
 export const refetchRepository = async (repository: IRepository) => {
