@@ -1,5 +1,5 @@
 > [!NOTE]
-> RelaGit is far from Stable, **DO NOT** use it for production projects yet.
+> RelaGit is far from stable, **DO NOT** use it for production projects yet.
 
 <div align="center">
 	<picture>
