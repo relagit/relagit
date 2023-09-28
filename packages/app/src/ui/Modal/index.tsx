@@ -1,3 +1,7 @@
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:ipcRenderer'
+) as typeof import('electron').ipcRenderer;
+
 import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
@@ -6,6 +10,7 @@ import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
 
 import Button from '@ui/Common/Button';
+import * as ipc from '~/common/ipc';
 import Icon from '@ui/Common/Icon';
 import Layer from '@ui/Layer';
 
@@ -141,7 +146,9 @@ export const showErrorModal = (error: Error, message: string) => {
 								<Button
 									type="danger"
 									label="Reload Client"
-									onClick={() => window.location.reload()}
+									onClick={() => {
+										ipcRenderer.invoke(ipc.RELOAD_CLIENT);
+									}}
 								>
 									Reload
 								</Button>

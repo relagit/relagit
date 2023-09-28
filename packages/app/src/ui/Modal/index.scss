@@ -148,6 +148,9 @@
 	}
 
 	&__stack {
+		overflow: hidden;
+		white-space: pre-wrap;
+		text-overflow: ellipsis;
 		font-size: 1rem;
 		font-weight: 400;
 		padding: 16px;

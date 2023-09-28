@@ -52,9 +52,24 @@ export default (props: ICodeViewProps) => {
 	const changes = createStoreListener([FileStore], () =>
 		FileStore.getFilesByRepositoryPath(props.repository)
 	);
+	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
+	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
+			if (LocationStore.historyOpen) {
+				if (!LocationStore.selectedCommitFile) {
+					return setShouldShow(false);
+				}
+
+				setDiff(LocationStore.selectedCommitFile?.diff);
+				setShouldShow(true);
+				setShowOverridden(false);
+				setThrew(null);
+
+				return;
+			}
+
 			if (!props.file || !props.repository) {
 				return;
 			}
@@ -134,7 +149,7 @@ export default (props: ICodeViewProps) => {
 				}
 			>
 				<Show
-					when={props.file && props.repository}
+					when={(props.file && props.repository) || (historyOpen() && commit())}
 					fallback={
 						<>
 							<Show
@@ -179,7 +194,11 @@ export default (props: ICodeViewProps) => {
 					}
 				>
 					<Show
-						when={!IMAGE_EXTENSIONS.includes(path.extname(props.file))}
+						when={
+							!IMAGE_EXTENSIONS.includes(
+								path.extname(props.file || commit()?.filename)
+							)
+						}
 						fallback={
 							<div class="codeview-image">
 								{/* TODO */}
@@ -343,7 +362,9 @@ export default (props: ICodeViewProps) => {
 																			highlighter(
 																				change.content,
 																				langFrom(
-																					props.file || ''
+																					props.file ||
+																						commit()
+																							?.filename
 																				)
 																			)
 																		)}

@@ -1,4 +1,6 @@
 import RepositoryStore, { IRepository } from './repository';
+import { IPastCommit } from '@app/modules/git/show';
+import { ILogCommit } from '@app/modules/git/log';
 import SettingsStore from './settings';
 import { GenericStore } from '.';
 import { IFile } from './files';
@@ -6,12 +8,25 @@ import { IFile } from './files';
 const LocationStore = new (class Location extends GenericStore {
 	#selectedFile: IFile | undefined;
 	#selectedRepository: IRepository | undefined;
+	#historyOpen = false;
+	#selectedCommit: ILogCommit | undefined;
+	#selectedCommitFiles: IPastCommit | undefined;
+	#selectedCommitFile: IPastCommit['files'][number] | undefined;
 
 	constructor() {
 		super();
 
+		this.#historyOpen = false;
 		this.#selectedFile = undefined;
+		this.#selectedCommit = undefined;
 		this.#selectedRepository = undefined;
+		this.#selectedCommitFiles = undefined;
+		this.#selectedCommitFile = undefined;
+
+		window.Native.listeners.HISTORY((_, value) => {
+			this.#historyOpen = value ?? !this.#historyOpen;
+			this.emit();
+		});
 
 		setTimeout(() => {
 			if (SettingsStore.getSetting('activeRepository')) {
@@ -35,6 +50,22 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#selectedRepository;
 	}
 
+	get selectedCommit() {
+		return this.#selectedCommit;
+	}
+
+	get selectedCommitFiles() {
+		return this.#selectedCommitFiles;
+	}
+
+	get selectedCommitFile() {
+		return this.#selectedCommitFile;
+	}
+
+	get historyOpen() {
+		return this.#historyOpen;
+	}
+
 	setSelectedFile(file: IFile) {
 		this.#selectedFile = file;
 		this.emit();
@@ -42,6 +73,26 @@ const LocationStore = new (class Location extends GenericStore {
 
 	clearSelectedFile() {
 		this.#selectedFile = undefined;
+		this.emit();
+	}
+
+	setHistoryOpen(open: boolean) {
+		this.#historyOpen = open;
+		this.emit();
+	}
+
+	setSelectedCommit(commit: ILogCommit) {
+		this.#selectedCommit = commit;
+		this.emit();
+	}
+
+	setSelectedCommitFiles(commit: IPastCommit) {
+		this.#selectedCommitFiles = commit;
+		this.emit();
+	}
+
+	setSelectedCommitFile(file: IPastCommit['files'][number]) {
+		this.#selectedCommitFile = file;
 		this.emit();
 	}
 

@@ -45,14 +45,18 @@
 			background-color: var(--bg-hover);
 		}
 
-		&:active {
-			background-color: var(--bg-active);
-		}
-
 		&:focus {
-			background-color: var(--bg-active);
+			background-color: var(--bg-hover);
 			border-color: transparent;
 			outline: none;
+		}
+
+		&.active {
+			background-color: var(--bg-active);
+
+			svg {
+				color: var(--color-primary);
+			}
 		}
 
 		svg {
