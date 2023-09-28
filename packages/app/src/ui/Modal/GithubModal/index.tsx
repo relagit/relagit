@@ -2,14 +2,16 @@ import { Show, For, createSignal } from 'solid-js';
 
 import { GithubResponse } from './types';
 
+import { openExternal } from '@app/modules/shell';
+
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import EmptyState from '@app/ui/Common/EmptyState';
+import TextArea from '@app/ui/Common/TextArea';
+import Button from '@app/ui/Common/Button';
 import Icon from '@app/ui/Common/Icon';
 import Layer from '@ui/Layer';
 
 import './index.scss';
-import TextArea from '@app/ui/Common/TextArea';
-import Button from '@app/ui/Common/Button';
 
 let languageFile;
 
@@ -137,7 +139,7 @@ export default () => {
 												label="View repository on GitHub"
 												type="default"
 												onClick={() => {
-													// TODO: Open external link
+													openExternal(opened().html_url);
 												}}
 											>
 												View on GitHub
