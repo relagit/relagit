@@ -8,9 +8,9 @@ import { Transition } from 'solid-transition-group';
 import { createStoreListener } from '@stores/index';
 import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
+import * as ipc from '~/common/ipc';
 
 import Button from '@ui/Common/Button';
-import * as ipc from '~/common/ipc';
 import Icon from '@ui/Common/Icon';
 import Layer from '@ui/Layer';
 
