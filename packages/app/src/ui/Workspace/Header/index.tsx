@@ -159,6 +159,16 @@ export default () => {
 						}
 						case 'behind': {
 							debug('Pulling changes');
+
+							try {
+								await Git.Pull(LocationStore.selectedRepository);
+							} catch (e) {
+								showErrorModal(e, 'Unknown error while pulling from remote');
+
+								error(e);
+							}
+
+							refetchRepository(LocationStore.selectedRepository);
 						}
 						default: {
 							debug('No change');

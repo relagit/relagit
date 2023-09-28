@@ -8,6 +8,7 @@ export { Show } from './show';
 export { Push } from './push';
 export { Diff } from './diff';
 export { Init } from './init';
+export { Pull } from './pull';
 export { Log } from './log';
 
 export { IGitParams as GitParams } from './core';
