@@ -81,6 +81,7 @@ export default (props: ICodeViewProps) => {
 			}
 
 			setSwitching(true);
+			setShowCommit(false);
 
 			setShowOverridden(false);
 			setShouldShow(true);
