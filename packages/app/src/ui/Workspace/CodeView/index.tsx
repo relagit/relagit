@@ -58,18 +58,11 @@ export default (props: ICodeViewProps) => {
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
 			if (LocationStore.historyOpen) {
-				console.log('history open');
-
 				if (!LocationStore.selectedCommitFile) {
-					console.log('no selected commit file');
-
 					return setShouldShow(false);
 				}
 
-				console.log('selected commit file');
-
 				setDiff(LocationStore.selectedCommitFile?.diff);
-				setContent("// this shouldn't be showing :)");
 				setShouldShow(true);
 				setShowOverridden(false);
 				setThrew(null);

@@ -1,5 +1,7 @@
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
+import { For, Show } from 'solid-js';
+
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 
@@ -7,7 +9,6 @@ import Header from '@ui/Workspace/Header';
 import CodeView from './CodeView';
 
 import './index.scss';
-import { For, Show, createEffect } from 'solid-js';
 
 export interface IWorkspaceProps {
 	sidebar: boolean;
@@ -30,10 +31,6 @@ export default (props: IWorkspaceProps) => {
 		[LocationStore],
 		() => LocationStore.selectedCommitFile
 	);
-
-	createEffect(() => {
-		console.log('commit', commit());
-	});
 
 	return (
 		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
