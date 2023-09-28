@@ -66,7 +66,9 @@ export default (props: ICodeViewProps) => {
 				}
 
 				setDiff(LocationStore.selectedCommitFile?.diff);
-				setShouldShow(true);
+				setShouldShow(
+					LocationStore.selectedCommitFile?.diff?.files?.[0]?.chunks.length < 10
+				);
 				setShowOverridden(false);
 				setShowCommit(false);
 				setThrew(null);
