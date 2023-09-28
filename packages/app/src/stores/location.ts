@@ -11,6 +11,7 @@ const LocationStore = new (class Location extends GenericStore {
 	#historyOpen = false;
 	#selectedCommit: ILogCommit | undefined;
 	#selectedCommitFiles: IPastCommit | undefined;
+	#selectedCommitFile: IPastCommit['files'][number] | undefined;
 
 	constructor() {
 		super();
@@ -20,6 +21,7 @@ const LocationStore = new (class Location extends GenericStore {
 		this.#selectedCommit = undefined;
 		this.#selectedRepository = undefined;
 		this.#selectedCommitFiles = undefined;
+		this.#selectedCommitFile = undefined;
 
 		window.Native.listeners.HISTORY((_, value) => {
 			this.#historyOpen = value ?? !this.#historyOpen;
@@ -56,6 +58,10 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#selectedCommitFiles;
 	}
 
+	get selectedCommitFile() {
+		return this.#selectedCommitFile;
+	}
+
 	get historyOpen() {
 		return this.#historyOpen;
 	}
@@ -82,6 +88,11 @@ const LocationStore = new (class Location extends GenericStore {
 
 	setSelectedCommitFiles(commit: IPastCommit) {
 		this.#selectedCommitFiles = commit;
+		this.emit();
+	}
+
+	setSelectedCommitFile(file: IPastCommit['files'][number]) {
+		this.#selectedCommitFile = file;
 		this.emit();
 	}
 

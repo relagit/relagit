@@ -26,6 +26,10 @@ export default (props: IWorkspaceProps) => {
 	});
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFiles);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const selectedCommitFile = createStoreListener(
+		[LocationStore],
+		() => LocationStore.selectedCommitFile
+	);
 
 	createEffect(() => {
 		console.log('commit', commit());
@@ -40,9 +44,17 @@ export default (props: IWorkspaceProps) => {
 						<For each={commit()?.files}>
 							{(commitFile) => (
 								<div
-									class="workspace__container__files__file"
+									aria-role="button"
+									aria-label={`Open ${commitFile.filename}`}
+									aria-selected={selectedCommitFile() === commitFile}
+									data-active={selectedCommitFile() === commitFile}
+									data-status={selectedCommitFile()?.status}
+									classList={{
+										workspace__container__files__file: true,
+										active: selectedCommitFile() === commitFile
+									}}
 									onClick={() => {
-										//
+										LocationStore.setSelectedCommitFile(commitFile);
 									}}
 								>
 									<div class="workspace__container__files__file__filename">
