@@ -124,7 +124,7 @@ Modal.Layer = () => {
 	);
 };
 
-export const showErrorModal = (error: Error, message: string) => {
+export const showErrorModal = (error: Error | string, message: string) => {
 	ModalStore.addModal({
 		type: 'error',
 		element: (
@@ -135,8 +135,10 @@ export const showErrorModal = (error: Error, message: string) => {
 							<ModalCloseButton close={props.close} />
 						</ModalHeader>
 						<ModalBody>
-							<p class="error-modal__message">{error.message}</p>
-							<pre class="error-modal__stack">{error.stack}</pre>
+							<p class="error-modal__message">{error['message'] || error}</p>
+							<Show when={error['stack']}>
+								<pre class="error-modal__stack">{error['stack']}</pre>
+							</Show>
 						</ModalBody>
 						<ModalFooter>
 							<div class="modal__footer__buttons">

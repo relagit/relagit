@@ -3,11 +3,17 @@ import { IRepository } from '@stores/repository';
 import { Git } from './core';
 
 export const Pull = async (repository: IRepository) => {
-	const res = await Git({
-		directory: repository.path,
-		command: 'pull',
-		args: ['origin', repository.branch]
-	});
+	try {
+		const res = await Git({
+			directory: repository.path,
+			command: 'pull',
+			args: ['origin', repository.branch]
+		});
 
-	return res;
+		return res;
+	} catch (error) {
+		if ((error as string).startsWith?.('From ')) return;
+
+		throw error;
+	}
 };
