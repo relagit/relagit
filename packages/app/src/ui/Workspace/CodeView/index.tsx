@@ -85,10 +85,9 @@ export default (props: ICodeViewProps) => {
 			}
 
 			setSwitching(true);
-			setShowCommit(false);
-
 			setShowOverridden(false);
-			setShouldShow(true);
+			setShowCommit(false);
+			setShouldShow(false);
 			setThrew(null);
 
 			let _diff: string | null = null;
