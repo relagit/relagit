@@ -20,6 +20,12 @@ import './index.scss';
 
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
 
+const totalLines = (file: GitDiff['files'][number]) => {
+	return file.chunks.reduce((acc, curr) => {
+		return acc + curr.changes.length;
+	}, 0);
+};
+
 const status = (e: 'UnchangedLine' | 'AddedLine' | 'DeletedLine') => {
 	switch (e) {
 		case 'UnchangedLine':
@@ -66,9 +72,7 @@ export default (props: ICodeViewProps) => {
 				}
 
 				setDiff(LocationStore.selectedCommitFile?.diff);
-				setShouldShow(
-					LocationStore.selectedCommitFile?.diff?.files?.[0]?.chunks.length < 10
-				);
+				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 100);
 				setShowOverridden(false);
 				setShowCommit(false);
 				setThrew(null);
@@ -117,7 +121,7 @@ export default (props: ICodeViewProps) => {
 			if (!diff() || diff() === true) {
 				setShouldShow(true);
 			} else {
-				setShouldShow((diff() as GitDiff)?.files?.[0]?.chunks.length < 10);
+				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 100);
 			}
 		} catch (e) {
 			setThrew(e);
