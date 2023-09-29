@@ -1,12 +1,6 @@
 import { Git } from './core';
 
 export const Analyse = async (directory: string) => {
-	await Git({
-		directory,
-		command: 'fetch',
-		args: []
-	});
-
 	const branch = await Git({
 		directory,
 		command: 'rev-parse',

@@ -4,6 +4,7 @@ import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 import { debug } from './modules/logger';
+import { Git } from './modules/git/core';
 
 import Workspace from '@ui/Workspace';
 import Settings from '@ui/Settings';
@@ -48,6 +49,12 @@ export default () => {
 			debug('Loading', repo);
 
 			loaded.push(repo);
+
+			Git({
+				directory: repo,
+				command: 'fetch',
+				args: []
+			});
 
 			await getRepositoryStatus(repo, true, true);
 		}
