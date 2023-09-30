@@ -57,6 +57,7 @@
 				padding: 0 12px 0 8px;
 				border-bottom: 1px solid var(--separator-secondary);
 				overflow: hidden;
+				user-select: none;
 
 				&:hover {
 					background-color: var(--bg-hover);

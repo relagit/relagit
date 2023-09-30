@@ -15,6 +15,7 @@
 		margin-inline: 8px;
 		padding: 10px;
 		border-radius: 2px;
+		user-select: none;
 
 		&.disabled {
 			pointer-events: none;

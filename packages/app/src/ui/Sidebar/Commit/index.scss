@@ -6,6 +6,7 @@
 	padding: 8px 12px;
 	border-bottom: 1px solid var(--separator-secondary);
 	overflow: hidden;
+	user-select: none;
 	gap: 8px;
 
 	&:hover {
