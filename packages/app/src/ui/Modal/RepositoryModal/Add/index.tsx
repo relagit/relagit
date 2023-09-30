@@ -4,11 +4,11 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 import { Signal, createEffect, createSignal } from 'solid-js';
 
 import SettingsStore from '@stores/settings';
+import { useI18n } from '@app/modules/i18n';
 
 import SegmentedControl from '@ui/Common/SegmentedControl';
 import { ModalBody, ModalFooter } from '@ui/Modal';
 import FileSelect from '@ui/Common/FileSelect';
-import Anchor from '@ui/Common/Anchor';
 import Button from '@ui/Common/Button';
 
 export interface IAddRepositoryModalProps {
@@ -20,12 +20,17 @@ export interface IAddRepositoryModalProps {
 }
 
 export default (props: IAddRepositoryModalProps) => {
+	const t = useI18n();
+
 	const fileValidator = (p: string) => {
 		if (p.length === 0) return null;
 
 		const exists = fs.existsSync(p);
 
-		if (!exists) return 'Directory does not exist';
+		if (!exists)
+			return t('ui.filepicker.doesNotExist', {
+				type: t('ui.filepicker.directory')
+			});
 
 		let isDirectory = false;
 
@@ -38,24 +43,15 @@ export default (props: IAddRepositoryModalProps) => {
 			isDirectory = false;
 		}
 
-		if (!isDirectory) return 'Path is not a directory';
+		if (!isDirectory)
+			return t('ui.filepicker.isNot', {
+				type: t('ui.filepicker.file'),
+				expected: t('ui.filepicker.directory')
+			});
 
 		const isGit = fs.existsSync(path.join(p, '.git', 'HEAD'));
 
-		if (!isGit)
-			return (
-				<>
-					Directory is not a Git Repository. Would you like to{' '}
-					<Anchor
-						onClick={() => {
-							props.tabSignal[1](1);
-						}}
-					>
-						create one
-					</Anchor>{' '}
-					here instead?
-				</>
-			);
+		if (!isGit) return <>{t('modal.repository.notGit')}</>;
 
 		return true;
 	};
@@ -75,11 +71,11 @@ export default (props: IAddRepositoryModalProps) => {
 				<SegmentedControl
 					items={[
 						{
-							label: 'Add',
+							label: t('modal.repository.add'),
 							value: 0
 						},
 						{
-							label: 'Create',
+							label: t('modal.repository.create'),
 							value: 1
 						}
 					]}
@@ -103,10 +99,10 @@ export default (props: IAddRepositoryModalProps) => {
 			<ModalFooter>
 				<div class="modal__footer__buttons">
 					<Button label="Cancel" type="default" onClick={props.modalProps.close}>
-						Cancel
+						{t('modal.repository.cancel')}
 					</Button>
 					<Button
-						label="Add Repository"
+						label={t('modal.repository.addRepo')}
 						type="brand"
 						onClick={() => {
 							SettingsStore.setSetting('repositories', [
@@ -118,7 +114,7 @@ export default (props: IAddRepositoryModalProps) => {
 						}}
 						disabled={!allowClose()}
 					>
-						Add
+						{t('modal.repository.add')}
 					</Button>
 				</div>
 			</ModalFooter>

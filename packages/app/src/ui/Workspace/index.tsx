@@ -4,6 +4,7 @@ import { For, Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 
 import Header from '@ui/Workspace/Header';
 import CodeView from './CodeView';
@@ -32,6 +33,8 @@ export default (props: IWorkspaceProps) => {
 		() => LocationStore.selectedCommitFile
 	);
 
+	const t = useI18n();
+
 	return (
 		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
 			<Header />
@@ -42,7 +45,9 @@ export default (props: IWorkspaceProps) => {
 							{(commitFile) => (
 								<div
 									aria-role="button"
-									aria-label={`Open ${commitFile.filename}`}
+									aria-label={t('workspace.commit.open', {
+										name: commitFile.filename
+									})}
 									aria-selected={selectedCommitFile() === commitFile}
 									data-active={selectedCommitFile() === commitFile}
 									data-status={selectedCommitFile()?.status}

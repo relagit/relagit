@@ -5,7 +5,22 @@ import SettingsStore from '@app/stores/settings';
 
 import en from './locales/en';
 
-type Locale = typeof en;
+export type Locale = typeof en;
+export type LocaleKey = ObjectToDotProp<Locale>;
+
+// https://codeberg.org/Ven/vendicated.dev/src/branch/i18n/src/locales/index.ts#L24
+type ObjectToDotProp<T extends object> = ObjectToDotPropInternal<T>[keyof T];
+
+type ObjectToDotPropInternal<T extends object> = {
+	[Key in keyof T]: Key extends string
+		? T[Key] extends Record<string, unknown>
+			? ObjectToDotProp<T[Key]> extends string
+				? // @ts-expect-error "Type instantiation is excessively deep and possibly infinite"
+				  `${Key}.${ObjectToDotProp<T[Key]>}`
+				: never
+			: Key
+		: never;
+};
 
 const ALL_LOCALES: Record<string, Locale> = {
 	en
@@ -14,7 +29,7 @@ const ALL_LOCALES: Record<string, Locale> = {
 type Stringifyable = string | number | boolean | null | undefined;
 
 export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALES]) => {
-	return (key: string, args?: Record<string, Stringifyable>, plural?: number) => {
+	return (key: LocaleKey, args?: Record<string, Stringifyable>, plural?: number) => {
 		const paths = key.split('.');
 
 		let out = '';

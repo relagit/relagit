@@ -6,7 +6,7 @@ import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
-import { useI18n } from '@modules/i18n';
+import { LocaleKey, useI18n } from '@modules/i18n';
 import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
 import * as ipc from '~/common/ipc';
@@ -73,10 +73,12 @@ const Modal = (props: IModalProps) => {
 };
 
 export const ModalCloseButton = (props: { close: () => void }) => {
+	const t = useI18n();
+
 	return (
 		<button
 			aria-role="button"
-			aria-label="Close Modal"
+			aria-label={t('ui.modal.closeModal')}
 			class="modal__close"
 			onClick={props.close}
 		>
@@ -125,7 +127,7 @@ Modal.Layer = () => {
 	);
 };
 
-export const showErrorModal = (error: Error | string, message: string) => {
+export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 	ModalStore.addModal({
 		type: 'error',
 		element: (
@@ -148,19 +150,19 @@ export const showErrorModal = (error: Error | string, message: string) => {
 								<div class="modal__footer__buttons">
 									<Button
 										type="default"
-										label="Close Modal"
+										label={t('ui.modal.closeModal')}
 										onClick={props.close}
 									>
-										Close
+										{t('ui.modal.close')}
 									</Button>
 									<Button
 										type="danger"
-										label="Reload Client"
+										label={t('modal.error.reloadClient')}
 										onClick={() => {
 											ipcRenderer.invoke(ipc.RELOAD_CLIENT);
 										}}
 									>
-										Reload
+										{t('modal.error.reload')}
 									</Button>
 								</div>
 							</ModalFooter>

@@ -6,6 +6,7 @@ import { createStoreListener } from '@stores/index';
 import { showErrorModal } from '@ui/Modal';
 import SettingsStore from '@stores/settings';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import * as logger from '@modules/logger';
 import FilesStore from '@stores/files';
 import * as Git from '@modules/git';
@@ -19,6 +20,8 @@ export default () => {
 	const [description, setDescription] = createSignal('');
 	const [summary, setSummary] = createSignal('');
 	const [error, setError] = createSignal(false);
+
+	const t = useI18n();
 
 	const changes = createStoreListener([FilesStore, LocationStore], () =>
 		FilesStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
@@ -85,12 +88,14 @@ export default () => {
 			<TextArea
 				disabled={!(selected() && changes() && staged())}
 				value={description()}
-				placeholder="Description"
+				placeholder={t('sidebar.footer.description')}
 				onChange={setDescription}
 				expanded={true}
 			/>
 			<Button
-				label={`Commit to ${selected()?.branch || 'Remote'}`}
+				label={t('sidebar.footer.commit', {
+					branch: selected()?.branch || 'Remote'
+				})}
 				type={error() ? 'danger' : 'brand'}
 				onClick={async () => {
 					LocationStore.setSelectedFile(null);
@@ -111,7 +116,9 @@ export default () => {
 				}}
 				disabled={!Boolean(summary().length)}
 			>
-				Commit to {selected()?.branch || 'Remote'}
+				{t('sidebar.footer.commit', {
+					branch: selected()?.branch || 'Remote'
+				})}
 			</Button>
 		</div>
 	);

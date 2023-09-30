@@ -3,6 +3,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 import { Signal, createEffect, createSignal } from 'solid-js';
 
 import SettingsStore from '@stores/settings';
+import { useI18n } from '@app/modules/i18n';
 import { Init } from '@modules/git';
 
 import SegmentedControl from '@ui/Common/SegmentedControl';
@@ -21,12 +22,17 @@ export interface ICreateRepositoryModalProps {
 }
 
 export default (props: ICreateRepositoryModalProps) => {
+	const t = useI18n();
+
 	const fileValidator = (p: string) => {
 		if (p.length === 0) return null;
 
 		const exists = fs.existsSync(p);
 
-		if (!exists) return 'Directory does not exist';
+		if (!exists)
+			return t('ui.filepicker.doesNotExist', {
+				type: t('ui.filepicker.directory')
+			});
 
 		let isDirectory = false;
 
@@ -39,7 +45,11 @@ export default (props: ICreateRepositoryModalProps) => {
 			isDirectory = false;
 		}
 
-		if (!isDirectory) return 'Path is not a directory';
+		if (!isDirectory)
+			return t('ui.filepicker.isNot', {
+				type: t('ui.filepicker.file'),
+				expected: t('ui.filepicker.directory')
+			});
 
 		return true;
 	};
@@ -61,11 +71,11 @@ export default (props: ICreateRepositoryModalProps) => {
 				<SegmentedControl
 					items={[
 						{
-							label: 'Add',
+							label: t('modal.repository.add'),
 							value: 0
 						},
 						{
-							label: 'Create',
+							label: t('modal.repository.create'),
 							value: 1
 						}
 					]}
@@ -99,10 +109,10 @@ export default (props: ICreateRepositoryModalProps) => {
 			<ModalFooter>
 				<div class="modal__footer__buttons">
 					<Button label="Cancel" type="default" onClick={props.modalProps.close}>
-						Cancel
+						{t('modal.repository.cancel')}
 					</Button>
 					<Button
-						label="Create Repository"
+						label={t('modal.repository.createRepo')}
 						type="brand"
 						onClick={async () => {
 							props.modalProps.close();
@@ -116,7 +126,7 @@ export default (props: ICreateRepositoryModalProps) => {
 						}}
 						disabled={!allowClose()}
 					>
-						Create
+						{t('modal.repository.create')}
 					</Button>
 				</div>
 			</ModalFooter>

@@ -65,7 +65,7 @@ export default () => {
 			>
 				<div
 					aria-role="button"
-					aria-label="Open Repository Drawer"
+					aria-label={t('sidebar.openDrawer')}
 					tabIndex={0}
 					class="sidebar__header"
 					onClick={() => setOpen(!open())}

@@ -90,7 +90,9 @@ export default (props: IFile) => {
 		>
 			<div
 				aria-role="button"
-				aria-label={`Open ${props.name}`}
+				aria-label={t('sidebar.open', {
+					name: props.name
+				})}
 				aria-selected={selectedFile() === props}
 				class={`sidebar__item ${selectedFile() === props ? 'active' : ''}`}
 				data-id={props.id}
@@ -114,7 +116,11 @@ export default (props: IFile) => {
 				</div>
 				<button
 					aria-role="button"
-					aria-label={`${props.staged ? 'Unstage' : 'Stage'} Changes`}
+					aria-label={
+						props.staged
+							? t('sidebar.contextMenu.unstage')
+							: t('sidebar.contextMenu.stage')
+					}
 					onClick={() => {
 						FileStore.toggleStaged(selected().path, props);
 					}}

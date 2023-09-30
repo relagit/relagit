@@ -4,10 +4,11 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 
 import { Show, createEffect, createSignal, JSX } from 'solid-js';
 
+import { useI18n } from '@app/modules/i18n';
+import * as ipc from '~/common/ipc';
+
 import TextArea from '../TextArea';
 import Icon from '../Icon';
-
-import * as ipc from '~/common/ipc';
 
 import './index.scss';
 
@@ -29,6 +30,8 @@ export default (props: IFileSelectProps) => {
 	const [inputValue, setInputValue] = createSignal(props.initial || '');
 	const [valid, setValid] = createSignal<string | boolean | JSX.Element>(null);
 	const [status, setStatus] = createSignal<'valid' | 'invalid' | null>(null);
+
+	const t = useI18n();
 
 	createEffect(() => {
 		if (props.validate) {
@@ -73,7 +76,7 @@ export default (props: IFileSelectProps) => {
 				<Show when={props.input}>
 					<TextArea
 						value={inputValue()}
-						placeholder="Select a file..."
+						placeholder={t('ui.filepicker.placeholder')}
 						disabled={props.disabled}
 						onChange={(v) => {
 							setInputValue(v);
@@ -84,7 +87,7 @@ export default (props: IFileSelectProps) => {
 				</Show>
 				<button
 					aria-role="button"
-					aria-label="Select a file"
+					aria-label={t('ui.filepicker.label')}
 					aria-disabled={props.disabled}
 					class="filepicker__input__button"
 					onClick={openDialog}
@@ -104,7 +107,7 @@ export default (props: IFileSelectProps) => {
 				</Show>
 				<Show when={status() === 'valid'}>
 					<Icon name="check" />
-					<span>Valid Selection</span>
+					<span>{t('ui.filepicker.valid')}</span>
 				</Show>
 			</div>
 		</div>

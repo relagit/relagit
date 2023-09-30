@@ -5,6 +5,7 @@ import { removeRepository } from '@modules/actions';
 import { showItemInFolder } from '@modules/shell';
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
 import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
@@ -28,6 +29,8 @@ export default (props: IHeaderDrawerProps) => {
 		RepositoryStore.getByName(LocationStore.selectedRepository?.name)
 	);
 
+	const t = useI18n();
+
 	return (
 		<div
 			aria-hidden={!props.open[0]()}
@@ -38,20 +41,20 @@ export default (props: IHeaderDrawerProps) => {
 		>
 			<div class="sidebar__drawer__body">
 				<div class="sidebar__drawer__body__header">
-					Repositories
+					{t('sidebar.drawer.title')}
 					<Menu
 						event="click"
 						items={[
 							{
 								type: 'item',
-								label: 'Create Repository Group'
+								label: t('sidebar.drawer.contextMenu.createGroup')
 							},
 							{
 								type: 'separator'
 							},
 							{
 								type: 'item',
-								label: 'Add Repository',
+								label: t('sidebar.drawer.contextMenu.addRepository'),
 								onClick: () => {
 									ModalStore.addModal({
 										type: 'add-repository',
@@ -61,7 +64,7 @@ export default (props: IHeaderDrawerProps) => {
 							},
 							{
 								type: 'item',
-								label: 'Create Repository',
+								label: t('sidebar.drawer.contextMenu.createRepository'),
 								onClick: () => {
 									ModalStore.addModal({
 										type: 'create-repository',
@@ -71,7 +74,7 @@ export default (props: IHeaderDrawerProps) => {
 							},
 							{
 								type: 'item',
-								label: 'Clone from GitHub',
+								label: t('sidebar.drawer.contextMenu.cloneFromGitHub'),
 								onClick: () => {
 									ModalStore.addModal({
 										type: 'github-repository',
@@ -83,7 +86,7 @@ export default (props: IHeaderDrawerProps) => {
 					>
 						<button
 							aria-role="button"
-							aria-label="Add Repository"
+							aria-label={t('sidebar.drawer.contextMenu.addRepository')}
 							class="sidebar__drawer__body__header__button"
 						>
 							<Icon name="plus" />
@@ -98,18 +101,19 @@ export default (props: IHeaderDrawerProps) => {
 									items={[
 										{
 											type: 'item',
-											label: `View in ${
-												window.Native.platform === 'darwin'
-													? 'Finder'
-													: 'Explorer'
-											}`,
+											label: t('sidebar.drawer.contextMenu.viewIn', {
+												name:
+													window.Native.platform === 'darwin'
+														? 'Finder'
+														: 'Explorer'
+											}),
 											onClick: () => {
 												showItemInFolder(repository.path);
 											}
 										},
 										{
 											type: 'item',
-											label: 'Remove',
+											label: t('sidebar.drawer.contextMenu.remove'),
 											color: 'danger',
 											onClick: () => {
 												removeRepository(repository);
@@ -119,7 +123,9 @@ export default (props: IHeaderDrawerProps) => {
 								>
 									<button
 										aria-role="button"
-										aria-label={`Switch to ${repository.name}`}
+										aria-label={t('sidebar.drawer.switchTo', {
+											name: repository.name
+										})}
 										aria-selected={selected()?.id === repository.id}
 										classList={{
 											sidebar__drawer__body__content__item: true,
@@ -149,14 +155,14 @@ export default (props: IHeaderDrawerProps) => {
 			</div>
 			<div class="sidebar__drawer__footer">
 				<Button
-					label="Open Settings"
+					label={t('sidebar.drawer.openSettings')}
 					type="default"
 					onClick={() => {
 						props.open[1](false);
 						LayerStore.setVisible('settings', true);
 					}}
 				>
-					Settings
+					{t('sidebar.drawer.settings')}
 				</Button>
 			</div>
 		</div>

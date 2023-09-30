@@ -3,6 +3,7 @@ import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'soli
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
+import { useI18n } from '@app/modules/i18n';
 
 import SegmentedView from '../Common/SegmentedView';
 import TextArea from '@ui/Common/TextArea';
@@ -104,6 +105,8 @@ export const Switch = (props: ISwitchProps) => {
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
+	const t = useI18n();
+
 	const close = () => LayerStore.setVisible('settings', false);
 
 	const listener = (e: KeyboardEvent) => {
@@ -124,23 +127,23 @@ export default () => {
 		<>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-commit-style">
-					Commit Message Style
+					{t('settings.general.commitStyle.label')}
 				</label>
 				<p class="settings-layer__setting__description">
-					This only effects the currently selected repository.
+					{t('settings.general.commitStyle.description')}
 				</p>
 				<RadioGroup
 					options={[
 						{
-							element: <>Conventional</>,
+							element: <>{t('settings.general.commitStyle.conventional')}</>,
 							value: 'conventional'
 						},
 						{
-							element: <>Relational</>,
+							element: <>{t('settings.general.commitStyle.relational')}</>,
 							value: 'relational'
 						},
 						{
-							element: <>None</>,
+							element: <>{t('settings.general.commitStyle.none')}</>,
 							value: 'none'
 						}
 					]}
@@ -158,8 +161,8 @@ export default () => {
 			</div>
 			<div class="settings-layer__setting">
 				<Switch
-					label="Enforce Commit Message Style"
-					note="This will prevent you from committing if your commit message does not match the style selected for a repository."
+					label={t('settings.general.enforceCommitStyle.label')}
+					note={t('settings.general.enforceCommitStyle.description')}
 					value={() => settings()?.get('enforceCommitMessageStyle') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('enforceCommitMessageStyle', value);
@@ -168,8 +171,8 @@ export default () => {
 			</div>
 			<div class="settings-layer__setting">
 				<Switch
-					label="Prefer Parentheses"
-					note="Use parentheses instead of brackets for commit message styles."
+					label={t('settings.general.preferParens.label')}
+					note={t('settings.general.preferParens.description')}
 					value={() => settings()?.get('preferParens') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('preferParens', value);
@@ -183,8 +186,8 @@ export default () => {
 		<>
 			<div class="settings-layer__setting">
 				<Switch
-					label="Vibrancy (MacOS)"
-					note="Enable Under-Window Vibrancy. This may impact performance. Requires Restart."
+					label={t('settings.appearance.vibrancy.label')}
+					note={t('settings.appearance.vibrancy.description')}
 					disabled={window.Native.platform !== 'darwin'}
 					value={() => settings()?.get('vibrancy') as boolean}
 					onChange={(value) => {
@@ -194,20 +197,20 @@ export default () => {
 			</div>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-theme">
-					Theme
+					{t('settings.appearance.theme.label')}
 				</label>
 				<RadioGroup
 					options={[
 						{
-							element: <>Light</>,
+							element: <>{t('settings.appearance.theme.light')}</>,
 							value: 'light'
 						},
 						{
-							element: <>Dark</>,
+							element: <>{t('settings.appearance.theme.dark')}</>,
 							value: 'dark'
 						},
 						{
-							element: <>System</>,
+							element: <>{t('settings.appearance.theme.system')}</>,
 							value: 'system'
 						}
 					]}
@@ -219,11 +222,10 @@ export default () => {
 			</div>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-font">
-					Custom Font
+					{t('settings.appearance.font.label')}
 				</label>
 				<p class="settings-layer__setting__description">
-					This will override the default code font. You can use any font that is installed
-					on your system.
+					{t('settings.appearance.font.description')}
 				</p>
 				<TextArea
 					className="settings-layer__setting__textarea"
@@ -231,7 +233,7 @@ export default () => {
 					onChange={(value) => {
 						SettingsStore.setSetting('fontFamily', value);
 					}}
-					placeholder="e.g. 'JetBrains Mono', monospace"
+					placeholder={t('settings.appearance.font.placeholder')}
 				/>
 			</div>
 		</>
@@ -240,11 +242,11 @@ export default () => {
 	return (
 		<div class="settings-layer">
 			<div class="settings-layer__title">
-				<h1>Settings</h1>
+				<h1>{t('settings.title')}</h1>
 				<div class="settings-layer__title__buttons">
 					<button
 						aria-role="button"
-						aria-label="Close Settings"
+						aria-label={t('settings.close')}
 						class="settings-layer__title__buttons__close"
 						onClick={close}
 					>
@@ -256,12 +258,12 @@ export default () => {
 				<SegmentedView
 					views={[
 						{
-							label: 'General',
+							label: t('settings.general.title'),
 							value: 'general',
 							element: General
 						},
 						{
-							label: 'Appearance',
+							label: t('settings.appearance.title'),
 							value: 'appearance',
 							element: Appearance
 						}

@@ -1,4 +1,49 @@
 export default {
+	settings: {
+		title: 'Settings',
+		close: 'Close Settings',
+		general: {
+			title: 'General',
+			commitStyle: {
+				label: 'Commit Message Style',
+				description:
+					'Select the style of commit messages you would like to use. This only effects the currently selected repository',
+				conventional: 'Conventional Commits',
+				relational: 'Relational Commits',
+				none: 'None'
+			},
+			enforceCommitStyle: {
+				label: 'Enforce Commit Message Style',
+				description:
+					'This will prevent you from committing if your commit message does not match the style selected for a repository.'
+			},
+			preferParens: {
+				label: 'Prefer Parentheses',
+				description: 'Prefer parentheses over angle brackets for commit message styles.'
+			}
+		},
+		appearance: {
+			title: 'Appearance',
+			vibrancy: {
+				label: 'Vibrancy',
+				description:
+					'Enable Under-Window Vibrancy. This may impact performance. Requires Restart.'
+			},
+			theme: {
+				label: 'Theme',
+				description: 'Select the theme you would like to use.',
+				light: 'Light',
+				dark: 'Dark',
+				system: 'System'
+			},
+			font: {
+				label: 'Custom Font',
+				description:
+					'This will override the default code font. You can use any font that is installed on your system.',
+				placeholder: '"SF Mono", "JetBrains Mono", "Fira Code", monospace'
+			}
+		}
+	},
 	error: {
 		fetching: 'Unexpected error while fetching repository status',
 		remote: 'Unexpected error while fetching remote status',
@@ -8,15 +53,47 @@ export default {
 		filepicker: {
 			placeholder: 'Select a file...',
 			label: 'Open file picker',
-			valid: 'Valid Selection'
+			valid: 'Valid Selection',
+			directory: 'Directory',
+			file: 'File',
+			doesNotExist: '{{type}} does not exist',
+			isNot: '{{type}} is not a {{expected}}'
+		}
+	},
+	workspace: {
+		commit: {
+			open: 'Open {{hash}}'
 		}
 	},
 	sidebar: {
+		commmit: {
+			label: 'Open Commit {{hash}}'
+		},
+		drawer: {
+			title: 'Repositories',
+			contextMenu: {
+				createGroup: 'Create Repository Group',
+				addRepository: 'Add Repository',
+				createRepository: 'Create Repository',
+				cloneFromGitHub: 'Clone from GitHub',
+				viewIn: 'View in {{name}}',
+				remove: 'Remove'
+			},
+			switchTo: 'Switch to {{name}}',
+			openSettings: 'Open Settings',
+			settings: 'Settings'
+		},
+		footer: {
+			description: 'Description',
+			commit: 'Commit to {{branch}}'
+		},
+		openDrawer: 'Open Repository Drawer',
 		upToDate: "You're all up to date.",
 		noCommits: 'No commits to show.',
 		noRepo: 'No Repository Selected',
 		noRepoHint: 'Select one to get started.',
 		noBranch: 'No Branch',
+		open: 'Open {{name}}',
 		contextMenu: {
 			stage: 'Stage Changes',
 			unstage: 'Unstage Changes',
@@ -65,6 +142,22 @@ export default {
 		stashedChanges: ['{{count}} stashed change', '{{count}} stashed changes']
 	},
 	modal: {
+		closeModal: 'Close Modal',
+		confirm: 'Confirm',
+		cancel: 'Cancel',
+		close: 'Close',
+		repository: {
+			cancel: 'Cancel',
+			add: 'Add',
+			create: 'Create',
+			addRepo: 'Add Repository',
+			createRepo: 'Create Repository',
+			notGit: 'Directory is not a Git Repository. Would you like to create one?'
+		},
+		error: {
+			reload: 'Reload',
+			reloadClient: 'Reload Client'
+		},
 		github: {
 			title: 'Clone from ',
 			back: 'Back',

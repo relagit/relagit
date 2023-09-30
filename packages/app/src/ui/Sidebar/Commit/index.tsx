@@ -4,6 +4,7 @@ import { showErrorModal } from '@app/ui/Modal';
 import { debug, error } from '@modules/logger';
 import { renderDate } from '@app/modules/time';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 
 import './index.scss';
@@ -11,10 +12,14 @@ import './index.scss';
 export default (props: ILogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
 
+	const t = useI18n();
+
 	return (
 		<div
 			aria-role="button"
-			aria-label={`Open Commit ${props.hash.substring(0, 7)}`}
+			aria-label={t('sidebar.commit.label', {
+				hash: props.hash.substring(0, 7)
+			})}
 			aria-selected={selected() === props}
 			class={`sidebar__commit ${selected() === props ? 'active' : ''}`}
 			data-id={props.hash}
