@@ -141,7 +141,8 @@ export const getRepositoryStatus = async (
 				remote: info.remote,
 				branch: info.branch,
 				commit: info.commit,
-				aheadOrBehind: info.aheadOrBehind,
+				ahead: info.ahead,
+				behind: info.behind,
 				lastFetched: Date.now()
 			});
 		} catch (error) {
@@ -153,7 +154,8 @@ export const getRepositoryStatus = async (
 				remote: null,
 				branch: null,
 				commit: null,
-				aheadOrBehind: null,
+				ahead: null,
+				behind: null,
 				lastFetched: Date.now()
 			});
 		}

@@ -8,7 +8,8 @@ export interface IRepository {
 	remote: string;
 	branch: string;
 	commit: string;
-	aheadOrBehind: number;
+	ahead: number;
+	behind: number;
 	lastFetched?: number;
 }
 

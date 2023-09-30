@@ -35,6 +35,7 @@ export const Analyse = async (directory: string) => {
 		commit,
 		dirname,
 		remote,
-		aheadOrBehind: (ahead ? Number(ahead[1]) : 0) - (behind ? Number(behind[1]) : 0)
+		ahead: ahead ? parseInt(ahead[1]) : 0,
+		behind: behind ? parseInt(behind[1]) : 0
 	};
 };

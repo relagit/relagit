@@ -45,6 +45,8 @@ export default {
 		pushChanges: 'Push Changes',
 		pullChanges: 'Pull Changes',
 		noChanges: 'No Changes',
+		diverged: 'Trees have diverged',
+		divergedHint: 'Stash changes and pull',
 		nothingToSee: 'Nothing to see here',
 		popStash: 'Pop Stash',
 		commits: ['{{count}} commit', '{{count}} commits'],

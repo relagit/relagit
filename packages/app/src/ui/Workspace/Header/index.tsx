@@ -80,24 +80,23 @@ export default () => {
 	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [stashed, setStashed] = createSignal<number>(null);
-	const [status, setStatus] = createSignal<string>(null);
+	const [status, setStatus] = createSignal<'diverged' | 'ahead' | 'behind'>(null);
 
 	const t = useI18n();
 
 	createEffect(() => {
 		if (!repository()) return;
 
-		const aob = repository()?.aheadOrBehind || 0;
+		const ahead = repository()?.ahead || 0;
+		const behind = repository()?.behind || 0;
 
-		if (aob < 0) {
-			return setStatus('behind');
-		}
-
-		if (aob > 0) {
-			return setStatus('ahead');
-		}
-
-		setStatus(null);
+		if (ahead > 0 && behind > 0) {
+			setStatus('diverged');
+		} else if (ahead > 0) {
+			setStatus('ahead');
+		} else if (behind > 0) {
+			setStatus('behind');
+		} else setStatus(null);
 	});
 
 	createStoreListener([LocationStore, RepositoryStore], async () => {
@@ -131,6 +130,8 @@ export default () => {
 							return 'repo-push';
 						case 'behind':
 							return 'cPull';
+						case 'diverged':
+							return 'repo-forked';
 						default:
 							return 'repo';
 					}
@@ -141,6 +142,8 @@ export default () => {
 							return t('git.pushChanges');
 						case 'behind':
 							return t('git.pullChanges');
+						case 'diverged':
+							return t('git.diverged');
 						default:
 							return t('git.noChanges');
 					}
@@ -148,12 +151,16 @@ export default () => {
 				id="workspace-pull"
 				disabled={!repository() || status() === null}
 				detail={(() => {
-					const aob = repository()?.aheadOrBehind || 0;
+					const ahead = repository()?.ahead || 0;
+					const behind = repository()?.behind || 0;
 
 					switch (status()) {
 						case 'ahead':
+							return t('git.commits', { count: Math.abs(ahead) }, Math.abs(ahead));
 						case 'behind':
-							return t('git.commits', { count: Math.abs(aob) }, Math.abs(aob));
+							return t('git.commits', { count: Math.abs(behind) }, Math.abs(behind));
+						case 'diverged':
+							return t('git.divergedHint');
 						default:
 							return t('git.nothingToSee');
 					}
@@ -180,6 +187,24 @@ export default () => {
 								await Git.Pull(LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'Unknown error while pulling from remote');
+
+								error(e);
+							}
+
+							refetchRepository(LocationStore.selectedRepository);
+						}
+						case 'diverged': {
+							debug('Diverged');
+
+							try {
+								await Git.Stash(LocationStore.selectedRepository);
+
+								await Git.Pull(LocationStore.selectedRepository);
+							} catch (e) {
+								showErrorModal(
+									e,
+									'Unknown error while dealing with diverged repository'
+								);
 
 								error(e);
 							}
