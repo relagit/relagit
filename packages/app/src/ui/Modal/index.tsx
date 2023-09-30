@@ -171,5 +171,3 @@ export const showErrorModal = (error: Error | string, message: string) => {
 		)
 	});
 };
-
-window.showErrorModal = showErrorModal;
