@@ -1,6 +1,7 @@
 import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { refetchRepository } from '@modules/actions';
+import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
@@ -77,6 +78,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 export default () => {
 	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<string>(null);
 
 	createEffect(() => {
@@ -93,6 +95,18 @@ export default () => {
 		}
 
 		setStatus(null);
+	});
+
+	createStoreListener([LocationStore, RepositoryStore], async () => {
+		try {
+			const res = await Git.ListStash(LocationStore.selectedRepository);
+
+			setStashed(res?.length);
+		} catch (e) {
+			showErrorModal(e, 'Unknown error while fetching repository status');
+
+			error(e);
+		}
 	});
 
 	return (
@@ -176,6 +190,25 @@ export default () => {
 					}
 				}}
 			/>
+			<Show when={stashed() > 0}>
+				<PanelButton
+					icon="file-directory"
+					id="workspace-pop-stash"
+					onClick={async () => {
+						try {
+							await Git.PopStash(LocationStore.selectedRepository);
+
+							refetchRepository(LocationStore.selectedRepository);
+						} catch (e) {
+							showErrorModal(e, 'Unknown error while popping stash');
+
+							error(e);
+						}
+					}}
+					label="Pop Stash"
+					detail={`${stashed()} stashed changes`}
+				/>
+			</Show>
 			<div class="workspace__header__spacer" />
 			<PanelButton
 				icon="history"

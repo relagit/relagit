@@ -2,12 +2,14 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 
 import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
+import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { debug } from '@modules/logger';
+import * as Git from '@app/modules/git';
 import FileStore from '@stores/files';
 
 import type { IFile } from '@stores/files';
 
+import { showErrorModal } from '@app/ui/Modal';
 import Menu from '@ui/Menu';
 
 import './index.scss';
@@ -33,7 +35,16 @@ export default (props: IFile) => {
 				},
 				{
 					label: 'Stash Changes',
-					type: 'item'
+					type: 'item',
+					onClick: async () => {
+						try {
+							await Git.Stash(selected());
+						} catch (e) {
+							showErrorModal(e, 'Unknown error while stashing changes');
+
+							error(e);
+						}
+					}
 				},
 				{
 					label: 'Discard Changes',
