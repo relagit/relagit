@@ -98,7 +98,7 @@ export default () => {
 					try {
 						await Git.Commit(selected(), summary(), description());
 					} catch (e) {
-						showErrorModal(e, 'Unknown error while committing changes');
+						showErrorModal(e, 'error.git');
 
 						logger.error(e);
 

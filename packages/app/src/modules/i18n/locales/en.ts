@@ -1,4 +1,16 @@
 export default {
+	error: {
+		fetching: 'Unexpected error while fetching repository status',
+		remote: 'Unexpected error while fetching remote status',
+		git: 'Unexpected error while executing git command'
+	},
+	ui: {
+		filepicker: {
+			placeholder: 'Select a file...',
+			label: 'Open file picker',
+			valid: 'Valid Selection'
+		}
+	},
 	sidebar: {
 		upToDate: "You're all up to date.",
 		noCommits: 'No commits to show.',

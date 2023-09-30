@@ -6,6 +6,7 @@ import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
+import { useI18n } from '@modules/i18n';
 import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
 import * as ipc from '~/common/ipc';
@@ -129,36 +130,46 @@ export const showErrorModal = (error: Error | string, message: string) => {
 		type: 'error',
 		element: (
 			<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
-				{(props) => (
-					<>
-						<ModalHeader title={message}>
-							<ModalCloseButton close={props.close} />
-						</ModalHeader>
-						<ModalBody>
-							<p class="error-modal__message">{error['message'] || error}</p>
-							<Show when={error['stack']}>
-								<pre class="error-modal__stack">{error['stack']}</pre>
-							</Show>
-						</ModalBody>
-						<ModalFooter>
-							<div class="modal__footer__buttons">
-								<Button type="default" label="Close Modal" onClick={props.close}>
-									Close
-								</Button>
-								<Button
-									type="danger"
-									label="Reload Client"
-									onClick={() => {
-										ipcRenderer.invoke(ipc.RELOAD_CLIENT);
-									}}
-								>
-									Reload
-								</Button>
-							</div>
-						</ModalFooter>
-					</>
-				)}
+				{(props) => {
+					const t = useI18n();
+
+					return (
+						<>
+							<ModalHeader title={t(message)}>
+								<ModalCloseButton close={props.close} />
+							</ModalHeader>
+							<ModalBody>
+								<p class="error-modal__message">{error['message'] || error}</p>
+								<Show when={error['stack']}>
+									<pre class="error-modal__stack">{error['stack']}</pre>
+								</Show>
+							</ModalBody>
+							<ModalFooter>
+								<div class="modal__footer__buttons">
+									<Button
+										type="default"
+										label="Close Modal"
+										onClick={props.close}
+									>
+										Close
+									</Button>
+									<Button
+										type="danger"
+										label="Reload Client"
+										onClick={() => {
+											ipcRenderer.invoke(ipc.RELOAD_CLIENT);
+										}}
+									>
+										Reload
+									</Button>
+								</div>
+							</ModalFooter>
+						</>
+					);
+				}}
 			</Modal>
 		)
 	});
 };
+
+window.showErrorModal = showErrorModal;

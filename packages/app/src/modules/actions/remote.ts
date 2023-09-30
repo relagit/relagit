@@ -16,7 +16,7 @@ export const remoteStatus = async (repository: string) => {
 	try {
 		status = await Git.Remote(repository);
 	} catch (e) {
-		showErrorModal(e, 'Error fetching remote status');
+		showErrorModal(e, 'error.remote');
 
 		error(e);
 
@@ -53,7 +53,7 @@ export const updateRemoteStatus = async (repository: string) => {
 	try {
 		status = await Git.Remote(repository);
 	} catch (e) {
-		showErrorModal(e, 'Error fetching remote status');
+		showErrorModal(e, 'error.remote');
 
 		error(e);
 

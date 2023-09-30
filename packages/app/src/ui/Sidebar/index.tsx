@@ -41,7 +41,7 @@ export default (props: ISidebarProps) => {
 
 			setCommits(await Git.Log(LocationStore.selectedRepository));
 		} catch (error) {
-			showErrorModal(error, 'Unknown error while fetching repository status');
+			showErrorModal(error, 'error.fetching');
 
 			logger.error(error);
 		}

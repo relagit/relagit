@@ -105,7 +105,7 @@ export default () => {
 
 			setStashed(res?.length);
 		} catch (e) {
-			showErrorModal(e, 'Unknown error while fetching repository status');
+			showErrorModal(e, 'error.fetching');
 
 			error(e);
 		}
@@ -173,7 +173,7 @@ export default () => {
 							try {
 								await Git.Push(LocationStore.selectedRepository);
 							} catch (e) {
-								showErrorModal(e, 'Unknown error while pushing changes');
+								showErrorModal(e, 'error.git');
 
 								error(e);
 							}
@@ -186,7 +186,7 @@ export default () => {
 							try {
 								await Git.Pull(LocationStore.selectedRepository);
 							} catch (e) {
-								showErrorModal(e, 'Unknown error while pulling from remote');
+								showErrorModal(e, 'error.git');
 
 								error(e);
 							}
@@ -201,10 +201,7 @@ export default () => {
 
 								await Git.Pull(LocationStore.selectedRepository);
 							} catch (e) {
-								showErrorModal(
-									e,
-									'Unknown error while dealing with diverged repository'
-								);
+								showErrorModal(e, 'error.git');
 
 								error(e);
 							}
@@ -227,7 +224,7 @@ export default () => {
 
 							refetchRepository(LocationStore.selectedRepository);
 						} catch (e) {
-							showErrorModal(e, 'Unknown error while popping stash');
+							showErrorModal(e, 'error.git');
 
 							error(e);
 						}

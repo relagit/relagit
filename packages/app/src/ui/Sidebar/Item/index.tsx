@@ -45,7 +45,7 @@ export default (props: IFile) => {
 						try {
 							await Git.Stash(selected());
 						} catch (e) {
-							showErrorModal(e, 'Unknown error while stashing changes');
+							showErrorModal(e, 'error.git');
 
 							error(e);
 						}

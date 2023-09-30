@@ -28,7 +28,7 @@ export default (props: ILogCommit) => {
 						await Git.Show(LocationStore.selectedRepository.path, props.hash)
 					);
 				} catch (e) {
-					showErrorModal(e, 'Failed to show commit');
+					showErrorModal(e, 'error.git');
 
 					error('Failed to show commit', e);
 				}

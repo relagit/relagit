@@ -165,7 +165,7 @@ export const getRepositoryStatus = async (
 
 		return RepositoryStore.getByPath(directory);
 	} catch (error) {
-		showErrorModal(error, 'Unknown error while fetching repository status');
+		showErrorModal(error, 'error.fetching');
 
 		logger.error(error);
 	}
