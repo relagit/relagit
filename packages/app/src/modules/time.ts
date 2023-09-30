@@ -1,14 +1,18 @@
 import { createRenderEffect, from } from 'solid-js';
 
+import { useI18n } from './i18n';
+
 export const relative = (ms: number) => {
+	const t = useI18n();
+
 	const seconds = Math.floor((Date.now() - ms) / 1000);
 
 	const timeIntervals = [
-		{ interval: 31536000, label: 'year' },
-		{ interval: 2592000, label: 'month' },
-		{ interval: 86400, label: 'day' },
-		{ interval: 3600, label: 'hour' },
-		{ interval: 60, label: 'minute' }
+		{ interval: 31536000, label: 'time.year' },
+		{ interval: 2592000, label: 'time.month' },
+		{ interval: 86400, label: 'time.day' },
+		{ interval: 3600, label: 'time.hour' },
+		{ interval: 60, label: 'time.minute' }
 	];
 
 	for (let i = 0; i < timeIntervals.length; i++) {
@@ -16,11 +20,11 @@ export const relative = (ms: number) => {
 		const quotient = Math.floor(seconds / interval);
 
 		if (quotient > 0) {
-			return `${quotient} ${label}${quotient > 1 ? 's' : ''} ago`;
+			return t(label, { count: quotient }, quotient) + ' ' + t('time.ago');
 		}
 	}
 
-	return 'Just now';
+	return t('time.now');
 };
 
 export const renderDate = (ms: number): (() => string) => {

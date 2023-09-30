@@ -5,6 +5,7 @@ import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
 import * as Git from '@modules/git';
 
@@ -81,6 +82,8 @@ export default () => {
 	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<string>(null);
 
+	const t = useI18n();
+
 	createEffect(() => {
 		if (!repository()) return;
 
@@ -135,11 +138,11 @@ export default () => {
 				label={(() => {
 					switch (status()) {
 						case 'ahead':
-							return 'Push Changes';
+							return t('git.pushChanges');
 						case 'behind':
-							return 'Pull Changes';
+							return t('git.pullChanges');
 						default:
-							return 'No Changes';
+							return t('git.noChanges');
 					}
 				})()}
 				id="workspace-pull"
@@ -149,11 +152,10 @@ export default () => {
 
 					switch (status()) {
 						case 'ahead':
-							return `${aob} commit${aob > 1 ? 's' : ''}`;
 						case 'behind':
-							return `${Math.abs(aob)} commit${Math.abs(aob) > 1 ? 's' : ''}`;
+							return t('git.commits', { count: Math.abs(aob) }, Math.abs(aob));
 						default:
-							return 'Nothing to see here';
+							return t('git.nothingToSee');
 					}
 				})()}
 				onClick={async () => {
@@ -205,8 +207,8 @@ export default () => {
 							error(e);
 						}
 					}}
-					label="Pop Stash"
-					detail={`${stashed()} stashed changes`}
+					label={t('git.popStash')}
+					detail={t('git.stashedChanges', { count: stashed() }, stashed())}
 				/>
 			</Show>
 			<div class="workspace__header__spacer" />

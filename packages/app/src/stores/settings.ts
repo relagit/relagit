@@ -7,6 +7,8 @@ const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
 import { GenericStore } from '.';
 
+export type ALL_LOCALES = 'en';
+
 export interface ISettings {
 	commitStyles: {
 		[repo: string]: string;
@@ -20,6 +22,7 @@ export interface ISettings {
 	accentColor: string;
 	repositories: string[];
 	activeRepository: string;
+	locale: string;
 }
 
 const validatePath = () => {

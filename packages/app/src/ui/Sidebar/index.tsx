@@ -4,6 +4,7 @@ import RepositoryStore, { IRepository } from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
@@ -30,6 +31,8 @@ export default (props: ISidebarProps) => {
 
 	let lastRepository: IRepository | undefined;
 
+	const t = useI18n();
+
 	createStoreListener([RepositoryStore, LocationStore], async () => {
 		try {
 			if (lastRepository === LocationStore.selectedRepository) return;
@@ -51,7 +54,7 @@ export default (props: ISidebarProps) => {
 				<div class="sidebar__commits">
 					<Show
 						when={commits()?.length}
-						fallback={<EmptyState hint="No commits to show." />}
+						fallback={<EmptyState hint={t('sidebar.noCommits')} />}
 					>
 						<For each={commits()}>
 							{(commit) => {
@@ -65,7 +68,7 @@ export default (props: ISidebarProps) => {
 				<div class="sidebar__items">
 					<Show
 						when={files()?.length}
-						fallback={<EmptyState hint="You're all up to date." />}
+						fallback={<EmptyState hint={t('sidebar.upToDate')} />}
 					>
 						<For each={files()}>
 							{(file) => {

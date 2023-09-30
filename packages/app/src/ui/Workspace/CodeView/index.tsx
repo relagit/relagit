@@ -7,6 +7,7 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import { error } from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
@@ -61,6 +62,8 @@ export default (props: ICodeViewProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+
+	const t = useI18n();
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
@@ -136,8 +139,8 @@ export default (props: ICodeViewProps) => {
 			when={!showCommit()}
 			fallback={
 				<EmptyState
-					detail="Nothing to see here"
-					hint="You've got to select a file to see its changes. (´・｀)"
+					detail={t('codeview.noCommit')}
+					hint={t('codeview.noCommitHint')}
 					image={{
 						light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
 						dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
@@ -149,8 +152,8 @@ export default (props: ICodeViewProps) => {
 				when={!switching()}
 				fallback={
 					<EmptyState
-						detail="Loading..."
-						hint="This shouldn't take too long."
+						detail={t('codeview.loading')}
+						hint={t('codeview.loadingHint')}
 						image={{
 							light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
 							dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
@@ -162,7 +165,7 @@ export default (props: ICodeViewProps) => {
 					when={!threw()}
 					fallback={
 						<EmptyState
-							detail="Something went wrong while loading the file."
+							detail={t('codeview.errorHint')}
 							hint={threw().message}
 							image={{
 								light: EMPTY_STATE_IMAGES.L_ERROR,
@@ -194,8 +197,8 @@ export default (props: ICodeViewProps) => {
 										when={changes()?.length}
 										fallback={
 											<EmptyState
-												detail="No pending changes!"
-												hint="Go take a break! You've earned it."
+												detail={t('codeview.noChanges')}
+												hint={t('codeview.noChangesHint')}
 												image={{
 													light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
 													dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
@@ -204,8 +207,8 @@ export default (props: ICodeViewProps) => {
 										}
 									>
 										<EmptyState
-											detail="No files selected."
-											hint="Click one in the sidebar over there （´・｀） to get started."
+											detail={t('codeview.noFile')}
+											hint={t('codeview.noFileHint')}
 											image={{
 												light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
 												dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
@@ -239,8 +242,8 @@ export default (props: ICodeViewProps) => {
 								fallback={
 									<>
 										<EmptyState
-											detail="Files too powerful!"
-											hint="This file is sooo huge that we aren't rendering it for performance reasons."
+											detail={t('codeview.tooBig')}
+											hint={t('codeview.tooBigHint')}
 											actions={[
 												{
 													label: 'Show',

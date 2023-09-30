@@ -4,6 +4,7 @@ import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 import * as Git from '@app/modules/git';
 import FileStore from '@stores/files';
 
@@ -18,6 +19,8 @@ export default (props: IFile) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
 
+	const t = useI18n();
+
 	const extension = (name: string) => {
 		const parts = name.split('.');
 		return parts.length > 1 ? parts[parts.length - 1] : '';
@@ -27,14 +30,16 @@ export default (props: IFile) => {
 		<Menu
 			items={[
 				{
-					label: `${props.staged ? 'Unstage' : 'Stage'} Changes`,
+					label: props.staged
+						? t('sidebar.contextMenu.unstage')
+						: t('sidebar.contextMenu.stage'),
 					type: 'item',
 					onClick: () => {
 						FileStore.toggleStaged(selected().path, props);
 					}
 				},
 				{
-					label: 'Stash Changes',
+					label: t('sidebar.contextMenu.stash'),
 					type: 'item',
 					onClick: async () => {
 						try {
@@ -47,7 +52,7 @@ export default (props: IFile) => {
 					}
 				},
 				{
-					label: 'Discard Changes',
+					label: t('sidebar.contextMenu.discard'),
 					type: 'item',
 					color: 'danger'
 				},
@@ -55,11 +60,11 @@ export default (props: IFile) => {
 					type: 'separator'
 				},
 				{
-					label: 'Add to gitignore',
+					label: t('sidebar.contextMenu.ignore'),
 					type: 'item'
 				},
 				{
-					label: `Add all .${extension(props.name)} Files to gitignore`,
+					label: t('sidebar.contextMenu.ignoreExt', { ext: extension(props.name) }),
 					type: 'item',
 					disabled: extension(props.name) === '.gitingore'
 				},
@@ -67,7 +72,9 @@ export default (props: IFile) => {
 					type: 'separator'
 				},
 				{
-					label: `View in ${window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'}`,
+					label: t('sidebar.contextMenu.viewIn', {
+						name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
+					}),
 					type: 'item',
 					onClick: () => {
 						showItemInFolder(path.join(selected().path, props.path, props.name));
@@ -75,7 +82,7 @@ export default (props: IFile) => {
 					disabled: props.status === 'deleted'
 				},
 				{
-					label: 'Open in Code',
+					label: t('sidebar.contextMenu.openIn', { name: 'Code' }),
 					type: 'item',
 					disabled: props.status === 'deleted'
 				}

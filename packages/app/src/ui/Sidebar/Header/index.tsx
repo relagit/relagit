@@ -5,6 +5,7 @@ import { createStoreListener } from '@stores/index';
 import RespositoryStore from '@stores/repository';
 import RemoteStore from '@app/stores/remote';
 import LocationStore from '@stores/location';
+import { useI18n } from '@app/modules/i18n';
 
 import Icon from '@ui/Common/Icon';
 import Menu from '@app/ui/Menu';
@@ -14,6 +15,8 @@ import './index.scss';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);
+
+	const t = useI18n();
 
 	window.Native.listeners.SWITCHER((_, value) => {
 		setOpen((o) => value ?? !o);
@@ -30,16 +33,18 @@ export default () => {
 				items={[
 					{
 						type: 'item',
-						label: `View in ${
-							window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
-						}`,
+						label: t('sidebar.contextMenu.viewIn', {
+							name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
+						}),
 						onClick: () => {
 							showItemInFolder(selected().path);
 						},
 						disabled: !selected()
 					},
 					{
-						label: 'Open in Code',
+						label: t('sidebar.contextMenu.openIn', {
+							name: 'Code'
+						}),
 						disabled: !selected(),
 						type: 'item'
 					},
@@ -47,7 +52,7 @@ export default () => {
 						type: 'separator'
 					},
 					{
-						label: 'Open Remote',
+						label: t('sidebar.contextMenu.openRemote'),
 						disabled: !selected(),
 						type: 'item',
 						onClick: () => {
@@ -72,15 +77,15 @@ export default () => {
 				>
 					<div class="sidebar__header__info">
 						<div class="sidebar__header__repository">
-							{selected()?.name || 'No Repository Selected'}
+							{selected()?.name || t('sidebar.noRepo')}
 						</div>
 						<div class="sidebar__header__details">
 							<Show
 								when={selected()}
-								fallback={<span>Choose one to get started.</span>}
+								fallback={<span>{t('sidebar.noRepoHint')}</span>}
 							>
 								<span class="sidebar__header__details__branch">
-									{selected()?.branch || 'No Branch'}
+									{selected()?.branch || t('sidebar.noBranch')}
 								</span>
 							</Show>
 						</div>

@@ -3,6 +3,7 @@ import { Show, For, createSignal } from 'solid-js';
 import { GithubResponse } from './types';
 
 import { openExternal } from '@app/modules/shell';
+import { useI18n } from '@app/modules/i18n';
 
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import EmptyState from '@app/ui/Common/EmptyState';
@@ -28,6 +29,8 @@ export default () => {
 	const [searchQuery, setSearchQuery] = createSignal('');
 	const [opened, setOpened] = createSignal<GithubResponse['user/repos'][number]>();
 	const [error, setError] = createSignal(false);
+
+	const t = useI18n();
 
 	const makeSorter = () => {
 		return (a: GithubResponse['user/repos'][0], b: GithubResponse['user/repos'][0]) => {
@@ -71,7 +74,7 @@ export default () => {
 						<ModalHeader
 							title={
 								<>
-									Clone from{' '}
+									{t('modal.github.title')}
 									<div class="github-modal__logo">
 										<Icon name="mark-github" className="mark" />
 										<Icon name="logo-github" className="logo" />
@@ -88,10 +91,10 @@ export default () => {
 										onClick={() => {
 											setOpened(null);
 										}}
-										label="Back to Search"
+										label={t('modal.github.backToSearch')}
 										type="default"
 									>
-										<Icon name="arrow-left" /> Back
+										<Icon name="arrow-left" /> {t('modal.github.back')}
 									</Button>
 									<h2 class="github-modal__header__title">{opened().name}</h2>
 									<div class="github-modal__header__social">
@@ -133,16 +136,17 @@ export default () => {
 													// TODO: Clone repo
 												}}
 											>
-												<Icon name="git-pull-request" /> Clone
+												<Icon name="git-pull-request" />{' '}
+												{t('modal.github.clone')}
 											</Button>
 											<Button
-												label="View repository on GitHub"
+												label={t('modal.github.viewOnGithub')}
 												type="default"
 												onClick={() => {
 													openExternal(opened().html_url);
 												}}
 											>
-												View on GitHub
+												{t('modal.github.viewOnGithub')}
 											</Button>
 										</div>
 									</div>
@@ -151,7 +155,7 @@ export default () => {
 							<Show when={!opened()}>
 								<div class="github-modal__header">
 									<TextArea
-										placeholder="Enter a GitHub User or Organisation"
+										placeholder={t('modal.github.searchPlaceholder')}
 										value={searchQuery()}
 										onChange={setSearchQuery}
 										onKeyDown={(e) => {
@@ -162,7 +166,7 @@ export default () => {
 									/>
 									<Button
 										onClick={refetch}
-										label="Search for Repositories"
+										label={t('modal.github.search')}
 										type="brand"
 									>
 										Search
@@ -170,14 +174,14 @@ export default () => {
 								</div>
 								<Show when={!response() && !error()}>
 									<EmptyState
-										detail="Loading..."
-										hint="Please wait while we fetch your repositories."
+										detail={t('modal.github.loading')}
+										hint={t('modal.github.loadingHint')}
 									/>
 								</Show>
 								<Show when={error()}>
 									<EmptyState
-										detail="Oops! Something went wrong."
-										hint="We dropped the ball while trying to gather your repositories."
+										detail={t('modal.github.error')}
+										hint={t('modal.github.errorHint')}
 									/>
 								</Show>
 
@@ -187,7 +191,9 @@ export default () => {
 											{(repo) => (
 												<div
 													aria-role="button"
-													aria-label={`Clone ${repo.name}`}
+													aria-label={`${t('modal.github.clone')} ${
+														repo.name
+													}`}
 													tabIndex={0}
 													onClick={() => {
 														setOpened(repo);
