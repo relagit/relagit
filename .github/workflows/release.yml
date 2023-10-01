@@ -39,3 +39,8 @@ jobs:
                   release_name: ${{ env.VERSION }}
                   draft: false
                   prerelease: false
+            - name: 'Upload Release Asset'
+              run: |
+                  gh release upload ${{ env.VERSION }} --clobber ./out/**/*.{zip,exe,deb}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
