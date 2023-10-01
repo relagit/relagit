@@ -1,10 +1,8 @@
 import { createRenderEffect, from } from 'solid-js';
 
-import { LocaleKey, useI18n } from './i18n';
+import { LocaleKey, t } from './i18n';
 
 export const relative = (ms: number) => {
-	const t = useI18n();
-
 	const seconds = Math.floor((Date.now() - ms) / 1000);
 
 	const timeIntervals = [

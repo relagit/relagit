@@ -4,15 +4,13 @@ import { showErrorModal } from '@app/ui/Modal';
 import { debug, error } from '@modules/logger';
 import { renderDate } from '@app/modules/time';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 
 import './index.scss';
 
 export default (props: ILogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
-
-	const t = useI18n();
 
 	return (
 		<div

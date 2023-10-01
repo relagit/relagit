@@ -4,7 +4,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 
 import { Show, createEffect, createSignal, JSX } from 'solid-js';
 
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import * as ipc from '~/common/ipc';
 
 import TextArea from '../TextArea';
@@ -30,8 +30,6 @@ export default (props: IFileSelectProps) => {
 	const [inputValue, setInputValue] = createSignal(props.initial || '');
 	const [valid, setValid] = createSignal<string | boolean | JSX.Element>(null);
 	const [status, setStatus] = createSignal<'valid' | 'invalid' | null>(null);
-
-	const t = useI18n();
 
 	createEffect(() => {
 		if (props.validate) {

@@ -6,7 +6,7 @@ import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
-import { LocaleKey, useI18n } from '@modules/i18n';
+import { LocaleKey, t } from '@modules/i18n';
 import ModalStore from '@stores/modal';
 import LayerStore from '@stores/layer';
 import * as ipc from '~/common/ipc';
@@ -73,8 +73,6 @@ const Modal = (props: IModalProps) => {
 };
 
 export const ModalCloseButton = (props: { close: () => void }) => {
-	const t = useI18n();
-
 	return (
 		<button
 			aria-role="button"
@@ -133,8 +131,6 @@ export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 		element: (
 			<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
 				{(props) => {
-					const t = useI18n();
-
 					return (
 						<>
 							<ModalHeader title={t(message)}>

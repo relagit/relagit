@@ -51,7 +51,7 @@ export default () => {
 			<TextArea
 				disabled={!(selected() && changes() && staged())}
 				value={summary()}
-				placeholder={commitMessage()?.message || 'Summary'}
+				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
 				onChange={(value) => {
 					if (
 						settings()?.get('enforceCommitMessageStyle') === true &&

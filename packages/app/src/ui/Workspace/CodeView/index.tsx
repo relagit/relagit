@@ -7,7 +7,7 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import { error } from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
@@ -62,8 +62,6 @@ export default (props: ICodeViewProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
-
-	const t = useI18n();
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {

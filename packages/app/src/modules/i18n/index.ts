@@ -1,11 +1,9 @@
-import { createSignal } from 'solid-js';
-
-import { createStoreListener } from '@app/stores';
 import SettingsStore from '@app/stores/settings';
 
-import en from './locales/en';
+import enUS from './locales/en-US';
+import lat from './locales/lat';
 
-export type Locale = typeof en;
+export type Locale = typeof enUS;
 export type LocaleKey = ObjectToDotProp<Locale>;
 
 // https://codeberg.org/Ven/vendicated.dev/src/branch/i18n/src/locales/index.ts#L24
@@ -23,7 +21,8 @@ type ObjectToDotPropInternal<T extends object> = {
 };
 
 const ALL_LOCALES: Record<string, Locale> = {
-	en
+	'en-US': enUS,
+	lat
 };
 
 type Stringifyable = string | number | boolean | null | undefined;
@@ -72,14 +71,10 @@ export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALE
 	};
 };
 
-const [locale, setLocale] = createSignal(en);
-
-createStoreListener([SettingsStore], () => {
-	setLocale(
-		ALL_LOCALES[(SettingsStore.settings.get('locale') as keyof typeof ALL_LOCALES) || 'en']
-	);
-});
-
 export const useI18n = () => {
-	return i18nFactory(locale());
+	return i18nFactory(
+		ALL_LOCALES[(SettingsStore.getSetting('locale') as string) || 'en-US'] || enUS
+	);
 };
+
+export const t = useI18n();

@@ -5,7 +5,7 @@ import { createStoreListener } from '@stores/index';
 import RespositoryStore from '@stores/repository';
 import RemoteStore from '@app/stores/remote';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 
 import Icon from '@ui/Common/Icon';
 import Menu from '@app/ui/Menu';
@@ -15,8 +15,6 @@ import './index.scss';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);
-
-	const t = useI18n();
 
 	window.Native.listeners.SWITCHER((_, value) => {
 		setOpen((o) => value ?? !o);

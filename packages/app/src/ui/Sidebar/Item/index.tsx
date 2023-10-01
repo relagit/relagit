@@ -4,7 +4,7 @@ import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import * as Git from '@app/modules/git';
 import FileStore from '@stores/files';
 
@@ -18,8 +18,6 @@ import './index.scss';
 export default (props: IFile) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
-
-	const t = useI18n();
 
 	const extension = (name: string) => {
 		const parts = name.split('.');

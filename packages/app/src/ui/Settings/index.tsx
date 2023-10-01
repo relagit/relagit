@@ -3,7 +3,7 @@ import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'soli
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 
 import SegmentedView from '../Common/SegmentedView';
 import TextArea from '@ui/Common/TextArea';
@@ -105,8 +105,6 @@ export const Switch = (props: ISwitchProps) => {
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
-	const t = useI18n();
-
 	const close = () => LayerStore.setVisible('settings', false);
 
 	const listener = (e: KeyboardEvent) => {
@@ -176,6 +174,30 @@ export default () => {
 					value={() => settings()?.get('preferParens') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('preferParens', value);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-locale">
+					{t('settings.general.language.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.general.language.description')}
+				</p>
+				<RadioGroup
+					options={[
+						{
+							element: <>English, US</>,
+							value: 'en-US'
+						},
+						{
+							element: <>Latin</>,
+							value: 'lat'
+						}
+					]}
+					value={settings()?.get('locale') as string}
+					onChange={(value) => {
+						SettingsStore.setSetting('locale', value);
 					}}
 				/>
 			</div>

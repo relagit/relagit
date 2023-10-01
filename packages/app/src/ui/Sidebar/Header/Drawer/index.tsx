@@ -5,7 +5,7 @@ import { removeRepository } from '@modules/actions';
 import { showItemInFolder } from '@modules/shell';
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
 import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
@@ -28,8 +28,6 @@ export default (props: IHeaderDrawerProps) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getByName(LocationStore.selectedRepository?.name)
 	);
-
-	const t = useI18n();
 
 	return (
 		<div

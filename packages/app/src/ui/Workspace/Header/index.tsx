@@ -5,7 +5,7 @@ import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
 import * as Git from '@modules/git';
 
@@ -82,7 +82,7 @@ export default () => {
 	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<'diverged' | 'ahead' | 'behind'>(null);
 
-	const t = useI18n();
+	;
 
 	createEffect(() => {
 		if (!repository()) return;

@@ -1,6 +1,6 @@
 import { Show, createSignal } from 'solid-js';
 
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 
 import Modal, { ModalCloseButton, ModalHeader } from '..';
 import Create from './Create';
@@ -16,8 +16,6 @@ export interface IRepositoryModalProps {
 export default (props: IRepositoryModalProps) => {
 	const [tab, setTab] = createSignal(props.tab ? (props.tab === 'add' ? 0 : 1) : 0);
 	const draftPath = createSignal('');
-
-	const t = useI18n();
 
 	return (
 		<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>

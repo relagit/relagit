@@ -3,7 +3,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 import { Signal, createEffect, createSignal } from 'solid-js';
 
 import SettingsStore from '@stores/settings';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import { Init } from '@modules/git';
 
 import SegmentedControl from '@ui/Common/SegmentedControl';
@@ -22,8 +22,6 @@ export interface ICreateRepositoryModalProps {
 }
 
 export default (props: ICreateRepositoryModalProps) => {
-	const t = useI18n();
-
 	const fileValidator = (p: string) => {
 		if (p.length === 0) return null;
 

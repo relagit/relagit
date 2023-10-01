@@ -6,7 +6,7 @@ export default {
 			title: 'General',
 			language: {
 				label: 'Language',
-				description: 'Select the language you would like to use.'
+				description: 'Select the language you would like to use. Requires Restart.'
 			},
 			commitStyle: {
 				label: 'Commit Message Style',
@@ -89,6 +89,7 @@ export default {
 		},
 		footer: {
 			description: 'Description',
+			summary: 'Summary',
 			commit: 'Commit to {{branch}}'
 		},
 		openDrawer: 'Open Repository Drawer',

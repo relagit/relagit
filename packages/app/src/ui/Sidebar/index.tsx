@@ -4,7 +4,7 @@ import RepositoryStore, { IRepository } from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
 import LocationStore from '@stores/location';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
@@ -30,8 +30,6 @@ export default (props: ISidebarProps) => {
 	const [commits, setCommits] = createSignal<ILogCommit[]>([]);
 
 	let lastRepository: IRepository | undefined;
-
-	const t = useI18n();
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
 		try {

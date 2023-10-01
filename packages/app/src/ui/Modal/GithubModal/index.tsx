@@ -3,7 +3,7 @@ import { Show, For, createSignal } from 'solid-js';
 import { GithubResponse } from './types';
 
 import { openExternal } from '@app/modules/shell';
-import { useI18n } from '@app/modules/i18n';
+import { t } from '@app/modules/i18n';
 
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import EmptyState from '@app/ui/Common/EmptyState';
@@ -29,8 +29,6 @@ export default () => {
 	const [searchQuery, setSearchQuery] = createSignal('');
 	const [opened, setOpened] = createSignal<GithubResponse['user/repos'][number]>();
 	const [error, setError] = createSignal(false);
-
-	const t = useI18n();
 
 	const makeSorter = () => {
 		return (a: GithubResponse['user/repos'][0], b: GithubResponse['user/repos'][0]) => {
