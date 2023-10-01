@@ -1,6 +1,6 @@
 import { createRenderEffect, from } from 'solid-js';
 
-import { useI18n } from './i18n';
+import { LocaleKey, useI18n } from './i18n';
 
 export const relative = (ms: number) => {
 	const t = useI18n();
@@ -20,7 +20,7 @@ export const relative = (ms: number) => {
 		const quotient = Math.floor(seconds / interval);
 
 		if (quotient > 0) {
-			return t(label, { count: quotient }, quotient) + ' ' + t('time.ago');
+			return t(label as LocaleKey, { count: quotient }, quotient) + ' ' + t('time.ago');
 		}
 	}
 

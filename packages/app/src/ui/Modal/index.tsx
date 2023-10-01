@@ -78,7 +78,7 @@ export const ModalCloseButton = (props: { close: () => void }) => {
 	return (
 		<button
 			aria-role="button"
-			aria-label={t('ui.modal.closeModal')}
+			aria-label={t('modal.closeModal')}
 			class="modal__close"
 			onClick={props.close}
 		>
@@ -150,10 +150,10 @@ export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 								<div class="modal__footer__buttons">
 									<Button
 										type="default"
-										label={t('ui.modal.closeModal')}
+										label={t('modal.closeModal')}
 										onClick={props.close}
 									>
-										{t('ui.modal.close')}
+										{t('modal.close')}
 									</Button>
 									<Button
 										type="danger"

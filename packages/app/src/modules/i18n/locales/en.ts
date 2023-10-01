@@ -4,6 +4,10 @@ export default {
 		close: 'Close Settings',
 		general: {
 			title: 'General',
+			language: {
+				label: 'Language',
+				description: 'Select the language you would like to use.'
+			},
 			commitStyle: {
 				label: 'Commit Message Style',
 				description:
