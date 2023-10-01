@@ -1,3 +1,4 @@
+export const SHOW_ITEM_IN_FOLDER = 'native:show-item-in-folder';
 export const OPEN_FILE_DIALOG = 'native:open-file-dialog';
 export const OPEN_SWITCHER = 'window:open-switcher';
 export const OPEN_SIDEBAR = 'window:open-sidebar';
