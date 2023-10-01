@@ -31,14 +31,8 @@ jobs:
               run: |
                   echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
             - name: 'Create Release'
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  tag_name: ${{ env.VERSION }}
-                  release_name: ${{ env.VERSION }}
-                  draft: false
-                  prerelease: false
+              run: |
+                  gh release create ${{ env.VERSION }} --title ${{ env.VERSION }} --generate-notes
             - name: 'Upload Release zip (mac)'
               if: matrix.os == 'macos-latest'
               run: |
