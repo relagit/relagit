@@ -1,3 +1,4 @@
+import { debug } from '@app/modules/logger';
 import { GenericStore } from '.';
 
 export interface IRepository {
@@ -41,6 +42,9 @@ const RepositoryStore = new (class Repository extends GenericStore {
 			if (!changepath) return; // Ignore empty path
 
 			if (changepath.includes('.git/index.lock')) return; // Ignore git files
+			if (changepath.includes('.git/FETCH_HEAD')) return;
+
+			debug('Filesystem change detected', changepath);
 
 			window._refetchRepository(this.getByPath(path));
 
