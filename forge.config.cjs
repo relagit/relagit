@@ -43,6 +43,14 @@ module.exports = {
 			}
 		},
 		{
+			name: '@electron-forge/maker-zip',
+			platforms: ['darwin'],
+			config: {
+				name: 'RelaGit',
+				overwrite: true
+			}
+		},
+		{
 			name: '@electron-forge/maker-squirrel',
 			config: {
 				name: 'RelaGit'
