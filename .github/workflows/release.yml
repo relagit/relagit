@@ -1,0 +1,41 @@
+name: Release
+on: push
+
+jobs:
+    release:
+        runs-on: ${{ matrix.os }}
+
+        strategy:
+            matrix:
+                os: [macos-latest, ubuntu-latest, windows-latest]
+
+        name: Release
+        if: "startsWith(github.event.head_commit.message, '(main) release: ')"
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v2
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm build
+            - run: pnpm make
+            - name: 'Find Version in package.json'
+              id: version
+              run: |
+                  echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+            - name: 'Create Release'
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ env.VERSION }}
+                  release_name: ${{ env.VERSION }}
+                  draft: false
+                  prerelease: false
