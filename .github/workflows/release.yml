@@ -26,7 +26,7 @@ jobs:
             - run: pnpm install --frozen-lockfile
             - run: pnpm build
             - name: Run Electron Builder
-              uses: samuelmeuli/action-electron-builder
+              uses: samuelmeuli/action-electron-builder@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   release: true
