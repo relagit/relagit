@@ -50,13 +50,13 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-deb',
 			config: {
-				name: 'relagit'
+				name: 'RelaGit'
 			}
 		},
 		{
 			name: '@electron-forge/maker-rpm',
 			config: {
-				name: 'relagit'
+				name: 'RelaGit'
 			}
 		}
 	]
