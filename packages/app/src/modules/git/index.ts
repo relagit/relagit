@@ -5,6 +5,7 @@ export { Commit } from './commit';
 export { Remote } from './remote';
 export { Status } from './status';
 export { Branch } from './branch';
+export { Blame } from './blame';
 export { Show } from './show';
 export { Push } from './push';
 export { Diff } from './diff';

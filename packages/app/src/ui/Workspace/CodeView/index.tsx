@@ -17,6 +17,8 @@ import Icon from '@ui/Common/Icon';
 
 import type { GitDiff } from 'parse-git-diff';
 
+type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
+
 import './index.scss';
 
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
@@ -53,6 +55,7 @@ export default (props: ICodeViewProps) => {
 	const [diff, setDiff] = createSignal<GitDiff | null | true>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
+	const [blame, setBlame] = createSignal<GitBlame>();
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
@@ -62,6 +65,7 @@ export default (props: ICodeViewProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
@@ -97,6 +101,7 @@ export default (props: ICodeViewProps) => {
 			try {
 				contents = await Git.Content(props.file, props.repository);
 				_diff = await Git.Diff(props.file, props.repository);
+				setBlame(await Git.Blame(props.repository, props.file));
 			} catch (e) {
 				setThrew(e);
 
@@ -287,6 +292,18 @@ export default (props: ICodeViewProps) => {
 																class="codeview__line__content"
 																innerHTML={dealWithTabs(line)}
 															></div>
+															<Show when={blameOpen()}>
+																<div class="codeview__line__blame">
+																	<Show when={blame()?.[index()]}>
+																		{blame()?.[index()]?.author}
+																		,{' '}
+																		{
+																			blame()?.[index()]
+																				?.message
+																		}
+																	</Show>
+																</div>
+															</Show>
 														</div>
 													);
 												}}
@@ -398,6 +415,29 @@ export default (props: ICodeViewProps) => {
 																				)
 																			)}
 																		></div>
+																		<Show when={blameOpen()}>
+																			<div class="codeview__line__blame">
+																				<Show
+																					when={
+																						blame()?.[
+																							line_number_one
+																						]
+																					}
+																				>
+																					{
+																						blame()?.[
+																							line_number_one
+																						]?.author
+																					}
+																					,{' '}
+																					{
+																						blame()?.[
+																							line_number_one
+																						]?.message
+																					}
+																				</Show>
+																			</div>
+																		</Show>
 																	</div>
 																);
 															}}

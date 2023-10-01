@@ -36,6 +36,9 @@ export const Native = {
 		HISTORY: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
 		},
+		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_BLAME, fn);
+		},
 		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},

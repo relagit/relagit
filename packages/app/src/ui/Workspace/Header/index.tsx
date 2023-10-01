@@ -79,10 +79,9 @@ const PanelButton = (props: IPanelButtonProps) => {
 export default () => {
 	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<'diverged' | 'ahead' | 'behind'>(null);
-
-	;
 
 	createEffect(() => {
 		if (!repository()) return;
@@ -234,6 +233,14 @@ export default () => {
 				/>
 			</Show>
 			<div class="workspace__header__spacer" />
+			<PanelButton
+				icon="git-commit"
+				id="workspace-blame"
+				className={blameOpen() ? 'active' : ''}
+				onClick={() => {
+					LocationStore.setBlameOpen(!blameOpen());
+				}}
+			/>
 			<PanelButton
 				icon="history"
 				id="workspace-history"
