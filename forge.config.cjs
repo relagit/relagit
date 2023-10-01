@@ -14,7 +14,8 @@ module.exports = {
 	packagerConfig: {
 		name: 'RelaGit',
 		appBundleId: 'com.rela.git',
-		icon: build.env === 'development' ? './icons/gold' : './icons/dark'
+		icon: build.env === 'development' ? './icons/gold' : './icons/dark',
+		executableName: 'relagit'
 	},
 	makers: [
 		{
