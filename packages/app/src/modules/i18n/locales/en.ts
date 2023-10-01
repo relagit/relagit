@@ -66,7 +66,7 @@ export default {
 		}
 	},
 	sidebar: {
-		commmit: {
+		commit: {
 			label: 'Open Commit {{hash}}'
 		},
 		drawer: {
