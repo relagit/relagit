@@ -368,6 +368,9 @@ export default (props: ICodeViewProps) => {
 																if (change.type === 'MessageLine')
 																	return null;
 
+																const lineBlame =
+																	blame()?.[line_number_one];
+
 																return (
 																	<div
 																		class={`codeview__line ${status(
@@ -418,22 +421,14 @@ export default (props: ICodeViewProps) => {
 																		<Show when={blameOpen()}>
 																			<div class="codeview__line__blame">
 																				<Show
-																					when={
-																						blame()?.[
-																							line_number_one
-																						]
-																					}
+																					when={lineBlame}
 																				>
 																					{
-																						blame()?.[
-																							line_number_one
-																						]?.author
+																						lineBlame.author
 																					}
 																					,{' '}
 																					{
-																						blame()?.[
-																							line_number_one
-																						]?.message
+																						lineBlame.message
 																					}
 																				</Show>
 																			</div>
