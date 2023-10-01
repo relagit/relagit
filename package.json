@@ -102,6 +102,7 @@
 		},
 		"linux": {
 			"category": "Developer",
+			"maintainer": "TheCommieAxolotl",
 			"target": [
 				"deb",
 				"tar.gz",
