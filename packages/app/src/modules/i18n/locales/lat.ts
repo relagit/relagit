@@ -157,6 +157,10 @@ export default {
 			createRepo: 'Fac Repository',
 			notGit: 'Git Repositorium Directorium non est. Vis creare unum?'
 		},
+		reload: {
+			title: 'Reload Client',
+			message: 'Clientis reload faciet. Mutationes non salvabuntur. Es tu certus?'
+		},
 		error: {
 			reload: 'Reload',
 			reloadClient: 'Reload clientis'

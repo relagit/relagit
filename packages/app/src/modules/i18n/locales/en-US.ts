@@ -159,6 +159,11 @@ export default {
 			createRepo: 'Create Repository',
 			notGit: 'Directory is not a Git Repository. Would you like to create one?'
 		},
+		reload: {
+			title: 'Reload Client',
+			message:
+				'A setting has been changed that requires a reload. Would you like to reload now?'
+		},
 		error: {
 			reload: 'Reload',
 			reloadClient: 'Reload Client'

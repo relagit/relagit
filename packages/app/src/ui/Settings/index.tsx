@@ -1,14 +1,23 @@
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:ipcRenderer'
+) as typeof import('electron').ipcRenderer;
+
 import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
+import ModalStore from '@app/stores/modal';
+import LayerStore from '@stores/layer';
 import { t } from '@app/modules/i18n';
+import * as ipc from '~/common/ipc';
 
+import Modal, { ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from '../Modal';
 import SegmentedView from '../Common/SegmentedView';
 import TextArea from '@ui/Common/TextArea';
-import LayerStore from '@stores/layer';
+import Button from '../Common/Button';
 import Icon from '@ui/Common/Icon';
+import Layer from '../Layer';
 
 import './index.scss';
 
@@ -21,6 +30,48 @@ export interface IRadioGroupProps {
 	onChange: (value: string) => void;
 	disabled?: boolean;
 }
+
+const showReloadModal = () => {
+	ModalStore.addModal({
+		type: 'error',
+		element: (
+			<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
+				{(props) => {
+					return (
+						<>
+							<ModalHeader title={t('modal.reload.title')}>
+								<ModalCloseButton close={props.close} />
+							</ModalHeader>
+							<ModalBody>
+								<p class="reload-modal__message">{t('modal.reload.message')}</p>
+							</ModalBody>
+							<ModalFooter>
+								<div class="modal__footer__buttons">
+									<Button
+										type="default"
+										label={t('modal.closeModal')}
+										onClick={props.close}
+									>
+										{t('modal.close')}
+									</Button>
+									<Button
+										type="danger"
+										label={t('modal.error.reloadClient')}
+										onClick={() => {
+											ipcRenderer.invoke(ipc.RELOAD_CLIENT);
+										}}
+									>
+										{t('modal.error.reload')}
+									</Button>
+								</div>
+							</ModalFooter>
+						</>
+					);
+				}}
+			</Modal>
+		)
+	});
+};
 
 export const RadioGroup = (props: IRadioGroupProps) => {
 	const [value, setValue] = createSignal(props.value);
@@ -198,6 +249,8 @@ export default () => {
 					value={settings()?.get('locale') as string}
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
+
+						showReloadModal();
 					}}
 				/>
 			</div>
@@ -214,6 +267,10 @@ export default () => {
 					value={() => settings()?.get('vibrancy') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('vibrancy', value);
+
+						if (value) {
+							showReloadModal();
+						}
 					}}
 				/>
 			</div>
