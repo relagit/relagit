@@ -24,7 +24,6 @@ jobs:
                   cache: 'pnpm'
 
             - run: pnpm install --frozen-lockfile
-            - run: pnpm build
             - name: Run Electron Builder
               uses: samuelmeuli/action-electron-builder@master
               with:
