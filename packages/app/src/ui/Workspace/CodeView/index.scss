@@ -66,6 +66,16 @@
 			background-color: var(--bg-c-hover);
 		}
 
+		&__indicator {
+			z-index: 1;
+			font-family: var(--font-mono);
+			font-variant-ligatures: none;
+			height: fit-content;
+			line-height: 1.8;
+			opacity: 0.5;
+			padding-left: 10px;
+		}
+
 		&__content {
 			padding-inline: 10px;
 			z-index: 1;

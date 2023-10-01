@@ -288,6 +288,12 @@ export default (props: ICodeViewProps) => {
 															>
 																{index()}
 															</div>
+
+															<div
+																class={`codeview__line__indicator ${status()}`}
+															>
+																{status() === 'added' ? '+' : '-'}
+															</div>
 															<div
 																class="codeview__line__content"
 																innerHTML={dealWithTabs(line)}
@@ -369,13 +375,14 @@ export default (props: ICodeViewProps) => {
 																	return null;
 
 																const lineBlame =
-																	blame()?.[line_number_one];
+																		blame()?.[line_number_one],
+																	lineStatus = status(
+																		change.type
+																	);
 
 																return (
 																	<div
-																		class={`codeview__line ${status(
-																			change.type
-																		)}`}
+																		class={`codeview__line ${lineStatus}`}
 																	>
 																		<div
 																			class="codeview__line__number"
@@ -404,6 +411,16 @@ export default (props: ICodeViewProps) => {
 																			}}
 																		>
 																			{line_number_two}
+																		</div>
+																		<div
+																			class={`codeview__line__indicator ${lineStatus}`}
+																		>
+																			{lineStatus === 'added'
+																				? '+'
+																				: lineStatus ===
+																				  'deleted'
+																				? '-'
+																				: ' '}
 																		</div>
 																		<div
 																			class="codeview__line__content"
