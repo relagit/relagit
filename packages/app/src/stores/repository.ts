@@ -35,7 +35,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 	attachListeners(path: string) {
 		let fsTimeout: NodeJS.Timeout | null = null;
 
-		window.Native.listeners.WATCHER.add(path, (changepath) => {
+		window.Native.listeners.WATCHER.add(path, (_, changepath) => {
 			if (fsTimeout) return;
 
 			if (!changepath) return; // Ignore empty path
