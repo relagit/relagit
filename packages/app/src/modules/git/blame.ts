@@ -44,6 +44,8 @@ export const parseBlame = (
 };
 
 export const Blame = async (repo: string, file: string) => {
+	if (!repo || !file) return [];
+
 	const result = await Git({
 		directory: repo,
 		command: 'blame',
