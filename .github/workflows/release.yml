@@ -39,8 +39,17 @@ jobs:
                   release_name: ${{ env.VERSION }}
                   draft: false
                   prerelease: false
-            - name: 'Upload Release Asset'
+            - name: 'Upload Release zip (mac)'
+              if: matrix.os == 'macos-latest'
               run: |
-                  gh release upload ${{ env.VERSION }} --clobber ./out/**/*.{zip,exe,deb}
+                  gh release upload ${{ env.VERSION }} --clobber ./out/**/*.{zip}
+            - name: 'Upload Release exe (windows)'
+              if: matrix.os == 'macos-latest'
+              run: |
+                  gh release upload ${{ env.VERSION }} --clobber ./out/**/*.{exe}
+            - name: 'Upload Release deb (linux)'
+              if: matrix.os == 'macos-latest'
+              run: |
+                  gh release upload ${{ env.VERSION }} --clobber ./out/**/*.{deb}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
