@@ -71,6 +71,12 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 	if (file && stat) {
 		if (!fs.existsSync(path.join(directory, file))) return;
 
+		if (FileStore.getByPath(file)) {
+			warn('File already exists, not adding again');
+
+			return;
+		}
+
 		return FileStore.addFile(directory, {
 			staged: true,
 			id: Math.random().toString(16).split('.')[1],
@@ -105,6 +111,12 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			for (const subFile of subFiles) {
 				getFileStatus(directory, path.join(p, subFile), status);
 			}
+
+			continue;
+		}
+
+		if (FileStore.getByPath(path.join(directory, p))) {
+			warn('File already exists, not adding again');
 
 			continue;
 		}
