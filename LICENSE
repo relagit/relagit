@@ -1,5 +1,5 @@
                       Relational Limited Public License.                      
-                            Version 1, 2023-09-17.                            
+                            Version 2, 2023-10-01.                            
 
 Copyright (c) 2023 TheCommieAxolotl & RelaGit contributors.
 
@@ -9,7 +9,7 @@ in the Software as described below:
 
 Permission is granted to use, copy, modify, and merge copies of the Software;
 however, the Software may not be sold or used commercially without the express
-permission of the author(s) specified above.
+permission of the author(s) of the Software.
 
 Any contributor to this project releases their contributions under the same
 license and acknowledges that, in the event of a change to this license, there
@@ -21,6 +21,11 @@ this license being replaced or changed in future releases of the Software.
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+Any person who has received a copy of the Software under this license may
+choose to discontinue use of the Software at any time, and may also choose to
+relicense the Software under any other license with consent of the author(s)
+of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
