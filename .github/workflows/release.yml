@@ -33,6 +33,8 @@ jobs:
             - name: 'Create Release'
               run: |
                   gh release create ${{ env.VERSION }} --title ${{ env.VERSION }} --generate-notes
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: 'Upload Release zip (mac)'
               if: matrix.os == 'macos-latest'
               run: |
