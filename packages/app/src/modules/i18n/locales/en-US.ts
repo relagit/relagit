@@ -125,6 +125,8 @@ export default {
 	codeview: {
 		noCommit: 'Nothing to see here',
 		noCommitHint: "You've got to select a file to see its changes. (´・｀)",
+		binary: 'Binary file',
+		binaryHint: "Sorry, we can't show you the diff for this file as it's a binary file.",
 		loading: 'Loading...',
 		loadingHint: "This shouldn't take too long.",
 		errorHint: 'Something went wrong while loading the file.',

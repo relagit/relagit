@@ -1,5 +1,3 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
 import { createSignal, For, Show } from 'solid-js';
 
 import highlighter, { langFrom } from '@modules/highlighter';
@@ -22,6 +20,11 @@ type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 import './index.scss';
 
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
+export const BINARY_EXTENSIONS = ['.DS_Store', '.exe', '.dll', '.so', '.dylib', '.o', '.a'];
+
+const extname = (file: string) => {
+	return file.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
+};
 
 const totalLines = (file: GitDiff['files'][number]) => {
 	return file.chunks.reduce((acc, curr) => {
@@ -232,19 +235,36 @@ export default (props: ICodeViewProps) => {
 						<Show
 							when={
 								!IMAGE_EXTENSIONS.includes(
-									path.extname(props.file || commit()?.filename)
+									extname(props.file || commit()?.filename)
+								) &&
+								!BINARY_EXTENSIONS.includes(
+									extname(props.file || commit()?.filename)
 								)
 							}
 							fallback={
-								<div class="codeview-image">
-									{/* TODO */}
-									<div class="codeview-image__container removed">
-										<Icon name="image" />
-									</div>
-									<div class="codeview-image__container added">
-										<Icon name="image" />
-									</div>
-								</div>
+								<>
+									<Show when={IMAGE_EXTENSIONS.includes(extname(props.file))}>
+										<div class="codeview-image">
+											{/* TODO */}
+											<div class="codeview-image__container removed">
+												<Icon name="image" />
+											</div>
+											<div class="codeview-image__container added">
+												<Icon name="image" />
+											</div>
+										</div>
+									</Show>
+									<Show when={BINARY_EXTENSIONS.includes(extname(props.file))}>
+										<EmptyState
+											detail={t('codeview.binary')}
+											hint={t('codeview.binaryHint')}
+											image={{
+												light: EMPTY_STATE_IMAGES.L_ERROR,
+												dark: EMPTY_STATE_IMAGES.D_ERROR
+											}}
+										/>
+									</Show>
+								</>
 							}
 						>
 							<Show

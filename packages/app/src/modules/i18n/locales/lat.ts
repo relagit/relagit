@@ -123,6 +123,8 @@ export default {
 	codeview: {
 		noCommit: 'Nihil hic videre',
 		noCommitHint: 'Elige tibi fasciculum ad eius mutationes videndas. (´・｀)',
+		binary: 'Fasciculus binarius',
+		binaryHint: 'Mea culpa! Diff non ostendere possumus.',
 		loading: 'Exspecto...',
 		loadingHint: 'Hoc non nimis longum.',
 		errorHint: 'Aliquid abiit iniuriam dum tabella oneratisque.',
