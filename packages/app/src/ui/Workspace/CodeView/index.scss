@@ -51,6 +51,7 @@
 		z-index: 2;
 		background-color: var(--bg-c);
 		overflow: hidden;
+		flex-shrink: 0;
 
 		&.deleted {
 			--bg-c: var(--bg-diff-del);
