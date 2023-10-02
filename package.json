@@ -98,11 +98,13 @@
 		},
 		"mac": {
 			"identity": null,
-			"category": "Developer"
+			"category": "public.app-category.developer-tools",
+			"darkModeSupport": true
 		},
 		"linux": {
 			"category": "Developer",
 			"maintainer": "TheCommieAxolotl",
+			"homepage": "https://git.rela.dev",
 			"target": [
 				"deb",
 				"tar.gz",
