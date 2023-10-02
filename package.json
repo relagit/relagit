@@ -104,7 +104,6 @@
 		"linux": {
 			"category": "Developer",
 			"maintainer": "TheCommieAxolotl",
-			"homepage": "https://git.rela.dev",
 			"target": [
 				"deb",
 				"tar.gz",
