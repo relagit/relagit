@@ -31,6 +31,8 @@ export const Git = async (params: IGitParams): Promise<string> => {
 				if (!(cmd.startsWith('git push ') && stderr.startsWith('To '))) {
 					hasError = stderr;
 					reject(stderr);
+				} else {
+					resolve(stderr.trim());
 				}
 			} else {
 				resolve(stdout.trim());
