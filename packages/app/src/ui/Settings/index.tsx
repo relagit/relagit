@@ -244,6 +244,10 @@ export default () => {
 						{
 							element: <>Latin</>,
 							value: 'lat'
+						},
+						{
+							element: <>Deutsch</>,
+							value: 'de'
 						}
 					]}
 					value={settings()?.get('locale') as string}

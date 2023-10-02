@@ -2,6 +2,7 @@ import SettingsStore from '@app/stores/settings';
 
 import enUS from './locales/en-US';
 import lat from './locales/lat';
+import de from './locales/de';
 
 export type Locale = typeof enUS;
 export type LocaleKey = ObjectToDotProp<Locale>;
@@ -22,7 +23,8 @@ type ObjectToDotPropInternal<T extends object> = {
 
 const ALL_LOCALES: Record<string, Locale> = {
 	'en-US': enUS,
-	lat
+	lat,
+	de
 };
 
 type Stringifyable = string | number | boolean | null | undefined;
