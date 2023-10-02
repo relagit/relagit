@@ -188,6 +188,10 @@ textarea {
 	&.platform-darwin {
 		padding-top: 28px;
 	}
+
+	&:not(.vibrancy) {
+		background: var(--bg-primary);
+	}
 }
 
 .window-control-bar {
