@@ -31,7 +31,7 @@ export interface IHeaderDrawerProps {
 export default (props: IHeaderDrawerProps) => {
 	const repositories = createStoreListener([RepositoryStore], () => RepositoryStore.repositories);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
-		RepositoryStore.getByName(LocationStore.selectedRepository?.name)
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const files = createStoreListener([FileStore], () => FileStore.files);
 
@@ -98,8 +98,12 @@ export default (props: IHeaderDrawerProps) => {
 					</Menu>
 				</div>
 				<div class="sidebar__drawer__body__content">
-					<For each={repositories().sort((a, b) => a.name.localeCompare(b.name))}>
-						{(repository) => (
+					<For
+						each={Array.from(repositories()).sort((a, b) =>
+							a[1].name.localeCompare(b[1].name)
+						)}
+					>
+						{([_, repository]) => (
 							<>
 								<Menu
 									items={[

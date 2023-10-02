@@ -21,7 +21,7 @@ export default () => {
 	});
 
 	const selected = createStoreListener([LocationStore, RespositoryStore], () =>
-		RespositoryStore.getByName(LocationStore.selectedRepository?.name)
+		RespositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 
 	return (

@@ -1,4 +1,5 @@
-import RepositoryStore, { IRepository } from './repository';
+import type { IRepository } from './repository';
+
 import { IPastCommit } from '@app/modules/git/show';
 import { ILogCommit } from '@app/modules/git/log';
 import SettingsStore from './settings';
@@ -34,19 +35,6 @@ const LocationStore = new (class Location extends GenericStore {
 			this.#blameOpen = value ?? !this.#blameOpen;
 			this.emit();
 		});
-
-		setTimeout(() => {
-			if (SettingsStore.getSetting('activeRepository')) {
-				const repo = RepositoryStore.getByPath(
-					SettingsStore.getSetting('activeRepository') as string
-				);
-
-				if (repo) {
-					this.#selectedRepository = repo;
-					this.emit();
-				}
-			}
-		}, 1000); // 1s timeout is GENERALLY enough for the repository to be loaded, if it's not, it's not a big deal
 	}
 
 	get selectedFile() {
@@ -112,7 +100,7 @@ const LocationStore = new (class Location extends GenericStore {
 		this.emit();
 	}
 
-	setSelectedRepository(repository: IRepository) {
+	setSelectedRepository(repository: IRepository, set = true) {
 		if (!repository) {
 			return;
 		}
@@ -121,7 +109,7 @@ const LocationStore = new (class Location extends GenericStore {
 		this.#selectedRepository = repository;
 		this.emit();
 
-		SettingsStore.setSetting('activeRepository', repository?.path);
+		if (set) SettingsStore.setSetting('activeRepository', repository?.path);
 	}
 
 	clearSelectedRepository() {

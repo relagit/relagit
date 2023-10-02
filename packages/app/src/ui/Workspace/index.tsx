@@ -3,6 +3,7 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 import { For, Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
+import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
 import { t } from '@app/modules/i18n';
 
@@ -16,7 +17,10 @@ export interface IWorkspaceProps {
 }
 
 export default (props: IWorkspaceProps) => {
-	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository?.path);
+	const repo = createStoreListener(
+		[LocationStore, RepositoryStore],
+		() => RepositoryStore.getById(LocationStore.selectedRepository?.id)?.path
+	);
 	const file = createStoreListener([LocationStore], () => {
 		const repo = LocationStore.selectedRepository;
 		const file = LocationStore.selectedFile;

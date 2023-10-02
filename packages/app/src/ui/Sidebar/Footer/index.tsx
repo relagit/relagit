@@ -1,16 +1,17 @@
 import { createSignal } from 'solid-js';
 
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
+import RepositoryStore from '@app/stores/repository';
 import { refetchRepository } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
-import { showErrorModal } from '@ui/Modal';
 import SettingsStore from '@stores/settings';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import * as logger from '@modules/logger';
 import FilesStore from '@stores/files';
+import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 
+import { showErrorModal } from '@ui/Modal';
 import TextArea from '@ui/Common/TextArea';
 import Button from '@ui/Common/Button';
 
@@ -27,7 +28,9 @@ export default () => {
 	const staged = createStoreListener([FilesStore, LocationStore], () =>
 		FilesStore.hasStagedFiles(LocationStore.selectedRepository?.path)
 	);
-	const selected = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
+	);
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {

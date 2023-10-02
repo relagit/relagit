@@ -1,12 +1,13 @@
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
+import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import * as Git from '@app/modules/git';
 import FileStore from '@stores/files';
+import { t } from '@app/modules/i18n';
 
 import type { IFile } from '@stores/files';
 
@@ -16,7 +17,9 @@ import Menu from '@ui/Menu';
 import './index.scss';
 
 export default (props: IFile) => {
-	const selected = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
+	);
 	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
 
 	const extension = (name: string) => {

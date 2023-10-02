@@ -106,16 +106,20 @@ const FileStore = new (class File extends GenericStore {
 		this.emit();
 	}
 
-	updateFile(repositoryPath: string, file: IFile) {
+	updateFile(repositoryPath: string, id: string, file: Partial<IFile>) {
 		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
 			this.#record.set(
 				repositoryPath,
 				files.map((f) => {
-					if (f.id === file.id) {
-						return file;
+					if (f.id === id) {
+						return {
+							...f,
+							...file
+						};
 					}
+
 					return f;
 				})
 			);

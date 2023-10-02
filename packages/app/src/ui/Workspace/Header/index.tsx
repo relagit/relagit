@@ -5,8 +5,8 @@ import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
+import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
@@ -77,7 +77,9 @@ const PanelButton = (props: IPanelButtonProps) => {
 };
 
 export default () => {
-	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const repository = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
+	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const [stashed, setStashed] = createSignal<number>(null);
