@@ -63,7 +63,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 	if (file) {
 		if (FileStore.getByPath(file)) return;
 	} else {
-		if (FileStore.getFilesByRepositoryPath(directory)?.length) {
+		if (FileStore.getByRepositoryPath(directory)?.length) {
 			FileStore.removeFiles(directory);
 		}
 	}
@@ -198,7 +198,7 @@ export const refetchRepository = async (repository: IRepository) => {
 		LocationStore.setSelectedRepository(repo);
 	}
 
-	const equivalent = FileStore.getFilesByRepositoryName(repository.name)?.find(
+	const equivalent = FileStore.getByRepositoryName(repository.name)?.find(
 		(f) => f.path === currentFile?.path
 	);
 

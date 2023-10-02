@@ -24,7 +24,7 @@ export interface ISidebarProps {
 
 export default (props: ISidebarProps) => {
 	const files = createStoreListener([FileStore, LocationStore], () =>
-		FileStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
+		FileStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [commits, setCommits] = createSignal<ILogCommit[]>([]);

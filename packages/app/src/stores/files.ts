@@ -35,17 +35,17 @@ const FileStore = new (class File extends GenericStore {
 	}
 
 	hasStagedFiles(path: string) {
-		return this.getFilesByRepositoryPath(path)?.some((f) => f.staged);
+		return this.getByRepositoryPath(path)?.some((f) => f.staged);
 	}
 
 	getStagedFilePaths(path: string) {
-		return this.getFilesByRepositoryPath(path)
+		return this.getByRepositoryPath(path)
 			?.filter((f) => f.staged)
 			.map((f) => nodepath.join(f.path, f.name));
 	}
 
 	toggleStaged(repoPath: string, file: IFile) {
-		const files = this.getFilesByRepositoryPath(repoPath);
+		const files = this.getByRepositoryPath(repoPath);
 
 		if (files) {
 			this.#record.set(
@@ -65,11 +65,11 @@ const FileStore = new (class File extends GenericStore {
 		this.emit();
 	}
 
-	getFilesByRepositoryPath(path: string) {
+	getByRepositoryPath(path: string) {
 		return this.files.get(path);
 	}
 
-	getFilesByRepositoryName(name: string) {
+	getByRepositoryName(name: string) {
 		return Array.from(this.files.entries()).find(([key]) => key.split('/').pop() === name)?.[1];
 	}
 
@@ -82,7 +82,7 @@ const FileStore = new (class File extends GenericStore {
 	}
 
 	addFile(repositoryPath: string, file: IFile) {
-		const files = this.getFilesByRepositoryPath(repositoryPath);
+		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
 			files.push(file);
@@ -94,7 +94,7 @@ const FileStore = new (class File extends GenericStore {
 	}
 
 	removeFile(repositoryPath: string, file: IFile) {
-		const files = this.getFilesByRepositoryPath(repositoryPath);
+		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
 			this.#record.set(
@@ -107,7 +107,7 @@ const FileStore = new (class File extends GenericStore {
 	}
 
 	updateFile(repositoryPath: string, file: IFile) {
-		const files = this.getFilesByRepositoryPath(repositoryPath);
+		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
 			this.#record.set(

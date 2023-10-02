@@ -22,7 +22,7 @@ export default () => {
 	const [error, setError] = createSignal(false);
 
 	const changes = createStoreListener([FilesStore, LocationStore], () =>
-		FilesStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
+		FilesStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 	const staged = createStoreListener([FilesStore, LocationStore], () =>
 		FilesStore.hasStagedFiles(LocationStore.selectedRepository?.path)

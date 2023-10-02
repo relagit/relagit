@@ -64,7 +64,7 @@ export default (props: ICodeViewProps) => {
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
 
 	const changes = createStoreListener([FileStore], () =>
-		FileStore.getFilesByRepositoryPath(props.repository)
+		FileStore.getByRepositoryPath(props.repository)
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
