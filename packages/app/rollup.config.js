@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import Module from 'node:module';
 import path from 'node:path';
-import sass from 'sass';
 
 import { defineConfig } from 'rollup';
 
@@ -40,7 +39,6 @@ export default defineConfig({
 		json(),
 		commonjs(),
 		scss({
-			sass: sass,
 			fileName: 'style.css'
 		}),
 		tsconfig({
