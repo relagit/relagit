@@ -2,7 +2,6 @@ import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
 import fs, { WatchListener } from 'node:fs';
 
 import * as starryNight from '@wooorm/starry-night';
-import * as sucrase from 'sucrase';
 
 import { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
@@ -17,8 +16,7 @@ export const Native = {
 		return require(id);
 	},
 	libraries: {
-		starryNight,
-		sucrase
+		starryNight
 	},
 	listeners: {
 		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {

@@ -1,8 +1,7 @@
+const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase') as typeof import('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
-
-const sucrase = window.Native.libraries.sucrase;
 
 import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';

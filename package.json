@@ -22,11 +22,13 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"sucrase": "^3.34.0",
 		"vscode-oniguruma": "^1.7.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.23.0",
 		"@babel/preset-env": "^7.22.20",
+		"@wooorm/starry-night": "^2.2.0",
 		"@babel/preset-typescript": "^7.23.0",
 		"@primer/octicons": "^18.3.0",
 		"@rollup/plugin-babel": "^6.0.3",
@@ -44,7 +46,6 @@
 		"@types/primer__octicons": "^17.11.0",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		"@wooorm/starry-night": "^2.2.0",
 		"babel-preset-solid": "^1.7.12",
 		"electron": "^25.8.4",
 		"electron-builder": "^24.6.4",
@@ -67,7 +68,6 @@
 		"sass": "^1.68.0",
 		"solid-js": "^1.7.12",
 		"solid-transition-group": "^0.2.3",
-		"sucrase": "^3.34.0",
 		"terser": "^5.20.0",
 		"thena": "^0.0.9",
 		"typescript": "^5.2.2",
