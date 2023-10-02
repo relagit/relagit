@@ -7,8 +7,8 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { error } from '@modules/logger';
+import { t } from '@app/modules/i18n';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
@@ -273,6 +273,8 @@ export default (props: ICodeViewProps) => {
 													const status = () =>
 														diff() ? 'added' : 'deleted';
 
+													const lineBlame = blame()?.[index()];
+
 													return (
 														<div class={`codeview__line ${status()}`}>
 															<div
@@ -298,16 +300,14 @@ export default (props: ICodeViewProps) => {
 																class="codeview__line__content"
 																innerHTML={dealWithTabs(line)}
 															></div>
-															<Show when={blameOpen()}>
-																<div class="codeview__line__blame">
-																	<Show when={blame()?.[index()]}>
-																		{blame()?.[index()]?.author}
-																		,{' '}
-																		{
-																			blame()?.[index()]
-																				?.message
-																		}
-																	</Show>
+
+															<Show when={blameOpen() && lineBlame}>
+																<div
+																	{...props}
+																	class="codeview__line__blame"
+																>
+																	{lineBlame.author},{' '}
+																	{lineBlame.message}
 																</div>
 															</Show>
 														</div>
@@ -435,19 +435,18 @@ export default (props: ICodeViewProps) => {
 																				)
 																			)}
 																		></div>
-																		<Show when={blameOpen()}>
-																			<div class="codeview__line__blame">
-																				<Show
-																					when={lineBlame}
-																				>
-																					{
-																						lineBlame.author
-																					}
-																					,{' '}
-																					{
-																						lineBlame.message
-																					}
-																				</Show>
+																		<Show
+																			when={
+																				blameOpen() &&
+																				lineBlame
+																			}
+																		>
+																			<div
+																				{...props}
+																				class="codeview__line__blame"
+																			>
+																				{lineBlame.author},{' '}
+																				{lineBlame.message}
 																			</div>
 																		</Show>
 																	</div>
