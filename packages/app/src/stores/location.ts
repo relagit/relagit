@@ -9,6 +9,7 @@ const LocationStore = new (class Location extends GenericStore {
 	#selectedFile: IFile | undefined;
 	#selectedRepository: IRepository | undefined;
 	#historyOpen = false;
+	#blameOpen = false;
 	#selectedCommit: ILogCommit | undefined;
 	#selectedCommitFiles: IPastCommit | undefined;
 	#selectedCommitFile: IPastCommit['files'][number] | undefined;
@@ -16,6 +17,7 @@ const LocationStore = new (class Location extends GenericStore {
 	constructor() {
 		super();
 
+		this.#blameOpen = false;
 		this.#historyOpen = false;
 		this.#selectedFile = undefined;
 		this.#selectedCommit = undefined;
@@ -25,6 +27,11 @@ const LocationStore = new (class Location extends GenericStore {
 
 		window.Native.listeners.HISTORY((_, value) => {
 			this.#historyOpen = value ?? !this.#historyOpen;
+			this.emit();
+		});
+
+		window.Native.listeners.BLAME((_, value) => {
+			this.#blameOpen = value ?? !this.#blameOpen;
 			this.emit();
 		});
 
@@ -66,6 +73,10 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#historyOpen;
 	}
 
+	get blameOpen() {
+		return this.#blameOpen;
+	}
+
 	setSelectedFile(file: IFile) {
 		this.#selectedFile = file;
 		this.emit();
@@ -78,6 +89,11 @@ const LocationStore = new (class Location extends GenericStore {
 
 	setHistoryOpen(open: boolean) {
 		this.#historyOpen = open;
+		this.emit();
+	}
+
+	setBlameOpen(open: boolean) {
+		this.#blameOpen = open;
 		this.emit();
 	}
 

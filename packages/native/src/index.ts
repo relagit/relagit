@@ -151,6 +151,13 @@ app.once('ready', async () => {
 					click: () => {
 						win.webContents.send(ipc.OPEN_HISTORY);
 					}
+				},
+				{
+					label: 'Toggle Blame View',
+					accelerator: 'CmdOrCtrl+4',
+					click: () => {
+						win.webContents.send(ipc.OPEN_BLAME);
+					}
 				}
 			]
 		},

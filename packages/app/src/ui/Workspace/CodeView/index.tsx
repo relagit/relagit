@@ -7,8 +7,8 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { error } from '@modules/logger';
+import { t } from '@app/modules/i18n';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
@@ -16,6 +16,8 @@ import EmptyState, { EMPTY_STATE_IMAGES } from '@ui/Common/EmptyState';
 import Icon from '@ui/Common/Icon';
 
 import type { GitDiff } from 'parse-git-diff';
+
+type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 
 import './index.scss';
 
@@ -53,6 +55,7 @@ export default (props: ICodeViewProps) => {
 	const [diff, setDiff] = createSignal<GitDiff | null | true>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
+	const [blame, setBlame] = createSignal<GitBlame>();
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
@@ -62,6 +65,7 @@ export default (props: ICodeViewProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
@@ -97,6 +101,7 @@ export default (props: ICodeViewProps) => {
 			try {
 				contents = await Git.Content(props.file, props.repository);
 				_diff = await Git.Diff(props.file, props.repository);
+				setBlame(await Git.Blame(props.repository, props.file));
 			} catch (e) {
 				setThrew(e);
 
@@ -268,6 +273,8 @@ export default (props: ICodeViewProps) => {
 													const status = () =>
 														diff() ? 'added' : 'deleted';
 
+													const lineBlame = blame()?.[index()];
+
 													return (
 														<div class={`codeview__line ${status()}`}>
 															<div
@@ -283,10 +290,26 @@ export default (props: ICodeViewProps) => {
 															>
 																{index()}
 															</div>
+
+															<div
+																class={`codeview__line__indicator ${status()}`}
+															>
+																{status() === 'added' ? '+' : '-'}
+															</div>
 															<div
 																class="codeview__line__content"
 																innerHTML={dealWithTabs(line)}
 															></div>
+
+															<Show when={blameOpen() && lineBlame}>
+																<div
+																	{...props}
+																	class="codeview__line__blame"
+																>
+																	{lineBlame.author},{' '}
+																	{lineBlame.message}
+																</div>
+															</Show>
 														</div>
 													);
 												}}
@@ -351,11 +374,15 @@ export default (props: ICodeViewProps) => {
 																if (change.type === 'MessageLine')
 																	return null;
 
+																const lineBlame =
+																		blame()?.[line_number_one],
+																	lineStatus = status(
+																		change.type
+																	);
+
 																return (
 																	<div
-																		class={`codeview__line ${status(
-																			change.type
-																		)}`}
+																		class={`codeview__line ${lineStatus}`}
 																	>
 																		<div
 																			class="codeview__line__number"
@@ -386,6 +413,16 @@ export default (props: ICodeViewProps) => {
 																			{line_number_two}
 																		</div>
 																		<div
+																			class={`codeview__line__indicator ${lineStatus}`}
+																		>
+																			{lineStatus === 'added'
+																				? '+'
+																				: lineStatus ===
+																				  'deleted'
+																				? '-'
+																				: ' '}
+																		</div>
+																		<div
 																			class="codeview__line__content"
 																			innerHTML={dealWithTabs(
 																				highlighter(
@@ -398,6 +435,20 @@ export default (props: ICodeViewProps) => {
 																				)
 																			)}
 																		></div>
+																		<Show
+																			when={
+																				blameOpen() &&
+																				lineBlame
+																			}
+																		>
+																			<div
+																				{...props}
+																				class="codeview__line__blame"
+																			>
+																				{lineBlame.author},{' '}
+																				{lineBlame.message}
+																			</div>
+																		</Show>
 																	</div>
 																);
 															}}
