@@ -1,15 +1,16 @@
-import { Accessor, Setter, For } from 'solid-js';
+import { Accessor, Setter, For, Show } from 'solid-js';
 
+import RepositoryStore, { IRepository } from '@stores/repository';
 import { createStoreListener } from '@stores/index';
 import { removeRepository } from '@modules/actions';
 import { showItemInFolder } from '@modules/shell';
-import RepositoryStore from '@stores/repository';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
+import FileStore, { IFile } from '@app/stores/files';
 import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
+import { t } from '@app/modules/i18n';
 
 import RepositoryModal from '@ui/Modal/RepositoryModal';
 import GithubModal from '@ui/Modal/GithubModal';
@@ -18,6 +19,10 @@ import Icon from '@ui/Common/Icon';
 import Menu from '@ui/Menu';
 
 import './index.scss';
+
+const hasUncommittedChanges = (files: Map<string, IFile[]>, repository: IRepository) => {
+	return files.get(repository.path)?.length > 0;
+};
 
 export interface IHeaderDrawerProps {
 	open: [Accessor<boolean>, Setter<boolean>];
@@ -28,6 +33,7 @@ export default (props: IHeaderDrawerProps) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getByName(LocationStore.selectedRepository?.name)
 	);
+	const files = createStoreListener([FileStore], () => FileStore.files);
 
 	return (
 		<div
@@ -139,11 +145,16 @@ export default (props: IHeaderDrawerProps) => {
 											LocationStore.setSelectedRepository(repository);
 										}}
 									>
-										{repository.name}
-										<div class="sidebar__drawer__body__content__item__details">
-											{repository.branch} -{' '}
-											{renderDate(repository.lastFetched)()}
+										<div class="sidebar__drawer__body__content__item__text">
+											{repository.name}
+											<div class="sidebar__drawer__body__content__item__text__details">
+												{repository.branch} -{' '}
+												{renderDate(repository.lastFetched)()}
+											</div>
 										</div>
+										<Show when={hasUncommittedChanges(files(), repository)}>
+											<div class="sidebar__drawer__body__content__item__indicator" />
+										</Show>
 									</button>
 								</Menu>
 							</>

@@ -66,8 +66,9 @@
 				padding: 10px 20px;
 				width: 100%;
 				display: flex;
-				gap: 4px;
-				flex-direction: column;
+				gap: 16px;
+				align-items: center;
+				justify-content: space-between;
 
 				&:not(:last-child) {
 					border-bottom: 1px solid var(--separator-secondary);
@@ -81,9 +82,23 @@
 					background-color: var(--bg-active);
 				}
 
-				&__details {
-					font-size: 0.85rem;
-					opacity: 0.6;
+				&__text {
+					display: flex;
+					gap: 4px;
+					flex-direction: column;
+					text-align: left;
+
+					&__details {
+						font-size: 0.85rem;
+						opacity: 0.6;
+					}
+				}
+
+				&__indicator {
+					width: 6px;
+					height: 6px;
+					border-radius: 50%;
+					background-color: #{illyrica.$color-blue-500};
 				}
 			}
 		}
