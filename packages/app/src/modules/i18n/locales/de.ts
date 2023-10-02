@@ -8,6 +8,15 @@ export default {
 				label: 'Sprache',
 				description: 'Wähle die Sprache aus, die du benutzen möchtest. Erfordert Neustart.'
 			},
+			editor: {
+				label: 'Externer Editor',
+				description:
+					'Wähle den Editor aus, den du benutzen möchtest, um Dateien zu öffnen. Erfordert Neustart.',
+				code: 'VS Code',
+				subl: 'Sublime Text',
+				'code-insiders': 'VS Code Insiders',
+				atom: 'Atom'
+			},
 			commitStyle: {
 				label: 'Commit Nachrichten-Stil',
 				description:

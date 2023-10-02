@@ -258,6 +258,36 @@ export default () => {
 					}}
 				/>
 			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-editor">
+					{t('settings.general.editor.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.general.editor.description')}
+				</p>
+				<RadioGroup
+					options={[
+						{
+							element: <>{t('settings.general.editor.code')}</>,
+							value: 'code'
+						},
+						{
+							element: <>{t('settings.general.editor.code-insiders')}</>,
+							value: 'code-insiders'
+						},
+						{
+							element: <>{t('settings.general.editor.subl')}</>,
+							value: 'subl'
+						}
+					]}
+					value={(settings()?.get('externalEditor') as string) || 'code'}
+					onChange={(value) => {
+						SettingsStore.setSetting('externalEditor', value);
+
+						showReloadModal();
+					}}
+				/>
+			</div>
 		</>
 	);
 

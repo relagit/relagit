@@ -12,6 +12,8 @@ import Menu from '@app/ui/Menu';
 import Drawer from './Drawer';
 
 import './index.scss';
+import { openInEditor } from '@app/modules/code';
+import SettingsStore from '@app/stores/settings';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);
@@ -41,8 +43,19 @@ export default () => {
 					},
 					{
 						label: t('sidebar.contextMenu.openIn', {
-							name: 'Code'
+							name: t(
+								`settings.general.editor.${
+									(SettingsStore.getSetting('externalEditor') as
+										| 'code'
+										| 'code-insiders'
+										| 'atom'
+										| 'subl') || 'code'
+								}`
+							)
 						}),
+						onClick: () => {
+							openInEditor(selected()?.path);
+						},
 						disabled: !selected(),
 						type: 'item'
 					},

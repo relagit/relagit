@@ -23,6 +23,7 @@ export interface ISettings {
 	repositories: string[];
 	activeRepository: string;
 	locale: string;
+	externalEditor: string;
 }
 
 const validatePath = () => {
@@ -42,7 +43,7 @@ const validatePath = () => {
 };
 
 const SettingsStore = new (class Settings extends GenericStore {
-	#record: Map<keyof ISettings, ISettings[keyof ISettings]> = new Map();
+	#record: Map<keyof ISettings, ISettings[keyof ISettings]> | undefined = new Map();
 	constructor() {
 		super();
 
@@ -55,8 +56,8 @@ const SettingsStore = new (class Settings extends GenericStore {
 		return this.#record;
 	}
 
-	getSetting(key: keyof ISettings): ISettings[keyof ISettings] {
-		return this.#record.get(key);
+	getSetting<T extends keyof ISettings>(key: keyof ISettings): ISettings[T] {
+		return this.#record.get(key) as ISettings[T];
 	}
 
 	setSetting(key: keyof ISettings, value: ISettings[keyof ISettings]) {

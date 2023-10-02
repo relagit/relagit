@@ -8,6 +8,14 @@ export default {
 				label: 'Lingua',
 				description: 'Linguam elige uti velis.'
 			},
+			editor: {
+				label: 'Editor Externus',
+				description: 'Editor elige uti velis ut limas aperire. Neustart requiritur.',
+				code: 'VS Code',
+				subl: 'Sublime Text',
+				'code-insiders': 'VS Code Insiders',
+				atom: 'Atom'
+			},
 			commitStyle: {
 				label: 'Commit Nuntius Forma',
 				description: 'Elige commit nuntis forma. Hoc solum facit current repository',
