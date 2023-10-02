@@ -101,11 +101,18 @@ export default (props: ICodeViewProps) => {
 			try {
 				contents = await Git.Content(props.file, props.repository);
 				_diff = await Git.Diff(props.file, props.repository);
-				setBlame(await Git.Blame(props.repository, props.file));
 			} catch (e) {
 				setThrew(e);
 
 				setSwitching(false);
+
+				error(e);
+			}
+
+			try {
+				setBlame(await Git.Blame(props.repository, props.file));
+			} catch (e) {
+				setBlame(null);
 
 				error(e);
 			}
