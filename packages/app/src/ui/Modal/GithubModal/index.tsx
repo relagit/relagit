@@ -1,4 +1,6 @@
-import { Show, For, createSignal } from 'solid-js';
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+
+import { Show, For, createSignal, createEffect } from 'solid-js';
 
 import { GithubResponse } from './types';
 
@@ -27,6 +29,8 @@ const getLanguageColor = (language: string) => {
 export default () => {
 	const [response, setResponse] = createSignal<GithubResponse['user/repos'] | null>(null);
 	const [searchQuery, setSearchQuery] = createSignal('');
+	const [readme, setReadme] = createSignal<GithubResponse['repos/user/repo/readme']>();
+	const [readmeHtml, setReadmeHtml] = createSignal<string | null>(null);
 	const [opened, setOpened] = createSignal<GithubResponse['user/repos'][number]>();
 	const [error, setError] = createSignal(false);
 
@@ -63,6 +67,27 @@ export default () => {
 			setError(true);
 		}
 	};
+
+	createEffect(async () => {
+		if (!opened()) return;
+
+		const response = await fetch(opened().url + '/readme');
+		const html = await fetch(opened().url + '/readme', {
+			headers: { accept: 'application/vnd.github.html+json' }
+		});
+
+		if (response.status !== 200 || html.status !== 200) {
+			setReadme(null);
+
+			return;
+		}
+
+		const readme = await response.json();
+		const readmeHtml = await html.text();
+
+		setReadme(readme);
+		setReadmeHtml(readmeHtml);
+	});
 
 	return (
 		<Modal size="x-large" dismissable transitions={Layer.Transitions.Fade}>
@@ -124,7 +149,20 @@ export default () => {
 									</div>
 								</div>
 								<div class="github-modal__details">
-									<div class="github-modal__details__readme"></div>
+									<div class="github-modal__details__readme">
+										<Show when={readme() && readmeHtml()}>
+											<div class="github-modal__details__readme__path">
+												{readme()?.path}
+											</div>
+											<div
+												class="github-modal__details__readme__content"
+												innerHTML={readmeHtml()?.replace(
+													'src="./',
+													`src="${path.dirname(readme()?.download_url)}/`
+												)}
+											></div>
+										</Show>
+									</div>
 									<div class="github-modal__details__info">
 										<div class="github-modal__details__info__actions">
 											<Button

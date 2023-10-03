@@ -3,6 +3,12 @@ import { ipcMain, dialog, OpenDialogOptions, BrowserWindow, app, shell } from 'e
 import * as ipc from '~/common/ipc';
 
 export default (win: Electron.BrowserWindow) => {
+	win.webContents.on('will-navigate', (e, url) => {
+		e.preventDefault();
+
+		shell.openExternal(url);
+	});
+
 	ipcMain.handle(ipc.OPEN_FILE_DIALOG, async (_, options: OpenDialogOptions) => {
 		return await dialog.showOpenDialog(win, options);
 	});

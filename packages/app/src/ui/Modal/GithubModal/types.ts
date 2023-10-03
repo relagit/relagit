@@ -89,6 +89,26 @@ export interface GitHubRepository {
 	default_branch: string;
 }
 
+export interface GitHubReadme {
+	name: string;
+	path: string;
+	sha: string;
+	size: number;
+	url: string;
+	html_url: string;
+	git_url: string;
+	download_url: string;
+	type: 'file';
+	content: string;
+	encoding: 'base64' | 'utf-8';
+	_links: {
+		self: string;
+		git: string;
+		html: string;
+	};
+}
+
 export interface GithubResponse {
 	'user/repos': GitHubRepository[];
+	'repos/user/repo/readme': GitHubReadme;
 }
