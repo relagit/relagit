@@ -2,9 +2,8 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 
 import { Show, For, createSignal, createEffect } from 'solid-js';
 
-import { GithubResponse } from './types';
-
 import { openExternal } from '@app/modules/shell';
+import { GitHub, GithubResponse } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
@@ -27,15 +26,20 @@ const getLanguageColor = (language: string) => {
 };
 
 export default () => {
-	const [response, setResponse] = createSignal<GithubResponse['user/repos'] | null>(null);
+	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
+		null
+	);
 	const [searchQuery, setSearchQuery] = createSignal('');
-	const [readme, setReadme] = createSignal<GithubResponse['repos/user/repo/readme']>();
+	const [readme, setReadme] = createSignal<GithubResponse['repos/:username/:repo/readme'][1]>();
 	const [readmeHtml, setReadmeHtml] = createSignal<string | null>(null);
-	const [opened, setOpened] = createSignal<GithubResponse['user/repos'][number]>();
+	const [opened, setOpened] = createSignal<GithubResponse['users/:username/repos'][1][number]>();
 	const [error, setError] = createSignal(false);
 
 	const makeSorter = () => {
-		return (a: GithubResponse['user/repos'][0], b: GithubResponse['user/repos'][0]) => {
+		return (
+			a: GithubResponse['users/:username/repos'][1][0],
+			b: GithubResponse['users/:username/repos'][1][0]
+		) => {
 			if (a.stargazers_count > b.stargazers_count) {
 				return -1;
 			}
@@ -52,16 +56,7 @@ export default () => {
 		try {
 			setError(false);
 
-			const response = await fetch(`https://api.github.com/users/${searchQuery()}/repos`);
-
-			if (response.status !== 200) {
-				setResponse(null);
-				setError(true);
-
-				return;
-			}
-
-			setResponse((await response.json()) as GithubResponse['user/repos']);
+			setResponse(await GitHub('users/:username/repos').get(searchQuery()));
 		} catch (e) {
 			setResponse(null);
 			setError(true);
@@ -71,22 +66,23 @@ export default () => {
 	createEffect(async () => {
 		if (!opened()) return;
 
-		const response = await fetch(opened().url + '/readme');
-		const html = await fetch(opened().url + '/readme', {
-			headers: { accept: 'application/vnd.github.html+json' }
-		});
+		try {
+			const readme = await GitHub('repos/:username/:repo/readme').get(
+				searchQuery(),
+				opened().name
+			);
+			const html = await GitHub('repos/:username/:repo/readme')
+				.headers<string>({
+					Accept: 'application/vnd.github.v3.html'
+				})
+				.get(searchQuery(), opened().name);
 
-		if (response.status !== 200 || html.status !== 200) {
+			setReadme(readme);
+			setReadmeHtml(html);
+		} catch (e) {
 			setReadme(null);
-
-			return;
+			setReadmeHtml(null);
 		}
-
-		const readme = await response.json();
-		const readmeHtml = await html.text();
-
-		setReadme(readme);
-		setReadmeHtml(readmeHtml);
 	});
 
 	return (
