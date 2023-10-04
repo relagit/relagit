@@ -23,11 +23,11 @@ export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp
 export const BINARY_EXTENSIONS = ['.DS_Store', '.exe', '.dll', '.so', '.dylib', '.o', '.a'];
 
 const extname = (file: string) => {
-	return file.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
+	return file?.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
 };
 
 const totalLines = (file: GitDiff['files'][number]) => {
-	return file.chunks.reduce((acc, curr) => {
+	return file?.chunks?.reduce((acc, curr) => {
 		return acc + curr.changes.length;
 	}, 0);
 };
@@ -243,7 +243,11 @@ export default (props: ICodeViewProps) => {
 							}
 							fallback={
 								<>
-									<Show when={IMAGE_EXTENSIONS.includes(extname(props.file))}>
+									<Show
+										when={IMAGE_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										)}
+									>
 										<div class="codeview-image">
 											{/* TODO */}
 											<div class="codeview-image__container removed">
@@ -254,7 +258,11 @@ export default (props: ICodeViewProps) => {
 											</div>
 										</div>
 									</Show>
-									<Show when={BINARY_EXTENSIONS.includes(extname(props.file))}>
+									<Show
+										when={BINARY_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										)}
+									>
 										<EmptyState
 											detail={t('codeview.binary')}
 											hint={t('codeview.binaryHint')}
