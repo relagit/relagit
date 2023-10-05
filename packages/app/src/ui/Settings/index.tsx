@@ -1,9 +1,12 @@
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
 
+import { __WORKFLOWS_PATH__, iconFromAction, workflows } from '@app/modules/actions';
+import { showItemInFolder } from '@app/modules/shell';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
@@ -291,6 +294,39 @@ export default () => {
 		</>
 	);
 
+	const Workflows = (
+		<>
+			<div class="settings-layer__workflows">
+				<For each={Array.from(workflows)}>
+					{(workflow) => {
+						return (
+							<div
+								class="settings-layer__workflows__workflow"
+								aria-label={workflow.name}
+								aria-role="button"
+								onClick={() => {
+									showItemInFolder(
+										path.join(__WORKFLOWS_PATH__, workflow.filename)
+									);
+								}}
+							>
+								<div class="settings-layer__workflows__workflow__text">
+									<h2 class="settings-layer__workflows__workflow__text__header">
+										{workflow.name}
+									</h2>
+									<p class="settings-layer__workflows__workflow__text__description">
+										{workflow.description}
+									</p>
+								</div>
+								<Icon name={iconFromAction(workflow.on)} />
+							</div>
+						);
+					}}
+				</For>
+			</div>
+		</>
+	);
+
 	const Appearance = (
 		<>
 			<div class="settings-layer__setting">
@@ -379,6 +415,11 @@ export default () => {
 							label: t('settings.appearance.title'),
 							value: 'appearance',
 							element: Appearance
+						},
+						{
+							label: t('settings.workflows.title'),
+							value: 'workflows',
+							element: Workflows
 						}
 					]}
 				/>

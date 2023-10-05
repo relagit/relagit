@@ -2,6 +2,9 @@ export default {
 	settings: {
 		title: 'Settings',
 		close: 'Close Settings',
+		workflows: {
+			title: 'Workflows'
+		},
 		general: {
 			title: 'General',
 			language: {

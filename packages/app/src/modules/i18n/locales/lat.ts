@@ -2,6 +2,9 @@ export default {
 	settings: {
 		title: 'Optiones',
 		close: 'Dimitte Optiones',
+		workflows: {
+			title: 'Workflows'
+		},
 		general: {
 			title: 'Generalis',
 			language: {

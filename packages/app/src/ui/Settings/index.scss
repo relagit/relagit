@@ -68,6 +68,57 @@
 			gap: 10px;
 		}
 	}
+
+	&__workflows {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		&__workflow {
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 16px;
+			background-color: var(--bg-tertiary);
+			align-items: center;
+			font-size: 1rem;
+			border-radius: 4px;
+			font-weight: 400;
+			padding: 24px;
+			color: var(--color-primary);
+			border: 1px solid var(--separator-primary);
+			cursor: pointer;
+
+			svg {
+				width: 2rem;
+				height: 2rem;
+				color: var(--color-primary);
+			}
+
+			&__text {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+
+				&__header {
+					display: flex;
+					width: 100%;
+					justify-content: space-between;
+					align-items: center;
+					font-size: 1.5rem !important;
+					font-weight: 600;
+					gap: 16px;
+				}
+
+				&__description {
+					color: var(--color-label);
+					font-size: 1rem;
+					font-weight: 400;
+				}
+			}
+		}
+	}
 }
 
 .radio {
