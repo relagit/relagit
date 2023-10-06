@@ -35,7 +35,9 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		const res = await fetch(url, { headers });
 
-		return await res.json();
+		return await (headers['Accept'] === 'application/vnd.github.v3+json'
+			? res.json()
+			: res.text());
 	};
 
 	const headersFn = (newHeaders: HeadersInit) => {
