@@ -56,7 +56,7 @@ export default {
 				label: 'Custom Font',
 				description:
 					'This will override the default code font. You can use any font that is installed on your system.',
-				placeholder: '"SF Mono", "JetBrains Mono", "Fira Code", monospace'
+				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
 			}
 		}
 	},
