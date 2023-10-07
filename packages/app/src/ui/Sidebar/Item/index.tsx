@@ -17,6 +17,7 @@ import { showErrorModal } from '@app/ui/Modal';
 import Menu from '@ui/Menu';
 
 import './index.scss';
+import { addToGitignore } from '@app/modules/git/gitignore';
 
 export default (props: IFile) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
@@ -64,12 +65,19 @@ export default (props: IFile) => {
 				},
 				{
 					label: t('sidebar.contextMenu.ignore'),
-					type: 'item'
+					type: 'item',
+					disabled: extension(props.name) === 'gitignore',
+					onClick: () => {
+						addToGitignore(selected(), path.join(props.path, props.name));
+					}
 				},
 				{
 					label: t('sidebar.contextMenu.ignoreExt', { ext: extension(props.name) }),
 					type: 'item',
-					disabled: extension(props.name) === '.gitingore'
+					disabled: extension(props.name) === 'gitignore',
+					onClick: () => {
+						addToGitignore(selected(), '.' + extension(props.name));
+					}
 				},
 				{
 					type: 'separator'
