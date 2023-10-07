@@ -1,5 +1,6 @@
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
+import { addToGitignore } from '@app/modules/git/gitignore';
 import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
@@ -17,7 +18,6 @@ import { showErrorModal } from '@app/ui/Modal';
 import Menu from '@ui/Menu';
 
 import './index.scss';
-import { addToGitignore } from '@app/modules/git/gitignore';
 
 export default (props: IFile) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
@@ -58,7 +58,10 @@ export default (props: IFile) => {
 				{
 					label: t('sidebar.contextMenu.discard'),
 					type: 'item',
-					color: 'danger'
+					color: 'danger',
+					onClick: async () => {
+						await Git.Discard(selected(), props);
+					}
 				},
 				{
 					type: 'separator'

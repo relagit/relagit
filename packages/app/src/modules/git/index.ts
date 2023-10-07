@@ -1,4 +1,5 @@
 export { Stash, ListStash, PopStash } from './stash';
+export { Discard } from './discard';
 export { Content } from './content';
 export { Analyse } from './analyse';
 export { Commit } from './commit';
