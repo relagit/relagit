@@ -1,12 +1,14 @@
 import { Accessor, Setter, For, Show } from 'solid-js';
 
+import { openExternal, showItemInFolder } from '@modules/shell';
 import RepositoryStore, { IRepository } from '@stores/repository';
+import FileStore, { IFile } from '@app/stores/files';
 import { createStoreListener } from '@stores/index';
 import { removeRepository } from '@modules/actions';
-import { showItemInFolder } from '@modules/shell';
+import { openInEditor } from '@app/modules/code';
+import SettingsStore from '@app/stores/settings';
 import LocationStore from '@stores/location';
 import { renderDate } from '@modules/time';
-import FileStore, { IFile } from '@app/stores/files';
 import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
@@ -117,6 +119,32 @@ export default (props: IHeaderDrawerProps) => {
 											}),
 											onClick: () => {
 												showItemInFolder(repository.path);
+											}
+										},
+										{
+											type: 'item',
+											label: t('sidebar.contextMenu.openRemote'),
+											onClick: () => {
+												openExternal(repository.remote);
+											}
+										},
+										{
+											type: 'item',
+											label: t('sidebar.contextMenu.openIn', {
+												name: t(
+													`settings.general.editor.${
+														(SettingsStore.getSetting(
+															'externalEditor'
+														) as
+															| 'code'
+															| 'code-insiders'
+															| 'atom'
+															| 'subl') || 'code'
+													}`
+												)
+											}),
+											onClick: () => {
+												openInEditor(repository.path);
 											}
 										},
 										{
