@@ -148,6 +148,9 @@ export default (props: IHeaderDrawerProps) => {
 											}
 										},
 										{
+											type: 'separator'
+										},
+										{
 											type: 'item',
 											label: t('sidebar.drawer.contextMenu.remove'),
 											color: 'danger',
