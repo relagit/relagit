@@ -29,7 +29,7 @@ export default (props: ISegmentedViewProps) => {
 					disabled: v.disabled
 				}))}
 			/>
-			<div class="segmented-view__body">
+			<div class="segmented-view__body scroller">
 				<For each={props.views}>
 					{(view) => {
 						return (

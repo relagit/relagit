@@ -403,27 +403,25 @@ export default () => {
 					</button>
 				</div>
 			</div>
-			<div class="scroller hide-bar">
-				<SegmentedView
-					views={[
-						{
-							label: t('settings.general.title'),
-							value: 'general',
-							element: General
-						},
-						{
-							label: t('settings.appearance.title'),
-							value: 'appearance',
-							element: Appearance
-						},
-						{
-							label: t('settings.workflows.title'),
-							value: 'workflows',
-							element: Workflows
-						}
-					]}
-				/>
-			</div>
+			<SegmentedView
+				views={[
+					{
+						label: t('settings.general.title'),
+						value: 'general',
+						element: General
+					},
+					{
+						label: t('settings.appearance.title'),
+						value: 'appearance',
+						element: Appearance
+					},
+					{
+						label: t('settings.workflows.title'),
+						value: 'workflows',
+						element: Workflows
+					}
+				]}
+			/>
 		</div>
 	);
 };
