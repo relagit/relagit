@@ -105,6 +105,7 @@ export default (props: IHeaderDrawerProps) => {
 							a[1].name.localeCompare(b[1].name)
 						)}
 					>
+						{/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
 						{([_, repository]) => (
 							<>
 								<Menu
