@@ -352,7 +352,9 @@ export default () => {
 				<Switch
 					label={t('settings.appearance.vibrancy.label')}
 					note={t('settings.appearance.vibrancy.description')}
-					disabled={window.Native.platform !== 'darwin'}
+					disabled={
+						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
+					}
 					value={() => settings()?.get('vibrancy') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('vibrancy', value);
