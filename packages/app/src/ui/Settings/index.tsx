@@ -1,12 +1,10 @@
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
 
-import { __WORKFLOWS_PATH__, iconFromAction, workflows } from '@app/modules/actions';
-import { showItemInFolder } from '@app/modules/shell';
+import { iconFromAction, workflows } from '@app/modules/actions';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
