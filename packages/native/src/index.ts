@@ -24,7 +24,10 @@ app.once('ready', async () => {
 		titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
-		backgroundMaterial: settings.get('vibrancy') ? 'mica' : undefined,
+		backgroundMaterial: settings.get('vibrancy') ? 'auto' : undefined,
+		transparent: settings.get('vibrancy') && process.platform === 'win32' ? true : undefined,
+		backgroundColor:
+			settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined,
 		height: (settings.get('window.height') as number) || 850,
 		width: (settings.get('window.width') as number) || 1200,
 		minWidth: 500,
