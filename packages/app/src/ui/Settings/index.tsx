@@ -294,6 +294,8 @@ export default () => {
 		</>
 	);
 
+	const [openWorkflows, setOpenWorkflows] = createSignal(null);
+
 	const Workflows = (
 		<>
 			<div class="settings-layer__workflows">
@@ -305,20 +307,39 @@ export default () => {
 								aria-label={workflow.name}
 								aria-role="button"
 								onClick={() => {
-									showItemInFolder(
-										path.join(__WORKFLOWS_PATH__, workflow.filename)
-									);
+									setOpenWorkflows(workflow);
 								}}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										setOpenWorkflows(workflow);
+									}
+								}}
+								tabIndex={0}
 							>
-								<div class="settings-layer__workflows__workflow__text">
-									<h2 class="settings-layer__workflows__workflow__text__header">
-										{workflow.name}
-									</h2>
-									<p class="settings-layer__workflows__workflow__text__description">
-										{workflow.description}
-									</p>
+								<div class="settings-layer__workflows__workflow__content">
+									<div class="settings-layer__workflows__workflow__content__text">
+										<h2 class="settings-layer__workflows__workflow__content__text__header">
+											{workflow.name}
+										</h2>
+										<p class="settings-layer__workflows__workflow__content__text__description">
+											{workflow.description}
+										</p>
+									</div>
+									<Icon name={iconFromAction(workflow.on)} />
 								</div>
-								<Icon name={iconFromAction(workflow.on)} />
+								<Show when={openWorkflows() === workflow}>
+									<div class="settings-layer__workflows__workflow__steps">
+										<For each={workflow.steps}>
+											{(step) => {
+												return (
+													<div class="settings-layer__workflows__workflow__steps__step">
+														{step.name}
+													</div>
+												);
+											}}
+										</For>
+									</div>
+								</Show>
 							</div>
 						);
 					}}
