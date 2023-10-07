@@ -42,6 +42,16 @@ export default () => {
 						disabled: !selected()
 					},
 					{
+						label: t('sidebar.contextMenu.openRemote'),
+						disabled: !selected(),
+						type: 'item',
+						onClick: () => {
+							const remotes = RemoteStore.getByRepoPath(selected().path);
+
+							if (remotes[0]?.url) openExternal(remotes[0].url);
+						}
+					},
+					{
 						label: t('sidebar.contextMenu.openIn', {
 							name: t(
 								`settings.general.editor.${
@@ -58,19 +68,6 @@ export default () => {
 						},
 						disabled: !selected(),
 						type: 'item'
-					},
-					{
-						type: 'separator'
-					},
-					{
-						label: t('sidebar.contextMenu.openRemote'),
-						disabled: !selected(),
-						type: 'item',
-						onClick: () => {
-							const remotes = RemoteStore.getByRepoPath(selected().path);
-
-							if (remotes[0]?.url) openExternal(remotes[0].url);
-						}
 					}
 				]}
 			>
