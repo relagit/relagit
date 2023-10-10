@@ -37,7 +37,7 @@ export default (win: Electron.BrowserWindow) => {
 	ipcMain.handle(ipc.SPAWN_ENV, (_, exec: string, path: string) => {
 		child_process.spawn(exec, [path], {
 			detached: true,
-			env: preloadPathEnv()
+			env: preloadPathEnv() // TODO: this sometimes fails on macos when launching from applications
 		});
 	});
 };
