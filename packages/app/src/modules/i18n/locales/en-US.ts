@@ -15,9 +15,9 @@ export default {
 				label: 'External Editor',
 				description:
 					'Select the editor you would like to use for opening files. May Require Restart.',
-				code: 'VS Code',
+				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
-				'code-insiders': 'VS Code Insiders',
+				'code-insiders': 'Visual Studio Code Insiders',
 				atom: 'Atom'
 			},
 			commitStyle: {

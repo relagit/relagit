@@ -239,16 +239,16 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>English, US</>,
+							element: <>Deutsch</>,
+							value: 'de'
+						},
+						{
+							element: <>English (U.S.)</>,
 							value: 'en-US'
 						},
 						{
 							element: <>Latin</>,
 							value: 'lat'
-						},
-						{
-							element: <>Deutsch</>,
-							value: 'de'
 						}
 					]}
 					value={settings()?.get('locale') as string}

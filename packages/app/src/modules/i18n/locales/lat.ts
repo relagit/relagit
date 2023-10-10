@@ -14,9 +14,9 @@ export default {
 			editor: {
 				label: 'Editor Externus',
 				description: 'Editor elige uti velis ut limas aperire. Neustart requiritur.',
-				code: 'VS Code',
+				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
-				'code-insiders': 'VS Code Insiders',
+				'code-insiders': 'Visual Studio Code Insiders',
 				atom: 'Atom'
 			},
 			commitStyle: {
