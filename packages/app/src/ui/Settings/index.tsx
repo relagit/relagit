@@ -14,8 +14,8 @@ import { t } from '@app/modules/i18n';
 import * as ipc from '~/common/ipc';
 
 import Modal, { ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from '../Modal';
-import SegmentedView from '../Common/SegmentedView';
 import TextArea from '@ui/Common/TextArea';
+import TabView from '../Common/TabView';
 import Button from '../Common/Button';
 import Icon from '@ui/Common/Icon';
 import Layer from '../Layer';
@@ -173,7 +173,7 @@ export default () => {
 		window.removeEventListener('keydown', listener);
 	});
 
-	const General = (
+	const Commits = (
 		<>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-commit-style">
@@ -229,6 +229,11 @@ export default () => {
 					}}
 				/>
 			</div>
+		</>
+	);
+
+	const General = (
+		<>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-locale">
 					{t('settings.general.language.label')}
@@ -424,12 +429,17 @@ export default () => {
 					</button>
 				</div>
 			</div>
-			<SegmentedView
+			<TabView
 				views={[
 					{
 						label: t('settings.general.title'),
 						value: 'general',
 						element: General
+					},
+					{
+						label: t('settings.commits.title'),
+						value: 'commits',
+						element: Commits
 					},
 					{
 						label: t('settings.appearance.title'),

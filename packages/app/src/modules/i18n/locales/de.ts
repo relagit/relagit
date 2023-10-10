@@ -5,6 +5,9 @@ export default {
 		workflows: {
 			title: 'Workflows'
 		},
+		commits: {
+			title: 'Commits'
+		},
 		general: {
 			title: 'Allgemein',
 			language: {

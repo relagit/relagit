@@ -1,0 +1,29 @@
+.segmented-view {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	overflow: hidden;
+
+	.segmented-control {
+		flex-shrink: 0;
+		border-bottom: 1px solid var(--separator-secondary);
+		gap: 0;
+		align-items: initial;
+		justify-content: initial;
+
+		.segmented-control__item {
+			border-color: transparent;
+			width: auto;
+			padding: 0 64px;
+
+			&.active {
+				border-color: #{illyrica.$color-blue-500};
+			}
+		}
+	}
+
+	&__body {
+		height: 100%;
+		padding-right: 16px;
+	}
+}
