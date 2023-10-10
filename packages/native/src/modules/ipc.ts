@@ -5,12 +5,13 @@ import child_process from 'child_process';
 import * as ipc from '~/common/ipc';
 
 const preloadPathEnv = () => {
-	const path = child_process.execSync('echo $PATH').toString().trim();
+	try {
+		const path = child_process.execSync('echo $PATH').toString().trim();
 
-	return {
-		...process.env,
-		PATH: path
-	};
+		return Object.assign(process.env, { PATH: path });
+	} catch (error) {
+		return process.env;
+	}
 };
 
 export default (win: Electron.BrowserWindow) => {
