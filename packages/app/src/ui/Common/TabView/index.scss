@@ -10,6 +10,12 @@
 		gap: 0;
 		align-items: initial;
 		justify-content: initial;
+		overflow-x: auto;
+		overflow-y: hidden;
+
+		&::-webkit-scrollbar {
+			height: 0;
+		}
 
 		.segmented-control__item {
 			border-color: transparent;
