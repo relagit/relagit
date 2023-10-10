@@ -1,6 +1,17 @@
 import { ipcMain, dialog, OpenDialogOptions, BrowserWindow, app, shell } from 'electron';
 
+import child_process from 'child_process';
+
 import * as ipc from '~/common/ipc';
+
+const preloadPathEnv = () => {
+	const path = child_process.execSync('echo $PATH').toString().trim();
+
+	return {
+		...process.env,
+		PATH: path
+	};
+};
 
 export default (win: Electron.BrowserWindow) => {
 	win.webContents.on('will-navigate', (e, url) => {
@@ -20,6 +31,13 @@ export default (win: Electron.BrowserWindow) => {
 	ipcMain.handle(ipc.RELOAD_CLIENT, () => {
 		app.relaunch();
 		app.exit();
+	});
+
+	ipcMain.handle(ipc.SPAWN_ENV, (_, exec: string, path: string) => {
+		child_process.spawn(exec, [path], {
+			detached: true,
+			env: preloadPathEnv()
+		});
 	});
 };
 

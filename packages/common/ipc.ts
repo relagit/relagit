@@ -7,4 +7,5 @@ export const OPEN_BLAME = 'window:open-blame';
 export const LOAD_WORKFLOW = 'window:load-workflow';
 export const OPEN_SETTINGS = 'window:open-settings';
 export const RELOAD_CLIENT = 'window:reload-client';
+export const SPAWN_ENV = 'native:spawn-env';
 export const FOCUS = 'window:focus';
