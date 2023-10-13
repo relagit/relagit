@@ -9,7 +9,7 @@
 	padding: 4px;
 	background: var(--bg-tertiary);
 	border-radius: 4px;
-	height: fit-content;
+	flex-shrink: 0;
 
 	&__item {
 		display: flex;

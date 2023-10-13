@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
 import RepositoryStore from '@app/stores/repository';
-import { refetchRepository } from '@modules/actions';
+import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 import LocationStore from '@stores/location';
@@ -102,6 +102,11 @@ export default () => {
 					LocationStore.setSelectedFile(null);
 
 					try {
+						triggerWorkflow('commit', selected(), {
+							summary: summary(),
+							description: description()
+						});
+
 						await Git.Commit(selected(), summary(), description());
 					} catch (e) {
 						showErrorModal(e, 'error.git');
