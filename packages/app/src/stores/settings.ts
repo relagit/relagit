@@ -23,7 +23,8 @@ export interface ISettings {
 	repositories: string[];
 	activeRepository: string;
 	locale: string;
-	externalEditor: string;
+	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl';
+	enabledThemes: string[];
 }
 
 const validatePath = () => {
@@ -56,11 +57,11 @@ const SettingsStore = new (class Settings extends GenericStore {
 		return this.#record;
 	}
 
-	getSetting<T extends keyof ISettings>(key: keyof ISettings): ISettings[T] {
+	getSetting<T extends keyof ISettings>(key: T): ISettings[T] {
 		return this.#record.get(key) as ISettings[T];
 	}
 
-	setSetting(key: keyof ISettings, value: ISettings[keyof ISettings]) {
+	setSetting<T extends keyof ISettings>(key: T, value: ISettings[T]) {
 		this.#record.set(key, value);
 		this.save();
 		this.emit();

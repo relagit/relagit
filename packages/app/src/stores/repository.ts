@@ -25,7 +25,7 @@ const RepositoryStore = new (class Repository extends GenericStore {
 		setTimeout(() => {
 			if (SettingsStore.getSetting('activeRepository')) {
 				const repo = RepositoryStore.getByPath(
-					SettingsStore.getSetting('activeRepository') as string
+					SettingsStore.getSetting('activeRepository')
 				);
 
 				if (repo) {

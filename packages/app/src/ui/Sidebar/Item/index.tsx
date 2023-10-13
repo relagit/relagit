@@ -99,11 +99,7 @@ export default (props: IFile) => {
 					label: t('sidebar.contextMenu.openIn', {
 						name: t(
 							`settings.general.editor.${
-								(SettingsStore.getSetting('externalEditor') as
-									| 'code'
-									| 'code-insiders'
-									| 'atom'
-									| 'subl') || 'code'
+								SettingsStore.getSetting('externalEditor') || 'code'
 							}`
 						)
 					}),

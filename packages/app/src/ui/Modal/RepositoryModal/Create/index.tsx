@@ -117,7 +117,7 @@ export default (props: ICreateRepositoryModalProps) => {
 							await Init(props.pathSignal[0]());
 
 							SettingsStore.setSetting('repositories', [
-								...(SettingsStore.getSetting('repositories') as string[]),
+								...SettingsStore.getSetting('repositories'),
 								props.pathSignal[0]()
 							]);
 						}}
