@@ -39,7 +39,6 @@ export default (props: ICreateRepositoryModalProps) => {
 
 			isDirectory = true;
 		} catch (e) {
-			console.error(e);
 			isDirectory = false;
 		}
 

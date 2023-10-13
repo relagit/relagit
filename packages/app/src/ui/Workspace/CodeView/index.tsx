@@ -80,7 +80,7 @@ export default (props: ICodeViewProps) => {
 				}
 
 				setDiff(LocationStore.selectedCommitFile?.diff);
-				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 100);
+				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 250);
 				setShowOverridden(false);
 				setShowCommit(false);
 				setThrew(null);
@@ -136,14 +136,14 @@ export default (props: ICodeViewProps) => {
 			if (!diff() || diff() === true) {
 				setShouldShow(true);
 			} else {
-				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 100);
+				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
 			}
 		} catch (e) {
 			setThrew(e);
 
 			setSwitching(false);
 
-			console.error(e);
+			error(e);
 		}
 	});
 
@@ -299,7 +299,7 @@ export default (props: ICodeViewProps) => {
 									</>
 								}
 							>
-								<pre class="codeview">
+								<pre class={`codeview lang-${extname(props.file || '').slice(1)}`}>
 									<Show
 										when={diff() !== true && diff() !== null}
 										fallback={
