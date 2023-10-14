@@ -37,3 +37,11 @@ export const updateCSS = (id: string, cssOrPath: string, local = false) => {
 			break;
 	}
 };
+
+export const removeCSS = (id: string) => {
+	const el = document.getElementById(`theme-${id}`);
+
+	if (!el) return;
+
+	el.remove();
+};

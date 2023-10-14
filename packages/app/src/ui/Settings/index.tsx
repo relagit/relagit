@@ -7,7 +7,7 @@ import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'soli
 import { iconFromAction, workflows } from '@app/modules/actions';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
-import SettingsStore from '@stores/settings';
+import SettingsStore, { ISettings } from '@stores/settings';
 import ModalStore from '@app/stores/modal';
 import LayerStore from '@stores/layer';
 import { t } from '@app/modules/i18n';
@@ -21,6 +21,7 @@ import Icon from '@ui/Common/Icon';
 import Layer from '../Layer';
 
 import './index.scss';
+import { themes, toggleTheme } from '@app/modules/actions/themes';
 
 export interface IRadioGroupProps {
 	options: {
@@ -288,7 +289,10 @@ export default () => {
 					]}
 					value={(settings()?.get('externalEditor') as string) || 'code'}
 					onChange={(value) => {
-						SettingsStore.setSetting('externalEditor', value);
+						SettingsStore.setSetting(
+							'externalEditor',
+							value as ISettings['externalEditor']
+						);
 
 						showReloadModal();
 					}}
@@ -391,7 +395,7 @@ export default () => {
 					]}
 					value={settings()?.get('theme') as string}
 					onChange={(value) => {
-						SettingsStore.setSetting('theme', value);
+						SettingsStore.setSetting('theme', value as ISettings['theme']);
 					}}
 				/>
 			</div>
@@ -410,6 +414,37 @@ export default () => {
 					}}
 					placeholder={t('settings.appearance.font.placeholder')}
 				/>
+			</div>
+
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-client-themes">
+					{t('settings.appearance.clientThemes.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.appearance.clientThemes.description')}
+				</p>
+				<div class="settings-layer__setting__client-themes">
+					<For each={Array.from(themes)}>
+						{(theme) => {
+							return (
+								<div class="settings-layer__setting__client-themes__theme">
+									<Switch
+										label={theme.name}
+										note={theme.description}
+										value={() =>
+											settings()
+												.get('enabledThemes')
+												?.['includes']?.(theme.id)
+										}
+										onChange={() => {
+											toggleTheme(theme.id);
+										}}
+									/>
+								</div>
+							);
+						}}
+					</For>
+				</div>
 			</div>
 		</>
 	);

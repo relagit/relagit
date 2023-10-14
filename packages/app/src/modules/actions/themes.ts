@@ -3,8 +3,8 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('pa
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import { Theme, __RELAGIT_PATH__, makeConsole, require } from './workflows';
+import { addCSS, updateCSS, removeCSS } from '../dom';
 import SettingsStore from '@app/stores/settings';
-import { addCSS, updateCSS } from '../dom';
 import { error } from '../logger';
 
 const __THEMES_PATH__ = path.join(__RELAGIT_PATH__, 'themes');
@@ -54,20 +54,43 @@ window.Native.listeners.WATCHER.add(path.join(__THEMES_PATH__), (_, changepath) 
 		const theme = Array.from(themes).find((t) => t.filename === path.basename(changepath));
 
 		if (theme) {
-			updateCSS(theme.name, path.join(__THEMES_PATH__, theme.filename, 'index.css'));
+			updateCSS(theme.id, path.join(__THEMES_PATH__, theme.filename, 'index.css'));
 		}
 	}
 });
 
+export const toggleTheme = (id: string) => {
+	SettingsStore.setSetting(
+		'enabledThemes',
+		SettingsStore.getSetting('enabledThemes')?.includes(id)
+			? SettingsStore.getSetting('enabledThemes')?.filter((t) => t !== id)
+			: [...(SettingsStore.getSetting('enabledThemes') || []), id]
+	);
+
+	enableThemes();
+};
+
+const ENABLED = new Set<string>();
+
 const enableThemes = () => {
 	for (const theme of themes) {
-		if (!SettingsStore.getSetting('enabledThemes').includes(theme.name)) return;
+		if (!SettingsStore.getSetting('enabledThemes')?.includes(theme.id)) {
+			removeCSS(theme.id);
+
+			ENABLED.delete(theme.id);
+
+			continue;
+		}
+
+		if (ENABLED.has(theme.id)) continue;
 
 		addCSS(
-			theme.name,
+			theme.id,
 			path.join(__THEMES_PATH__, theme.filename, `./${theme.main || 'index.css'}`),
 			true
 		);
+
+		ENABLED.add(theme.id);
 	}
 };
 
