@@ -41,9 +41,7 @@
 		}
 
 		&__name {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			white-space: nowrap; // we are assuming the filename will be short enough not to overflow :/
 
 			&__separator {
 				opacity: 0.6;
