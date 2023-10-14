@@ -142,7 +142,7 @@ export const Switch = (props: ISwitchProps) => {
 				<div
 					aria-label={props.label}
 					aria-selected={props.value()}
-					aria-role="switch"
+					aria-role="button"
 					classList={{
 						check: true,
 						active: props.value()
@@ -150,6 +150,7 @@ export const Switch = (props: ISwitchProps) => {
 					tabIndex={0}
 					onClick={(e) => {
 						e.preventDefault();
+						e.stopPropagation();
 
 						props.onChange(!props.value());
 					}}
@@ -442,13 +443,17 @@ export default () => {
 								<div class="settings-layer__setting__client-themes__theme">
 									<Switch
 										label={theme.name}
-										note={theme.description}
+										note={`${theme.description || ''} (${theme.authors
+											.map((a) => a.name)
+											.join(', ')})`}
 										value={() =>
 											settings()
 												.get('enabledThemes')
 												?.['includes']?.(theme.id)
 										}
 										onChange={() => {
+											console.log('onchange');
+
 											toggleTheme(theme.id);
 										}}
 									/>
