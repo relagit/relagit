@@ -286,10 +286,10 @@
 
 			--switch-color: var(--color-primary);
 			--switch-bg: var(--bg-tertiary);
-			--switch-thumb: var(--bg-senary);
-			--switch-stroke: var(--separator-primary);
+			--switch-thumb: var(--bg-hover);
+			--switch-stroke: var(--base-dark-grey);
 			--switch-slider-stroke: var(--switch-stroke);
-			--switch-focus: #{illyrica.$color-blue-500};
+			--switch-focus: var(--color-blue-500);
 
 			&:focus {
 				border-color: transparent;
@@ -318,14 +318,25 @@
 			}
 
 			&.active {
-				--switch-slider-stroke: #{illyrica.$color-blue-500};
-				--switch-thumb: #{illyrica.$color-blue-300};
-				--switch-bg: #{illyrica.$color-blue-100};
+				--switch-slider-stroke: var(--color-blue-500);
+				--switch-thumb: #1c84ec85; // hardcoded 50% alpha
+				--switch-bg: #1c84ec33; // hardcoded 20% alpha
+				--switch-stroke: var(--bg-active);
 
 				.slider {
 					transform: translateX(18px);
 				}
 			}
 		}
+	}
+}
+
+.settings-layer__setting__client-themes__theme {
+	background: var(--bg-quaternary);
+	border-radius: 4px;
+	border: 1px solid var(--separator-primary);
+
+	.settings-layer__setting__input {
+		padding: 8px 16px;
 	}
 }

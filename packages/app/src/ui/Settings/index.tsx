@@ -142,9 +142,21 @@ export const Switch = (props: ISwitchProps) => {
 				<div
 					aria-label={props.label}
 					aria-selected={props.value()}
+					aria-role="switch"
 					classList={{
 						check: true,
 						active: props.value()
+					}}
+					tabIndex={0}
+					onClick={(e) => {
+						e.preventDefault();
+
+						props.onChange(!props.value());
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							props.onChange(!props.value());
+						}
 					}}
 				>
 					<input type="checkbox" checked={props.value()} />

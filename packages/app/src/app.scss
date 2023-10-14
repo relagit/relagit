@@ -120,14 +120,6 @@ html {
 	@include darkTheme;
 }
 
-.theme-dark .switch label .check.active .slider {
-	background-color: #{illyrica.$color-blue-700} !important;
-}
-
-.theme-dark .switch label .check.active {
-	--switch-bg: var(--bg-quaternary);
-}
-
 .theme-light,
 .theme-light ::after,
 .theme-light ::before {
@@ -145,14 +137,6 @@ html {
 	.theme-system ::after,
 	.theme-system ::before {
 		@include darkTheme;
-	}
-
-	.theme-system .switch label .check.active .slider {
-		background-color: #{illyrica.$color-blue-700} !important;
-	}
-
-	.theme-system .switch label .check.active {
-		--switch-bg: var(--bg-quaternary);
 	}
 }
 
