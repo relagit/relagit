@@ -16,11 +16,14 @@ import TextArea from '@ui/Common/TextArea';
 import Button from '@ui/Common/Button';
 
 import './index.scss';
+import DraftStore from '@app/stores/draft';
 
 export default () => {
-	const [description, setDescription] = createSignal('');
-	const [summary, setSummary] = createSignal('');
 	const [error, setError] = createSignal(false);
+
+	const draft = createStoreListener([DraftStore, LocationStore], () =>
+		DraftStore.getDraft(LocationStore.selectedRepository?.path)
+	);
 
 	const changes = createStoreListener([FilesStore, LocationStore], () =>
 		FilesStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
@@ -53,7 +56,7 @@ export default () => {
 		<div class={`sidebar__footer ${selected() && changes() && staged() ? '' : 'hidden'}`}>
 			<TextArea
 				disabled={!(selected() && changes() && staged())}
-				value={summary()}
+				value={draft()?.message}
 				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
 				onChange={(value) => {
 					if (
@@ -68,29 +71,46 @@ export default () => {
 						if (allowed) {
 							setError(false);
 
-							setSummary(value);
+							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+								message: value,
+								description: draft()?.description || ''
+							});
 						} else {
 							setError(true);
 
-							setSummary(value);
+							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+								message: value,
+								description: draft()?.description || ''
+							});
 						}
 					} else {
 						setError(false);
 
-						setSummary(value);
+						DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+							message: value,
+							description: draft()?.description || ''
+						});
 					}
 				}}
 				onContextMenu={() => {
-					if (summary().length) return;
+					if (draft()?.message.length) return;
 
-					setSummary(commitMessage()?.message || '');
+					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+						message: commitMessage()?.message || '',
+						description: draft()?.description || ''
+					});
 				}}
 			/>
 			<TextArea
 				disabled={!(selected() && changes() && staged())}
-				value={description()}
+				value={draft()?.description}
 				placeholder={t('sidebar.footer.description')}
-				onChange={setDescription}
+				onChange={(value) => {
+					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+						message: draft()?.message || '',
+						description: value
+					});
+				}}
 				expanded={true}
 			/>
 			<Button
@@ -103,11 +123,11 @@ export default () => {
 
 					try {
 						triggerWorkflow('commit', selected(), {
-							summary: summary(),
-							description: description()
+							summary: draft()?.message,
+							description: draft()?.description
 						});
 
-						await Git.Commit(selected(), summary(), description());
+						await Git.Commit(selected(), draft()?.message, draft()?.description);
 					} catch (e) {
 						showErrorModal(e, 'error.git');
 
@@ -116,11 +136,14 @@ export default () => {
 						return;
 					}
 
-					setSummary('');
+					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+						message: '',
+						description: ''
+					});
 
 					await refetchRepository(selected());
 				}}
-				disabled={!Boolean(summary().length)}
+				disabled={!draft()?.message.length}
 			>
 				{t('sidebar.footer.commit', {
 					branch: selected()?.branch || 'Remote'
