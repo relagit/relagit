@@ -452,8 +452,6 @@ export default () => {
 												?.['includes']?.(theme.id)
 										}
 										onChange={() => {
-											console.log('onchange');
-
 											toggleTheme(theme.id);
 										}}
 									/>

@@ -46,6 +46,10 @@ export default (props: ILogCommit) => {
 				<div class="sidebar__commit__bottom__date">
 					{renderDate(new Date(props.date).getTime())()}
 				</div>
+				<div class="sidebar__commit__bottom__diff">
+					<div class="sidebar__commit__bottom__diff__insertions">+{props.insertions}</div>
+					<div class="sidebar__commit__bottom__diff__deletions">-{props.deletions}</div>
+				</div>
 			</div>
 		</div>
 	);
