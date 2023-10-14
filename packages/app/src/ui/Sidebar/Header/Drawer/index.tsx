@@ -53,13 +53,6 @@ export default (props: IHeaderDrawerProps) => {
 						items={[
 							{
 								type: 'item',
-								label: t('sidebar.drawer.contextMenu.createGroup')
-							},
-							{
-								type: 'separator'
-							},
-							{
-								type: 'item',
 								label: t('sidebar.drawer.contextMenu.addRepository'),
 								onClick: () => {
 									ModalStore.addModal({

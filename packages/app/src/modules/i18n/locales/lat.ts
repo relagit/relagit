@@ -88,7 +88,6 @@ export default {
 		drawer: {
 			title: 'Repositoria',
 			contextMenu: {
-				createGroup: 'Fac Repository Group',
 				addRepository: 'Add Repository',
 				createRepository: 'Fac Repository',
 				cloneFromGitHub: 'Exemplum fac a GitHub',

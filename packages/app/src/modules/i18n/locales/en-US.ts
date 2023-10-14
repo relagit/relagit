@@ -95,7 +95,6 @@ export default {
 		drawer: {
 			title: 'Repositories',
 			contextMenu: {
-				createGroup: 'Create Repository Group',
 				addRepository: 'Add Repository',
 				createRepository: 'Create Repository',
 				cloneFromGitHub: 'Clone from GitHub',
