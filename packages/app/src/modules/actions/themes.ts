@@ -17,6 +17,11 @@ export const loadThemes = async () => {
 	const _themes = fs.readdirSync(__THEMES_PATH__);
 
 	for (const themePath of _themes) {
+		let theme: Theme & {
+			filename: string;
+			id: string;
+		};
+
 		try {
 			const possiblePaths = [
 				path.join(__THEMES_PATH__, themePath, 'index.ts'),
@@ -38,26 +43,25 @@ export const loadThemes = async () => {
 				}).code + '\n\nreturn module.exports || exports.default || exports || null;'
 			);
 
-			const theme = fn(require, {}, {}, makeConsole(path.basename(themePath)));
+			const th = fn(require, {}, {}, makeConsole(path.basename(themePath)));
 
-			themes.add({ ...theme, filename: themePath, id: themePath.replace(/[^\w]/g, '-') });
+			themes.add({ ...th, filename: themePath, id: themePath.replace(/[^\w]/g, '-') });
+
+			theme = { ...th, filename: themePath, id: themePath.replace(/[^\w]/g, '-') };
 		} catch (e) {
 			error('Failed to load theme', e);
 		}
+
+		window.Native.listeners.WATCHER.add(
+			path.join(__THEMES_PATH__, theme.filename, theme.main),
+			() => {
+				updateCSS(theme.id, path.join(__THEMES_PATH__, theme.filename, theme.main), true); // update will not add/remove so we can call it every time
+			}
+		);
 	}
 
 	enableThemes();
 };
-
-window.Native.listeners.WATCHER.add(path.join(__THEMES_PATH__), (_, changepath) => {
-	if (changepath) {
-		const theme = Array.from(themes).find((t) => t.filename === path.basename(changepath));
-
-		if (theme) {
-			updateCSS(theme.id, path.join(__THEMES_PATH__, theme.filename, 'index.css'));
-		}
-	}
-});
 
 export const toggleTheme = (id: string) => {
 	SettingsStore.setSetting(
