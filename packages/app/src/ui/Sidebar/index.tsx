@@ -32,12 +32,14 @@ export default (props: ISidebarProps) => {
 	let lastRepository: IRepository | undefined;
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
+		if (!LocationStore.selectedRepository) return;
+
+		setCommits(await Git.Log(LocationStore.selectedRepository));
+
 		try {
 			if (lastRepository === LocationStore.selectedRepository) return;
 
 			lastRepository = LocationStore.selectedRepository;
-
-			setCommits(await Git.Log(LocationStore.selectedRepository));
 		} catch (error) {
 			showErrorModal(error, 'error.fetching');
 
