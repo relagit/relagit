@@ -4,8 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
 
 @function opacify($amount, $color) {
-	$alpha: $amount;
-	@return rgba(red($color), green($color), blue($color), $alpha);
+	@return rgba(red($color), green($color), blue($color), $amount);
 }
 
 @function greyscale($color) {
@@ -18,28 +17,28 @@
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 
-	--color-primary: #{illyrica.$base-dark-grey};
-	--color-secondary: #{illyrica.$base-grey};
-	--color-label: #{illyrica.$base-grey};
-	--color-link: #{illyrica.$color-blue-500};
-	--color-error: #{illyrica.$color-red-500};
-	--color-success: #{illyrica.$color-green-500};
-	--color-warning: #{illyrica.$color-yellow-500};
+	--color-primary: var(--base-dark-grey);
+	--color-secondary: var(--base-grey);
+	--color-label: var(--base-grey);
+	--color-link: var(--color-blue-500);
+	--color-error: var(--color-red-500);
+	--color-success: var(--color-green-500);
+	--color-warning: var(--color-yellow-500);
 
-	--status-added: #{illyrica.$color-green-500};
-	--status-modified: #{illyrica.$color-yellow-500};
-	--status-deleted: #{illyrica.$color-red-500};
-	--status-untracked: #{illyrica.$color-blue-500};
+	--status-added: var(--color-green-500);
+	--status-modified: var(--color-yellow-500);
+	--status-deleted: var(--color-red-500);
+	--status-untracked: var(--color-blue-500);
 
-	--bg-primary: #{illyrica.$material-primary};
-	--bg-secondary: #{illyrica.$material-secondary};
-	--bg-tertiary: #{illyrica.$material-tertiary};
-	--bg-quaternary: #{illyrica.$material-quaternary};
-	--bg-quinary: #{illyrica.$material-quinary};
-	--bg-senary: #{illyrica.$material-senary};
+	--bg-primary: var(--material-primary);
+	--bg-secondary: var(--material-secondary);
+	--bg-tertiary: var(--material-tertiary);
+	--bg-quaternary: var(--material-quaternary);
+	--bg-quinary: var(--material-quinary);
+	--bg-senary: var(--material-senary);
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
-	--bg-brand: #{illyrica.$color-blue-500};
+	--bg-brand: var(--color-blue-500);
 	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
 	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
@@ -55,36 +54,36 @@
 	--bg-diff-del: var(--bg-error);
 	--bg-diff-del-solid: var(--bg-error-solid);
 
-	--separator-primary: #{illyrica.$base-light-grey};
-	--separator-secondary: #{illyrica.$base-lighter-grey};
+	--separator-primary: var(--base-light-grey);
+	--separator-secondary: var(--base-lighter-grey);
 }
 
 @mixin darkTheme {
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 
-	--color-primary: #{illyrica.$dark-base-dark-grey};
-	--color-secondary: #{illyrica.$dark-base-grey};
-	--color-label: #{illyrica.$dark-base-grey};
-	--color-link: #{illyrica.$color-blue-500};
-	--color-error: #{illyrica.$color-red-500};
-	--color-success: #{illyrica.$color-green-500};
-	--color-warning: #{illyrica.$color-yellow-500};
+	--color-primary: var(--dark-base-dark-grey);
+	--color-secondary: var(--dark-base-grey);
+	--color-label: var(--dark-base-grey);
+	--color-link: var(--color-blue-500);
+	--color-error: var(--color-red-500);
+	--color-success: var(--color-green-500);
+	--color-warning: var(--color-yellow-500);
 
-	--status-added: #{illyrica.$color-green-800};
-	--status-modified: #{illyrica.$color-yellow-800};
-	--status-deleted: #{illyrica.$color-red-800};
-	--status-untracked: #{illyrica.$color-blue-800};
+	--status-added: var(--color-green-800);
+	--status-modified: var(--color-yellow-800);
+	--status-deleted: var(--color-red-800);
+	--status-untracked: var(--color-blue-800);
 
-	--bg-primary: #{illyrica.$dark-material-primary};
-	--bg-secondary: #{illyrica.$dark-material-secondary};
-	--bg-tertiary: #{illyrica.$dark-material-tertiary};
-	--bg-quaternary: #{illyrica.$dark-material-quaternary};
-	--bg-quinary: #{illyrica.$dark-material-quinary};
-	--bg-senary: #{illyrica.$dark-material-senary};
+	--bg-primary: var(--dark-material-primary);
+	--bg-secondary: var(--dark-material-secondary);
+	--bg-tertiary: var(--dark-material-tertiary);
+	--bg-quaternary: var(--dark-material-quaternary);
+	--bg-quinary: var(--dark-material-quinary);
+	--bg-senary: var(--dark-material-senary);
 	--bg-material: var(--bg-tertiary);
 	--bg-floating: var(--bg-secondary);
-	--bg-brand: #{illyrica.$color-blue-500};
+	--bg-brand: var(--color-blue-500);
 	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
 	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
 	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
@@ -100,8 +99,8 @@
 	--bg-diff-del: var(--bg-error);
 	--bg-diff-del-solid: var(--bg-error-solid);
 
-	--separator-primary: #{illyrica.$dark-base-light-grey};
-	--separator-secondary: #{illyrica.$dark-base-lighter-grey};
+	--separator-primary: var(--dark-base-light-grey);
+	--separator-secondary: var(--dark-base-lighter-grey);
 }
 
 * {
@@ -121,14 +120,6 @@ html {
 	@include darkTheme;
 }
 
-.theme-dark .switch label .check.active .slider {
-	background-color: #{illyrica.$color-blue-700} !important;
-}
-
-.theme-dark .switch label .check.active {
-	--switch-bg: var(--bg-quaternary);
-}
-
 .theme-light,
 .theme-light ::after,
 .theme-light ::before {
@@ -146,14 +137,6 @@ html {
 	.theme-system ::after,
 	.theme-system ::before {
 		@include darkTheme;
-	}
-
-	.theme-system .switch label .check.active .slider {
-		background-color: #{illyrica.$color-blue-700} !important;
-	}
-
-	.theme-system .switch label .check.active {
-		--switch-bg: var(--bg-quaternary);
 	}
 }
 

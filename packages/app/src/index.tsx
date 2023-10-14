@@ -1,6 +1,7 @@
 import { Router } from '@solidjs/router';
 import { render } from 'solid-js/web';
 
+import { loadThemes } from '@modules/actions/themes';
 import { loadWorkflows } from '@modules/actions';
 import initIPC from '@modules/ipc';
 
@@ -8,6 +9,7 @@ import Main from './app';
 
 initIPC();
 loadWorkflows();
+loadThemes();
 
 function App() {
 	console.log(

@@ -25,7 +25,7 @@ export const remoteStatus = async (repository: string) => {
 
 	const repo = RepositoryStore.getByPath(repository);
 
-	triggerWorkflow('remote_fetch', status, repo);
+	triggerWorkflow('remote_fetch', repo, status);
 
 	for (const remote of status) {
 		const { name, url, type } = remote;

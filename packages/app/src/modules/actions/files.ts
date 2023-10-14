@@ -18,9 +18,7 @@ import { showErrorModal } from '@app/ui/Modal';
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(
 		'repositories',
-		(SettingsStore.getSetting('repositories') as string[]).filter(
-			(r: string) => r !== repository.path
-		)
+		SettingsStore.getSetting('repositories').filter((r: string) => r !== repository.path)
 	);
 
 	RepositoryStore.removeRepository(repository);

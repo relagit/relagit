@@ -74,9 +74,7 @@ export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALE
 };
 
 export const useI18n = () => {
-	return i18nFactory(
-		ALL_LOCALES[(SettingsStore.getSetting('locale') as string) || 'en-US'] || enUS
-	);
+	return i18nFactory(ALL_LOCALES[SettingsStore.getSetting('locale') || 'en-US'] || enUS);
 };
 
 export const t = useI18n();

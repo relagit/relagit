@@ -60,6 +60,10 @@ export default {
 				description:
 					'This will override the default code font. You can use any font that is installed on your system.',
 				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
+			},
+			clientThemes: {
+				label: 'Client Themes',
+				description: 'Pick user-made themes to use in the client.'
 			}
 		}
 	},

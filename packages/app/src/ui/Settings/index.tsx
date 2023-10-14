@@ -7,7 +7,7 @@ import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'soli
 import { iconFromAction, workflows } from '@app/modules/actions';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
-import SettingsStore from '@stores/settings';
+import SettingsStore, { ISettings } from '@stores/settings';
 import ModalStore from '@app/stores/modal';
 import LayerStore from '@stores/layer';
 import { t } from '@app/modules/i18n';
@@ -21,6 +21,7 @@ import Icon from '@ui/Common/Icon';
 import Layer from '../Layer';
 
 import './index.scss';
+import { themes, toggleTheme } from '@app/modules/actions/themes';
 
 export interface IRadioGroupProps {
 	options: {
@@ -141,9 +142,22 @@ export const Switch = (props: ISwitchProps) => {
 				<div
 					aria-label={props.label}
 					aria-selected={props.value()}
+					aria-role="button"
 					classList={{
 						check: true,
 						active: props.value()
+					}}
+					tabIndex={0}
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+
+						props.onChange(!props.value());
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							props.onChange(!props.value());
+						}
 					}}
 				>
 					<input type="checkbox" checked={props.value()} />
@@ -288,7 +302,10 @@ export default () => {
 					]}
 					value={(settings()?.get('externalEditor') as string) || 'code'}
 					onChange={(value) => {
-						SettingsStore.setSetting('externalEditor', value);
+						SettingsStore.setSetting(
+							'externalEditor',
+							value as ISettings['externalEditor']
+						);
 
 						showReloadModal();
 					}}
@@ -391,7 +408,7 @@ export default () => {
 					]}
 					value={settings()?.get('theme') as string}
 					onChange={(value) => {
-						SettingsStore.setSetting('theme', value);
+						SettingsStore.setSetting('theme', value as ISettings['theme']);
 					}}
 				/>
 			</div>
@@ -410,6 +427,41 @@ export default () => {
 					}}
 					placeholder={t('settings.appearance.font.placeholder')}
 				/>
+			</div>
+
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-client-themes">
+					{t('settings.appearance.clientThemes.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.appearance.clientThemes.description')}
+				</p>
+				<div class="settings-layer__setting__client-themes">
+					<For each={Array.from(themes)}>
+						{(theme) => {
+							return (
+								<div class="settings-layer__setting__client-themes__theme">
+									<Switch
+										label={theme.name}
+										note={`${theme.description || ''} (${theme.authors
+											.map((a) => a.name)
+											.join(', ')})`}
+										value={() =>
+											settings()
+												.get('enabledThemes')
+												?.['includes']?.(theme.id)
+										}
+										onChange={() => {
+											console.log('onchange');
+
+											toggleTheme(theme.id);
+										}}
+									/>
+								</div>
+							);
+						}}
+					</For>
+				</div>
 			</div>
 		</>
 	);

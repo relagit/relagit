@@ -8,7 +8,7 @@ import * as ipc from '~/common/ipc';
 export const openInEditor = async (path: string) => {
 	if (!path) return;
 
-	const editorExec = (SettingsStore.getSetting('externalEditor') as string) || 'code';
+	const editorExec = SettingsStore.getSetting('externalEditor') || 'code';
 
 	ipcRenderer.invoke(ipc.SPAWN_ENV, editorExec, path);
 };

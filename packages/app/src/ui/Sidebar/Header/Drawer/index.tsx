@@ -134,13 +134,9 @@ export default (props: IHeaderDrawerProps) => {
 											label: t('sidebar.contextMenu.openIn', {
 												name: t(
 													`settings.general.editor.${
-														(SettingsStore.getSetting(
+														SettingsStore.getSetting(
 															'externalEditor'
-														) as
-															| 'code'
-															| 'code-insiders'
-															| 'atom'
-															| 'subl') || 'code'
+														) || 'code'
 													}`
 												)
 											}),
