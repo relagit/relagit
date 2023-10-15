@@ -41,11 +41,13 @@ export const Native = {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},
 		WATCHER: {
-			add: (path: string, fn: WatchListener<string>) => {
+			add: (path: string, fn: WatchListener<string>, tryRecursive = true) => {
 				fs.watch(
 					path,
 					{
-						recursive: true
+						recursive:
+							tryRecursive &&
+							(process.platform === 'win32' || process.platform === 'darwin')
 					},
 					fn
 				);
