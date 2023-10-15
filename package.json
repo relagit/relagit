@@ -15,10 +15,10 @@
 		"start": "electron ./dist/main.js",
 		"format": "prettier --write .",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-		"make": "electron-builder --config builder.ts",
-		"make:mac": "electron-builder --mac --config builder.ts",
-		"make:win": "electron-builder --win --config builder.ts",
-		"make:linux": "electron-builder --linux --config builder.ts"
+		"make": "electron-builder --config builder.cjs",
+		"make:mac": "electron-builder --mac --config builder.cjs",
+		"make:win": "electron-builder --win --config builder.cjs",
+		"make:linux": "electron-builder --linux --config builder.cjs"
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {

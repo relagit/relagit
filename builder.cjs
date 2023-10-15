@@ -1,12 +1,20 @@
-import fs from 'fs';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8')) as {
+const fs = require('fs');
+
+/**
+ * @type {{
 	commit: string;
 	date: string;
 	env: 'development' | 'production';
-};
+}}
+ */
+const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8'));
 
-export default {
+/**
+ * @type {import('electron-builder').Configuration}
+ */
+const config = {
 	appId: 'com.relagit.app',
 	productName: 'RelaGit',
 	directories: {
@@ -46,4 +54,6 @@ export default {
 		target: ['zip']
 	},
 	files: ['!*', 'dist', 'public', 'package.json', 'LICENSE']
-} satisfies import('electron-builder').Configuration;
+};
+
+module.exports = config;
