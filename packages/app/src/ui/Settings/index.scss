@@ -211,12 +211,6 @@
 			background-color: var(--radio-active);
 		}
 
-		&:focus {
-			outline: none;
-			border: 2px solid var(--radio-focus);
-			padding: 10px 30px;
-		}
-
 		&.active {
 			background-color: var(--bg-senary);
 
@@ -225,9 +219,26 @@
 			}
 		}
 
+		&:focus {
+			outline: none;
+			border: 2px solid var(--radio-focus);
+			padding: 10px 30px;
+		}
+
 		input {
 			position: absolute;
 			opacity: 0;
+			width: 100%;
+			top: 0;
+			left: 0;
+			height: 100%;
+			border-radius: inherit;
+
+			&:focus {
+				outline: none;
+				border: 2px solid var(--radio-focus);
+				padding: 10px 30px;
+			}
 		}
 
 		.check {

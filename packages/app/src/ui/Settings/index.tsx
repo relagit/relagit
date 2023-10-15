@@ -91,13 +91,13 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 							aria-label={option.element}
 							aria-selected={value() === option.value}
 							classList={{ active: value() === option.value }}
+							tabIndex={0}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') {
 									props.onChange(option.value);
 									setValue(option.value);
 								}
 							}}
-							tabIndex={0}
 						>
 							<input
 								type="radio"
