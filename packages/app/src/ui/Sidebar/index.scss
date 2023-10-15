@@ -13,7 +13,7 @@
 	&.sidebar-active {
 		transform: translateX(0);
 
-		@media screen and (max-width: 800px) {
+		@media screen and (max-width: 875px) {
 			background-color: var(--bg-quaternary) !important;
 		}
 	}
