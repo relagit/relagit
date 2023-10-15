@@ -33,6 +33,7 @@
 
 	&::placeholder {
 		--input-color: var(--color-secondary);
+		user-select: none;
 	}
 
 	&::-webkit-scrollbar {

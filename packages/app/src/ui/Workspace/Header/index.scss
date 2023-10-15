@@ -17,6 +17,7 @@
 		background-color: transparent;
 		padding-inline: 35px;
 		gap: 16px;
+		user-select: none;
 		-webkit-app-region: no-drag;
 
 		&:not(:has(.workspace__header__panelbutton__info)) {

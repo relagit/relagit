@@ -5,6 +5,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
+import { createFocusTrap } from '@app/modules/focus';
 import { createStoreListener } from '@stores/index';
 import { LocaleKey, t } from '@modules/i18n';
 import ModalStore from '@stores/modal';
@@ -28,9 +29,10 @@ interface IModalProps {
 }
 
 const Modal = (props: IModalProps) => {
+	const [ref, setRef] = createSignal<HTMLElement>(null);
 	const [open, setOpen] = createSignal(false);
 
-	let ref;
+	createFocusTrap(open, ref);
 
 	onMount(() => {
 		requestAnimationFrame(() => {
@@ -44,15 +46,15 @@ const Modal = (props: IModalProps) => {
 		setTimeout(() => {
 			// allow any transitions to finish
 
-			ModalStore.removeModal(ModalStore.modals.find((m) => m.element === ref));
+			ModalStore.removeModal(ModalStore.modals.find((m) => m.element === ref()));
 		}, 1000);
 	};
 
 	return (
 		<div
-			ref={ref}
+			ref={setRef}
 			onMouseDown={(e) => {
-				if (props.dismissable && e.target === ref) {
+				if (props.dismissable && e.target === ref()) {
 					close();
 				}
 			}}

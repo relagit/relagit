@@ -48,7 +48,11 @@ export default (props: ISidebarProps) => {
 	});
 
 	return (
-		<div classList={{ sidebar: true, 'sidebar-active': props.sidebar }}>
+		<div
+			classList={{ sidebar: true, 'sidebar-active': props.sidebar }}
+			aria-role="sidebar"
+			aria-hidden={props.sidebar}
+		>
 			<Header />
 			<Show when={historyOpen()}>
 				<div class="sidebar__commits">

@@ -14,8 +14,11 @@
 	transform: translateX(-100%);
 	transition: transform 0.2s ease-in-out;
 	margin-top: 72px;
+	visibility: hidden;
+	user-select: none;
 
 	&.open {
+		visibility: visible;
 		transform: translateX(0);
 	}
 
@@ -76,6 +79,12 @@
 
 				&:hover {
 					background-color: var(--bg-hover);
+				}
+
+				&:focus {
+					outline: none;
+					border: 2px solid var(--color-blue-500);
+					padding: 8px 18px;
 				}
 
 				&.active {

@@ -114,7 +114,7 @@ export default (props: IFile) => {
 			<div
 				aria-role="button"
 				aria-label={t('sidebar.open', {
-					name: props.name
+					name: path.join(props.path, props.name)
 				})}
 				aria-selected={selectedFile() === props}
 				class={`sidebar__item ${selectedFile() === props ? 'active' : ''}`}
@@ -125,6 +125,13 @@ export default (props: IFile) => {
 					debug('Transitioning to file', props.name, 'in', props.path);
 					LocationStore.setSelectedFile(props);
 				}}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						debug('Transitioning to file', props.name, 'in', props.path);
+						LocationStore.setSelectedFile(props);
+					}
+				}}
+				tabIndex={0}
 			>
 				<div class="sidebar__item__filename">
 					<span class="sidebar__item__filename__path" title={props.path}>

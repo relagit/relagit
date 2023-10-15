@@ -187,6 +187,7 @@ export default () => {
 							<Show when={!opened()}>
 								<div class="github-modal__header">
 									<TextArea
+										label={t('modal.github.search')}
 										placeholder={t('modal.github.searchPlaceholder')}
 										value={searchQuery()}
 										onChange={setSearchQuery}

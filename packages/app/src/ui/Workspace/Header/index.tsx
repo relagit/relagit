@@ -19,6 +19,7 @@ export interface IPanelButtonProps {
 	id: string;
 	icon: IconName | keyof typeof customIcons;
 	iconVariant?: 12 | 16 | 24 | 32;
+	name?: string;
 	onClick: () => void;
 	size?: 'small' | 'medium' | 'large';
 	label?: string;
@@ -42,7 +43,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 					<button
 						{...p}
 						aria-role="button"
-						aria-label={props.label}
+						aria-label={props.label || props.name}
 						classList={{
 							workspace__header__panelbutton: true,
 							'workspace__header__panelbutton-small': props.size === 'small',
@@ -237,6 +238,7 @@ export default () => {
 			<div class="workspace__header__spacer" />
 			<PanelButton
 				icon="git-commit"
+				name="Toggle blame view"
 				id="workspace-blame"
 				className={blameOpen() ? 'active' : ''}
 				onClick={() => {
@@ -245,6 +247,7 @@ export default () => {
 			/>
 			<PanelButton
 				icon="history"
+				name="Toggle history"
 				id="workspace-history"
 				className={historyOpen() ? 'active' : ''}
 				onClick={() => {

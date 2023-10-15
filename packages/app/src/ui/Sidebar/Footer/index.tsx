@@ -55,6 +55,7 @@ export default () => {
 	return (
 		<div class={`sidebar__footer ${selected() && changes() && staged() ? '' : 'hidden'}`}>
 			<TextArea
+				label={t('sidebar.footer.summary')}
 				disabled={!(selected() && changes() && staged())}
 				value={draft()?.message}
 				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
@@ -102,6 +103,7 @@ export default () => {
 				}}
 			/>
 			<TextArea
+				label={t('sidebar.footer.description')}
 				disabled={!(selected() && changes() && staged())}
 				value={draft()?.description}
 				placeholder={t('sidebar.footer.description')}

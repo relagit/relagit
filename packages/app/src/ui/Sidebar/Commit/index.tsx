@@ -36,6 +36,23 @@ export default (props: ILogCommit) => {
 					error('Failed to show commit', e);
 				}
 			}}
+			onKeyDown={async (e) => {
+				if (e.key === 'Enter') {
+					debug('Transitioning to commit', props.hash);
+					LocationStore.setSelectedCommit(props);
+
+					try {
+						LocationStore.setSelectedCommitFiles(
+							await Git.Show(LocationStore.selectedRepository.path, props.hash)
+						);
+					} catch (e) {
+						showErrorModal(e, 'error.git');
+
+						error('Failed to show commit', e);
+					}
+				}
+			}}
+			tabIndex={0}
 		>
 			<div class="sidebar__commit__top">
 				<div class="sidebar__commit__top__message">{props.message}</div>

@@ -2,12 +2,14 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
+import { Accessor, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 
+import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { iconFromAction, workflows } from '@app/modules/actions';
+import SettingsStore, { ISettings } from '@stores/settings';
+import { createFocusTrap } from '@app/modules/focus';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
-import SettingsStore, { ISettings } from '@stores/settings';
 import ModalStore from '@app/stores/modal';
 import LayerStore from '@stores/layer';
 import { t } from '@app/modules/i18n';
@@ -21,11 +23,10 @@ import Icon from '@ui/Common/Icon';
 import Layer from '../Layer';
 
 import './index.scss';
-import { themes, toggleTheme } from '@app/modules/actions/themes';
 
 export interface IRadioGroupProps {
 	options: {
-		element: JSX.Element;
+		element: string;
 		value: string;
 	}[];
 	value: string;
@@ -87,8 +88,16 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 				{(option) => {
 					return (
 						<label
+							aria-label={option.element}
 							aria-selected={value() === option.value}
 							classList={{ active: value() === option.value }}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									props.onChange(option.value);
+									setValue(option.value);
+								}
+							}}
+							tabIndex={0}
 						>
 							<input
 								type="radio"
@@ -171,6 +180,12 @@ export const Switch = (props: ISwitchProps) => {
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
+	const open = createStoreListener([LayerStore], () => LayerStore.visible('settings'));
+
+	const [ref, setRef] = createSignal<HTMLElement>(null);
+
+	createFocusTrap(open, ref);
+
 	const close = () => LayerStore.setVisible('settings', false);
 
 	const listener = (e: KeyboardEvent) => {
@@ -199,15 +214,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>{t('settings.general.commitStyle.conventional')}</>,
+							element: t('settings.general.commitStyle.conventional'),
 							value: 'conventional'
 						},
 						{
-							element: <>{t('settings.general.commitStyle.relational')}</>,
+							element: t('settings.general.commitStyle.relational'),
 							value: 'relational'
 						},
 						{
-							element: <>{t('settings.general.commitStyle.none')}</>,
+							element: t('settings.general.commitStyle.none'),
 							value: 'none'
 						}
 					]}
@@ -258,15 +273,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>Deutsch</>,
+							element: 'Deutsch',
 							value: 'de'
 						},
 						{
-							element: <>English (U.S.)</>,
+							element: 'English (U.S.)',
 							value: 'en-US'
 						},
 						{
-							element: <>Latin</>,
+							element: 'Latin',
 							value: 'lat'
 						}
 					]}
@@ -288,15 +303,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>{t('settings.general.editor.code')}</>,
+							element: t('settings.general.editor.code'),
 							value: 'code'
 						},
 						{
-							element: <>{t('settings.general.editor.code-insiders')}</>,
+							element: t('settings.general.editor.code-insiders'),
 							value: 'code-insiders'
 						},
 						{
-							element: <>{t('settings.general.editor.subl')}</>,
+							element: t('settings.general.editor.subl'),
 							value: 'subl'
 						}
 					]}
@@ -394,15 +409,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>{t('settings.appearance.theme.light')}</>,
+							element: t('settings.appearance.theme.light'),
 							value: 'light'
 						},
 						{
-							element: <>{t('settings.appearance.theme.dark')}</>,
+							element: t('settings.appearance.theme.dark'),
 							value: 'dark'
 						},
 						{
-							element: <>{t('settings.appearance.theme.system')}</>,
+							element: t('settings.appearance.theme.system'),
 							value: 'system'
 						}
 					]}
@@ -420,6 +435,7 @@ export default () => {
 					{t('settings.appearance.font.description')}
 				</p>
 				<TextArea
+					label={t('settings.appearance.font.label')}
 					className="settings-layer__setting__textarea"
 					value={(settings()?.get('fontFamily') as string) || ''}
 					onChange={(value) => {
@@ -465,7 +481,7 @@ export default () => {
 	);
 
 	return (
-		<div class="settings-layer">
+		<div class="settings-layer" ref={setRef}>
 			<div class="settings-layer__title">
 				<h1>{t('settings.title')}</h1>
 				<div class="settings-layer__title__buttons">

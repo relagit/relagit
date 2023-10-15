@@ -15,6 +15,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		user-select: none;
 
 		h1 {
 			font-size: 2.5rem;
@@ -53,12 +54,14 @@
 			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-primary);
+			user-select: none;
 		}
 
 		&__description {
 			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-label);
+			user-select: none;
 		}
 
 		&__input {
@@ -84,6 +87,7 @@
 			border-radius: 4px;
 			font-weight: 400;
 			padding: 24px;
+			user-select: none;
 			color: var(--color-primary);
 			border: 1px solid var(--separator-primary);
 
@@ -160,6 +164,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0;
+	user-select: none;
 
 	&.disabled {
 		opacity: 0.4;
@@ -206,8 +211,9 @@
 		}
 
 		&:focus {
-			border-color: transparent;
-			outline: 2px solid var(--button-focus);
+			outline: none;
+			border: 2px solid var(--radio-focus);
+			padding: 10px 30px;
 		}
 
 		&.active {
@@ -239,6 +245,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	user-select: none;
 
 	&.disabled {
 		opacity: 0.4;

@@ -10,6 +10,7 @@
 	background: var(--bg-tertiary);
 	border-radius: 4px;
 	flex-shrink: 0;
+	user-select: none;
 
 	&__item {
 		display: flex;
@@ -29,8 +30,8 @@
 		}
 
 		&:focus {
-			outline: none;
-			color: var(--color-primary);
+			box-shadow: none;
+			outline: 2px solid var(--color-blue-500);
 		}
 
 		&.active {
