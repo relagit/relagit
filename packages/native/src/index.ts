@@ -23,7 +23,9 @@ app.once('ready', async () => {
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
-			height: 28
+			height: 28,
+			color: '#141515',
+			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
