@@ -481,7 +481,7 @@ export default () => {
 	);
 
 	return (
-		<div class="settings-layer" ref={setRef}>
+		<dialog open={open()} class="settings-layer" ref={setRef}>
 			<div class="settings-layer__title">
 				<h1>{t('settings.title')}</h1>
 				<div class="settings-layer__title__buttons">
@@ -519,6 +519,6 @@ export default () => {
 					}
 				]}
 			/>
-		</div>
+		</dialog>
 	);
 };

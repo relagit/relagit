@@ -9,6 +9,7 @@
 	flex-direction: column;
 	background-color: var(--bg-primary);
 	color: var(--color-primary);
+	position: relative; // undo <dialog> styling
 
 	&__title {
 		margin-bottom: 20px;
