@@ -21,10 +21,24 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 		args: ['--pretty=format:%H%n%an%n%ad%n%s%n', '--stat', '--no-color', '--stat-width=1']
 	});
 
-	const commits = res.split(/\)\n\n/g).map((commit) => {
+	console.log(res);
+
+	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		const [hash, author, date, message] = commit.split('\n');
 
 		const changesLine = commit.split('\n').pop().split(', ');
+
+		if (!changesLine.includes('file')) {
+			return {
+				hash,
+				author,
+				date,
+				message,
+				files: 0,
+				insertions: 0,
+				deletions: 0
+			};
+		}
 
 		const files = Number(changesLine[0]?.split(' '));
 		const insertions = changesLine[1]?.includes('insert')
