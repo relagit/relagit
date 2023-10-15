@@ -16,7 +16,7 @@ export default (props: ILogCommit) => {
 		<div
 			aria-role="button"
 			aria-label={t('sidebar.commit.label', {
-				hash: props.hash.substring(0, 7)
+				hash: props.message
 			})}
 			aria-selected={selected() === props}
 			class={`sidebar__commit ${selected() === props ? 'active' : ''}`}
