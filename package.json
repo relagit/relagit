@@ -28,7 +28,6 @@
 	"devDependencies": {
 		"@babel/core": "^7.23.0",
 		"@babel/preset-env": "^7.22.20",
-		"@wooorm/starry-night": "^2.2.0",
 		"@babel/preset-typescript": "^7.23.0",
 		"@primer/octicons": "^18.3.0",
 		"@rollup/plugin-babel": "^6.0.3",
@@ -46,6 +45,7 @@
 		"@types/primer__octicons": "^17.11.0",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
+		"@wooorm/starry-night": "^2.2.0",
 		"babel-preset-solid": "^1.7.12",
 		"electron": "^25.8.4",
 		"electron-builder": "^24.6.4",
