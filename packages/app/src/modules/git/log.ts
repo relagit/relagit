@@ -24,9 +24,9 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		const [hash, author, date, message] = commit.split('\n');
 
-		const changesLine = commit.split('\n').pop().split(', ');
+		const changesLine = commit.split('\n')[commit.split('\n').length - 2].split(',');
 
-		if (!changesLine.includes('file')) {
+		if (!changesLine[0].includes('file')) {
 			return {
 				hash,
 				author,
@@ -38,14 +38,14 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 			};
 		}
 
-		const files = Number(changesLine[0]?.split(' '));
+		const files = Number(changesLine[0]?.trim()?.split(' ')[0]);
 		const insertions = changesLine[1]?.includes('insert')
-			? Number(changesLine[1]?.split(' ')[0])
+			? Number(changesLine[1]?.trim()?.split(' ')[0])
 			: 0;
 		const deletions = changesLine[1]?.includes('del')
-			? Number(changesLine[1]?.split(' ')[0])
+			? Number(changesLine[1]?.trim()?.split(' ')[0])
 			: changesLine[2]?.includes('del')
-			? Number(changesLine[2]?.split(' ')[0])
+			? Number(changesLine[2]?.trim()?.split(' ')[0])
 			: 0;
 
 		return {
