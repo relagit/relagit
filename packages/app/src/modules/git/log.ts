@@ -21,8 +21,6 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 		args: ['--pretty=format:%H%n%an%n%ad%n%s%n', '--stat', '--no-color', '--stat-width=1']
 	});
 
-	console.log(res);
-
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		const [hash, author, date, message] = commit.split('\n');
 
