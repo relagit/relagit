@@ -74,7 +74,9 @@ export default () => {
 					'--settings-accent-color': settings()?.get('accentColor') as string
 				}}
 			>
-				<Show when={window.Native.platform === 'darwin'}>
+				<Show
+					when={window.Native.platform === 'darwin' || window.Native.platform === 'win32'}
+				>
 					<div class="window-control-bar"></div>
 				</Show>
 				<Layer

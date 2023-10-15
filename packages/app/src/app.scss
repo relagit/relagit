@@ -168,7 +168,8 @@ textarea {
 	color: var(--color-primary);
 	font-family: var(--font-primary);
 
-	&.platform-darwin {
+	&.platform-darwin,
+	&.platform-win32 {
 		padding-top: 28px;
 	}
 
