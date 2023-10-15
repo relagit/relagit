@@ -44,6 +44,8 @@
 				background-color: transparent;
 				color: var(--color-secondary);
 
+				@include mixins.focusable;
+
 				&:hover {
 					color: var(--color-primary);
 				}

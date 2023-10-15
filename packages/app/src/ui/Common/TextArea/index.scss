@@ -18,17 +18,14 @@
 	--input-stroke: var(--separator-primary);
 	--input-focus: #{illyrica.$color-blue-500};
 
+	@include mixins.focusable(var(--input-focus));
+
 	&.expanded {
 		overflow-y: auto;
 		white-space: normal;
 		max-height: 100%;
 		min-height: 32px;
 		height: auto;
-	}
-
-	&:focus {
-		border-color: transparent;
-		outline: 2px solid var(--input-focus);
 	}
 
 	&::placeholder {

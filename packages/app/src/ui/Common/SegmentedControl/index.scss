@@ -25,13 +25,10 @@
 		padding-block: 6px;
 		border-radius: 2px;
 
+		@include mixins.focusable;
+
 		&:hover {
 			color: var(--color-primary);
-		}
-
-		&:focus {
-			box-shadow: none;
-			outline: 2px solid var(--color-blue-500);
 		}
 
 		&.active {

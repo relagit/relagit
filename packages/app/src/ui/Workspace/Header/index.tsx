@@ -44,6 +44,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 						{...p}
 						aria-role="button"
 						aria-label={props.label || props.name}
+						disabled={props.disabled}
 						classList={{
 							workspace__header__panelbutton: true,
 							'workspace__header__panelbutton-small': props.size === 'small',

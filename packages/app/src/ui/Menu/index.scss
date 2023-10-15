@@ -17,10 +17,7 @@
 		border-radius: 2px;
 		user-select: none;
 
-		&:focus {
-			border-color: transparent;
-			outline: 2px solid var(--color-blue-500);
-		}
+		@include mixins.focusable;
 
 		&.disabled {
 			pointer-events: none;

@@ -9,10 +9,7 @@
 	overflow: hidden;
 	user-select: none;
 
-	&:focus {
-		border-color: transparent;
-		outline: 2px solid var(--color-blue-500);
-	}
+	@include mixins.focusable;
 
 	&:hover {
 		background-color: var(--bg-hover);
@@ -63,9 +60,7 @@
 		padding: 4px;
 		border-radius: 4px;
 
-		&:focus {
-			outline: 2px solid #{illyrica.$color-blue-500};
-		}
+		@include mixins.focusable;
 
 		&.staged {
 			opacity: 1;

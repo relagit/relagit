@@ -128,13 +128,10 @@
 			gap: 8px;
 			height: 150px;
 
+			@include mixins.focusable;
+
 			&:hover {
 				background-color: var(--bg-quaternary);
-			}
-
-			&:focus {
-				border-color: transparent;
-				outline: 2px solid #{illyrica.$color-blue-500};
 			}
 
 			&__name {
