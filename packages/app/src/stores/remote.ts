@@ -53,6 +53,7 @@ const RemoteStore = new (class Remote extends GenericStore {
 			}
 			return f;
 		});
+
 		this.emit();
 	}
 

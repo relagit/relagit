@@ -9,12 +9,14 @@
 	flex-direction: column;
 	background-color: var(--bg-primary);
 	color: var(--color-primary);
+	position: relative; // undo <dialog> styling
 
 	&__title {
 		margin-bottom: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		user-select: none;
 
 		h1 {
 			font-size: 2.5rem;
@@ -53,12 +55,14 @@
 			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-primary);
+			user-select: none;
 		}
 
 		&__description {
 			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-label);
+			user-select: none;
 		}
 
 		&__input {
@@ -68,12 +72,100 @@
 			gap: 10px;
 		}
 	}
+
+	&__workflows {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		&__workflow {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			background-color: var(--bg-tertiary);
+			font-size: 1rem;
+			border-radius: 4px;
+			font-weight: 400;
+			padding: 24px;
+			user-select: none;
+			color: var(--color-primary);
+			border: 1px solid var(--separator-primary);
+
+			&:hover {
+				background-color: var(--bg-hover);
+			}
+
+			&:focus {
+				outline: none;
+				background-color: var(--bg-active);
+			}
+
+			svg {
+				width: 2rem;
+				height: 2rem;
+				color: var(--color-primary);
+			}
+
+			&__content {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				gap: 16px;
+				width: 100%;
+
+				&__text {
+					display: flex;
+					flex-direction: column;
+					width: 100%;
+
+					&__header {
+						display: flex;
+						width: 100%;
+						justify-content: space-between;
+						align-items: center;
+						font-size: 1.5rem !important;
+						font-weight: 600;
+						gap: 16px;
+					}
+
+					&__description {
+						color: var(--color-label);
+						font-size: 1rem;
+						font-weight: 400;
+					}
+				}
+			}
+
+			&__steps {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: flex-start;
+				gap: 8px;
+				width: 100%;
+
+				&__step {
+					display: flex;
+					padding: 8px 16px;
+					justify-content: space-between;
+					align-items: center;
+					border-radius: 2px;
+					border: 1px solid var(--separator-primary);
+					background: var(--bg-quaternary);
+					text-transform: capitalize;
+					width: 100%;
+				}
+			}
+		}
+	}
 }
 
 .radio {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
+	user-select: none;
 
 	&.disabled {
 		opacity: 0.4;
@@ -119,11 +211,6 @@
 			background-color: var(--radio-active);
 		}
 
-		&:focus {
-			border-color: transparent;
-			outline: 2px solid var(--button-focus);
-		}
-
 		&.active {
 			background-color: var(--bg-senary);
 
@@ -132,9 +219,26 @@
 			}
 		}
 
+		&:focus {
+			outline: none;
+			border: 2px solid var(--radio-focus);
+			padding: 10px 30px;
+		}
+
 		input {
 			position: absolute;
 			opacity: 0;
+			width: 100%;
+			top: 0;
+			left: 0;
+			height: 100%;
+			border-radius: inherit;
+
+			&:focus {
+				outline: none;
+				border: 2px solid var(--radio-focus);
+				padding: 10px 30px;
+			}
 		}
 
 		.check {
@@ -153,6 +257,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	user-select: none;
 
 	&.disabled {
 		opacity: 0.4;
@@ -200,10 +305,10 @@
 
 			--switch-color: var(--color-primary);
 			--switch-bg: var(--bg-tertiary);
-			--switch-thumb: var(--bg-senary);
-			--switch-stroke: var(--separator-primary);
+			--switch-thumb: var(--bg-hover);
+			--switch-stroke: var(--base-dark-grey);
 			--switch-slider-stroke: var(--switch-stroke);
-			--switch-focus: #{illyrica.$color-blue-500};
+			--switch-focus: var(--color-blue-500);
 
 			&:focus {
 				border-color: transparent;
@@ -232,14 +337,25 @@
 			}
 
 			&.active {
-				--switch-slider-stroke: #{illyrica.$color-blue-500};
-				--switch-thumb: #{illyrica.$color-blue-300};
-				--switch-bg: #{illyrica.$color-blue-100};
+				--switch-slider-stroke: var(--color-blue-500);
+				--switch-thumb: #1c84ec85; // hardcoded 50% alpha
+				--switch-bg: #1c84ec33; // hardcoded 20% alpha
+				--switch-stroke: var(--bg-active);
 
 				.slider {
 					transform: translateX(18px);
 				}
 			}
 		}
+	}
+}
+
+.settings-layer__setting__client-themes__theme {
+	background: var(--bg-quaternary);
+	border-radius: 4px;
+	border: 1px solid var(--separator-primary);
+
+	.settings-layer__setting__input {
+		padding: 8px 16px;
 	}
 }

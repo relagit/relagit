@@ -10,7 +10,7 @@
 	&.sidebar-active {
 		margin-left: 350px;
 
-		@media screen and (max-width: 800px) {
+		@media screen and (max-width: 875px) {
 			width: 100vw;
 			margin-left: 0;
 		}
@@ -137,6 +137,7 @@
 				padding-inline: 10px;
 				font-size: 1rem;
 				align-items: center;
+				user-select: none;
 				border-bottom: 1px solid var(--separator-secondary);
 
 				&__path {

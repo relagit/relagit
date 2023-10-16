@@ -17,7 +17,10 @@
 		background-color: transparent;
 		padding-inline: 35px;
 		gap: 16px;
+		user-select: none;
 		-webkit-app-region: no-drag;
+
+		@include mixins.focusable;
 
 		&:not(:has(.workspace__header__panelbutton__info)) {
 			padding-inline: 20px;
@@ -48,12 +51,6 @@
 
 		&:hover {
 			background-color: var(--bg-hover);
-		}
-
-		&:focus {
-			background-color: var(--bg-hover);
-			border-color: transparent;
-			outline: none;
 		}
 
 		&.active {

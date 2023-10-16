@@ -24,7 +24,7 @@ export interface ISidebarProps {
 
 export default (props: ISidebarProps) => {
 	const files = createStoreListener([FileStore, LocationStore], () =>
-		FileStore.getFilesByRepositoryPath(LocationStore.selectedRepository?.path)
+		FileStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [commits, setCommits] = createSignal<ILogCommit[]>([]);
@@ -32,12 +32,14 @@ export default (props: ISidebarProps) => {
 	let lastRepository: IRepository | undefined;
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
+		if (!LocationStore.selectedRepository) return;
+
+		setCommits(await Git.Log(LocationStore.selectedRepository));
+
 		try {
 			if (lastRepository === LocationStore.selectedRepository) return;
 
 			lastRepository = LocationStore.selectedRepository;
-
-			setCommits(await Git.Log(LocationStore.selectedRepository));
 		} catch (error) {
 			showErrorModal(error, 'error.fetching');
 
@@ -46,7 +48,11 @@ export default (props: ISidebarProps) => {
 	});
 
 	return (
-		<div classList={{ sidebar: true, 'sidebar-active': props.sidebar }}>
+		<div
+			classList={{ sidebar: true, 'sidebar-active': props.sidebar }}
+			aria-role="sidebar"
+			aria-hidden={props.sidebar}
+		>
 			<Header />
 			<Show when={historyOpen()}>
 				<div class="sidebar__commits">

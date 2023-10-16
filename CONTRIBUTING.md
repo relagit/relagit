@@ -59,6 +59,15 @@ Be sure to download the [Prettier](https://marketplace.visualstudio.com/items?it
 
 Be sure to also run `pnpm lint` before submitting a pull request to ensure that your code is linted correctly.
 
+All class names should be written in the following form(s):
+
+```scss
+component
+component__element
+component__element-modifier // this is mainly used if the component itself has a modifier. (e.g. layer-bare)
+component__element modifier // the more common modifier form
+```
+
 ## Commit Messages
 
 Please follow the [Relational Commits](https://github.com/relagit/commits/blob/master/spec/index.md) specification when writing commit messages.

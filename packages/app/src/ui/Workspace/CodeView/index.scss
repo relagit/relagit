@@ -6,7 +6,7 @@
 	font-variant-ligatures: none;
 	font-size: 11px; // NOT using rem to ennsure precision
 	width: 100%;
-	height: calc(100% - 108px);
+	height: calc(100% - 110px);
 	flex-direction: column;
 
 	::selection {
@@ -51,6 +51,7 @@
 		z-index: 2;
 		background-color: var(--bg-c);
 		overflow: hidden;
+		flex-shrink: 0;
 
 		&.deleted {
 			--bg-c: var(--bg-diff-del);
@@ -66,13 +67,23 @@
 			background-color: var(--bg-c-hover);
 		}
 
-		&__content {
-			padding-left: 10px;
+		&__indicator {
 			z-index: 1;
 			font-family: var(--font-mono);
 			font-variant-ligatures: none;
 			height: fit-content;
-			width: 100%;
+			line-height: 1.8;
+			opacity: 0.5;
+			padding-left: 10px;
+			user-select: none;
+		}
+
+		&__content {
+			padding-inline: 10px;
+			z-index: 1;
+			font-family: var(--font-mono);
+			font-variant-ligatures: none;
+			height: fit-content;
 			line-height: 1.8;
 			white-space: break-spaces;
 		}
@@ -89,6 +100,16 @@
 			background-color: var(--bg-c-hover);
 			border-right: 1px solid var(--separator-secondary);
 			padding-block: 3px;
+		}
+
+		&__blame {
+			opacity: 0.5;
+			font-size: 10px;
+			padding-inline: 5px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			user-select: none;
 		}
 
 		&.message {

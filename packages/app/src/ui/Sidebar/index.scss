@@ -9,17 +9,19 @@
 	transform: translateX(-100%);
 	transition: transform 0.2s ease-in-out;
 	z-index: 9;
+	visibility: hidden;
 
 	&.sidebar-active {
 		transform: translateX(0);
+		visibility: visible;
 
-		@media screen and (max-width: 800px) {
+		@media screen and (max-width: 875px) {
 			background-color: var(--bg-quaternary) !important;
 		}
 	}
 
 	&__items {
-		height: calc(100% - 350px);
+		height: calc(100% - 336px);
 		overflow-y: auto;
 		overflow-x: hidden;
 		padding: 0;
@@ -78,7 +80,7 @@
 }
 
 .theme-dark.vibrancy .sidebar {
-	background-color: #1a1b1cab;
+	background-color: #1a1b1c4a;
 }
 
 .theme-light.vibrancy .sidebar {
@@ -87,7 +89,7 @@
 
 @media (prefers-color-scheme: dark) {
 	.theme-system.vibrancy .sidebar {
-		background-color: #1a1b1cab;
+		background-color: #1a1b1c4a;
 	}
 }
 

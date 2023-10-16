@@ -73,6 +73,7 @@ export default (props: IFileSelectProps) => {
 			>
 				<Show when={props.input}>
 					<TextArea
+						label={t('ui.filepicker.label')}
 						value={inputValue()}
 						placeholder={t('ui.filepicker.placeholder')}
 						disabled={props.disabled}

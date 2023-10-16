@@ -2,19 +2,22 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-import { Accessor, createSignal, For, JSX, onCleanup, onMount, Show } from 'solid-js';
+import { Accessor, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 
+import { themes, toggleTheme } from '@app/modules/actions/themes';
+import { iconFromAction, workflows } from '@app/modules/actions';
+import SettingsStore, { ISettings } from '@stores/settings';
+import { createFocusTrap } from '@app/modules/focus';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
-import SettingsStore from '@stores/settings';
 import ModalStore from '@app/stores/modal';
 import LayerStore from '@stores/layer';
 import { t } from '@app/modules/i18n';
 import * as ipc from '~/common/ipc';
 
 import Modal, { ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from '../Modal';
-import SegmentedView from '../Common/SegmentedView';
 import TextArea from '@ui/Common/TextArea';
+import TabView from '../Common/TabView';
 import Button from '../Common/Button';
 import Icon from '@ui/Common/Icon';
 import Layer from '../Layer';
@@ -23,7 +26,7 @@ import './index.scss';
 
 export interface IRadioGroupProps {
 	options: {
-		element: JSX.Element;
+		element: string;
 		value: string;
 	}[];
 	value: string;
@@ -85,8 +88,16 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 				{(option) => {
 					return (
 						<label
+							aria-label={option.element}
 							aria-selected={value() === option.value}
 							classList={{ active: value() === option.value }}
+							tabIndex={0}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									props.onChange(option.value);
+									setValue(option.value);
+								}
+							}}
 						>
 							<input
 								type="radio"
@@ -140,9 +151,22 @@ export const Switch = (props: ISwitchProps) => {
 				<div
 					aria-label={props.label}
 					aria-selected={props.value()}
+					aria-role="button"
 					classList={{
 						check: true,
 						active: props.value()
+					}}
+					tabIndex={0}
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+
+						props.onChange(!props.value());
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							props.onChange(!props.value());
+						}
 					}}
 				>
 					<input type="checkbox" checked={props.value()} />
@@ -155,6 +179,12 @@ export const Switch = (props: ISwitchProps) => {
 
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
+
+	const open = createStoreListener([LayerStore], () => LayerStore.visible('settings'));
+
+	const [ref, setRef] = createSignal<HTMLElement>(null);
+
+	createFocusTrap(open, ref);
 
 	const close = () => LayerStore.setVisible('settings', false);
 
@@ -172,7 +202,7 @@ export default () => {
 		window.removeEventListener('keydown', listener);
 	});
 
-	const General = (
+	const Commits = (
 		<>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-commit-style">
@@ -184,15 +214,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>{t('settings.general.commitStyle.conventional')}</>,
+							element: t('settings.general.commitStyle.conventional'),
 							value: 'conventional'
 						},
 						{
-							element: <>{t('settings.general.commitStyle.relational')}</>,
+							element: t('settings.general.commitStyle.relational'),
 							value: 'relational'
 						},
 						{
-							element: <>{t('settings.general.commitStyle.none')}</>,
+							element: t('settings.general.commitStyle.none'),
 							value: 'none'
 						}
 					]}
@@ -228,6 +258,11 @@ export default () => {
 					}}
 				/>
 			</div>
+		</>
+	);
+
+	const General = (
+		<>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-locale">
 					{t('settings.general.language.label')}
@@ -238,11 +273,15 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>English, US</>,
+							element: 'Deutsch',
+							value: 'de'
+						},
+						{
+							element: 'English (U.S.)',
 							value: 'en-US'
 						},
 						{
-							element: <>Latin</>,
+							element: 'Latin',
 							value: 'lat'
 						}
 					]}
@@ -254,6 +293,93 @@ export default () => {
 					}}
 				/>
 			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-editor">
+					{t('settings.general.editor.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.general.editor.description')}
+				</p>
+				<RadioGroup
+					options={[
+						{
+							element: t('settings.general.editor.code'),
+							value: 'code'
+						},
+						{
+							element: t('settings.general.editor.code-insiders'),
+							value: 'code-insiders'
+						},
+						{
+							element: t('settings.general.editor.subl'),
+							value: 'subl'
+						}
+					]}
+					value={(settings()?.get('externalEditor') as string) || 'code'}
+					onChange={(value) => {
+						SettingsStore.setSetting(
+							'externalEditor',
+							value as ISettings['externalEditor']
+						);
+
+						showReloadModal();
+					}}
+				/>
+			</div>
+		</>
+	);
+
+	const [openWorkflows, setOpenWorkflows] = createSignal(null);
+
+	const Workflows = (
+		<>
+			<div class="settings-layer__workflows">
+				<For each={Array.from(workflows)}>
+					{(workflow) => {
+						return (
+							<div
+								class="settings-layer__workflows__workflow"
+								aria-label={workflow.name}
+								aria-role="button"
+								onClick={() => {
+									setOpenWorkflows(workflow);
+								}}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										setOpenWorkflows(workflow);
+									}
+								}}
+								tabIndex={0}
+							>
+								<div class="settings-layer__workflows__workflow__content">
+									<div class="settings-layer__workflows__workflow__content__text">
+										<h2 class="settings-layer__workflows__workflow__content__text__header">
+											{workflow.name}
+										</h2>
+										<p class="settings-layer__workflows__workflow__content__text__description">
+											{workflow.description}
+										</p>
+									</div>
+									<Icon name={iconFromAction(workflow.on)} />
+								</div>
+								<Show when={openWorkflows() === workflow}>
+									<div class="settings-layer__workflows__workflow__steps">
+										<For each={workflow.steps}>
+											{(step) => {
+												return (
+													<div class="settings-layer__workflows__workflow__steps__step">
+														{step.name}
+													</div>
+												);
+											}}
+										</For>
+									</div>
+								</Show>
+							</div>
+						);
+					}}
+				</For>
+			</div>
 		</>
 	);
 
@@ -263,7 +389,9 @@ export default () => {
 				<Switch
 					label={t('settings.appearance.vibrancy.label')}
 					note={t('settings.appearance.vibrancy.description')}
-					disabled={window.Native.platform !== 'darwin'}
+					disabled={
+						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
+					}
 					value={() => settings()?.get('vibrancy') as boolean}
 					onChange={(value) => {
 						SettingsStore.setSetting('vibrancy', value);
@@ -281,21 +409,21 @@ export default () => {
 				<RadioGroup
 					options={[
 						{
-							element: <>{t('settings.appearance.theme.light')}</>,
+							element: t('settings.appearance.theme.light'),
 							value: 'light'
 						},
 						{
-							element: <>{t('settings.appearance.theme.dark')}</>,
+							element: t('settings.appearance.theme.dark'),
 							value: 'dark'
 						},
 						{
-							element: <>{t('settings.appearance.theme.system')}</>,
+							element: t('settings.appearance.theme.system'),
 							value: 'system'
 						}
 					]}
 					value={settings()?.get('theme') as string}
 					onChange={(value) => {
-						SettingsStore.setSetting('theme', value);
+						SettingsStore.setSetting('theme', value as ISettings['theme']);
 					}}
 				/>
 			</div>
@@ -307,6 +435,7 @@ export default () => {
 					{t('settings.appearance.font.description')}
 				</p>
 				<TextArea
+					label={t('settings.appearance.font.label')}
 					className="settings-layer__setting__textarea"
 					value={(settings()?.get('fontFamily') as string) || ''}
 					onChange={(value) => {
@@ -315,11 +444,44 @@ export default () => {
 					placeholder={t('settings.appearance.font.placeholder')}
 				/>
 			</div>
+
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-client-themes">
+					{t('settings.appearance.clientThemes.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.appearance.clientThemes.description')}
+				</p>
+				<div class="settings-layer__setting__client-themes">
+					<For each={Array.from(themes)}>
+						{(theme) => {
+							return (
+								<div class="settings-layer__setting__client-themes__theme">
+									<Switch
+										label={theme.name}
+										note={`${theme.description || ''} (${theme.authors
+											.map((a) => a.name)
+											.join(', ')})`}
+										value={() =>
+											settings()
+												.get('enabledThemes')
+												?.['includes']?.(theme.id)
+										}
+										onChange={() => {
+											toggleTheme(theme.id);
+										}}
+									/>
+								</div>
+							);
+						}}
+					</For>
+				</div>
+			</div>
 		</>
 	);
 
 	return (
-		<div class="settings-layer">
+		<dialog open={open()} class="settings-layer" ref={setRef}>
 			<div class="settings-layer__title">
 				<h1>{t('settings.title')}</h1>
 				<div class="settings-layer__title__buttons">
@@ -333,22 +495,30 @@ export default () => {
 					</button>
 				</div>
 			</div>
-			<div class="scroller hide-bar">
-				<SegmentedView
-					views={[
-						{
-							label: t('settings.general.title'),
-							value: 'general',
-							element: General
-						},
-						{
-							label: t('settings.appearance.title'),
-							value: 'appearance',
-							element: Appearance
-						}
-					]}
-				/>
-			</div>
-		</div>
+			<TabView
+				views={[
+					{
+						label: t('settings.general.title'),
+						value: 'general',
+						element: General
+					},
+					{
+						label: t('settings.commits.title'),
+						value: 'commits',
+						element: Commits
+					},
+					{
+						label: t('settings.appearance.title'),
+						value: 'appearance',
+						element: Appearance
+					},
+					{
+						label: t('settings.workflows.title'),
+						value: 'workflows',
+						element: Workflows
+					}
+				]}
+			/>
+		</dialog>
 	);
 };

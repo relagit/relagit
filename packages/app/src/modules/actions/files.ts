@@ -18,9 +18,7 @@ import { showErrorModal } from '@app/ui/Modal';
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(
 		'repositories',
-		(SettingsStore.getSetting('repositories') as string[]).filter(
-			(r: string) => r !== repository.path
-		)
+		SettingsStore.getSetting('repositories').filter((r: string) => r !== repository.path)
 	);
 
 	RepositoryStore.removeRepository(repository);
@@ -63,7 +61,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 	if (file) {
 		if (FileStore.getByPath(file)) return;
 	} else {
-		if (FileStore.getFilesByRepositoryPath(directory)?.length) {
+		if (FileStore.getByRepositoryPath(directory)?.length) {
 			FileStore.removeFiles(directory);
 		}
 	}
@@ -137,39 +135,52 @@ export const getRepositoryStatus = async (
 	refetchRemotes?: boolean
 ) => {
 	try {
-		if (RepositoryStore.getByPath(directory)) {
-			warn('Repository already exists, not adding again');
+		let exists: IRepository = null;
 
-			return;
+		if (RepositoryStore.getByPath(directory)) {
+			exists = RepositoryStore.getByPath(directory);
 		}
 
 		try {
 			const info = await Git.Analyse(directory);
 
-			RepositoryStore.addRepository({
-				id: Math.random().toString(16).split('.')[1],
-				path: directory,
-				name: path.basename(directory),
-				remote: info.remote,
-				branch: info.branch,
-				commit: info.commit,
-				ahead: info.ahead,
-				behind: info.behind,
-				lastFetched: Date.now()
-			});
+			if (exists) {
+				RepositoryStore.updateRepository(exists.id, {
+					...info,
+					lastFetched: Date.now()
+				});
+			} else {
+				RepositoryStore.addRepository({
+					id: Math.random().toString(16).split('.')[1],
+					path: directory,
+					name: path.basename(directory),
+					remote: info.remote,
+					branch: info.branch,
+					commit: info.commit,
+					ahead: info.ahead,
+					behind: info.behind,
+					lastFetched: Date.now()
+				});
+			}
 		} catch (error) {
-			RepositoryStore.addRepository({
-				draft: true,
-				id: Math.random().toString(16).split('.')[1],
-				path: directory,
-				name: path.basename(directory),
-				remote: null,
-				branch: null,
-				commit: null,
-				ahead: null,
-				behind: null,
-				lastFetched: Date.now()
-			});
+			if (exists) {
+				RepositoryStore.updateRepository(exists.id, {
+					lastFetched: Date.now()
+				});
+			} else {
+				RepositoryStore.addRepository({
+					draft: true,
+					id: Math.random().toString(16).split('.')[1],
+					path: directory,
+					name: path.basename(directory),
+					remote: null,
+					branch: null,
+					commit: null,
+					ahead: null,
+					behind: null,
+					lastFetched: Date.now()
+				});
+			}
 		}
 
 		if (refetchFiles) await getFileStatus(directory);
@@ -190,15 +201,10 @@ export const refetchRepository = async (repository: IRepository) => {
 
 	FileStore.removeFiles(repository.path);
 	RemoteStore.removeByRepoPath(repository.path);
-	RepositoryStore.removeRepository(repository);
 
 	const repo = await getRepositoryStatus(repository.path, true, true);
 
-	if (LocationStore.selectedRepository?.name === repository.name) {
-		LocationStore.setSelectedRepository(repo);
-	}
-
-	const equivalent = FileStore.getFilesByRepositoryName(repository.name)?.find(
+	const equivalent = FileStore.getByRepositoryName(repo.name)?.find(
 		(f) => f.path === currentFile?.path
 	);
 

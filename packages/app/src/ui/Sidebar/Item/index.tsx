@@ -1,12 +1,16 @@
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
+import { addToGitignore } from '@app/modules/git/gitignore';
+import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { showItemInFolder } from '@modules/shell';
+import { openInEditor } from '@app/modules/code';
+import SettingsStore from '@app/stores/settings';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import * as Git from '@app/modules/git';
 import FileStore from '@stores/files';
+import { t } from '@app/modules/i18n';
 
 import type { IFile } from '@stores/files';
 
@@ -16,7 +20,9 @@ import Menu from '@ui/Menu';
 import './index.scss';
 
 export default (props: IFile) => {
-	const selected = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
+	);
 	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
 
 	const extension = (name: string) => {
@@ -52,19 +58,29 @@ export default (props: IFile) => {
 				{
 					label: t('sidebar.contextMenu.discard'),
 					type: 'item',
-					color: 'danger'
+					color: 'danger',
+					onClick: async () => {
+						await Git.Discard(selected(), props);
+					}
 				},
 				{
 					type: 'separator'
 				},
 				{
 					label: t('sidebar.contextMenu.ignore'),
-					type: 'item'
+					type: 'item',
+					disabled: extension(props.name) === 'gitignore',
+					onClick: () => {
+						addToGitignore(selected(), path.join(props.path, props.name));
+					}
 				},
 				{
 					label: t('sidebar.contextMenu.ignoreExt', { ext: extension(props.name) }),
 					type: 'item',
-					disabled: extension(props.name) === '.gitingore'
+					disabled: extension(props.name) === 'gitignore',
+					onClick: () => {
+						addToGitignore(selected(), '.' + extension(props.name));
+					}
 				},
 				{
 					type: 'separator'
@@ -80,16 +96,25 @@ export default (props: IFile) => {
 					disabled: props.status === 'deleted'
 				},
 				{
-					label: t('sidebar.contextMenu.openIn', { name: 'Code' }),
+					label: t('sidebar.contextMenu.openIn', {
+						name: t(
+							`settings.general.editor.${
+								SettingsStore.getSetting('externalEditor') || 'code'
+							}`
+						)
+					}),
 					type: 'item',
-					disabled: props.status === 'deleted'
+					disabled: props.status === 'deleted',
+					onClick: () => {
+						openInEditor(path.join(selected().path, props.path, props.name));
+					}
 				}
 			]}
 		>
 			<div
 				aria-role="button"
 				aria-label={t('sidebar.open', {
-					name: props.name
+					name: path.join(props.path, props.name)
 				})}
 				aria-selected={selectedFile() === props}
 				class={`sidebar__item ${selectedFile() === props ? 'active' : ''}`}
@@ -100,6 +125,13 @@ export default (props: IFile) => {
 					debug('Transitioning to file', props.name, 'in', props.path);
 					LocationStore.setSelectedFile(props);
 				}}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						debug('Transitioning to file', props.name, 'in', props.path);
+						LocationStore.setSelectedFile(props);
+					}
+				}}
+				tabIndex={0}
 			>
 				<div class="sidebar__item__filename">
 					<span class="sidebar__item__filename__path" title={props.path}>

@@ -14,8 +14,11 @@
 	transform: translateX(-100%);
 	transition: transform 0.2s ease-in-out;
 	margin-top: 72px;
+	visibility: hidden;
+	user-select: none;
 
 	&.open {
+		visibility: visible;
 		transform: translateX(0);
 	}
 
@@ -40,6 +43,8 @@
 				font-size: 1rem;
 				background-color: transparent;
 				color: var(--color-secondary);
+
+				@include mixins.focusable;
 
 				&:hover {
 					color: var(--color-primary);
@@ -66,8 +71,9 @@
 				padding: 10px 20px;
 				width: 100%;
 				display: flex;
-				gap: 4px;
-				flex-direction: column;
+				gap: 16px;
+				align-items: center;
+				justify-content: space-between;
 
 				&:not(:last-child) {
 					border-bottom: 1px solid var(--separator-secondary);
@@ -77,13 +83,33 @@
 					background-color: var(--bg-hover);
 				}
 
+				&:focus {
+					outline: none;
+					border: 2px solid var(--color-blue-500);
+					padding: 8px 18px;
+				}
+
 				&.active {
 					background-color: var(--bg-active);
 				}
 
-				&__details {
-					font-size: 0.85rem;
-					opacity: 0.6;
+				&__text {
+					display: flex;
+					gap: 4px;
+					flex-direction: column;
+					text-align: left;
+
+					&__details {
+						font-size: 0.85rem;
+						opacity: 0.6;
+					}
+				}
+
+				&__indicator {
+					width: 6px;
+					height: 6px;
+					border-radius: 50%;
+					background-color: #{illyrica.$color-blue-500};
 				}
 			}
 		}

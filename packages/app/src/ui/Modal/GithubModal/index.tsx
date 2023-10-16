@@ -1,8 +1,9 @@
-import { Show, For, createSignal } from 'solid-js';
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
-import { GithubResponse } from './types';
+import { Show, For, createSignal, createEffect } from 'solid-js';
 
 import { openExternal } from '@app/modules/shell';
+import { GitHub, GithubResponse } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
@@ -25,13 +26,20 @@ const getLanguageColor = (language: string) => {
 };
 
 export default () => {
-	const [response, setResponse] = createSignal<GithubResponse['user/repos'] | null>(null);
+	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
+		null
+	);
 	const [searchQuery, setSearchQuery] = createSignal('');
-	const [opened, setOpened] = createSignal<GithubResponse['user/repos'][number]>();
+	const [readme, setReadme] = createSignal<GithubResponse['repos/:username/:repo/readme'][1]>();
+	const [readmeHtml, setReadmeHtml] = createSignal<string | null>(null);
+	const [opened, setOpened] = createSignal<GithubResponse['users/:username/repos'][1][number]>();
 	const [error, setError] = createSignal(false);
 
 	const makeSorter = () => {
-		return (a: GithubResponse['user/repos'][0], b: GithubResponse['user/repos'][0]) => {
+		return (
+			a: GithubResponse['users/:username/repos'][1][0],
+			b: GithubResponse['users/:username/repos'][1][0]
+		) => {
 			if (a.stargazers_count > b.stargazers_count) {
 				return -1;
 			}
@@ -48,21 +56,34 @@ export default () => {
 		try {
 			setError(false);
 
-			const response = await fetch(`https://api.github.com/users/${searchQuery()}/repos`);
-
-			if (response.status !== 200) {
-				setResponse(null);
-				setError(true);
-
-				return;
-			}
-
-			setResponse((await response.json()) as GithubResponse['user/repos']);
+			setResponse(await GitHub('users/:username/repos').get(searchQuery()));
 		} catch (e) {
 			setResponse(null);
 			setError(true);
 		}
 	};
+
+	createEffect(async () => {
+		if (!opened()) return;
+
+		try {
+			const readme = await GitHub('repos/:username/:repo/readme').get(
+				searchQuery(),
+				opened().name
+			);
+			const html = await GitHub('repos/:username/:repo/readme')
+				.headers<string>({
+					Accept: 'application/vnd.github.v3.html'
+				})
+				.get(searchQuery(), opened().name);
+
+			setReadme(readme);
+			setReadmeHtml(html);
+		} catch (e) {
+			setReadme(null);
+			setReadmeHtml(null);
+		}
+	});
 
 	return (
 		<Modal size="x-large" dismissable transitions={Layer.Transitions.Fade}>
@@ -124,7 +145,20 @@ export default () => {
 									</div>
 								</div>
 								<div class="github-modal__details">
-									<div class="github-modal__details__readme"></div>
+									<div class="github-modal__details__readme">
+										<Show when={readme() && readmeHtml()}>
+											<div class="github-modal__details__readme__path">
+												{readme()?.path}
+											</div>
+											<div
+												class="github-modal__details__readme__content"
+												innerHTML={readmeHtml()?.replace(
+													'src="./',
+													`src="${path.dirname(readme()?.download_url)}/`
+												)}
+											></div>
+										</Show>
+									</div>
 									<div class="github-modal__details__info">
 										<div class="github-modal__details__info__actions">
 											<Button
@@ -153,6 +187,7 @@ export default () => {
 							<Show when={!opened()}>
 								<div class="github-modal__header">
 									<TextArea
+										label={t('modal.github.search')}
 										placeholder={t('modal.github.searchPlaceholder')}
 										value={searchQuery()}
 										onChange={setSearchQuery}

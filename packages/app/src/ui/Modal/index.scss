@@ -51,7 +51,7 @@
 		color: var(--color-primary);
 
 		&.small {
-			max-width: 400px;
+			max-width: 500px;
 			min-height: 300px;
 			max-height: 60%;
 			height: fit-content;
@@ -103,6 +103,7 @@
 			justify-content: space-between;
 			align-items: center;
 			padding: 40px 40px 20px 40px;
+			user-select: none;
 			border-bottom: 1px solid var(--separator-secondary);
 
 			&__title {
@@ -118,6 +119,7 @@
 			padding-block: 20px;
 			flex: 1;
 			overflow-y: auto;
+			user-select: none;
 		}
 
 		&__footer {

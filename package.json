@@ -3,8 +3,10 @@
 	"description": "Take back control over your git workflow.",
 	"main": "./dist/main.js",
 	"type": "module",
-	"version": "0.1.0",
+	"version": "0.3.0",
 	"packageManager": "pnpm@8.8.0",
+	"homepage": "https://git.rela.dev",
+	"repository": "https://github.com/relagit/relagit",
 	"license": "RLPL-2",
 	"scripts": {
 		"dev": "rollup -c -w",
@@ -13,13 +15,14 @@
 		"start": "electron ./dist/main.js",
 		"format": "prettier --write .",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-		"make": "electron-builder",
-		"make:mac": "electron-builder --mac",
-		"make:win": "electron-builder --win",
-		"make:linux": "electron-builder --linux"
+		"make": "electron-builder --config builder.cjs",
+		"make:mac": "electron-builder --mac --config builder.cjs",
+		"make:win": "electron-builder --win --config builder.cjs",
+		"make:linux": "electron-builder --linux --config builder.cjs"
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"sucrase": "^3.34.0",
 		"vscode-oniguruma": "^1.7.0"
 	},
 	"devDependencies": {
@@ -65,61 +68,9 @@
 		"sass": "^1.68.0",
 		"solid-js": "^1.7.12",
 		"solid-transition-group": "^0.2.3",
-		"sucrase": "^3.34.0",
 		"terser": "^5.20.0",
 		"thena": "^0.0.9",
 		"typescript": "^5.2.2",
 		"ws": "^8.14.2"
-	},
-	"build": {
-		"appId": "com.relagit.app",
-		"productName": "RelaGit",
-		"directories": {
-			"output": "out"
-		},
-		"asar": false,
-		"dmg": {
-			"background": "./build/background.png",
-			"icon": "./build/dmg.icns",
-			"iconSize": 72,
-			"contents": [
-				{
-					"x": 462,
-					"y": 160,
-					"type": "link",
-					"path": "/Applications"
-				},
-				{
-					"x": 155,
-					"y": 160,
-					"type": "file"
-				}
-			]
-		},
-		"mac": {
-			"identity": null,
-			"category": "Developer"
-		},
-		"linux": {
-			"category": "Developer",
-			"maintainer": "TheCommieAxolotl",
-			"target": [
-				"deb",
-				"tar.gz",
-				"rpm"
-			]
-		},
-		"win": {
-			"target": [
-				"zip"
-			]
-		},
-		"files": [
-			"!*",
-			"dist",
-			"public",
-			"package.json",
-			"LICENSE"
-		]
 	}
 }

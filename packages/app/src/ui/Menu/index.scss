@@ -17,6 +17,8 @@
 		border-radius: 2px;
 		user-select: none;
 
+		@include mixins.focusable;
+
 		&.disabled {
 			pointer-events: none;
 			opacity: 0.5;

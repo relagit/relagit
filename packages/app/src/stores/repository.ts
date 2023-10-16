@@ -1,4 +1,6 @@
 import { debug } from '@app/modules/logger';
+import LocationStore from './location';
+import SettingsStore from './settings';
 import { GenericStore } from '.';
 
 export interface IRepository {
@@ -15,22 +17,34 @@ export interface IRepository {
 }
 
 const RepositoryStore = new (class Repository extends GenericStore {
-	#record: IRepository[] = [];
+	#record: Map<string, IRepository> = new Map();
 
 	constructor() {
 		super();
+
+		setTimeout(() => {
+			if (SettingsStore.getSetting('activeRepository')) {
+				const repo = RepositoryStore.getByPath(
+					SettingsStore.getSetting('activeRepository')
+				);
+
+				if (repo) {
+					LocationStore.setSelectedRepository(repo, false);
+				}
+			}
+		}, 1000); // 1s timeout is GENERALLY enough for the repository to be loaded, if it's not, it's not a big deal
 	}
 
 	get repositories() {
 		return this.#record;
 	}
 
-	getByName(name: string) {
-		return this.repositories.find((f) => f.name === name);
+	getById(id: string) {
+		return this.repositories.get(id);
 	}
 
 	getByPath(path: string) {
-		return this.repositories.find((f) => f?.path === path);
+		return [...this.repositories.values()].find((f) => f.path === path);
 	}
 
 	attachListeners(path: string) {
@@ -55,31 +69,30 @@ const RepositoryStore = new (class Repository extends GenericStore {
 	}
 
 	addRepository(repository: IRepository) {
-		this.repositories.push(repository);
+		this.repositories.set(repository.id, repository);
 		this.emit();
 
 		this.attachListeners(repository.path);
 	}
 
 	removeRepository(repository: IRepository) {
-		this.#record = this.repositories.filter((f) => {
-			return f.id !== repository.id;
-		});
+		this.#record.delete(repository.id);
+
 		this.emit();
 	}
 
-	updateRepository(repository: IRepository) {
-		this.#record = this.repositories.map((f) => {
-			if (f.id === repository.id) {
-				return repository;
-			}
-			return f;
+	updateRepository(id: string, replacement: Partial<IRepository>) {
+		this.#record.set(id, {
+			...this.getById(id),
+			...replacement
 		});
+
 		this.emit();
+		LocationStore.emit();
 	}
 
 	clearRepositories() {
-		this.#record = [];
+		this.#record.clear();
 		this.emit();
 	}
 })();

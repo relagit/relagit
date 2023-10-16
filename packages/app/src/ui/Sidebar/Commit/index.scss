@@ -9,6 +9,8 @@
 	user-select: none;
 	gap: 8px;
 
+	@include mixins.focusable;
+
 	&:hover {
 		background-color: var(--bg-hover);
 	}
@@ -44,10 +46,9 @@
 
 	&__bottom {
 		display: flex;
-		justify-content: space-between;
 		width: 100%;
 		align-items: center;
-		gap: 16px;
+		gap: 8px;
 
 		&__author {
 			color: var(--color-secondary);
@@ -63,6 +64,24 @@
 			color: var(--color-secondary);
 			font-size: 0.9rem;
 			font-weight: 400;
+			margin-left: auto;
+		}
+
+		&__diff {
+			font-family: var(--font-mono);
+			color: var(--color-secondary);
+			font-size: 0.9rem;
+			font-weight: 400;
+			display: flex;
+			gap: 6px;
+
+			&__insertions {
+				color: var(--color-green-500);
+			}
+
+			&__deletions {
+				color: var(--color-red-500);
+			}
 		}
 	}
 }

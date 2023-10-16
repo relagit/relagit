@@ -7,7 +7,7 @@
 	<picture>
 	  <source media="(prefers-color-scheme: dark)" srcset="https://rela.dev/assets/projects/client-dark.png">
 	  <source media="(prefers-color-scheme: light)" srcset="https://rela.dev/assets/projects/client-light.png">
-	  <img alt="RelaGit client" src="https://rela.dev/assets/projects/client-light.png">
+	  <img alt="RelaGit client" src="https://rela.dev/assets/projects/client-dark.png">
 	</picture>
 </div>
 

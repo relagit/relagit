@@ -33,16 +33,12 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
 			border-radius: 4px;
 			color: var(--color-secondary);
 			background: var(--bg-tertiary);
 			border: 1px solid var(--separator-primary);
 
-			&:focus {
-				border-color: transparent;
-				outline: 2px solid #{illyrica.$color-blue-500};
-			}
+			@include mixins.focusable;
 		}
 	}
 

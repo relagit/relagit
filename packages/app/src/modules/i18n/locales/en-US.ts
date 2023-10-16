@@ -2,11 +2,26 @@ export default {
 	settings: {
 		title: 'Settings',
 		close: 'Close Settings',
+		workflows: {
+			title: 'Workflows'
+		},
+		commits: {
+			title: 'Commits'
+		},
 		general: {
 			title: 'General',
 			language: {
 				label: 'Language',
 				description: 'Select the language you would like to use. Requires Restart.'
+			},
+			editor: {
+				label: 'External Editor',
+				description:
+					'Select the editor you would like to use for opening files. May Require Restart.',
+				code: 'Visual Studio Code',
+				subl: 'Sublime Text',
+				'code-insiders': 'Visual Studio Code Insiders',
+				atom: 'Atom'
 			},
 			commitStyle: {
 				label: 'Commit Message Style',
@@ -44,7 +59,11 @@ export default {
 				label: 'Custom Font',
 				description:
 					'This will override the default code font. You can use any font that is installed on your system.',
-				placeholder: '"SF Mono", "JetBrains Mono", "Fira Code", monospace'
+				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
+			},
+			clientThemes: {
+				label: 'Client Themes',
+				description: 'Pick user-made themes to use in the client.'
 			}
 		}
 	},
@@ -76,7 +95,6 @@ export default {
 		drawer: {
 			title: 'Repositories',
 			contextMenu: {
-				createGroup: 'Create Repository Group',
 				addRepository: 'Add Repository',
 				createRepository: 'Create Repository',
 				cloneFromGitHub: 'Clone from GitHub',
@@ -125,6 +143,8 @@ export default {
 	codeview: {
 		noCommit: 'Nothing to see here',
 		noCommitHint: "You've got to select a file to see its changes. (´・｀)",
+		binary: 'Binary file',
+		binaryHint: "Sorry, we can't show you the diff for this file as it's a binary file.",
 		loading: 'Loading...',
 		loadingHint: "This shouldn't take too long.",
 		errorHint: 'Something went wrong while loading the file.',

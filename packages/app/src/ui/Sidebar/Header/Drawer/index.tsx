@@ -1,15 +1,18 @@
-import { Accessor, Setter, For } from 'solid-js';
+import { Accessor, Setter, For, Show } from 'solid-js';
 
+import { openExternal, showItemInFolder } from '@modules/shell';
+import RepositoryStore, { IRepository } from '@stores/repository';
+import FileStore, { IFile } from '@app/stores/files';
 import { createStoreListener } from '@stores/index';
 import { removeRepository } from '@modules/actions';
-import { showItemInFolder } from '@modules/shell';
-import RepositoryStore from '@stores/repository';
+import { openInEditor } from '@app/modules/code';
+import SettingsStore from '@app/stores/settings';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
 import { debug } from '@modules/logger';
 import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
+import { t } from '@app/modules/i18n';
 
 import RepositoryModal from '@ui/Modal/RepositoryModal';
 import GithubModal from '@ui/Modal/GithubModal';
@@ -19,6 +22,10 @@ import Menu from '@ui/Menu';
 
 import './index.scss';
 
+const hasUncommittedChanges = (files: Map<string, IFile[]>, repository: IRepository) => {
+	return files.get(repository.path)?.length > 0;
+};
+
 export interface IHeaderDrawerProps {
 	open: [Accessor<boolean>, Setter<boolean>];
 }
@@ -26,8 +33,9 @@ export interface IHeaderDrawerProps {
 export default (props: IHeaderDrawerProps) => {
 	const repositories = createStoreListener([RepositoryStore], () => RepositoryStore.repositories);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
-		RepositoryStore.getByName(LocationStore.selectedRepository?.name)
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
+	const files = createStoreListener([FileStore], () => FileStore.files);
 
 	return (
 		<div
@@ -43,13 +51,6 @@ export default (props: IHeaderDrawerProps) => {
 					<Menu
 						event="click"
 						items={[
-							{
-								type: 'item',
-								label: t('sidebar.drawer.contextMenu.createGroup')
-							},
-							{
-								type: 'separator'
-							},
 							{
 								type: 'item',
 								label: t('sidebar.drawer.contextMenu.addRepository'),
@@ -92,8 +93,13 @@ export default (props: IHeaderDrawerProps) => {
 					</Menu>
 				</div>
 				<div class="sidebar__drawer__body__content">
-					<For each={repositories().sort((a, b) => a.name.localeCompare(b.name))}>
-						{(repository) => (
+					<For
+						each={Array.from(repositories()).sort((a, b) =>
+							a[1].name.localeCompare(b[1].name)
+						)}
+					>
+						{/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+						{([_, repository]) => (
 							<>
 								<Menu
 									items={[
@@ -108,6 +114,31 @@ export default (props: IHeaderDrawerProps) => {
 											onClick: () => {
 												showItemInFolder(repository.path);
 											}
+										},
+										{
+											type: 'item',
+											label: t('sidebar.contextMenu.openRemote'),
+											onClick: () => {
+												openExternal(repository.remote);
+											}
+										},
+										{
+											type: 'item',
+											label: t('sidebar.contextMenu.openIn', {
+												name: t(
+													`settings.general.editor.${
+														SettingsStore.getSetting(
+															'externalEditor'
+														) || 'code'
+													}`
+												)
+											}),
+											onClick: () => {
+												openInEditor(repository.path);
+											}
+										},
+										{
+											type: 'separator'
 										},
 										{
 											type: 'item',
@@ -139,11 +170,16 @@ export default (props: IHeaderDrawerProps) => {
 											LocationStore.setSelectedRepository(repository);
 										}}
 									>
-										{repository.name}
-										<div class="sidebar__drawer__body__content__item__details">
-											{repository.branch} -{' '}
-											{renderDate(repository.lastFetched)()}
+										<div class="sidebar__drawer__body__content__item__text">
+											{repository.name}
+											<div class="sidebar__drawer__body__content__item__text__details">
+												{repository.branch} -{' '}
+												{renderDate(repository.lastFetched)()}
+											</div>
 										</div>
+										<Show when={hasUncommittedChanges(files(), repository)}>
+											<div class="sidebar__drawer__body__content__item__indicator" />
+										</Show>
 									</button>
 								</Menu>
 							</>

@@ -1,5 +1,3 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
 import { createSignal, For, Show } from 'solid-js';
 
 import highlighter, { langFrom } from '@modules/highlighter';
@@ -7,8 +5,8 @@ import { createStoreListener } from '@stores/index';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { error } from '@modules/logger';
+import { t } from '@app/modules/i18n';
 import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
@@ -17,12 +15,19 @@ import Icon from '@ui/Common/Icon';
 
 import type { GitDiff } from 'parse-git-diff';
 
+type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
+
 import './index.scss';
 
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
+export const BINARY_EXTENSIONS = ['.DS_Store', '.exe', '.dll', '.so', '.dylib', '.o', '.a'];
+
+const extname = (file: string) => {
+	return file?.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
+};
 
 const totalLines = (file: GitDiff['files'][number]) => {
-	return file.chunks.reduce((acc, curr) => {
+	return file?.chunks?.reduce((acc, curr) => {
 		return acc + curr.changes.length;
 	}, 0);
 };
@@ -53,15 +58,17 @@ export default (props: ICodeViewProps) => {
 	const [diff, setDiff] = createSignal<GitDiff | null | true>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
+	const [blame, setBlame] = createSignal<GitBlame>();
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
 
 	const changes = createStoreListener([FileStore], () =>
-		FileStore.getFilesByRepositoryPath(props.repository)
+		FileStore.getByRepositoryPath(props.repository)
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
@@ -73,7 +80,7 @@ export default (props: ICodeViewProps) => {
 				}
 
 				setDiff(LocationStore.selectedCommitFile?.diff);
-				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 100);
+				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 250);
 				setShowOverridden(false);
 				setShowCommit(false);
 				setThrew(null);
@@ -105,6 +112,14 @@ export default (props: ICodeViewProps) => {
 				error(e);
 			}
 
+			try {
+				setBlame(await Git.Blame(props.repository, props.file));
+			} catch (e) {
+				setBlame(null);
+
+				error(e);
+			}
+
 			setSwitching(false);
 
 			setContent(highlighter(contents, langFrom(props.file || '')));
@@ -121,14 +136,14 @@ export default (props: ICodeViewProps) => {
 			if (!diff() || diff() === true) {
 				setShouldShow(true);
 			} else {
-				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 100);
+				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
 			}
 		} catch (e) {
 			setThrew(e);
 
 			setSwitching(false);
 
-			console.error(e);
+			error(e);
 		}
 	});
 
@@ -220,19 +235,44 @@ export default (props: ICodeViewProps) => {
 						<Show
 							when={
 								!IMAGE_EXTENSIONS.includes(
-									path.extname(props.file || commit()?.filename)
+									extname(props.file || commit()?.filename)
+								) &&
+								!BINARY_EXTENSIONS.includes(
+									extname(props.file || commit()?.filename)
 								)
 							}
 							fallback={
-								<div class="codeview-image">
-									{/* TODO */}
-									<div class="codeview-image__container removed">
-										<Icon name="image" />
-									</div>
-									<div class="codeview-image__container added">
-										<Icon name="image" />
-									</div>
-								</div>
+								<>
+									<Show
+										when={IMAGE_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										)}
+									>
+										<div class="codeview-image">
+											{/* TODO */}
+											<div class="codeview-image__container removed">
+												<Icon name="image" />
+											</div>
+											<div class="codeview-image__container added">
+												<Icon name="image" />
+											</div>
+										</div>
+									</Show>
+									<Show
+										when={BINARY_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										)}
+									>
+										<EmptyState
+											detail={t('codeview.binary')}
+											hint={t('codeview.binaryHint')}
+											image={{
+												light: EMPTY_STATE_IMAGES.L_ERROR,
+												dark: EMPTY_STATE_IMAGES.D_ERROR
+											}}
+										/>
+									</Show>
+								</>
 							}
 						>
 							<Show
@@ -259,7 +299,7 @@ export default (props: ICodeViewProps) => {
 									</>
 								}
 							>
-								<pre class="codeview">
+								<pre class={`codeview lang-${extname(props.file || '').slice(1)}`}>
 									<Show
 										when={diff() !== true && diff() !== null}
 										fallback={
@@ -267,6 +307,8 @@ export default (props: ICodeViewProps) => {
 												{(line, index) => {
 													const status = () =>
 														diff() ? 'added' : 'deleted';
+
+													const lineBlame = blame()?.[index()];
 
 													return (
 														<div class={`codeview__line ${status()}`}>
@@ -283,10 +325,26 @@ export default (props: ICodeViewProps) => {
 															>
 																{index()}
 															</div>
+
+															<div
+																class={`codeview__line__indicator ${status()}`}
+															>
+																{status() === 'added' ? '+' : '-'}
+															</div>
 															<div
 																class="codeview__line__content"
 																innerHTML={dealWithTabs(line)}
 															></div>
+
+															<Show when={blameOpen() && lineBlame}>
+																<div
+																	{...props}
+																	class="codeview__line__blame"
+																>
+																	{lineBlame.author},{' '}
+																	{lineBlame.message}
+																</div>
+															</Show>
 														</div>
 													);
 												}}
@@ -351,11 +409,15 @@ export default (props: ICodeViewProps) => {
 																if (change.type === 'MessageLine')
 																	return null;
 
+																const lineBlame =
+																		blame()?.[line_number_one],
+																	lineStatus = status(
+																		change.type
+																	);
+
 																return (
 																	<div
-																		class={`codeview__line ${status(
-																			change.type
-																		)}`}
+																		class={`codeview__line ${lineStatus}`}
 																	>
 																		<div
 																			class="codeview__line__number"
@@ -386,6 +448,16 @@ export default (props: ICodeViewProps) => {
 																			{line_number_two}
 																		</div>
 																		<div
+																			class={`codeview__line__indicator ${lineStatus}`}
+																		>
+																			{lineStatus === 'added'
+																				? '+'
+																				: lineStatus ===
+																				  'deleted'
+																				? '-'
+																				: ' '}
+																		</div>
+																		<div
 																			class="codeview__line__content"
 																			innerHTML={dealWithTabs(
 																				highlighter(
@@ -398,6 +470,20 @@ export default (props: ICodeViewProps) => {
 																				)
 																			)}
 																		></div>
+																		<Show
+																			when={
+																				blameOpen() &&
+																				lineBlame
+																			}
+																		>
+																			<div
+																				{...props}
+																				class="codeview__line__blame"
+																			>
+																				{lineBlame.author},{' '}
+																				{lineBlame.message}
+																			</div>
+																		</Show>
 																	</div>
 																);
 															}}

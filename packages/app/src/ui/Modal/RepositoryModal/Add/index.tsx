@@ -37,7 +37,6 @@ export default (props: IAddRepositoryModalProps) => {
 
 			isDirectory = true;
 		} catch (e) {
-			console.error(e);
 			isDirectory = false;
 		}
 
@@ -104,7 +103,7 @@ export default (props: IAddRepositoryModalProps) => {
 						type="brand"
 						onClick={() => {
 							SettingsStore.setSetting('repositories', [
-								...(SettingsStore.getSetting('repositories') as string[]),
+								...SettingsStore.getSetting('repositories'),
 								props.pathSignal[0]()
 							]);
 

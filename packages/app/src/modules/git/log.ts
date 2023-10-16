@@ -7,6 +7,9 @@ export interface ILogCommit {
 	author: string;
 	date: string;
 	message: string;
+	files: number;
+	insertions: number;
+	deletions: number;
 }
 
 export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
@@ -15,17 +18,44 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 	const res = await Git({
 		directory: repository.path,
 		command: 'log',
-		args: ['--pretty=format:%H%n%an%n%ad%n%s%n']
+		args: ['--pretty=format:%H%n%an%n%ad%n%s%n', '--stat', '--no-color', '--stat-width=1']
 	});
 
-	const commits = res.split('\n\n').map((commit) => {
+	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		const [hash, author, date, message] = commit.split('\n');
+
+		const changesLine = commit.split('\n')[commit.split('\n').length - 2].split(',');
+
+		if (!changesLine[0].includes('file')) {
+			return {
+				hash,
+				author,
+				date,
+				message,
+				files: 0,
+				insertions: 0,
+				deletions: 0
+			};
+		}
+
+		const files = Number(changesLine[0]?.trim()?.split(' ')[0]);
+		const insertions = changesLine[1]?.includes('insert')
+			? Number(changesLine[1]?.trim()?.split(' ')[0])
+			: 0;
+		const deletions = changesLine[1]?.includes('del')
+			? Number(changesLine[1]?.trim()?.split(' ')[0])
+			: changesLine[2]?.includes('del')
+			? Number(changesLine[2]?.trim()?.split(' ')[0])
+			: 0;
 
 		return {
 			hash,
 			author,
 			date,
-			message
+			message,
+			files,
+			insertions,
+			deletions
 		};
 	});
 

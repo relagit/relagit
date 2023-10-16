@@ -4,6 +4,7 @@ import './index.scss';
 
 interface ITextareaProps {
 	value: string;
+	label: string;
 	onChange: (value: string) => void;
 	onContextMenu?: (e: MouseEvent) => void;
 	onKeyDown?: (e: KeyboardEvent) => void;
@@ -18,6 +19,7 @@ interface ITextareaProps {
 export default (props: ITextareaProps) => {
 	return (
 		<textarea
+			aria-label={props.label}
 			class={`textarea ${props.className || ''} ${props.expanded ? 'expanded' : ''}`}
 			value={props.value}
 			onInput={(e: Event) => {

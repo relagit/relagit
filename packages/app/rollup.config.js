@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import Module from 'node:module';
 import path from 'node:path';
-import sass from 'sass';
+import fs from 'node:fs';
 
 import { defineConfig } from 'rollup';
 
@@ -40,7 +40,6 @@ export default defineConfig({
 		json(),
 		commonjs(),
 		scss({
-			sass: sass,
 			fileName: 'style.css'
 		}),
 		tsconfig({
@@ -60,6 +59,25 @@ export default defineConfig({
 			extensions: ['.tsx'],
 			babelHelpers: 'bundled'
 		}),
-		!IS_DEV && terser()
+		!IS_DEV && terser(),
+		{
+			version: '0.0.1',
+			name: 'plugin-filecontent',
+			resolveId(source) {
+				if (source.startsWith('@content/')) {
+					return source.replace('@content/', '_LOAD_CONTENT_/');
+				}
+			},
+			load(id) {
+				if (id.startsWith('_LOAD_CONTENT_/')) {
+					const file = fs.readFileSync(
+						id.replace('_LOAD_CONTENT_/', './packages/app/src/'),
+						'utf-8'
+					);
+
+					return `export default ${JSON.stringify(file)}`;
+				}
+			}
+		}
 	].filter(Boolean)
 });

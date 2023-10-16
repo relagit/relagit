@@ -2,11 +2,25 @@ export default {
 	settings: {
 		title: 'Optiones',
 		close: 'Dimitte Optiones',
+		workflows: {
+			title: 'Workflows'
+		},
+		commits: {
+			title: 'Commits'
+		},
 		general: {
 			title: 'Generalis',
 			language: {
 				label: 'Lingua',
 				description: 'Linguam elige uti velis.'
+			},
+			editor: {
+				label: 'Editor Externus',
+				description: 'Editor elige uti velis ut limas aperire. Neustart requiritur.',
+				code: 'Visual Studio Code',
+				subl: 'Sublime Text',
+				'code-insiders': 'Visual Studio Code Insiders',
+				atom: 'Atom'
 			},
 			commitStyle: {
 				label: 'Commit Nuntius Forma',
@@ -42,7 +56,7 @@ export default {
 				label: 'Custom Font',
 				description:
 					'Hoc defalta deprimet in codice font. aliquo fonte uti potes qui in systemate tuo inauguratus est.',
-				placeholder: '"SF Mono", "JetBrains Mono", "Fira Code", monospace'
+				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
 			}
 		}
 	},
@@ -74,7 +88,6 @@ export default {
 		drawer: {
 			title: 'Repositoria',
 			contextMenu: {
-				createGroup: 'Fac Repository Group',
 				addRepository: 'Add Repository',
 				createRepository: 'Fac Repository',
 				cloneFromGitHub: 'Exemplum fac a GitHub',
@@ -123,6 +136,8 @@ export default {
 	codeview: {
 		noCommit: 'Nihil hic videre',
 		noCommitHint: 'Elige tibi fasciculum ad eius mutationes videndas. (´・｀)',
+		binary: 'Fasciculus binarius',
+		binaryHint: 'Mea culpa! Diff non ostendere possumus.',
 		loading: 'Exspecto...',
 		loadingHint: 'Hoc non nimis longum.',
 		errorHint: 'Aliquid abiit iniuriam dum tabella oneratisque.',

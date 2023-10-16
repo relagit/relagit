@@ -109,6 +109,16 @@ export default (props: IMenu) => {
 
 													setOpen(false);
 												}}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter') {
+														if (!item.onClick) return setOpen(false);
+
+														item.onClick();
+
+														setOpen(false);
+													}
+												}}
+												tabIndex={0}
 											>
 												{item.label}
 											</div>

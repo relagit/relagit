@@ -1,0 +1,7 @@
+@mixin focusable($focus-color: var(--color-blue-500)) {
+	&:focus {
+		border-color: transparent;
+		box-shadow: none;
+		outline: 2px solid $focus-color;
+	}
+}

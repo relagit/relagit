@@ -41,7 +41,8 @@ const getScope = (files: string[]): string => {
 						'index.tsx',
 						'index.jsx',
 						'index.mjs',
-						'index.cjs'
+						'index.cjs',
+						'index'
 					].includes(current)
 				)
 					return false;

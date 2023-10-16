@@ -5,8 +5,8 @@ import RepositoryStore from '@app/stores/repository';
 import { createStoreListener } from '@stores/index';
 import { debug, error } from '@modules/logger';
 import LocationStore from '@stores/location';
-import { t } from '@app/modules/i18n';
 import { renderDate } from '@modules/time';
+import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
@@ -19,6 +19,7 @@ export interface IPanelButtonProps {
 	id: string;
 	icon: IconName | keyof typeof customIcons;
 	iconVariant?: 12 | 16 | 24 | 32;
+	name?: string;
 	onClick: () => void;
 	size?: 'small' | 'medium' | 'large';
 	label?: string;
@@ -42,7 +43,8 @@ const PanelButton = (props: IPanelButtonProps) => {
 					<button
 						{...p}
 						aria-role="button"
-						aria-label={props.label}
+						aria-label={props.label || props.name}
+						disabled={props.disabled}
 						classList={{
 							workspace__header__panelbutton: true,
 							'workspace__header__panelbutton-small': props.size === 'small',
@@ -77,12 +79,13 @@ const PanelButton = (props: IPanelButtonProps) => {
 };
 
 export default () => {
-	const repository = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
+	const repository = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
+	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<'diverged' | 'ahead' | 'behind'>(null);
-
-	;
 
 	createEffect(() => {
 		if (!repository()) return;
@@ -235,7 +238,17 @@ export default () => {
 			</Show>
 			<div class="workspace__header__spacer" />
 			<PanelButton
+				icon="git-commit"
+				name="Toggle blame view"
+				id="workspace-blame"
+				className={blameOpen() ? 'active' : ''}
+				onClick={() => {
+					LocationStore.setBlameOpen(!blameOpen());
+				}}
+			/>
+			<PanelButton
 				icon="history"
+				name="Toggle history"
 				id="workspace-history"
 				className={historyOpen() ? 'active' : ''}
 				onClick={() => {

@@ -2,7 +2,6 @@ import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
 import fs, { WatchListener } from 'node:fs';
 
 import * as starryNight from '@wooorm/starry-night';
-import * as sucrase from 'sucrase';
 
 import { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
@@ -17,8 +16,7 @@ export const Native = {
 		return require(id);
 	},
 	libraries: {
-		starryNight,
-		sucrase
+		starryNight
 	},
 	listeners: {
 		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
@@ -36,15 +34,20 @@ export const Native = {
 		HISTORY: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
 		},
+		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_BLAME, fn);
+		},
 		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},
 		WATCHER: {
-			add: (path: string, fn: WatchListener<string>) => {
+			add: (path: string, fn: WatchListener<string>, tryRecursive = true) => {
 				fs.watch(
 					path,
 					{
-						recursive: true
+						recursive:
+							tryRecursive &&
+							(process.platform === 'win32' || process.platform === 'darwin')
 					},
 					fn
 				);

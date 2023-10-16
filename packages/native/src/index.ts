@@ -21,9 +21,18 @@ app.once('ready', async () => {
 	const settings = await getSettings();
 
 	const win = new BrowserWindow({
-		titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
+		titleBarStyle: 'hidden',
+		titleBarOverlay: {
+			height: 28,
+			color: '#141515',
+			symbolColor: '#cacaca'
+		},
 		title: 'RelaGit',
 		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
+		backgroundMaterial: settings.get('vibrancy') ? 'mica' : undefined,
+		transparent: settings.get('vibrancy') && process.platform === 'win32' ? true : undefined,
+		backgroundColor:
+			settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined,
 		height: (settings.get('window.height') as number) || 850,
 		width: (settings.get('window.width') as number) || 1200,
 		minWidth: 500,
@@ -150,6 +159,13 @@ app.once('ready', async () => {
 					accelerator: 'CmdOrCtrl+3',
 					click: () => {
 						win.webContents.send(ipc.OPEN_HISTORY);
+					}
+				},
+				{
+					label: 'Toggle Blame View',
+					accelerator: 'CmdOrCtrl+4',
+					click: () => {
+						win.webContents.send(ipc.OPEN_BLAME);
 					}
 				}
 			]

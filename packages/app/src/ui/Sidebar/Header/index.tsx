@@ -12,6 +12,8 @@ import Menu from '@app/ui/Menu';
 import Drawer from './Drawer';
 
 import './index.scss';
+import { openInEditor } from '@app/modules/code';
+import SettingsStore from '@app/stores/settings';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);
@@ -21,7 +23,7 @@ export default () => {
 	});
 
 	const selected = createStoreListener([LocationStore, RespositoryStore], () =>
-		RespositoryStore.getByName(LocationStore.selectedRepository?.name)
+		RespositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 
 	return (
@@ -40,16 +42,6 @@ export default () => {
 						disabled: !selected()
 					},
 					{
-						label: t('sidebar.contextMenu.openIn', {
-							name: 'Code'
-						}),
-						disabled: !selected(),
-						type: 'item'
-					},
-					{
-						type: 'separator'
-					},
-					{
 						label: t('sidebar.contextMenu.openRemote'),
 						disabled: !selected(),
 						type: 'item',
@@ -58,6 +50,20 @@ export default () => {
 
 							if (remotes[0]?.url) openExternal(remotes[0].url);
 						}
+					},
+					{
+						label: t('sidebar.contextMenu.openIn', {
+							name: t(
+								`settings.general.editor.${
+									SettingsStore.getSetting('externalEditor') || 'code'
+								}`
+							)
+						}),
+						onClick: () => {
+							openInEditor(selected()?.path);
+						},
+						disabled: !selected(),
+						type: 'item'
 					}
 				]}
 			>
