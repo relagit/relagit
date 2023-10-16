@@ -48,9 +48,11 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 
 		const _diff = parse('diff --git ' + name + '\n' + diff.join('\n') + '');
 
+		const p = path.dirname(name.replace('a/', '').split(' b/').pop()) + '/';
+
 		commit.files.push({
 			filename: path.basename(name.replace('a/', '').split(' b/').pop()),
-			path: path.dirname(name.replace('a/', '').split(' b/').pop()),
+			path: p === '.' ? '' : p,
 			diff: _diff,
 			status:
 				_diff.files[0]?.type === 'ChangedFile'

@@ -103,10 +103,10 @@ export default (props: IWorkspaceProps) => {
 				<div class="workspace__container__main">
 					<div class="workspace__container__main__file">
 						<div class="workspace__container__main__file__path">
-							{file().file?.path}/
+							{historyOpen() ? selectedCommitFile()?.path : file().file?.path}
 						</div>
 						<div class="workspace__container__main__file__name">
-							{file().file?.name}
+							{historyOpen() ? selectedCommitFile()?.filename : file().file?.name}
 						</div>
 					</div>
 					<CodeView file={file().path} repository={repo()} />
