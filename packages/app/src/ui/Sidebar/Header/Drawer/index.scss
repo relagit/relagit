@@ -1,3 +1,15 @@
+@keyframes visibilityout {
+	0% {
+		visibility: visible;
+	}
+	99% {
+		visibility: visible;
+	}
+	100% {
+		visibility: hidden;
+	}
+}
+
 .sidebar__drawer {
 	position: absolute;
 	inset: 0;
@@ -14,8 +26,11 @@
 	transform: translateX(-100%);
 	transition: transform 0.2s ease-in-out;
 	margin-top: 72px;
-	visibility: hidden;
 	user-select: none;
+
+	&:not(.open) {
+		animation: visibilityout 0.2s linear forwards;
+	}
 
 	&.open {
 		visibility: visible;
