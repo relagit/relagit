@@ -1,7 +1,7 @@
 .tooltip {
 	position: absolute;
-	transform-origin: 50% 100%;
-	transform: translate(-50%, calc(-100% - 2px));
+	transform-origin: center top;
+	transform: translate(-50%, calc(-100% - 10px));
 	width: fit-content;
 	border-radius: 4px;
 	background-color: var(--bg-floating);

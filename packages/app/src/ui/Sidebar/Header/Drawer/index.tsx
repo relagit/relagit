@@ -16,6 +16,7 @@ import { t } from '@app/modules/i18n';
 
 import RepositoryModal from '@ui/Modal/RepositoryModal';
 import GithubModal from '@ui/Modal/GithubModal';
+import Tooltip from '@ui/Common/Tooltip';
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
 import Menu from '@ui/Menu';
@@ -48,49 +49,54 @@ export default (props: IHeaderDrawerProps) => {
 			<div class="sidebar__drawer__body">
 				<div class="sidebar__drawer__body__header">
 					{t('sidebar.drawer.title')}
-					<Menu
-						event="click"
-						items={[
-							{
-								type: 'item',
-								label: t('sidebar.drawer.contextMenu.addRepository'),
-								onClick: () => {
-									ModalStore.addModal({
-										type: 'add-repository',
-										element: <RepositoryModal tab="add" />
-									});
-								}
-							},
-							{
-								type: 'item',
-								label: t('sidebar.drawer.contextMenu.createRepository'),
-								onClick: () => {
-									ModalStore.addModal({
-										type: 'create-repository',
-										element: <RepositoryModal tab="create" />
-									});
-								}
-							},
-							{
-								type: 'item',
-								label: t('sidebar.drawer.contextMenu.cloneFromGitHub'),
-								onClick: () => {
-									ModalStore.addModal({
-										type: 'github-repository',
-										element: <GithubModal />
-									});
-								}
-							}
-						]}
-					>
-						<button
-							aria-role="button"
-							aria-label={t('sidebar.drawer.contextMenu.addRepository')}
-							class="sidebar__drawer__body__header__button"
-						>
-							<Icon name="plus" />
-						</button>
-					</Menu>
+					<Tooltip text={t('sidebar.drawer.contextMenu.addRepository')}>
+						{(p) => (
+							<Menu
+								event="click"
+								items={[
+									{
+										type: 'item',
+										label: t('sidebar.drawer.contextMenu.addRepository'),
+										onClick: () => {
+											ModalStore.addModal({
+												type: 'add-repository',
+												element: <RepositoryModal tab="add" />
+											});
+										}
+									},
+									{
+										type: 'item',
+										label: t('sidebar.drawer.contextMenu.createRepository'),
+										onClick: () => {
+											ModalStore.addModal({
+												type: 'create-repository',
+												element: <RepositoryModal tab="create" />
+											});
+										}
+									},
+									{
+										type: 'item',
+										label: t('sidebar.drawer.contextMenu.cloneFromGitHub'),
+										onClick: () => {
+											ModalStore.addModal({
+												type: 'github-repository',
+												element: <GithubModal />
+											});
+										}
+									}
+								]}
+							>
+								<button
+									{...p}
+									aria-role="button"
+									aria-label={t('sidebar.drawer.contextMenu.addRepository')}
+									class="sidebar__drawer__body__header__button"
+								>
+									<Icon name="plus" />
+								</button>
+							</Menu>
+						)}
+					</Tooltip>
 				</div>
 				<div class="sidebar__drawer__body__content">
 					<For
