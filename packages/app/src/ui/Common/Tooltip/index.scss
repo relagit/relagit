@@ -1,7 +1,7 @@
 .tooltip {
 	position: absolute;
-	transform-origin: center top;
-	transform: translate(-50%, calc(-100% - 10px));
+	transform-origin: left top;
+	transform: translate(-50%, calc(-100% - var(--w-h)));
 	width: fit-content;
 	border-radius: 4px;
 	background-color: var(--bg-floating);
@@ -28,5 +28,16 @@
 
 	&__wrapper {
 		display: contents;
+	}
+
+	&__arrow {
+		left: calc(50% + 0px);
+		position: absolute;
+		top: 100%;
+		margin-left: -5px;
+		border: 5px solid transparent;
+		border-top-color: var(--bg-floating);
+		width: 0;
+		height: 0;
 	}
 }

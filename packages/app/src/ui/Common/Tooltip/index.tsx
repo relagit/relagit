@@ -45,10 +45,8 @@ export default (props: ITooltip) => {
 						const a = el.animate(
 							{
 								opacity: [0, 1],
-								transform: [
-									'translateY(10px) translate(-50%, calc(-100% - 10px))',
-									'translateY(0) translate(-50%, calc(-100% - 10px))'
-								]
+								translate: ['0 4px', '0 0px'],
+								scale: [0.95, 1]
 							},
 							{
 								duration: 200,
@@ -62,10 +60,8 @@ export default (props: ITooltip) => {
 						const a = el.animate(
 							{
 								opacity: [1, 0],
-								transform: [
-									'translateY(0) translate(-50%, calc(-100% - 2px))',
-									'translateY(10px) translate(-50%, calc(-100% - 2px))'
-								]
+								translate: ['0 0px', '0 4px'],
+								scale: [1, 0.95]
 							},
 							{
 								duration: 200,
@@ -85,6 +81,7 @@ export default (props: ITooltip) => {
 							}px; --w-w: ${wrapper.offsetWidth}px;`}
 						>
 							{props.text}
+							<div class="tooltip__arrow"></div>
 						</div>
 					</Show>
 				</Transition>
