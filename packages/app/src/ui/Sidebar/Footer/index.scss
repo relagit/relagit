@@ -21,4 +21,22 @@
 		pointer-events: none;
 		user-select: none;
 	}
+
+	&__textarea-button {
+		width: 18px;
+		height: 18px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: none;
+		border: none;
+		color: var(--color-secondary);
+		border-radius: 2px;
+
+		@include mixins.focusable;
+
+		&:hover {
+			color: var(--color-primary);
+		}
+	}
 }

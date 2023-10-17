@@ -1,6 +1,7 @@
 .textarea {
 	max-height: 32px;
 	min-height: 32px;
+	width: 100%;
 	font-size: 1rem;
 	resize: none;
 	font-family: var(--font-primary);
@@ -19,6 +20,18 @@
 	--input-focus: #{illyrica.$color-blue-500};
 
 	@include mixins.focusable(var(--input-focus));
+
+	&__wrapper {
+		position: relative;
+		width: 100%;
+		height: fit-content;
+	}
+
+	&__footer {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+	}
 
 	&.expanded {
 		overflow-y: auto;

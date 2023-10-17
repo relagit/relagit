@@ -17,6 +17,8 @@ import Button from '@ui/Common/Button';
 
 import './index.scss';
 import DraftStore from '@app/stores/draft';
+import Menu from '@app/ui/Menu';
+import Icon from '@app/ui/Common/Icon';
 
 export default () => {
 	const [error, setError] = createSignal(false);
@@ -113,6 +115,36 @@ export default () => {
 						description: value
 					});
 				}}
+				footer={
+					<>
+						<Menu
+							items={[
+								{
+									type: 'item',
+									label: 'Add Co-Author',
+									onClick: () => {
+										DraftStore.setDraft(
+											LocationStore.selectedRepository?.path,
+											{
+												message: draft()?.message || '',
+												description: `${draft()?.description || ''}${
+													draft()?.description?.includes('Co-authored-by')
+														? '\n'
+														: '\n\n\n'
+												}Co-authored-by: Name <name@git.com>`
+											}
+										);
+									}
+								}
+							]}
+							event="click"
+						>
+							<button class="sidebar__footer__textarea-button">
+								<Icon name="plus" />
+							</button>
+						</Menu>
+					</>
+				}
 				expanded={true}
 			/>
 			<Button
