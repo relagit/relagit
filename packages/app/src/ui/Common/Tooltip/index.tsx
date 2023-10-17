@@ -74,7 +74,7 @@ export default (props: ITooltip) => {
 				>
 					<Show when={open()}>
 						<div
-							class={`tooltip ${props.position ? props.position : 'auto'}`}
+							class={`tooltip ${props.position ? props.position : 'top'}`}
 							ref={tooltip}
 							style={`--x: ${x()}px; --y: ${y()}px; --w-h: ${
 								wrapper.offsetHeight

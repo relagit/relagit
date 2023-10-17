@@ -4,16 +4,35 @@
 	transform: translate(-50%, calc(-100% - var(--w-h)));
 	width: fit-content;
 	border-radius: 4px;
-	background-color: var(--bg-floating);
+	background-color: var(--bg-tooltip);
 	box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
 	font-size: 1rem;
 	padding: 10px 20px;
 	pointer-events: none;
 	z-index: 99;
 
-	&.auto {
-		top: var(--y);
-		left: var(--x);
+	&.right {
+		top: calc(var(--y) + var(--w-h) / 2);
+		left: calc(var(--x) + var(--w-w) + 2px);
+
+		.tooltip__arrow {
+			rotate: 90deg;
+			top: 50%;
+			margin-top: -5px;
+			left: -5px;
+		}
+	}
+
+	&.left {
+		top: calc(var(--y) + var(--w-h) / 2);
+		left: calc(var(--x) - var(--w-w) - 2px);
+
+		.tooltip__arrow {
+			rotate: 270deg;
+			top: 50%;
+			margin-top: -5px;
+			left: calc(100% - 5px);
+		}
 	}
 
 	&.top {
@@ -24,6 +43,11 @@
 	&.bottom {
 		top: calc(var(--y) + var(--w-h) + 2px);
 		left: var(--x);
+
+		.tooltip__arrow {
+			rotate: 180deg;
+			top: -10px;
+		}
 	}
 
 	&__wrapper {
@@ -36,7 +60,7 @@
 		top: 100%;
 		margin-left: -5px;
 		border: 5px solid transparent;
-		border-top-color: var(--bg-floating);
+		border-top-color: var(--bg-tooltip);
 		width: 0;
 		height: 0;
 	}
