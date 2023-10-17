@@ -64,6 +64,7 @@
 				}
 
 				&:focus {
+					outline: none;
 					color: var(--color-blue-500);
 				}
 			}
