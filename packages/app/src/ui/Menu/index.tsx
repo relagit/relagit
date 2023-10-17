@@ -42,8 +42,8 @@ export default (props: IMenu) => {
 	const wrapperListener = (e: MouseEvent) => {
 		e.stopPropagation();
 
-		setX(e.clientX);
-		setY(e.clientY);
+		setX(e.clientX || e.target?.['getBoundingClientRect']?.()?.x);
+		setY(e.clientY || e.target?.['getBoundingClientRect']?.()?.y);
 
 		setOpen(!open());
 	};
