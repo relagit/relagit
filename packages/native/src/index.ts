@@ -192,12 +192,10 @@ app.once('ready', async () => {
 					role: 'close'
 				},
 				{
-					label: 'Reload',
-					accelerator: 'CmdOrCtrl+R',
-					click: () => {
-						app.relaunch();
-						app.exit();
-					}
+					role: 'quit'
+				},
+				{
+					role: 'reload'
 				},
 				{
 					role: 'togglefullscreen'
@@ -205,7 +203,7 @@ app.once('ready', async () => {
 				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
 					type: 'separator'
 				},
-				/*(__NODE_ENV__ === "development" || process.env.DEBUG_PROD === "true") &&*/ {
+				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
 					role: 'toggleDevTools'
 				}
 			].filter(Boolean) as MenuItemConstructorOptions[]
