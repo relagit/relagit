@@ -1,3 +1,5 @@
+import { Show, createEffect } from 'solid-js';
+
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
 import { showErrorModal } from '@app/ui/Modal';
@@ -12,18 +14,24 @@ import './index.scss';
 export default (props: ILogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
 
+	createEffect(() => {
+		console.log('selected', selected()?.hash);
+		console.log('props', props.hash);
+
+		console.log('selected === props', selected()?.hash === props.hash);
+	});
+
 	return (
 		<div
 			aria-role="button"
 			aria-label={t('sidebar.commit.label', {
 				hash: props.message
 			})}
-			aria-selected={selected() === props}
-			class={`sidebar__commit ${selected() === props ? 'active' : ''}`}
+			aria-selected={selected()?.hash === props.hash}
+			class={`sidebar__commit ${selected()?.hash === props.hash ? 'active' : ''}`}
 			data-id={props.hash}
-			data-active={selected() === props}
+			data-active={selected()?.hash === props.hash}
 			onClick={async () => {
-				debug('Transitioning to commit', props.hash);
 				LocationStore.setSelectedCommit(props);
 
 				try {
@@ -64,8 +72,16 @@ export default (props: ILogCommit) => {
 					{renderDate(new Date(props.date).getTime())()}
 				</div>
 				<div class="sidebar__commit__bottom__diff">
-					<div class="sidebar__commit__bottom__diff__insertions">+{props.insertions}</div>
-					<div class="sidebar__commit__bottom__diff__deletions">-{props.deletions}</div>
+					<Show when={props.insertions}>
+						<div class="sidebar__commit__bottom__diff__insertions">
+							+{props.insertions}
+						</div>
+					</Show>
+					<Show when={props.deletions}>
+						<div class="sidebar__commit__bottom__diff__deletions">
+							-{props.deletions}
+						</div>
+					</Show>
 				</div>
 			</div>
 		</div>
