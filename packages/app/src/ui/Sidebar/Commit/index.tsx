@@ -1,4 +1,4 @@
-import { Show, createEffect } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
@@ -13,13 +13,6 @@ import './index.scss';
 
 export default (props: ILogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
-
-	createEffect(() => {
-		console.log('selected', selected()?.hash);
-		console.log('props', props.hash);
-
-		console.log('selected === props', selected()?.hash === props.hash);
-	});
 
 	return (
 		<div
