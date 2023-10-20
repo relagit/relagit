@@ -42,11 +42,6 @@ const FileStore = new (class File extends GenericStore {
 
 		file = file.replace(repository + '/', '');
 
-		console.log({
-			repository,
-			file
-		});
-
 		return this.getByPath(repository, file)?.status;
 	}
 

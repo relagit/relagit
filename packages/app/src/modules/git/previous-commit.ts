@@ -9,7 +9,10 @@ export const PreviousCommit = async (repository: IRepository, sha = 'HEAD'): Pro
 		args: ['--parents', '-n', '1', sha]
 	});
 
-	console.log({ res });
-
-	return res.trim().split(/\s/)[0].trim();
+	return (
+		res
+			.trim()
+			.split(/\s/)
+			.find((h) => h !== sha) || ''
+	).trim();
 };

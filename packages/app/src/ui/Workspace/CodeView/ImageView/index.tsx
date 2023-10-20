@@ -65,6 +65,27 @@ export default (props: IImageViewProps) => {
 		const out: [string | null, string | null] = [null, null];
 		const threwOut: [string | null, string | null] = [null, null];
 
+		if (props.status && props.status !== 'added') {
+			try {
+				const remote = await Git.ShowOrigin(
+					repository(),
+					props.path.replace(props.repository, ''),
+					await Git.PreviousCommit(repository(), commit()?.hash), // this will return undefined if there is no commit passed, so we can use it here
+					'binary'
+				);
+
+				if (remote !== null) {
+					const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
+
+					out[0] = `data:${mimeFromPath(props.path)};base64,${base64}`;
+				}
+			} catch (e) {
+				error(e);
+
+				threwOut[0] = e['message'] || e;
+			}
+		}
+
 		if (historyOpen() ? commitFile().status !== 'deleted' : fs.existsSync(props.path)) {
 			try {
 				if (historyOpen()) {
@@ -95,27 +116,6 @@ export default (props: IImageViewProps) => {
 				error(e);
 
 				threwOut[1] = e['message'] || e;
-			}
-		}
-
-		if (props.status && props.status !== 'added') {
-			try {
-				const remote = await Git.ShowOrigin(
-					repository(),
-					props.path.replace(props.repository, ''),
-					await Git.PreviousCommit(repository(), commit()?.hash),
-					'binary'
-				);
-
-				if (remote !== null) {
-					const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
-
-					out[0] = `data:${mimeFromPath(props.path)};base64,${base64}`;
-				}
-			} catch (e) {
-				error(e);
-
-				threwOut[0] = e['message'] || e;
 			}
 		}
 
