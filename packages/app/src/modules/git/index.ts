@@ -1,13 +1,14 @@
 export { Stash, ListStash, PopStash } from './stash';
+export { PreviousCommit } from './previous-commit';
+export { Show, ShowOrigin } from './show';
 export { Discard } from './discard';
 export { Content } from './content';
 export { Analyse } from './analyse';
+export { Status } from './status';
 export { Commit } from './commit';
 export { Remote } from './remote';
-export { Status } from './status';
 export { Branch } from './branch';
 export { Blame } from './blame';
-export { Show } from './show';
 export { Push } from './push';
 export { Diff } from './diff';
 export { Init } from './init';

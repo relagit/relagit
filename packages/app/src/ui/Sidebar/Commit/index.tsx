@@ -28,9 +28,13 @@ export default (props: ILogCommit) => {
 				LocationStore.setSelectedCommit(props);
 
 				try {
-					LocationStore.setSelectedCommitFiles(
-						await Git.Show(LocationStore.selectedRepository.path, props.hash)
+					const commit = await Git.Show(
+						LocationStore.selectedRepository.path,
+						props.hash
 					);
+
+					LocationStore.setSelectedCommitFiles(commit);
+					LocationStore.setSelectedCommitFile(commit.files[0]);
 				} catch (e) {
 					showErrorModal(e, 'error.git');
 
@@ -43,9 +47,13 @@ export default (props: ILogCommit) => {
 					LocationStore.setSelectedCommit(props);
 
 					try {
-						LocationStore.setSelectedCommitFiles(
-							await Git.Show(LocationStore.selectedRepository.path, props.hash)
+						const commit = await Git.Show(
+							LocationStore.selectedRepository.path,
+							props.hash
 						);
+
+						LocationStore.setSelectedCommitFiles(commit);
+						LocationStore.setSelectedCommitFile(commit.files[0]);
 					} catch (e) {
 						showErrorModal(e, 'error.git');
 

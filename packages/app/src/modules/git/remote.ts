@@ -9,17 +9,20 @@ export const Remote = async (directory: string) => {
 
 	if (!result) return [];
 
-	const remotes = result.split('\n').map((res) => {
-		const [name, body] = res.split('\t');
+	const remotes = result
+		.split('\n')
+		.filter((l) => l && l.length)
+		.map((res) => {
+			const [name, body] = res.split('\t');
 
-		const [url, type] = body.split(' ');
+			const [url, type] = body.split(' ');
 
-		return {
-			name,
-			url,
-			type: type.replace('(', '').replace(')', '')
-		};
-	});
+			return {
+				name,
+				url,
+				type: type.replace('(', '').replace(')', '')
+			};
+		});
 
 	return remotes;
 };

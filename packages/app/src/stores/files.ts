@@ -1,3 +1,5 @@
+import { GitStatus } from '@modules/git/diff';
+
 import { GenericStore } from '.';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
@@ -7,16 +9,7 @@ export interface IFile {
 	name: string;
 	staged: boolean;
 	path: string;
-	status:
-		| 'added'
-		| 'modified'
-		| 'deleted'
-		| 'untracked'
-		| 'unknown'
-		| 'unmerged'
-		| 'copied'
-		| 'renamed'
-		| 'type-changed';
+	status: GitStatus;
 }
 
 const FileStore = new (class File extends GenericStore {
@@ -42,6 +35,19 @@ const FileStore = new (class File extends GenericStore {
 		return this.getByRepositoryPath(path)
 			?.filter((f) => f.staged)
 			.map((f) => nodepath.join(f.path, f.name));
+	}
+
+	getStatus(repository: string, file: string) {
+		if (!file) return;
+
+		file = file.replace(repository + '/', '');
+
+		console.log({
+			repository,
+			file
+		});
+
+		return this.getByPath(repository, file)?.status;
 	}
 
 	toggleStaged(repoPath: string, file: IFile) {
@@ -73,12 +79,10 @@ const FileStore = new (class File extends GenericStore {
 		return Array.from(this.files.entries()).find(([key]) => key.split('/').pop() === name)?.[1];
 	}
 
-	getByPath(...p: string[]): IFile {
-		const pth = nodepath.join('/', ...p);
-
-		return Array.from(this.files.values())
-			.flat()
-			.find((f) => f.path === pth);
+	getByPath(repository: string, path: string): IFile {
+		return this.getByRepositoryPath(repository)?.find(
+			(f) => nodepath.join(f.path, f.name) === path
+		);
 	}
 
 	addFile(repositoryPath: string, file: IFile) {

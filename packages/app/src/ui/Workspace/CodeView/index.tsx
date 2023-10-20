@@ -1,3 +1,5 @@
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+
 import { createSignal, For, Show } from 'solid-js';
 
 import highlighter, { langFrom } from '@modules/highlighter';
@@ -11,6 +13,7 @@ import FileStore from '@stores/files';
 import * as Git from '@modules/git';
 
 import EmptyState, { EMPTY_STATE_IMAGES } from '@ui/Common/EmptyState';
+import ImageView from './ImageView';
 import Icon from '@ui/Common/Icon';
 
 import type { GitDiff } from 'parse-git-diff';
@@ -69,6 +72,9 @@ export default (props: ICodeViewProps) => {
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
+	const fileStatus = createStoreListener([FileStore, LocationStore], () =>
+		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
+	);
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		try {
@@ -113,7 +119,11 @@ export default (props: ICodeViewProps) => {
 			}
 
 			try {
-				setBlame(await Git.Blame(props.repository, props.file));
+				if (fileStatus() && fileStatus() !== 'added') {
+					setBlame(await Git.Blame(props.repository, props.file));
+				} else {
+					setBlame(null);
+				}
 			} catch (e) {
 				setBlame(null);
 
@@ -122,21 +132,28 @@ export default (props: ICodeViewProps) => {
 
 			setSwitching(false);
 
-			setContent(highlighter(contents, langFrom(props.file || '')));
+			if (
+				!BINARY_EXTENSIONS.includes(extname(props.file || '')) &&
+				!IMAGE_EXTENSIONS.includes(extname(props.file || ''))
+			) {
+				setContent(highlighter(contents, langFrom(props.file || '')));
 
-			if (_diff === DIFF_CODES.REMOVE_ALL) {
-				setDiff(null);
-			} else if (_diff === DIFF_CODES.ADD_ALL) {
-				setDiff(true);
+				if (_diff === DIFF_CODES.REMOVE_ALL) {
+					setDiff(null);
+				} else if (_diff === DIFF_CODES.ADD_ALL) {
+					setDiff(true);
+				} else {
+					const parsed = parseDiff(_diff);
+					setDiff(parsed);
+				}
+
+				if (!diff() || diff() === true) {
+					setShouldShow(true);
+				} else {
+					setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
+				}
 			} else {
-				const parsed = parseDiff(_diff);
-				setDiff(parsed);
-			}
-
-			if (!diff() || diff() === true) {
 				setShouldShow(true);
-			} else {
-				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
 			}
 		} catch (e) {
 			setThrew(e);
@@ -248,15 +265,19 @@ export default (props: ICodeViewProps) => {
 											extname(props.file || commit()?.filename)
 										)}
 									>
-										<div class="codeview-image">
-											{/* TODO */}
-											<div class="codeview-image__container removed">
-												<Icon name="image" />
-											</div>
-											<div class="codeview-image__container added">
-												<Icon name="image" />
-											</div>
-										</div>
+										<ImageView
+											repository={props.repository}
+											path={
+												historyOpen()
+													? path.join(
+															props.repository,
+															commit()?.path,
+															commit()?.filename
+													  )
+													: props.file
+											}
+											status={fileStatus()}
+										/>
 									</Show>
 									<Show
 										when={BINARY_EXTENSIONS.includes(

@@ -5,6 +5,17 @@ import parseGitDiff from 'parse-git-diff';
 import { DIFF_CODES } from './constants';
 import { Git } from './core';
 
+export type GitStatus =
+	| 'added'
+	| 'modified'
+	| 'deleted'
+	| 'untracked'
+	| 'unknown'
+	| 'unmerged'
+	| 'copied'
+	| 'renamed'
+	| 'type-changed';
+
 export const parseDiff = (rawDiff: string) => {
 	return parseGitDiff(rawDiff);
 };

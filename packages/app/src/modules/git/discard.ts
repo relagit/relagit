@@ -10,8 +10,6 @@ export const Discard = async (repository: IRepository, file: IFile) => {
 		return;
 	}
 
-	console.log(path.join(repository.path, file.path, file.name));
-
 	if (file.status == 'added') {
 		return fs.unlinkSync(path.join(repository.path, file.path, file.name));
 	}
