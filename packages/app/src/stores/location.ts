@@ -106,6 +106,9 @@ const LocationStore = new (class Location extends GenericStore {
 		}
 
 		this.#selectedFile = undefined;
+		this.#selectedCommit = undefined;
+		this.#selectedCommitFiles = undefined;
+		this.#selectedCommitFile = undefined;
 		this.#selectedRepository = repository;
 		this.emit();
 
