@@ -80,7 +80,7 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 					? 'deleted'
 					: _diff.files[0]?.type === 'RenamedFile'
 					? 'renamed'
-					: 'unknown'
+					: 'added' // we can assume it's added if it's not modified, deleted or renamed
 		});
 	}
 

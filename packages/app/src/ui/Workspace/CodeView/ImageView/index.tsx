@@ -71,7 +71,7 @@ export default (props: IImageViewProps) => {
 					const remote = await Git.ShowOrigin(
 						repository(),
 						props.path.replace(props.repository, ''),
-						commit().hash,
+						commit()?.hash,
 						'binary'
 					);
 
@@ -103,7 +103,7 @@ export default (props: IImageViewProps) => {
 				const remote = await Git.ShowOrigin(
 					repository(),
 					props.path.replace(props.repository, ''),
-					await Git.PreviousCommit(repository(), commit().hash),
+					await Git.PreviousCommit(repository(), commit()?.hash),
 					'binary'
 				);
 
