@@ -163,17 +163,19 @@ export default (props: IImageViewProps) => {
 					</Show>
 				</Show>
 			</div>
-			<div
-				classList={{
-					'image-view__diff': true,
-					removed: ps(URIs()[0] || '', URIs()[1] || '') < 0,
-					added: ps(URIs()[0] || '', URIs()[1] || '') > 0
-				}}
-			>
-				{ps(URIs()[0] || '', URIs()[1] || '') > 0
-					? `+ ${ps(URIs()[0] || '', URIs()[1] || '')}%`
-					: `- ${Math.abs(ps(URIs()[0] || '', URIs()[1] || ''))}%`}
-			</div>
+			<Show when={!isNaN(ps(URIs()[0] || '', URIs()[1] || ''))}>
+				<div
+					classList={{
+						'image-view__diff': true,
+						removed: ps(URIs()[0] || '', URIs()[1] || '') < 0,
+						added: ps(URIs()[0] || '', URIs()[1] || '') > 0
+					}}
+				>
+					{ps(URIs()[0] || '', URIs()[1] || '') > 0
+						? `+ ${ps(URIs()[0] || '', URIs()[1] || '')}%`
+						: `- ${Math.abs(ps(URIs()[0] || '', URIs()[1] || ''))}%`}
+				</div>
+			</Show>
 		</div>
 	);
 };
