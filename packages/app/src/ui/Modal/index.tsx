@@ -28,6 +28,8 @@ interface IModalProps {
 	size: 'small' | 'medium' | 'large' | 'x-large';
 }
 
+let opened = 1;
+
 const Modal = (props: IModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement>(null);
 	const [open, setOpen] = createSignal(false);
@@ -61,6 +63,9 @@ const Modal = (props: IModalProps) => {
 			classList={{
 				'modal-container': true,
 				visible: open()
+			}}
+			style={{
+				'z-index': 98 + opened++
 			}}
 		>
 			<Transition onEnter={props.transitions.enter} onExit={props.transitions.exit}>

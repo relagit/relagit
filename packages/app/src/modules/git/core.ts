@@ -39,7 +39,10 @@ export const Git = async (params: IGitParams): Promise<string> => {
 			hasError = error;
 			reject(error);
 		} else if (stderr) {
-			if (!(cmd.startsWith('git push ') && stderr.startsWith('To '))) {
+			if (
+				!(cmd.startsWith('git push ') && stderr.startsWith('To ')) &&
+				!(cmd.startsWith('git clone ') && stderr.startsWith('Cloning into'))
+			) {
 				hasError = stderr;
 				reject(stderr);
 			} else {

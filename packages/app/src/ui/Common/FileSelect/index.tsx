@@ -75,7 +75,11 @@ export default (props: IFileSelectProps) => {
 					<TextArea
 						label={t('ui.filepicker.label')}
 						value={inputValue()}
-						placeholder={t('ui.filepicker.placeholder')}
+						placeholder={
+							props.properties.includes('openFile')
+								? t('ui.filepicker.placeholder')
+								: t('ui.filepicker.folderPlaceholder')
+						}
 						disabled={props.disabled}
 						onChange={(v) => {
 							setInputValue(v);

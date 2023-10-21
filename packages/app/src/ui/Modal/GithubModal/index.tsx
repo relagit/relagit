@@ -1,13 +1,17 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 import { Show, For, createSignal, createEffect } from 'solid-js';
 
-import { openExternal } from '@app/modules/shell';
 import { GitHub, GithubResponse } from '@app/modules/github';
+import { openExternal } from '@app/modules/shell';
+import * as logger from '@modules/logger';
+import * as Git from '@app/modules/git';
 import { t } from '@app/modules/i18n';
 
-import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
+import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader, showErrorModal } from '..';
 import EmptyState from '@app/ui/Common/EmptyState';
+import FileSelect from '@app/ui/Common/FileSelect';
 import TextArea from '@app/ui/Common/TextArea';
 import Button from '@app/ui/Common/Button';
 import Icon from '@app/ui/Common/Icon';
@@ -33,7 +37,9 @@ export default () => {
 	const [readme, setReadme] = createSignal<GithubResponse['repos/:username/:repo/readme'][1]>();
 	const [readmeHtml, setReadmeHtml] = createSignal<string | null>(null);
 	const [opened, setOpened] = createSignal<GithubResponse['users/:username/repos'][1][number]>();
+	const [cloneReady, setCloneReady] = createSignal(false);
 	const [error, setError] = createSignal(false);
+	const [path, setPath] = createSignal('');
 
 	const makeSorter = () => {
 		return (
@@ -104,85 +110,140 @@ export default () => {
 							<ModalCloseButton {...props} />
 						</ModalHeader>
 						<ModalBody>
-							<Show when={opened()}>
-								<div class="github-modal__header">
-									<Button
-										onClick={() => {
-											setOpened(null);
-										}}
-										label={t('modal.github.backToSearch')}
-										type="default"
-									>
-										<Icon name="arrow-left" /> {t('modal.github.back')}
-									</Button>
-									<h2 class="github-modal__header__title">{opened().name}</h2>
-									<div class="github-modal__header__social">
-										<Show when={opened().stargazers_count}>
-											<div class="github-modal__header__social__stars">
-												<Icon name="star" />
-												{opened().stargazers_count}
-											</div>
-										</Show>
-										<Show when={opened().forks_count}>
-											<div class="github-modal__header__social__forks">
-												<Icon name="git-branch" />
-												{opened().forks_count}
-											</div>
-											<Show when={opened().language}>
-												<div class="github-modal__header__social__language">
-													<div
-														class="github-modal__header__social__language__indicator"
-														style={{
-															'background-color': getLanguageColor(
-																opened().language
-															)
-														}}
-													></div>
-													{opened().language}
+							<Show
+								when={!cloneReady()}
+								fallback={
+									<div class="github-modal__clone">
+										<Button
+											onClick={() => {
+												setCloneReady(false);
+											}}
+											label={t('modal.github.back')}
+											type="default"
+										>
+											<Icon name="arrow-left" /> {t('modal.github.back')}
+										</Button>
+										<FileSelect
+											input
+											validate={(path) => {
+												if (path.length === 0) return null;
+
+												const exists = fs.existsSync(path);
+
+												if (!exists) {
+													return t('ui.filepicker.doesNotExist', {
+														type: t('ui.filepicker.directory')
+													});
+												}
+
+												let isDirectory = false;
+
+												try {
+													fs.opendirSync(path);
+
+													isDirectory = true;
+												} catch (e) {
+													isDirectory = false;
+												}
+
+												if (!isDirectory)
+													return t('ui.filepicker.isNot', {
+														type: t('ui.filepicker.file'),
+														expected: t('ui.filepicker.directory')
+													});
+
+												return true;
+											}}
+											initial={path()}
+											properties={['openDirectory', 'createDirectory']}
+											onSelect={setPath}
+										/>
+									</div>
+								}
+							>
+								<Show when={opened()}>
+									<div class="github-modal__header">
+										<Button
+											onClick={() => {
+												setOpened(null);
+											}}
+											label={t('modal.github.backToSearch')}
+											type="default"
+										>
+											<Icon name="arrow-left" /> {t('modal.github.back')}
+										</Button>
+										<h2 class="github-modal__header__title">{opened().name}</h2>
+										<div class="github-modal__header__social">
+											<Show when={opened().stargazers_count}>
+												<div class="github-modal__header__social__stars">
+													<Icon name="star" />
+													{opened().stargazers_count}
 												</div>
 											</Show>
-										</Show>
-									</div>
-								</div>
-								<div class="github-modal__details">
-									<div class="github-modal__details__readme">
-										<Show when={readme() && readmeHtml()}>
-											<div class="github-modal__details__readme__path">
-												{readme()?.path}
-											</div>
-											<div
-												class="github-modal__details__readme__content"
-												innerHTML={readmeHtml()?.replace(
-													'src="./',
-													`src="${path.dirname(readme()?.download_url)}/`
-												)}
-											></div>
-										</Show>
-									</div>
-									<div class="github-modal__details__info">
-										<div class="github-modal__details__info__actions">
-											<Button
-												label="Clone repository"
-												type="brand"
-												onClick={() => {
-													// TODO: Clone repo
-												}}
-											>
-												<Icon name="git-pull-request" />{' '}
-												{t('modal.github.clone')}
-											</Button>
-											<Button
-												label={t('modal.github.viewOnGithub')}
-												type="default"
-												onClick={() => {
-													openExternal(opened().html_url);
-												}}
-											>
-												{t('modal.github.viewOnGithub')}
-											</Button>
+											<Show when={opened().forks_count}>
+												<div class="github-modal__header__social__forks">
+													<Icon name="git-branch" />
+													{opened().forks_count}
+												</div>
+												<Show when={opened().language}>
+													<div class="github-modal__header__social__language">
+														<div
+															class="github-modal__header__social__language__indicator"
+															style={{
+																'background-color':
+																	getLanguageColor(
+																		opened().language
+																	)
+															}}
+														></div>
+														{opened().language}
+													</div>
+												</Show>
+											</Show>
 										</div>
 									</div>
-								</div>
+									<div class="github-modal__details">
+										<div class="github-modal__details__readme">
+											<Show when={readme() && readmeHtml()}>
+												<div class="github-modal__details__readme__path">
+													{readme()?.path}
+												</div>
+												<div
+													class="github-modal__details__readme__content"
+													innerHTML={readmeHtml()?.replace(
+														'src="./',
+														`src="${nodepath.dirname(
+															readme()?.download_url
+														)}/`
+													)}
+												></div>
+											</Show>
+										</div>
+										<div class="github-modal__details__info">
+											<div class="github-modal__details__info__actions">
+												<Button
+													label="Clone repository"
+													type="brand"
+													onClick={() => {
+														setCloneReady(true);
+													}}
+												>
+													<Icon name="git-pull-request" />{' '}
+													{t('modal.github.clone')}
+												</Button>
+												<Button
+													label={t('modal.github.viewOnGithub')}
+													type="default"
+													onClick={() => {
+														openExternal(opened().html_url);
+													}}
+												>
+													{t('modal.github.viewOnGithub')}
+												</Button>
+											</div>
+										</div>
+									</div>
+								</Show>
 							</Show>
 							<Show when={!opened()}>
 								<div class="github-modal__header">
@@ -276,6 +337,39 @@ export default () => {
 								</Show>
 							</Show>
 						</ModalBody>
+						<Show when={cloneReady()}>
+							<ModalFooter>
+								<div class="modal__footer__buttons">
+									<Button
+										label={t('modal.github.clone')}
+										type="default"
+										onClick={() => {
+											props.close();
+										}}
+									>
+										{t('modal.cancel')}
+									</Button>
+									<Button
+										label={t('modal.github.clone')}
+										type="brand"
+										disabled={!path()}
+										onClick={async () => {
+											try {
+												await Git.Clone(opened().clone_url, path());
+
+												props.close();
+											} catch (e) {
+												logger.error(e);
+
+												showErrorModal(e, 'error.git');
+											}
+										}}
+									>
+										{t('modal.github.clone')}
+									</Button>
+								</div>
+							</ModalFooter>
+						</Show>
 					</>
 				);
 			}}

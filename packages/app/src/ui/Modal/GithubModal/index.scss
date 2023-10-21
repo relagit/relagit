@@ -1,4 +1,14 @@
 .github-modal {
+	&__clone {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+
+		button {
+			width: fit-content;
+		}
+	}
+
 	&__logo {
 		gap: 2px;
 		display: flex;

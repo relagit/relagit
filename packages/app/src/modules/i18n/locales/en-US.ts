@@ -75,6 +75,7 @@ export default {
 	ui: {
 		filepicker: {
 			placeholder: 'Select a file...',
+			folderPlaceholder: 'Select a folder...',
 			label: 'Open file picker',
 			valid: 'Valid Selection',
 			directory: 'Directory',

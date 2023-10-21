@@ -8,6 +8,7 @@ export { Status } from './status';
 export { Commit } from './commit';
 export { Remote } from './remote';
 export { Branch } from './branch';
+export { Clone } from './clone';
 export { Blame } from './blame';
 export { Push } from './push';
 export { Diff } from './diff';

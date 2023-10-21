@@ -68,6 +68,7 @@ export default {
 	ui: {
 		filepicker: {
 			placeholder: 'Eligere lima...',
+			folderPlaceholder: 'Eligere directorium...',
 			label: 'Aperta file picker',
 			valid: 'Valida lectio',
 			directory: 'Directorium',
