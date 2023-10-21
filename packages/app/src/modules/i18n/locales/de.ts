@@ -60,6 +60,11 @@ export default {
 				description:
 					'Das überschreibt die Standard Code-Schrift. Du kannst jede Schriftart benutzen, die auf deinem System installiert ist.',
 				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
+			},
+			clientThemes: {
+				label: 'Client Themes',
+				description:
+					'Wähle benutzerdefinierte Themes aus, die du im Client benutzen möchtest.'
 			}
 		}
 	},
