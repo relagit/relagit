@@ -138,6 +138,10 @@ export default {
 		now: 'Jetzt'
 	},
 	codeview: {
+		imageview: {
+			error: 'Konnte kein Bild zum Anzeigen finden',
+			errorHint: 'Das liegt wahrscheinlich daran, dass das Bild zu groß zum Anzeigen ist.'
+		},
 		noCommit: 'Nichts zu sehen',
 		noCommitHint: 'Du musst eine Datei auswählen, um ihre Änderungen zu sehen. (´・｀)',
 		binary: 'Binäre Datei',

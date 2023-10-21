@@ -135,6 +135,10 @@ export default {
 		now: 'Nunc'
 	},
 	codeview: {
+		imageview: {
+			error: 'Non potest invenire imaginem ostendere',
+			errorHint: 'Hoc est quia imago est nimis magnus ut ostendere.'
+		},
 		noCommit: 'Nihil hic videre',
 		noCommitHint: 'Elige tibi fasciculum ad eius mutationes videndas. (´・｀)',
 		binary: 'Fasciculus binarius',

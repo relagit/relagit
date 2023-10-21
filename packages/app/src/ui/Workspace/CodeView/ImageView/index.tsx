@@ -15,6 +15,7 @@ import * as Git from '@modules/git';
 import * as ipc from '~/common/ipc';
 
 import './index.scss';
+import { t } from '@app/modules/i18n';
 
 const mimeFromPath = (path: string) => {
 	const ext = path.split('.').pop();
@@ -134,8 +135,8 @@ export default (props: IImageViewProps) => {
 								light: threw ? EMPTY_STATE_IMAGES.L_ERROR : undefined,
 								dark: threw ? EMPTY_STATE_IMAGES.D_ERROR : undefined
 							}}
-							detail="Could not find an image to display"
-							hint={'There may have been an error'}
+							detail={t('codeview.imageview.error')}
+							hint={t('codeview.imageview.errorHint')}
 						/>
 					}
 				>
