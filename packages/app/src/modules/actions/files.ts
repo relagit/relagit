@@ -59,7 +59,7 @@ const isDirectory = async (file: string) => {
 
 export const getFileStatus = async (directory: string, file?: string, stat?: string) => {
 	if (file) {
-		if (FileStore.getByPath(file)) return;
+		if (FileStore.getByPath(directory, file)) return;
 	} else {
 		if (FileStore.getByRepositoryPath(directory)?.length) {
 			FileStore.removeFiles(directory);
@@ -69,7 +69,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 	if (file && stat) {
 		if (!fs.existsSync(path.join(directory, file))) return;
 
-		if (FileStore.getByPath(file)) {
+		if (FileStore.getByPath(directory, file)) {
 			warn('File already exists, not adding again');
 
 			return;
@@ -113,7 +113,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			continue;
 		}
 
-		if (FileStore.getByPath(path.join(directory, p))) {
+		if (FileStore.getByPath(directory, p)) {
 			warn('File already exists, not adding again');
 
 			continue;

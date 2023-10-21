@@ -45,6 +45,8 @@ export default (code: string, language: string) => {
 };
 
 export const langFrom = (filename: string) => {
+	if (!filename) return 'text';
+
 	const ext = '.' + filename.split('.').pop();
 
 	return (

@@ -31,10 +31,10 @@ export const Analyse = async (directory: string) => {
 	const dirname = directory.split('/').pop();
 
 	return {
-		branch,
-		commit,
+		branch: branch.trim(),
+		commit: commit.trim(),
 		dirname,
-		remote,
+		remote: remote.trim(),
 		ahead: ahead ? parseInt(ahead[1]) : 0,
 		behind: behind ? parseInt(behind[1]) : 0
 	};
