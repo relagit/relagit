@@ -11,7 +11,8 @@ jobs:
 
         strategy:
             matrix:
-                os: [macos-latest, ubuntu-latest, windows-latest]
+                # os: [macos-latest, ubuntu-latest, windows-latest]
+                os: [macos-latest, windows-latest]
 
         name: Release
         if: "startsWith(github.event.head_commit.message, '(main) release: ') || github.event_name == 'workflow_dispatch'"
