@@ -25,7 +25,6 @@ const config = {
 	directories: {
 		output: 'out'
 	},
-	files: ['dist/**/*'],
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
 	asar: false,
 	dmg: {
@@ -59,7 +58,7 @@ const config = {
 	win: {
 		target: ['zip']
 	},
-	files: ['!*', 'dist', 'public', 'package.json', 'LICENSE']
+	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
 
 module.exports = config;
