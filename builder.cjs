@@ -15,6 +15,10 @@ const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8'))
  * @type {import('electron-builder').Configuration}
  */
 const config = {
+	extends: null,
+	extraMetadata: {
+		main: 'dist/main.js'
+	},
 	appId: 'com.relagit.app',
 	productName: 'RelaGit',
 	artifactName: '${productName}-${os}.${ext}',
