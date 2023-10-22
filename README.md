@@ -13,4 +13,38 @@
 
 # relagit
 
-Take back control over your git workflow.
+A next-generation git client. Enables you to take back control over your git workflow.
+
+## Download
+
+Builds are generated automatically upon [release](https://github.com/relagit/relagit/releases).
+
+- [macOS](https://github.com/relagit/relagit/releases/latest)[^1]
+- [Windows](https://github.com/relagit/relagit/releases/latest)
+- [Linux](https://github.com/relagit/relagit/releases/latest)
+
+[^1]: macOS prebuilds are not yet available for Apple Silicon. You can build it yourself following the instructions above.
+
+## Building
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/) (v18 or higher)
+- [pnpm](https://pnpm.io/)
+- [Git](https://git-scm.com/)
+
+### Instructions
+
+```bash
+git clone https://github.com/relagit/relagit relagit
+
+cd relagit
+
+pnpm i
+pnpm build
+pnpm make:{platform}
+```
+
+Replace `platform` with one of the [supported platforms](https://github.com/relagit/relagit/blob/main/package.json#L19-L21) (e.g. `make:mac`).
+
+You will find an executable in the `out` folder.
