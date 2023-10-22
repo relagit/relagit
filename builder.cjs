@@ -1,8 +1,20 @@
-import fs from 'fs';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
+const fs = require('fs');
+
+/**
+ * @type {{
+	commit: string;
+	date: string;
+	env: 'development' | 'production';
+}}
+ */
 const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8'));
 
-export default {
+/**
+ * @type {import('electron-builder').Configuration}
+ */
+const config = {
 	extends: null,
 	extraMetadata: {
 		main: 'dist/main.js'
@@ -13,6 +25,7 @@ export default {
 	directories: {
 		output: 'out'
 	},
+	files: ['dist/**/*'],
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
 	asar: false,
 	dmg: {
@@ -46,5 +59,7 @@ export default {
 	win: {
 		target: ['zip']
 	},
-	files: ['dist/**.*', 'public/**.*', 'package.json', 'LICENSE']
-} as import('electron-builder').Configuration;
+	files: ['!*', 'dist', 'public', 'package.json', 'LICENSE']
+};
+
+module.exports = config;
