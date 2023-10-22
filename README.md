@@ -21,10 +21,9 @@ Builds are generated automatically upon [release](https://github.com/relagit/rel
 
 - [macOS](https://github.com/relagit/relagit/releases/latest)[^1]
 - [Windows](https://github.com/relagit/relagit/releases/latest)
-- ~~Linux~~[^2]
+- [Linux](https://github.com/relagit/relagit/releases/latest)
 
 [^1]: macOS prebuilds are not yet available for Apple Silicon. You can build it yourself following the instructions above.
-[^2]: We have temporarily dropped support for linux in our release pipeline due to numerous ambiguities.
 
 ## Building
 
