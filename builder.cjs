@@ -20,6 +20,7 @@ const config = {
 	directories: {
 		output: 'out'
 	},
+	files: ['dist/**/*'],
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
 	asar: false,
 	dmg: {
