@@ -17,6 +17,7 @@ const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8'))
 const config = {
 	appId: 'com.relagit.app',
 	productName: 'RelaGit',
+	artifactName: '${productName}-${os}.${ext}',
 	directories: {
 		output: 'out'
 	},
