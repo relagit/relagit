@@ -44,6 +44,30 @@
 		}
 	}
 
+	&__diff {
+		font-size: 0.9rem;
+		font-weight: 400;
+		display: flex;
+		gap: 6px;
+		width: 100%;
+
+		&__files {
+			font-family: var(--font-primary);
+			color: var(--color-secondary);
+			margin-right: auto;
+		}
+
+		&__insertions {
+			color: var(--color-green-500);
+			font-family: var(--font-mono);
+		}
+
+		&__deletions {
+			color: var(--color-red-500);
+			font-family: var(--font-mono);
+		}
+	}
+
 	&__bottom {
 		display: flex;
 		width: 100%;
@@ -65,23 +89,6 @@
 			font-size: 0.9rem;
 			font-weight: 400;
 			margin-left: auto;
-		}
-
-		&__diff {
-			font-family: var(--font-mono);
-			color: var(--color-secondary);
-			font-size: 0.9rem;
-			font-weight: 400;
-			display: flex;
-			gap: 6px;
-
-			&__insertions {
-				color: var(--color-green-500);
-			}
-
-			&__deletions {
-				color: var(--color-red-500);
-			}
 		}
 	}
 }

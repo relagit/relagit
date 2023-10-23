@@ -75,8 +75,8 @@ export default {
 			folderPlaceholder: 'Eligere directorium...',
 			label: 'Aperta file picker',
 			valid: 'Valida lectio',
-			directory: 'Directorium',
-			file: 'File',
+			directory: ['Directorium', 'Directoria'],
+			file: ['Lima', 'Limae'],
 			doesNotExist: '{{type}} non existit',
 			isNot: '{{type}} non {{expected}}'
 		}

@@ -78,8 +78,8 @@ export default {
 			folderPlaceholder: 'Select a folder...',
 			label: 'Open file picker',
 			valid: 'Valid Selection',
-			directory: 'Directory',
-			file: 'File',
+			directory: ['Directory', 'Directories'],
+			file: ['File', 'Files'],
 			doesNotExist: '{{type}} does not exist',
 			isNot: '{{type}} is not a {{expected}}'
 		}

@@ -79,8 +79,8 @@ export default {
 			folderPlaceholder: 'Wähle einen Ordner aus...',
 			label: 'Öffne die Dateiauswahl',
 			valid: 'Gültige Auswahl',
-			directory: 'Ordner',
-			file: 'Datei',
+			directory: ['Ordner', 'Ordner'],
+			file: ['Datei', 'Dateien'],
 			doesNotExist: '{{type}} existiert nicht',
 			isNot: '{{type}} ist kein {{expected}}'
 		}
