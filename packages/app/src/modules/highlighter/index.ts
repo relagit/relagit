@@ -3,6 +3,7 @@ const StarryNight = window.Native.libraries.starryNight;
 import { Grammar, Root } from '@wooorm/starry-night';
 import { error, warn } from '@modules/logger';
 import { toHtml } from 'hast-util-to-html';
+import purify from 'dompurify';
 
 let highlighter: {
 	flagToScope: (flag: string) => string | undefined;
@@ -20,26 +21,26 @@ export default (code: string, language: string) => {
 
 		return code
 			.split('\n')
-			.map((line) => `<span>${line}</span>`)
+			.map((line) => `<span>${purify.sanitize(line)}</span>`)
 			.join('\n');
 	}
 
 	if (language === 'text') {
 		return code
 			.split('\n')
-			.map((line) => `<span>${line}</span>`)
+			.map((line) => `<span>${purify.sanitize(line)}</span>`)
 			.join('\n');
 	}
 
 	try {
 		// @ts-expect-error - missing types
-		return toHtml(highlighter.highlight(code, language));
+		return purify.sanitize(toHtml(highlighter.highlight(code, language)));
 	} catch (e) {
 		error('Failed to highlight code', e);
 
 		return code
 			.split('\n')
-			.map((line) => `<span>${line}</span>`)
+			.map((line) => `<span>${purify.sanitize(line)}</span>`)
 			.join('\n');
 	}
 };
