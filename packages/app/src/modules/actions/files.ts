@@ -75,6 +75,16 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			return;
 		}
 
+		if (await isDirectory(path.join(directory, file))) {
+			const subFiles = await promises.readdir(path.join(directory, file));
+
+			for (const subFile of subFiles) {
+				getFileStatus(directory, path.join(file, subFile), stat);
+			}
+
+			return;
+		}
+
 		return FileStore.addFile(directory, {
 			staged: true,
 			id: Math.random().toString(16).split('.')[1],
