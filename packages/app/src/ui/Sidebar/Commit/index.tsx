@@ -73,17 +73,19 @@ export default (props: ILogCommit) => {
 					{renderDate(new Date(props.date).getTime())()}
 				</div>
 			</div>
-			<div class="sidebar__commit__diff">
-				<div class="sidebar__commit__diff__files">
-					{props.files} {t('ui.filepicker.file', {}, props.files)}
+			<Show when={props.insertions || props.deletions || props.files}>
+				<div class="sidebar__commit__diff">
+					<div class="sidebar__commit__diff__files">
+						{props.files} {t('ui.filepicker.file', {}, props.files)}
+					</div>
+					<Show when={props.insertions}>
+						<div class="sidebar__commit__diff__insertions">+{props.insertions}</div>
+					</Show>
+					<Show when={props.deletions}>
+						<div class="sidebar__commit__diff__deletions">-{props.deletions}</div>
+					</Show>
 				</div>
-				<Show when={props.insertions}>
-					<div class="sidebar__commit__diff__insertions">+{props.insertions}</div>
-				</Show>
-				<Show when={props.deletions}>
-					<div class="sidebar__commit__diff__deletions">-{props.deletions}</div>
-				</Show>
-			</div>
+			</Show>
 		</div>
 	);
 };
