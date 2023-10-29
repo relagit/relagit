@@ -133,8 +133,8 @@ export default (props: ICodeViewProps) => {
 			setSwitching(false);
 
 			if (
-				!BINARY_EXTENSIONS.includes(extname(props.file || '')) &&
-				!IMAGE_EXTENSIONS.includes(extname(props.file || ''))
+				!BINARY_EXTENSIONS.includes(extname(props.file || commit()?.filename)) &&
+				!IMAGE_EXTENSIONS.includes(extname(props.file || commit()?.filename))
 			) {
 				setContent(highlighter(contents, langFrom(props.file || '')));
 
