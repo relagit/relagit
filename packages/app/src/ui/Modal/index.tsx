@@ -136,7 +136,7 @@ export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 	ModalStore.addModal({
 		type: 'error',
 		element: (
-			<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
+			<Modal size="small" dismissable transitions={Layer.Transitions.Fade}>
 				{(props) => {
 					return (
 						<>
