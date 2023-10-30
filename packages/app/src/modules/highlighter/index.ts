@@ -46,9 +46,15 @@ export default (code: string, language: string) => {
 };
 
 export const langFrom = (filename: string) => {
+	const known = {
+		'.html': 'text.html.basic'
+	};
+
 	if (!filename) return 'text';
 
 	const ext = '.' + filename.split('.').pop();
+
+	if (known[ext]) return known[ext];
 
 	return (
 		StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ??
