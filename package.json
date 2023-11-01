@@ -22,6 +22,7 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"focus-trap": "^7.5.4",
 		"sucrase": "^3.34.0",
 		"vscode-oniguruma": "^1.7.0"
 	},
