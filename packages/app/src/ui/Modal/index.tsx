@@ -3,9 +3,9 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 ) as typeof import('electron').ipcRenderer;
 
 import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
+import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { Transition } from 'solid-transition-group';
 
-import { createFocusTrap } from '@app/modules/focus';
 import { createStoreListener } from '@stores/index';
 import { LocaleKey, t } from '@modules/i18n';
 import ModalStore from '@stores/modal';
@@ -34,16 +34,20 @@ const Modal = (props: IModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement>(null);
 	const [open, setOpen] = createSignal(false);
 
-	createFocusTrap(open, ref);
+	const { activate, deactivate } = useFocusTrap(ref);
 
 	onMount(() => {
 		requestAnimationFrame(() => {
 			setOpen(true);
+
+			activate();
 		});
 	});
 
 	const close = () => {
 		setOpen(false);
+
+		deactivate();
 
 		setTimeout(() => {
 			// allow any transitions to finish

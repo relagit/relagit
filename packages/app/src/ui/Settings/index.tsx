@@ -3,11 +3,11 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 ) as typeof import('electron').ipcRenderer;
 
 import { Accessor, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
+import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { iconFromAction, workflows } from '@app/modules/actions';
 import SettingsStore, { ISettings } from '@stores/settings';
-import { createFocusTrap } from '@app/modules/focus';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import ModalStore from '@app/stores/modal';
@@ -180,13 +180,27 @@ export const Switch = (props: ISwitchProps) => {
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
-	const open = createStoreListener([LayerStore], () => LayerStore.visible('settings'));
-
 	const [ref, setRef] = createSignal<HTMLElement>(null);
 
-	createFocusTrap(open, ref);
+	const [open, setOpen] = createSignal(LayerStore.visible('settings'));
 
-	const close = () => LayerStore.setVisible('settings', false);
+	const { activate, deactivate } = useFocusTrap(ref);
+
+	createStoreListener([LayerStore], () => {
+		setOpen(LayerStore.visible('settings'));
+
+		if (LayerStore.visible('settings')) {
+			activate();
+		}
+	});
+
+	const close = () => {
+		LayerStore.setVisible('settings', false);
+
+		setOpen(false);
+
+		deactivate();
+	};
 
 	const listener = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
