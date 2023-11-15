@@ -42,7 +42,7 @@
 	}
 
 	&::placeholder {
-		--input-color: var(--color-secondary);
+		color: var(--color-secondary);
 		user-select: none;
 	}
 
