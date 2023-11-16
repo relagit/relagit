@@ -65,7 +65,7 @@ All class names should be written in the following form(s):
 component
 component__element
 component__element-modifier // this is mainly used if the component itself has a modifier. (e.g. layer-bare)
-component__element modifier // the more common modifier form
+component__element modifier // the more common modifier form. (e.g. button primary)
 ```
 
 ## Commit Messages
