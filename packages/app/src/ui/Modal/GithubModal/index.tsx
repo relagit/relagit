@@ -29,6 +29,12 @@ const getLanguageColor = (language: string) => {
 	return languageFile[language]?.color || '#000';
 };
 
+const isEmpty = (path: string) => {
+	const files = fs.readdirSync(path);
+
+	return files.length === 0;
+};
+
 export default () => {
 	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
 		null
@@ -150,6 +156,11 @@ export default () => {
 													return t('ui.filepicker.isNot', {
 														type: t('ui.filepicker.file'),
 														expected: t('ui.filepicker.directory')
+													});
+
+												if (!isEmpty(path))
+													return t('ui.filepicker.notEmpty', {
+														type: t('ui.filepicker.directory')
 													});
 
 												return true;

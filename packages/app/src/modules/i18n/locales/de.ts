@@ -80,6 +80,7 @@ export default {
 			label: 'Öffne die Dateiauswahl',
 			valid: 'Gültige Auswahl',
 			directory: ['Ordner', 'Ordner'],
+			notEmpty: '{{type}} ist nicht leer',
 			file: ['Datei', 'Dateien'],
 			doesNotExist: '{{type}} existiert nicht',
 			isNot: '{{type}} ist kein {{expected}}'

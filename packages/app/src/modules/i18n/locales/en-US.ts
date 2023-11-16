@@ -78,6 +78,7 @@ export default {
 			folderPlaceholder: 'Select a folder...',
 			label: 'Open file picker',
 			valid: 'Valid Selection',
+			notEmpty: '{{type}} is not empty',
 			directory: ['Directory', 'Directories'],
 			file: ['File', 'Files'],
 			doesNotExist: '{{type}} does not exist',

@@ -76,6 +76,7 @@ export default {
 			label: 'Aperta file picker',
 			valid: 'Valida lectio',
 			directory: ['Directorium', 'Directoria'],
+			notEmpty: '{{type}} non est vacuus',
 			file: ['Lima', 'Limae'],
 			doesNotExist: '{{type}} non existit',
 			isNot: '{{type}} non {{expected}}'
