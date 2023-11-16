@@ -1,3 +1,5 @@
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+
 import { Show, createSignal, onMount } from 'solid-js';
 
 import { getRepositoryStatus } from '@modules/actions';
@@ -35,11 +37,24 @@ export default () => {
 			SettingsStore.settings?.get('activeRepository') &&
 			!loaded.includes(SettingsStore.settings?.get('activeRepository') as string)
 		)
-			await getRepositoryStatus(
-				SettingsStore.settings?.get('activeRepository') as string,
-				true,
-				true
-			);
+			if (!fs.existsSync(SettingsStore.settings?.get('activeRepository') as string)) {
+				SettingsStore.settings?.set(
+					'repositories',
+					(SettingsStore.settings?.get('repositories') as string[])?.filter(
+						(r) => r !== SettingsStore.settings?.get('activeRepository')
+					)
+				);
+
+				SettingsStore.settings?.set('activeRepository', null);
+
+				return;
+			}
+
+		await getRepositoryStatus(
+			SettingsStore.settings?.get('activeRepository') as string,
+			true,
+			true
+		);
 	});
 
 	createStoreListener([SettingsStore], async () => {
@@ -47,6 +62,17 @@ export default () => {
 			if (loaded.includes(repo)) continue;
 
 			debug('Loading', repo);
+
+			if (!fs.existsSync(repo)) {
+				SettingsStore.settings?.set(
+					'repositories',
+					(SettingsStore.settings?.get('repositories') as string[])?.filter(
+						(r) => r !== repo
+					)
+				);
+
+				continue;
+			}
 
 			loaded.push(repo);
 
