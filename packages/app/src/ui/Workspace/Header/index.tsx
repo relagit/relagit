@@ -1,16 +1,16 @@
 import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
-import { refetchRepository } from '@modules/actions';
-import RepositoryStore from '@app/stores/repository';
-import { createStoreListener } from '@stores/index';
-import { debug, error } from '@modules/logger';
-import LocationStore from '@stores/location';
-import { renderDate } from '@modules/time';
 import { t } from '@app/modules/i18n';
+import RepositoryStore from '@app/stores/repository';
+import { showErrorModal } from '@app/ui/Modal';
+import { refetchRepository } from '@modules/actions';
 import * as Git from '@modules/git';
+import { debug, error } from '@modules/logger';
+import { renderDate } from '@modules/time';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
-import { showErrorModal } from '@app/ui/Modal';
 import Tooltip from '@ui/Common/Tooltip';
 
 import './index.scss';

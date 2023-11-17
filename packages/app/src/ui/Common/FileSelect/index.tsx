@@ -1,16 +1,16 @@
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
-
-import { Show, createEffect, createSignal, JSX } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 import * as ipc from '~/common/ipc';
 
-import TextArea from '../TextArea';
 import Icon from '../Icon';
+import TextArea from '../TextArea';
 
 import './index.scss';
+
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:ipcRenderer'
+) as typeof import('electron').ipcRenderer;
 
 export interface IFileSelectProps {
 	input: boolean;

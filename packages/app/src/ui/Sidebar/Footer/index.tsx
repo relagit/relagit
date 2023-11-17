@@ -1,24 +1,24 @@
 import { createSignal } from 'solid-js';
 
-import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
+import { t } from '@app/modules/i18n';
+import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
+import Icon from '@app/ui/Common/Icon';
+import Menu from '@app/ui/Menu';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
-import { createStoreListener } from '@stores/index';
-import SettingsStore from '@stores/settings';
-import LocationStore from '@stores/location';
+import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
+import * as Git from '@modules/git';
 import * as logger from '@modules/logger';
 import FilesStore from '@stores/files';
-import { t } from '@app/modules/i18n';
-import * as Git from '@modules/git';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
+import SettingsStore from '@stores/settings';
 
-import { showErrorModal } from '@ui/Modal';
-import TextArea from '@ui/Common/TextArea';
 import Button from '@ui/Common/Button';
+import TextArea from '@ui/Common/TextArea';
+import { showErrorModal } from '@ui/Modal';
 
 import './index.scss';
-import DraftStore from '@app/stores/draft';
-import Menu from '@app/ui/Menu';
-import Icon from '@app/ui/Common/Icon';
 
 export default () => {
 	const [error, setError] = createSignal(false);

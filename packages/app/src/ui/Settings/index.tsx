@@ -1,28 +1,29 @@
+import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
+import { Accessor, For, Show, createSignal, onCleanup, onMount } from 'solid-js';
+
+import { iconFromAction, workflows } from '@app/modules/actions';
+import { themes, toggleTheme } from '@app/modules/actions/themes';
+import { t } from '@app/modules/i18n';
+import ModalStore from '@app/stores/modal';
+import { createStoreListener } from '@stores/index';
+import LayerStore from '@stores/layer';
+import LocationStore from '@stores/location';
+import SettingsStore, { ISettings } from '@stores/settings';
+import * as ipc from '~/common/ipc';
+
+import Icon from '@ui/Common/Icon';
+import TextArea from '@ui/Common/TextArea';
+
+import Button from '../Common/Button';
+import TabView from '../Common/TabView';
+import Layer from '../Layer';
+import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '../Modal';
+
+import './index.scss';
+
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
-
-import { Accessor, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
-
-import { themes, toggleTheme } from '@app/modules/actions/themes';
-import { iconFromAction, workflows } from '@app/modules/actions';
-import SettingsStore, { ISettings } from '@stores/settings';
-import { createStoreListener } from '@stores/index';
-import LocationStore from '@stores/location';
-import ModalStore from '@app/stores/modal';
-import LayerStore from '@stores/layer';
-import { t } from '@app/modules/i18n';
-import * as ipc from '~/common/ipc';
-
-import Modal, { ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from '../Modal';
-import TextArea from '@ui/Common/TextArea';
-import TabView from '../Common/TabView';
-import Button from '../Common/Button';
-import Icon from '@ui/Common/Icon';
-import Layer from '../Layer';
-
-import './index.scss';
 
 export interface IRadioGroupProps {
 	options: {

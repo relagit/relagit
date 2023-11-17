@@ -1,5 +1,5 @@
 import octicons from '@primer/octicons';
-import { Show, JSX } from 'solid-js';
+import { JSX, Show } from 'solid-js';
 
 import Pull from './Pull';
 

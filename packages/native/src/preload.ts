@@ -1,7 +1,6 @@
+import * as starryNight from '@wooorm/starry-night';
 import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
 import fs, { WatchListener } from 'node:fs';
-
-import * as starryNight from '@wooorm/starry-night';
 
 import { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';

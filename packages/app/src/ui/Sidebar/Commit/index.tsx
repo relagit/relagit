@@ -1,13 +1,13 @@
 import { Show } from 'solid-js';
 
-import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
-import { showErrorModal } from '@app/ui/Modal';
-import { debug, error } from '@modules/logger';
-import { renderDate } from '@app/modules/time';
-import LocationStore from '@stores/location';
 import { t } from '@app/modules/i18n';
+import { renderDate } from '@app/modules/time';
+import { showErrorModal } from '@app/ui/Modal';
 import * as Git from '@modules/git';
+import { debug, error } from '@modules/logger';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
 
 import './index.scss';
 

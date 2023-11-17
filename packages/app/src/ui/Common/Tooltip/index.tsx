@@ -1,6 +1,6 @@
-import { Transition } from 'solid-transition-group';
-import { createSignal, JSX, Show } from 'solid-js';
+import { JSX, Show, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
+import { Transition } from 'solid-transition-group';
 
 import './index.scss';
 

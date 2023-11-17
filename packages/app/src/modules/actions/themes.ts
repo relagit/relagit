@@ -1,11 +1,12 @@
+import SettingsStore from '@app/stores/settings';
+
+import { addCSS, removeCSS, updateCSS } from '../dom';
+import { error } from '../logger';
+import { Theme, __RELAGIT_PATH__, makeConsole, require } from './workflows';
+
 const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase') as typeof import('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
-import { Theme, __RELAGIT_PATH__, makeConsole, require } from './workflows';
-import { addCSS, updateCSS, removeCSS } from '../dom';
-import SettingsStore from '@app/stores/settings';
-import { error } from '../logger';
 
 const __THEMES_PATH__ = path.join(__RELAGIT_PATH__, 'themes');
 

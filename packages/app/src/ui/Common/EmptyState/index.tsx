@@ -42,10 +42,10 @@ export default (props: IEmptyStateProps) => {
 						settings()?.get('theme') === 'dark'
 							? props.image.dark
 							: settings()?.get('theme') === 'light'
-							? props.image.light
-							: matchMedia('(prefers-color-scheme: dark)').matches
-							? props.image.dark
-							: props.image.light
+							  ? props.image.light
+							  : matchMedia('(prefers-color-scheme: dark)').matches
+							    ? props.image.dark
+							    : props.image.light
 					}.svg`}
 					alt="Nothing here"
 					style={{ opacity: props.opacity || 1 }}

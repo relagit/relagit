@@ -1,9 +1,9 @@
 {
-  "allow": [
-    {
-      "owner": "githubnext",
-      "repo": "blocks-examples",
-      "id": "*"
-    }
-  ]
+	"allow": [
+		{
+			"owner": "githubnext",
+			"repo": "blocks-examples",
+			"id": "*"
+		}
+	]
 }

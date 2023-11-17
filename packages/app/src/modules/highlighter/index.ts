@@ -1,9 +1,10 @@
-const StarryNight = window.Native.libraries.starryNight;
-
 import { Grammar, Root } from '@wooorm/starry-night';
-import { error, warn } from '@modules/logger';
-import { toHtml } from 'hast-util-to-html';
 import purify from 'dompurify';
+import { toHtml } from 'hast-util-to-html';
+
+import { error, warn } from '@modules/logger';
+
+const StarryNight = window.Native.libraries.starryNight;
 
 let highlighter: {
 	flagToScope: (flag: string) => string | undefined;

@@ -1,5 +1,5 @@
-import { Transition } from 'solid-transition-group';
 import { JSX, Show } from 'solid-js';
+import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
 import LayerStore from '@stores/layer';

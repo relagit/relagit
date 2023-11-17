@@ -1,8 +1,8 @@
 import SettingsStore from '@app/stores/settings';
 
+import de from './locales/de';
 import enUS from './locales/en-US';
 import lat from './locales/lat';
-import de from './locales/de';
 
 export type Locale = typeof enUS;
 export type LocaleKey = ObjectToDotProp<Locale>;

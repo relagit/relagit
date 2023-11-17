@@ -1,9 +1,9 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
 import parse, { GitDiff } from 'parse-git-diff';
 
-import { GitStatus } from './diff';
 import { Git } from './core';
+import { GitStatus } from './diff';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export interface IPastCommit {
 	hash: string;
@@ -70,8 +70,8 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 		const binaryStatus = file.includes('files /dev/null')
 			? 'added'
 			: file.includes('files a/') && file.includes('and b/')
-			? 'modified'
-			: 'deleted';
+			  ? 'modified'
+			  : 'deleted';
 
 		commit.files.push({
 			filename: path.basename(name.replace('a/', '').split(' b/').pop()),
@@ -81,12 +81,12 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 				_diff.files[0]?.type === 'ChangedFile'
 					? 'modified'
 					: _diff.files[0]?.type === 'AddedFile'
-					? 'added'
-					: _diff.files[0]?.type === 'DeletedFile'
-					? 'deleted'
-					: _diff.files[0]?.type === 'RenamedFile'
-					? 'renamed'
-					: binaryStatus
+					  ? 'added'
+					  : _diff.files[0]?.type === 'DeletedFile'
+					    ? 'deleted'
+					    : _diff.files[0]?.type === 'RenamedFile'
+					      ? 'renamed'
+					      : binaryStatus
 		});
 	}
 

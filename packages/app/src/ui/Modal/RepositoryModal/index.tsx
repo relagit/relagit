@@ -1,11 +1,12 @@
+import Modal, { ModalCloseButton, ModalHeader } from '..';
 import { Show, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 
-import Modal, { ModalCloseButton, ModalHeader } from '..';
-import Create from './Create';
 import Layer from '@ui/Layer';
+
 import Add from './Add';
+import Create from './Create';
 
 import './index.scss';
 

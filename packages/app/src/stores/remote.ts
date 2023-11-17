@@ -1,4 +1,5 @@
 import { GenericStore } from '.';
+
 import { IRepository } from './repository';
 
 export interface IRemoteRepository {

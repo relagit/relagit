@@ -1,15 +1,15 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
 import { Signal, createEffect, createSignal } from 'solid-js';
 
-import SettingsStore from '@stores/settings';
 import { t } from '@app/modules/i18n';
+import SettingsStore from '@stores/settings';
 
+import Button from '@ui/Common/Button';
+import FileSelect from '@ui/Common/FileSelect';
 import SegmentedControl from '@ui/Common/SegmentedControl';
 import { ModalBody, ModalFooter } from '@ui/Modal';
-import FileSelect from '@ui/Common/FileSelect';
-import Button from '@ui/Common/Button';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 export interface IAddRepositoryModalProps {
 	pathSignal: Signal<string>;

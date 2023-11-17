@@ -1,10 +1,10 @@
-import RepositoryStore from '@stores/repository';
-import { triggerWorkflow } from './workflows';
-import RemoteStore from '@stores/remote';
-import { error } from '@modules/logger';
-import * as Git from '@modules/git';
-
 import { showErrorModal } from '@app/ui/Modal';
+import * as Git from '@modules/git';
+import { error } from '@modules/logger';
+import RemoteStore from '@stores/remote';
+import RepositoryStore from '@stores/repository';
+
+import { triggerWorkflow } from './workflows';
 
 export const remoteStatus = async (repository: string) => {
 	let status: {

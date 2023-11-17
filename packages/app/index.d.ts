@@ -1,5 +1,6 @@
-import { Native as _Native } from '../native/src/preload';
 import { IRepository } from '@app/stores/repository';
+
+import { Native as _Native } from '../native/src/preload';
 
 declare global {
 	interface Window {

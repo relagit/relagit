@@ -14,6 +14,7 @@
 		"build": "rollup -c",
 		"start": "electron ./dist/main.js",
 		"format": "prettier --write .",
+		"format:watch": "onchange \"**/*.ts\" \"**/*.tsx\" \"**/*.js\" \"**/*.jsx\" -- prettier --write {{changed}}",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"make": "electron-builder --config builder.cjs",
 		"make:mac": "electron-builder --mac --config builder.cjs",

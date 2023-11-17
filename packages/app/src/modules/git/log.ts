@@ -45,8 +45,8 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 		const deletions = changesLine[1]?.includes('del')
 			? Number(changesLine[1]?.trim()?.split(' ')[0])
 			: changesLine[2]?.includes('del')
-			? Number(changesLine[2]?.trim()?.split(' ')[0])
-			: 0;
+			  ? Number(changesLine[2]?.trim()?.split(' ')[0])
+			  : 0;
 
 		return {
 			hash,

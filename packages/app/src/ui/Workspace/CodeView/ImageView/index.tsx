@@ -1,21 +1,21 @@
+import { Show, createEffect, createSignal } from 'solid-js';
+
+import { t } from '@app/modules/i18n';
+import { error } from '@app/modules/logger';
+import { createStoreListener } from '@app/stores';
+import LocationStore from '@app/stores/location';
+import RepositoryStore from '@app/stores/repository';
+import EmptyState, { EMPTY_STATE_IMAGES } from '@app/ui/Common/EmptyState';
+import * as Git from '@modules/git';
+import { GitStatus } from '@modules/git/diff';
+import * as ipc from '~/common/ipc';
+
+import './index.scss';
+
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
-import { Show, createEffect, createSignal } from 'solid-js';
-
-import EmptyState, { EMPTY_STATE_IMAGES } from '@app/ui/Common/EmptyState';
-import RepositoryStore from '@app/stores/repository';
-import { createStoreListener } from '@app/stores';
-import LocationStore from '@app/stores/location';
-import { GitStatus } from '@modules/git/diff';
-import { error } from '@app/modules/logger';
-import * as Git from '@modules/git';
-import * as ipc from '~/common/ipc';
-
-import './index.scss';
-import { t } from '@app/modules/i18n';
 
 const mimeFromPath = (path: string) => {
 	const ext = path.split('.').pop();

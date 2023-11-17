@@ -1,15 +1,11 @@
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
-
-import { For, Show, createEffect, createSignal, onMount, JSX } from 'solid-js';
 import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
+import { For, JSX, Show, createEffect, createSignal, onMount } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
-import { createStoreListener } from '@stores/index';
 import { LocaleKey, t } from '@modules/i18n';
-import ModalStore from '@stores/modal';
+import { createStoreListener } from '@stores/index';
 import LayerStore from '@stores/layer';
+import ModalStore from '@stores/modal';
 import * as ipc from '~/common/ipc';
 
 import Button from '@ui/Common/Button';
@@ -17,6 +13,10 @@ import Icon from '@ui/Common/Icon';
 import Layer from '@ui/Layer';
 
 import './index.scss';
+
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
+	'electron:ipcRenderer'
+) as typeof import('electron').ipcRenderer;
 
 interface IModalProps {
 	transitions: {

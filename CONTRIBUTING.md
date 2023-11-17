@@ -39,10 +39,10 @@ packages/
 
 App is dedicated to [renderer](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process) code. It is written in [TypeScript](https://www.typescriptlang.org/) and [SolidJS](https://www.solidjs.com/). Both it and native contain their own `rollup.config.js` files which control how the code is bundled.
 
-The app directory also contains all of RelaGit's styling, which is written in [SCSS](https://sass-lang.com/), any scss file which is imported into a TypeScript file will be compiled into the bundled CSS file. 
+The app directory also contains all of RelaGit's styling, which is written in [SCSS](https://sass-lang.com/), any scss file which is imported into a TypeScript file will be compiled into the bundled CSS file.
 
 ```ts
-import './index.scss'
+import './index.scss';
 ```
 
 ### `common`

@@ -1,23 +1,22 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
-import { addToGitignore } from '@app/modules/git/gitignore';
-import RepositoryStore from '@app/stores/repository';
-import { createStoreListener } from '@stores/index';
-import { showItemInFolder } from '@modules/shell';
 import { openInEditor } from '@app/modules/code';
-import SettingsStore from '@app/stores/settings';
-import { debug, error } from '@modules/logger';
-import LocationStore from '@stores/location';
 import * as Git from '@app/modules/git';
-import FileStore from '@stores/files';
+import { addToGitignore } from '@app/modules/git/gitignore';
 import { t } from '@app/modules/i18n';
-
-import type { IFile } from '@stores/files';
-
+import RepositoryStore from '@app/stores/repository';
+import SettingsStore from '@app/stores/settings';
 import { showErrorModal } from '@app/ui/Modal';
+import { debug, error } from '@modules/logger';
+import { showItemInFolder } from '@modules/shell';
+import FileStore from '@stores/files';
+import type { IFile } from '@stores/files';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
+
 import Menu from '@ui/Menu';
 
 import './index.scss';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export default (props: IFile) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
@@ -159,18 +158,18 @@ export default (props: IFile) => {
 					{props.status === 'modified'
 						? 'M'
 						: props.status === 'added'
-						? 'A'
-						: props.status === 'deleted'
-						? 'D'
-						: props.status === 'renamed'
-						? 'R'
-						: props.status === 'copied'
-						? 'C'
-						: props.status === 'unmerged'
-						? 'U'
-						: props.status === 'untracked'
-						? '?'
-						: ''}
+						  ? 'A'
+						  : props.status === 'deleted'
+						    ? 'D'
+						    : props.status === 'renamed'
+						      ? 'R'
+						      : props.status === 'copied'
+						        ? 'C'
+						        : props.status === 'unmerged'
+						          ? 'U'
+						          : props.status === 'untracked'
+						            ? '?'
+						            : ''}
 				</button>
 			</div>
 		</Menu>

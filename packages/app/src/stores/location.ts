@@ -1,10 +1,11 @@
-import type { IRepository } from './repository';
-
-import { IPastCommit } from '@app/modules/git/show';
-import { ILogCommit } from '@app/modules/git/log';
-import SettingsStore from './settings';
 import { GenericStore } from '.';
+
+import { ILogCommit } from '@app/modules/git/log';
+import { IPastCommit } from '@app/modules/git/show';
+
 import { IFile } from './files';
+import type { IRepository } from './repository';
+import SettingsStore from './settings';
 
 const LocationStore = new (class Location extends GenericStore {
 	#selectedFile: IFile | undefined;

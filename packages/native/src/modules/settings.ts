@@ -1,7 +1,7 @@
-import promises from 'node:fs/promises';
-import path from 'node:path';
 import fs from 'node:fs';
+import promises from 'node:fs/promises';
 import os from 'node:os';
+import path from 'node:path';
 
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 

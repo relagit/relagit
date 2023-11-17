@@ -1,20 +1,18 @@
-import { fileURLToPath } from 'node:url';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
+import terser from '@rollup/plugin-terser';
+import fs from 'node:fs';
 import Module from 'node:module';
 import path from 'node:path';
-import fs from 'node:fs';
-
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'rollup';
-
-import nodeResolve from '@rollup/plugin-node-resolve';
-import tsconfig from 'rollup-plugin-tsconfig-paths';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import commonjs from '@rollup/plugin-commonjs';
-import replace from '@rollup/plugin-replace';
 import esbuild from 'rollup-plugin-esbuild';
-import terser from '@rollup/plugin-terser';
-import babel from '@rollup/plugin-babel';
-import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+import tsconfig from 'rollup-plugin-tsconfig-paths';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

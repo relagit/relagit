@@ -1,7 +1,9 @@
+import { GenericStore } from '.';
+
 import { debug } from '@app/modules/logger';
+
 import LocationStore from './location';
 import SettingsStore from './settings';
-import { GenericStore } from '.';
 
 export interface IRepository {
 	draft?: boolean;

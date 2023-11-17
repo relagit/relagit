@@ -131,10 +131,12 @@ interface Actions {
 
 declare module 'relagit:actions' {
 	const { Workflow, context }: Actions;
+
 	export { Workflow, context };
 }
 
 declare module 'relagit:themes' {
 	const { Theme }: Themes;
+
 	export { Theme };
 }

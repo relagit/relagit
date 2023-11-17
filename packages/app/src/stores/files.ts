@@ -1,6 +1,6 @@
-import { GitStatus } from '@modules/git/diff';
-
 import { GenericStore } from '.';
+
+import { GitStatus } from '@modules/git/diff';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 

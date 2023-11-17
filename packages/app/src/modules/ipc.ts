@@ -1,5 +1,6 @@
-import { workflows } from './actions/workflows';
 import LayerStore from '@stores/layer';
+
+import { workflows } from './actions/workflows';
 
 export default () => {
 	window.Native.listeners.SETTINGS(() => {

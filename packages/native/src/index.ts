@@ -1,13 +1,12 @@
-import pkj from '../../../package.json' assert { type: 'json' };
+import { BrowserWindow, Menu, MenuItemConstructorOptions, app } from 'electron';
 import * as path from 'path';
 
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+import * as ipc from '~/common/ipc';
 
-import { getSettings, setSettings } from './modules/settings';
+import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
-
-import * as ipc from '~/common/ipc';
+import { getSettings, setSettings } from './modules/settings';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',

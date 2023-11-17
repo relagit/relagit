@@ -1,19 +1,20 @@
+import * as Git from '@modules/git';
+import * as logger from '@modules/logger';
+import FileStore from '@stores/files';
+import LocationStore from '@stores/location';
+import RemoteStore from '@stores/remote';
+import RepositoryStore, { IRepository } from '@stores/repository';
+import SettingsStore from '@stores/settings';
+
+import { showErrorModal } from '@ui/Modal';
+
+import { warn } from '../logger';
+import { remoteStatus } from './remote';
+
 const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs')
 	.promises as typeof import('fs').promises;
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
-import RepositoryStore, { IRepository } from '@stores/repository';
-import LocationStore from '@stores/location';
-import SettingsStore from '@stores/settings';
-import RemoteStore from '@stores/remote';
-import * as logger from '@modules/logger';
-import { remoteStatus } from './remote';
-import FileStore from '@stores/files';
-import * as Git from '@modules/git';
-import { warn } from '../logger';
-
-import { showErrorModal } from '@app/ui/Modal';
 
 export const removeRepository = async (repository: IRepository) => {
 	SettingsStore.setSetting(

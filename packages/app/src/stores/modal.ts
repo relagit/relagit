@@ -1,5 +1,4 @@
 import { GenericStore } from '.';
-
 import { JSX } from 'solid-js';
 
 const ModalStore = new (class Modal extends GenericStore {

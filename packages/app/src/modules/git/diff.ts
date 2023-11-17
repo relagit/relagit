@@ -1,9 +1,9 @@
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
 import parseGitDiff from 'parse-git-diff';
 
 import { DIFF_CODES } from './constants';
 import { Git } from './core';
+
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 export type GitStatus =
 	| 'added'

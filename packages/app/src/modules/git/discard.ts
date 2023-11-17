@@ -1,9 +1,10 @@
+import { IFile } from '@app/stores/files';
+import { IRepository } from '@app/stores/repository';
+
+import { Git } from './core';
+
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
-import { IRepository } from '@app/stores/repository';
-import { IFile } from '@app/stores/files';
-import { Git } from './core';
 
 export const Discard = async (repository: IRepository, file: IFile) => {
 	if (!repository || !file) {

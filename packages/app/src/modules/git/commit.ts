@@ -1,5 +1,5 @@
-import { IRepository } from '@stores/repository';
 import FileStore from '@stores/files';
+import { IRepository } from '@stores/repository';
 
 import { Git } from './core';
 

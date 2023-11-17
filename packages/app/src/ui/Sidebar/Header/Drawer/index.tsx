@@ -1,25 +1,25 @@
-import { Accessor, Setter, For, Show } from 'solid-js';
+import { Accessor, For, Setter, Show } from 'solid-js';
 
-import { openExternal, showItemInFolder } from '@modules/shell';
-import RepositoryStore, { IRepository } from '@stores/repository';
-import FileStore, { IFile } from '@app/stores/files';
-import { createStoreListener } from '@stores/index';
-import { removeRepository } from '@modules/actions';
 import { openInEditor } from '@app/modules/code';
-import SettingsStore from '@app/stores/settings';
-import LocationStore from '@stores/location';
-import { renderDate } from '@modules/time';
-import { debug } from '@modules/logger';
-import LayerStore from '@stores/layer';
-import ModalStore from '@stores/modal';
 import { t } from '@app/modules/i18n';
+import FileStore, { IFile } from '@app/stores/files';
+import SettingsStore from '@app/stores/settings';
+import { removeRepository } from '@modules/actions';
+import { debug } from '@modules/logger';
+import { openExternal, showItemInFolder } from '@modules/shell';
+import { renderDate } from '@modules/time';
+import { createStoreListener } from '@stores/index';
+import LayerStore from '@stores/layer';
+import LocationStore from '@stores/location';
+import ModalStore from '@stores/modal';
+import RepositoryStore, { IRepository } from '@stores/repository';
 
-import RepositoryModal from '@ui/Modal/RepositoryModal';
-import GithubModal from '@ui/Modal/GithubModal';
-import Tooltip from '@ui/Common/Tooltip';
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
+import Tooltip from '@ui/Common/Tooltip';
 import Menu from '@ui/Menu';
+import GithubModal from '@ui/Modal/GithubModal';
+import RepositoryModal from '@ui/Modal/RepositoryModal';
 
 import './index.scss';
 

@@ -1,19 +1,20 @@
-import { createSignal, Show } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 
-import { openExternal, showItemInFolder } from '@app/modules/shell';
-import { createStoreListener } from '@stores/index';
-import RespositoryStore from '@stores/repository';
-import RemoteStore from '@app/stores/remote';
-import LocationStore from '@stores/location';
+import { openInEditor } from '@app/modules/code';
 import { t } from '@app/modules/i18n';
+import { openExternal, showItemInFolder } from '@app/modules/shell';
+import RemoteStore from '@app/stores/remote';
+import SettingsStore from '@app/stores/settings';
+import Menu from '@app/ui/Menu';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
+import RespositoryStore from '@stores/repository';
 
 import Icon from '@ui/Common/Icon';
-import Menu from '@app/ui/Menu';
+
 import Drawer from './Drawer';
 
 import './index.scss';
-import { openInEditor } from '@app/modules/code';
-import SettingsStore from '@app/stores/settings';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);

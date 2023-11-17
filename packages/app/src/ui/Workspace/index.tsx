@@ -1,16 +1,17 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
 import { For, Show } from 'solid-js';
 
-import { createStoreListener } from '@stores/index';
-import RepositoryStore from '@stores/repository';
-import LocationStore from '@stores/location';
 import { t } from '@app/modules/i18n';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
+import RepositoryStore from '@stores/repository';
 
 import Header from '@ui/Workspace/Header';
+
 import CodeView from './CodeView';
 
 import './index.scss';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export interface IWorkspaceProps {
 	sidebar: boolean;
@@ -84,16 +85,16 @@ export default (props: IWorkspaceProps) => {
 										{commitFile.status === 'modified'
 											? 'M'
 											: commitFile.status === 'added'
-											? 'A'
-											: commitFile.status === 'deleted'
-											? 'D'
-											: commitFile.status === 'renamed'
-											? 'R'
-											: commitFile.status === 'copied'
-											? 'C'
-											: commitFile.status === 'unmerged'
-											? 'U'
-											: '??'}
+											  ? 'A'
+											  : commitFile.status === 'deleted'
+											    ? 'D'
+											    : commitFile.status === 'renamed'
+											      ? 'R'
+											      : commitFile.status === 'copied'
+											        ? 'C'
+											        : commitFile.status === 'unmerged'
+											          ? 'U'
+											          : '??'}
 									</div>
 								</div>
 							)}

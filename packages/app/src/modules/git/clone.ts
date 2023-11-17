@@ -1,7 +1,8 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-
 import SettingsStore from '@app/stores/settings';
+
 import { Git } from './core';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export const Clone = async (url: string, directory: string) => {
 	const result = await Git({

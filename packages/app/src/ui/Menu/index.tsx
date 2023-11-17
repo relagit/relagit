@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, JSX, Show } from 'solid-js';
+import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import './index.scss';

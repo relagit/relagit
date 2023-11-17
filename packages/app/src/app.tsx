@@ -1,20 +1,21 @@
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
 import { Show, createSignal, onMount } from 'solid-js';
 
 import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
-import { debug } from './modules/logger';
-import { Git } from './modules/git/core';
 
-import Workspace from '@ui/Workspace';
+import Layer from '@ui/Layer';
+import Modal from '@ui/Modal';
 import Settings from '@ui/Settings';
 import Sidebar from '@ui/Sidebar';
-import Modal from '@ui/Modal';
-import Layer from '@ui/Layer';
+import Workspace from '@ui/Workspace';
+
+import { Git } from './modules/git/core';
+import { debug } from './modules/logger';
 
 import './app.scss';
+
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 const loaded = [];
 

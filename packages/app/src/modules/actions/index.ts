@@ -1,6 +1,6 @@
-import * as workflows from './workflows';
-import * as remote from './remote';
 import * as files from './files';
+import * as remote from './remote';
+import * as workflows from './workflows';
 
 export * from './workflows';
 export * from './remote';

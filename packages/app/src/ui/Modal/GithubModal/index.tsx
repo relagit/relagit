@@ -1,23 +1,23 @@
-const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
-
-import { Show, For, createSignal, createEffect } from 'solid-js';
-
-import { GitHub, GithubResponse } from '@app/modules/github';
-import { openExternal } from '@app/modules/shell';
-import * as logger from '@modules/logger';
-import * as Git from '@app/modules/git';
-import { t } from '@app/modules/i18n';
-
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader, showErrorModal } from '..';
+import { For, Show, createEffect, createSignal } from 'solid-js';
+
+import * as Git from '@app/modules/git';
+import { GitHub, GithubResponse } from '@app/modules/github';
+import { t } from '@app/modules/i18n';
+import { openExternal } from '@app/modules/shell';
+import Button from '@app/ui/Common/Button';
 import EmptyState from '@app/ui/Common/EmptyState';
 import FileSelect from '@app/ui/Common/FileSelect';
-import TextArea from '@app/ui/Common/TextArea';
-import Button from '@app/ui/Common/Button';
 import Icon from '@app/ui/Common/Icon';
+import TextArea from '@app/ui/Common/TextArea';
+import * as logger from '@modules/logger';
+
 import Layer from '@ui/Layer';
 
 import './index.scss';
+
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 let languageFile;
 

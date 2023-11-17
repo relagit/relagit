@@ -1,6 +1,6 @@
-export * from './elements';
-
 import { head } from './elements';
+
+export * from './elements';
 
 export const addCSS = (id: string, cssOrPath: string, local = false) => {
 	let el: HTMLLinkElement | HTMLStyleElement;

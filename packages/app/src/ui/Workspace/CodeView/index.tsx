@@ -1,26 +1,26 @@
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+import type { GitDiff } from 'parse-git-diff';
+import { For, Show, createSignal } from 'solid-js';
 
-import { createSignal, For, Show } from 'solid-js';
-
-import highlighter, { langFrom } from '@modules/highlighter';
-import { createStoreListener } from '@stores/index';
+import { t } from '@app/modules/i18n';
+import * as Git from '@modules/git';
 import { DIFF_CODES } from '@modules/git/constants';
 import { parseDiff } from '@modules/git/diff';
-import LocationStore from '@stores/location';
+import highlighter, { langFrom } from '@modules/highlighter';
 import { error } from '@modules/logger';
-import { t } from '@app/modules/i18n';
 import FileStore from '@stores/files';
-import * as Git from '@modules/git';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
 
 import EmptyState, { EMPTY_STATE_IMAGES } from '@ui/Common/EmptyState';
-import ImageView from './ImageView';
 import Icon from '@ui/Common/Icon';
 
-import type { GitDiff } from 'parse-git-diff';
-
-type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
+import ImageView from './ImageView';
 
 import './index.scss';
+
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+
+type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
 export const BINARY_EXTENSIONS = ['.DS_Store', '.exe', '.dll', '.so', '.dylib', '.o', '.a'];
@@ -474,9 +474,9 @@ export default (props: ICodeViewProps) => {
 																			{lineStatus === 'added'
 																				? '+'
 																				: lineStatus ===
-																				  'deleted'
-																				? '-'
-																				: ' '}
+																				    'deleted'
+																				  ? '-'
+																				  : ' '}
 																		</div>
 																		<div
 																			class="codeview__line__content"

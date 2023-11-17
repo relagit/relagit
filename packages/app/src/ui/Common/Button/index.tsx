@@ -1,4 +1,5 @@
 import { JSX } from 'solid-js';
+
 import './index.scss';
 
 interface IButtonProps {

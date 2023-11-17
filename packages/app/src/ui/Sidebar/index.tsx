@@ -1,18 +1,19 @@
 import { For, Show, createSignal } from 'solid-js';
 
-import RepositoryStore, { IRepository } from '@app/stores/repository';
-import { createStoreListener } from '@stores/index';
 import { ILogCommit } from '@app/modules/git/log';
-import LocationStore from '@stores/location';
 import { t } from '@app/modules/i18n';
+import RepositoryStore, { IRepository } from '@app/stores/repository';
+import * as Git from '@modules/git';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
-import * as Git from '@modules/git';
+import { createStoreListener } from '@stores/index';
+import LocationStore from '@stores/location';
 
 import EmptyState from '@ui/Common/EmptyState';
-import { showErrorModal } from '../Modal';
 import Header from '@ui/Sidebar/Header';
 import Item from '@ui/Sidebar/Item';
+
+import { showErrorModal } from '../Modal';
 import Commit from './Commit';
 import Footer from './Footer';
 
