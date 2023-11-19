@@ -1,3 +1,4 @@
+import { useFocusTrap } from '@solidjs-use/integrations';
 import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
@@ -24,19 +25,23 @@ export interface IMenu {
 export default (props: IMenu) => {
 	const [open, setOpen] = createSignal(false);
 
-	let menu: HTMLDivElement;
-	let wrapper: HTMLDivElement;
+	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();
+	const [menu, setMenu] = createSignal<HTMLDivElement>();
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
 
+	const { activate, deactivate } = useFocusTrap(menu);
+
 	const hide = () => {
 		setOpen(false);
+
+		deactivate();
 	};
 
 	const click = (e) => {
-		if (menu === e.target) return;
+		if (menu() === e.target) return;
 
-		if (!menu.contains(e.target)) return setOpen(false);
+		if (!menu().contains(e.target)) return hide();
 	};
 
 	const wrapperListener = (e: MouseEvent) => {
@@ -45,14 +50,20 @@ export default (props: IMenu) => {
 		setX(e.clientX || e.target?.['getBoundingClientRect']?.()?.x);
 		setY(e.clientY || e.target?.['getBoundingClientRect']?.()?.y);
 
-		setOpen(!open());
+		const alreadyOpen = open();
+
+		if (alreadyOpen) return hide();
+
+		setOpen(true);
+
+		activate();
 	};
 
 	createEffect(() => {
-		const menuHeight = menu?.offsetHeight;
+		const menuHeight = menu()?.offsetHeight;
 		const windowHeight = window.innerHeight;
 
-		const menuWidth = menu?.offsetWidth;
+		const menuWidth = menu()?.offsetWidth;
 		const windowWidth = window.innerWidth;
 
 		if (y() + menuHeight > windowHeight - 10) {
@@ -71,7 +82,7 @@ export default (props: IMenu) => {
 			document.removeEventListener('contextmenu', hide);
 		}
 
-		wrapper.addEventListener(props.event || 'contextmenu', wrapperListener);
+		wrapper().addEventListener(props.event || 'contextmenu', wrapperListener);
 	});
 
 	return (
@@ -79,7 +90,7 @@ export default (props: IMenu) => {
 			<Show when={open()}>
 				<Portal mount={document.getElementById('app-container')}>
 					<div
-						ref={menu}
+						ref={setMenu}
 						class="menu"
 						style={{
 							'--x': `${x()}px`,
@@ -103,19 +114,19 @@ export default (props: IMenu) => {
 													.toLowerCase()
 													.replace(/\W/g, '-')}
 												onClick={() => {
-													if (!item.onClick) return setOpen(false);
+													if (!item.onClick) return hide();
 
 													item.onClick();
 
-													setOpen(false);
+													hide();
 												}}
 												onKeyDown={(e) => {
 													if (e.key === 'Enter') {
-														if (!item.onClick) return setOpen(false);
+														if (!item.onClick) return hide();
 
 														item.onClick();
 
-														setOpen(false);
+														hide();
 													}
 												}}
 												tabIndex={0}
@@ -129,7 +140,7 @@ export default (props: IMenu) => {
 					</div>
 				</Portal>
 			</Show>
-			<div class="contextmenu-wrapper" ref={wrapper}>
+			<div class="contextmenu-wrapper" ref={setWrapper}>
 				{props.children}
 			</div>
 		</>
