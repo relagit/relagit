@@ -191,7 +191,8 @@ app.once('ready', async () => {
 					role: 'close'
 				},
 				{
-					role: 'quit'
+					role: 'quit',
+					label: 'Quit RelaGit'
 				},
 				{
 					role: 'reload'
