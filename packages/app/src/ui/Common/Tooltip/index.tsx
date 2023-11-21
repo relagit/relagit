@@ -40,12 +40,18 @@ export default (props: ITooltip) => {
 		setY(rect.top + rect.height / 2);
 	};
 
+	const delay = (e: FocusEvent) => {
+		setTimeout(() => {
+			show(e);
+		}, 200);
+	};
+
 	return (
 		<>
 			<props.children
 				title={props.text}
 				tabIndex={0}
-				onFocus={show}
+				onFocus={delay}
 				onBlur={hide}
 				onMouseEnter={show}
 				onMouseLeave={hide}
