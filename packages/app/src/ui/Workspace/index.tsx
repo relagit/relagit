@@ -47,6 +47,7 @@ export default (props: IWorkspaceProps) => {
 						<For each={commit()?.files}>
 							{(commitFile) => (
 								<div
+									tabIndex={0}
 									aria-role="button"
 									aria-label={t('workspace.commit.open', {
 										name: commitFile.filename
@@ -60,6 +61,11 @@ export default (props: IWorkspaceProps) => {
 									}}
 									onClick={() => {
 										LocationStore.setSelectedCommitFile(commitFile);
+									}}
+									onKeyDown={(event) => {
+										if (event.key === 'Enter') {
+											LocationStore.setSelectedCommitFile(commitFile);
+										}
 									}}
 								>
 									<div class="workspace__container__files__file__filename">
