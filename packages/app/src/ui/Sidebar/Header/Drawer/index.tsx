@@ -28,7 +28,8 @@ const hasUncommittedChanges = (files: Map<string, IFile[]>, repository: IReposit
 };
 
 export interface IHeaderDrawerProps {
-	open: [Accessor<boolean>, Setter<boolean>];
+	open: [Accessor<boolean>, (value: boolean) => void];
+	ref: [Accessor<HTMLDivElement>, Setter<HTMLDivElement>];
 }
 
 export default (props: IHeaderDrawerProps) => {
@@ -40,6 +41,7 @@ export default (props: IHeaderDrawerProps) => {
 
 	return (
 		<div
+			ref={props.ref[1]}
 			aria-hidden={!props.open[0]()}
 			classList={{
 				sidebar__drawer: true,

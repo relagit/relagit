@@ -1,3 +1,4 @@
+import { useFocusTrap } from '@solidjs-use/integrations';
 import { Show, createSignal } from 'solid-js';
 
 import { openInEditor } from '@app/modules/code';
@@ -18,9 +19,24 @@ import './index.scss';
 
 export default () => {
 	const [open, setOpen] = createSignal(false);
+	const ref = createSignal<HTMLDivElement>();
+
+	const { activate, deactivate } = useFocusTrap(ref[0]);
+
+	const toggle = (value: boolean) => {
+		if (value) {
+			setOpen(true);
+
+			activate();
+		} else {
+			setOpen(false);
+
+			deactivate();
+		}
+	};
 
 	window.Native.listeners.SWITCHER((_, value) => {
-		setOpen((o) => value ?? !o);
+		toggle(value ?? !open());
 	});
 
 	const selected = createStoreListener([LocationStore, RespositoryStore], () =>
@@ -29,7 +45,7 @@ export default () => {
 
 	return (
 		<>
-			<Drawer open={[open, setOpen]} />
+			<Drawer ref={ref} open={[open, toggle]} />
 			<Menu
 				items={[
 					{
@@ -73,10 +89,10 @@ export default () => {
 					aria-label={t('sidebar.openDrawer')}
 					tabIndex={0}
 					class="sidebar__header"
-					onClick={() => setOpen(!open())}
+					onClick={() => toggle(!open())}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							setOpen(!open());
+							toggle(!open());
 						}
 					}}
 				>
