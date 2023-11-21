@@ -155,7 +155,7 @@ app.once('ready', async () => {
 				},
 				{
 					label: 'Toggle Commit History View',
-					accelerator: 'CmdOrCtrl+H',
+					accelerator: 'CmdOrCtrl+L',
 					click: () => {
 						win.webContents.send(ipc.OPEN_HISTORY);
 					}
