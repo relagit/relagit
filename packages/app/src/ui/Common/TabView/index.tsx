@@ -29,7 +29,7 @@ export default (props: ITabViewProps) => {
 					disabled: v.disabled
 				}))}
 			/>
-			<div class="segmented-view__body scroller">
+			<div class="segmented-view__body scroller no-x">
 				<For each={props.views}>
 					{(view) => {
 						return (

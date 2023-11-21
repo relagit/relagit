@@ -2,6 +2,7 @@ export default {
 	settings: {
 		title: 'Einstellungen',
 		close: 'Einstellungen schließen',
+		restrt: 'Erfordert Neustart.',
 		workflows: {
 			title: 'Workflows'
 		},
@@ -12,12 +13,12 @@ export default {
 			title: 'Allgemein',
 			language: {
 				label: 'Sprache',
-				description: 'Wähle die Sprache aus, die du benutzen möchtest. Erfordert Neustart.'
+				description: 'Wähle die Sprache aus, die du benutzen möchtest.'
 			},
 			editor: {
 				label: 'Externer Editor',
 				description:
-					'Wähle den Editor aus, den du benutzen möchtest, um Dateien zu öffnen. Erfordert Neustart.',
+					'Wähle den Editor aus, den du benutzen möchtest, um Dateien zu öffnen.',
 				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
 				'code-insiders': 'Visual Studio Code Insiders',
@@ -45,15 +46,15 @@ export default {
 			title: 'Aussehen',
 			vibrancy: {
 				label: 'Vibrancy',
-				description:
-					'Aktiviere "Vibrancy". Das kann sich auf die Leistung auswirken. Erfordert Neustart.'
+				description: 'Aktiviere "Vibrancy". Das kann sich auf die Leistung auswirken.'
 			},
 			theme: {
 				label: 'Erscheinungsbild',
 				description: 'Wähle das Erscheinungsbild aus, das du benutzen möchtest.',
 				light: 'Hell',
 				dark: 'Dunkel',
-				system: 'System'
+				system: 'System',
+				choose: 'Wähle {{theme}} Erscheinungsbild'
 			},
 			font: {
 				label: 'Benutzerdefinierte Schriftart',

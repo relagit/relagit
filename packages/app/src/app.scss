@@ -200,6 +200,10 @@ textarea {
 	scrollbar-width: thin;
 	scrollbar-color: var(--bg-secondary) var(--bg-floating);
 
+	&.no-x {
+		overflow-x: auto;
+	}
+
 	&.hide-bar {
 		scrollbar-width: none;
 

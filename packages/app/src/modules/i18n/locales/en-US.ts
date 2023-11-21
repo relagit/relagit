@@ -2,6 +2,7 @@ export default {
 	settings: {
 		title: 'Settings',
 		close: 'Close Settings',
+		restart: 'Requires Restart.',
 		workflows: {
 			title: 'Workflows'
 		},
@@ -12,12 +13,11 @@ export default {
 			title: 'General',
 			language: {
 				label: 'Language',
-				description: 'Select the language you would like to use. Requires Restart.'
+				description: 'Select the language you would like to use.'
 			},
 			editor: {
 				label: 'External Editor',
-				description:
-					'Select the editor you would like to use for opening files. May Require Restart.',
+				description: 'Select the editor you would like to use for opening files.',
 				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
 				'code-insiders': 'Visual Studio Code Insiders',
@@ -45,15 +45,16 @@ export default {
 			title: 'Appearance',
 			vibrancy: {
 				label: 'Vibrancy',
-				description:
-					'Enable Under-Window Vibrancy. This may impact performance. Requires Restart.'
+				description: 'Enable Under-Window Vibrancy. This may impact performance.'
 			},
 			theme: {
 				label: 'Theme',
 				description: 'Select the theme you would like to use.',
 				light: 'Light',
 				dark: 'Dark',
-				system: 'System'
+				system: 'System',
+				systemNote: "The application's appearance will change based on OS preferences.",
+				choose: 'Select {{theme}} theme'
 			},
 			font: {
 				label: 'Custom Font',

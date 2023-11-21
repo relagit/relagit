@@ -25,7 +25,7 @@ export default (props: IIconProps) => {
 			when={customIcons.hasOwnProperty(props.name)}
 			fallback={
 				<span
-					style={props.style}
+					{...props}
 					class={`icon ${props.className || ''}`}
 					innerHTML={
 						props.variant

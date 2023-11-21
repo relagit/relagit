@@ -2,6 +2,7 @@ export default {
 	settings: {
 		title: 'Optiones',
 		close: 'Dimitte Optiones',
+		restart: 'Neustart requiritur.',
 		workflows: {
 			title: 'Workflows'
 		},
@@ -16,7 +17,7 @@ export default {
 			},
 			editor: {
 				label: 'Editor Externus',
-				description: 'Editor elige uti velis ut limas aperire. Neustart requiritur.',
+				description: 'Editor elige uti velis ut limas aperire.',
 				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
 				'code-insiders': 'Visual Studio Code Insiders',
@@ -43,14 +44,15 @@ export default {
 			title: 'Aspectus',
 			vibrancy: {
 				label: 'Vibrance',
-				description: 'Admitte sub Fenestra Vibrancy. Sileo requirit.'
+				description: 'Admitte sub Fenestra Vibrancy.'
 			},
 			theme: {
 				label: 'Theme',
 				description: 'Select thema uti velis.',
 				light: 'Lux',
 				dark: 'Dark',
-				system: 'Systema'
+				system: 'Systema',
+				choose: 'Elige {{theme}} thema'
 			},
 			font: {
 				label: 'Custom Font',

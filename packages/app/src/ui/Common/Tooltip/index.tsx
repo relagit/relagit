@@ -8,6 +8,10 @@ export interface ITooltip {
 	children: (p: {
 		onMouseEnter: (e: MouseEvent) => void;
 		onMouseLeave: () => void;
+		onFocus: (e: FocusEvent) => void;
+		onBlur: () => void;
+		tabIndex: number;
+		title: string;
 	}) => JSX.Element | JSX.Element[];
 	text: string;
 	position?: 'top' | 'bottom' | 'auto';
@@ -25,7 +29,7 @@ export default (props: ITooltip) => {
 		setOpen(false);
 	};
 
-	const show = (e: MouseEvent) => {
+	const show = (e: MouseEvent | FocusEvent) => {
 		e.stopPropagation();
 
 		setOpen(true);
@@ -38,7 +42,15 @@ export default (props: ITooltip) => {
 
 	return (
 		<>
-			<props.children onMouseEnter={show} onMouseLeave={hide} ref={wrapper}></props.children>
+			<props.children
+				title={props.text}
+				tabIndex={0}
+				onFocus={show}
+				onBlur={hide}
+				onMouseEnter={show}
+				onMouseLeave={hide}
+				ref={wrapper}
+			></props.children>
 			<Portal mount={document.getElementById('app-container')}>
 				<Transition
 					onEnter={(el, done) => {

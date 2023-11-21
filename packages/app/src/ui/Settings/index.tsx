@@ -16,6 +16,7 @@ import TextArea from '@ui/Common/TextArea';
 
 import Button from '../Common/Button';
 import TabView from '../Common/TabView';
+import Tooltip from '../Common/Tooltip';
 import Layer from '../Layer';
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '../Modal';
 
@@ -284,6 +285,8 @@ export default () => {
 				</label>
 				<p class="settings-layer__setting__description">
 					{t('settings.general.language.description')}
+					<br />
+					{t('settings.restart')}
 				</p>
 				<RadioGroup
 					options={[
@@ -292,7 +295,7 @@ export default () => {
 							value: 'de'
 						},
 						{
-							element: 'English (U.S.)',
+							element: 'English US',
 							value: 'en-US'
 						},
 						{
@@ -314,6 +317,8 @@ export default () => {
 				</label>
 				<p class="settings-layer__setting__description">
 					{t('settings.general.editor.description')}
+					<br />
+					{t('settings.restart')}
 				</p>
 				<RadioGroup
 					options={[
@@ -403,7 +408,9 @@ export default () => {
 			<div class="settings-layer__setting">
 				<Switch
 					label={t('settings.appearance.vibrancy.label')}
-					note={t('settings.appearance.vibrancy.description')}
+					note={
+						t('settings.appearance.vibrancy.description') + '\n' + t('settings.restart')
+					}
 					disabled={
 						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
 					}
@@ -421,26 +428,73 @@ export default () => {
 				<label class="settings-layer__setting__label" id="settings-theme">
 					{t('settings.appearance.theme.label')}
 				</label>
-				<RadioGroup
-					options={[
-						{
-							element: t('settings.appearance.theme.light'),
-							value: 'light'
-						},
-						{
-							element: t('settings.appearance.theme.dark'),
-							value: 'dark'
-						},
-						{
-							element: t('settings.appearance.theme.system'),
-							value: 'system'
-						}
-					]}
-					value={settings()?.get('theme') as string}
-					onChange={(value) => {
-						SettingsStore.setSetting('theme', value as ISettings['theme']);
-					}}
-				/>
+				<div class="settings-layer__setting__themepicker" role="radiogroup">
+					<For each={['light', 'dark', 'system']}>
+						{(theme) => {
+							return (
+								<label
+									aria-label={t('settings.appearance.theme.choose', {
+										theme
+									})}
+									aria-selected={settings()?.get('theme') === theme}
+									classList={{ active: settings()?.get('theme') === theme }}
+									tabIndex={0}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											SettingsStore.setSetting(
+												'theme',
+												theme as ISettings['theme']
+											);
+										}
+									}}
+								>
+									<input
+										type="radio"
+										value={theme}
+										checked={settings()?.get('theme') === theme}
+										onChange={() => {
+											SettingsStore.setSetting(
+												'theme',
+												theme as ISettings['theme']
+											);
+										}}
+									/>
+									<img src={`assets/themes/${theme}.png`} class="image" />
+
+									<Show
+										when={theme === 'system'}
+										fallback={
+											<p class="title">
+												{t(
+													`settings.appearance.theme.${
+														theme as 'light' | 'dark'
+													}`
+												)}
+											</p>
+										}
+									>
+										<span class="title">
+											{t('settings.appearance.theme.system')}
+											<Tooltip
+												text={t('settings.appearance.theme.systemNote')}
+											>
+												{(p) => (
+													<div
+														{...p}
+														role="definition"
+														class="definition"
+													>
+														<Icon name="question" />
+													</div>
+												)}
+											</Tooltip>
+										</span>
+									</Show>
+								</label>
+							);
+						}}
+					</For>
+				</div>
 			</div>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-font">
