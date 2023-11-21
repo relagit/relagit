@@ -23,13 +23,13 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
-		"@solidjs-use/integrations": "^2.3.0",
-		"focus-trap": "^7.5.4",
-		"solidjs-use": "^2.3.0",
 		"sucrase": "^3.34.0",
 		"vscode-oniguruma": "^1.7.0"
 	},
 	"devDependencies": {
+		"solidjs-use": "^2.3.0",
+		"focus-trap": "^7.5.4",
+		"@solidjs-use/integrations": "^2.3.0",
 		"@babel/core": "^7.23.0",
 		"@babel/preset-env": "^7.22.20",
 		"@babel/preset-typescript": "^7.23.0",
