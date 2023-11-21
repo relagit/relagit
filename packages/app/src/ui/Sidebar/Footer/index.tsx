@@ -139,7 +139,11 @@ export default () => {
 							]}
 							event="click"
 						>
-							<button class="sidebar__footer__textarea-button">
+							<button
+								class="sidebar__footer__textarea-button"
+								aria-label={t('sidebar.footer.add')}
+								disabled={!(selected() && changes() && staged())}
+							>
 								<Icon name="plus" />
 							</button>
 						</Menu>

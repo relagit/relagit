@@ -112,7 +112,8 @@ export default {
 		footer: {
 			description: 'Beschreibung',
 			summary: 'Zusammenfassung',
-			commit: 'Commit zu {{branch}}'
+			commit: 'Commit zu {{branch}}',
+			add: 'Hinzufügen'
 		},
 		openDrawer: 'Öffne Repository-Drawer',
 		upToDate: 'Du bist auf dem neuesten Stand.',

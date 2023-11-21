@@ -111,7 +111,8 @@ export default {
 		footer: {
 			description: 'Description',
 			summary: 'Summary',
-			commit: 'Commit to {{branch}}'
+			commit: 'Commit to {{branch}}',
+			add: 'Add'
 		},
 		openDrawer: 'Open Repository Drawer',
 		upToDate: "You're all up to date.",
