@@ -4,6 +4,8 @@ import path from 'path';
 
 const __dirname = process.cwd();
 
+console.log('cwd:', __dirname);
+
 const GITHUB_TOKEN = process.argv[2].replace('--token=', '');
 
 const platform = () => {
@@ -31,12 +33,12 @@ const run = () => {
 	}
 
 	console.log('building...');
-	child_process.execSync('pnpm build', {
+	child_process.execSync('npm run build', {
 		cwd: __dirname
 	});
 
 	console.log('making...');
-	child_process.execSync(`pnpm make:${platform()} --publish always`, {
+	child_process.execSync(`npm run make:${platform()} --publish always`, {
 		cwd: __dirname,
 		env: {
 			GH_TOKEN: GITHUB_TOKEN
