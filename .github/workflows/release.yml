@@ -22,19 +22,10 @@ jobs:
 
             - uses: pnpm/action-setup@v2
 
-            # this is required for yarn to install
-            - run: |
-                  corepack enable
-
             - uses: actions/setup-node@v3
               with:
                   node-version: 20
                   cache: 'pnpm'
 
-            - run: pnpm install --frozen-lockfile
-            - name: Run Electron Builder
-              uses: samuelmeuli/action-electron-builder@master
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  release: true
-                  args: '--config builder.cjs'
+            - run: node ./build/index.js --token="${{ secrets.GITHUB_TOKEN }}"
+              name: Run Build and Release Script
