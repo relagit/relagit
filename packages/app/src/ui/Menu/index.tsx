@@ -90,6 +90,11 @@ export default (props: IMenu) => {
 			<Show when={open()}>
 				<Portal mount={document.getElementById('app-container')}>
 					<div
+						onKeyDown={(e) => {
+							if (e.key === 'Escape') {
+								hide();
+							}
+						}}
 						ref={setMenu}
 						class="menu"
 						style={{
