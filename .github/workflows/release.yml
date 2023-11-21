@@ -27,5 +27,16 @@ jobs:
                   node-version: 20
                   cache: 'pnpm'
 
-            - run: node ./build/index.js --token="${{ secrets.GITHUB_TOKEN }}"
-              name: Run Build and Release Script
+            - run: |
+                  echo node -v
+                  echo npm -v
+                  echo pnpm -v
+
+            - run: pnpm i --frozen-lockfile
+              name: Install
+
+            - run: pnpm run build
+              name: Build
+
+            - run: pnpm make:${{ matrix.os }} --publish always
+              name: Make

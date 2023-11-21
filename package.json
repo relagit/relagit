@@ -19,7 +19,10 @@
 		"make": "electron-builder --config builder.cjs",
 		"make:mac": "electron-builder --mac --config builder.cjs",
 		"make:win": "electron-builder --win --config builder.cjs",
-		"make:linux": "electron-builder --linux --config builder.cjs"
+		"make:linux": "electron-builder --linux --config builder.cjs",
+		"make:macos-latest": "electron-builder --mac --config builder.cjs",
+		"make:windows-latest": "electron-builder --win --config builder.cjs",
+		"make:ubuntu-latest": "electron-builder --linux --config builder.cjs"
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
