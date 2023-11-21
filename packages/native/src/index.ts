@@ -140,14 +140,14 @@ app.once('ready', async () => {
 			submenu: [
 				{
 					label: 'Toggle Sidebar',
-					accelerator: 'CmdOrCtrl+1',
+					accelerator: 'CmdOrCtrl+B',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SIDEBAR);
 					}
 				},
 				{
 					label: 'Toggle Switcher',
-					accelerator: 'CmdOrCtrl+2',
+					accelerator: 'CmdOrCtrl+K',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SWITCHER);
 						win.webContents.send(ipc.OPEN_SIDEBAR, true);
@@ -155,14 +155,14 @@ app.once('ready', async () => {
 				},
 				{
 					label: 'Toggle Commit History View',
-					accelerator: 'CmdOrCtrl+3',
+					accelerator: 'CmdOrCtrl+H',
 					click: () => {
 						win.webContents.send(ipc.OPEN_HISTORY);
 					}
 				},
 				{
 					label: 'Toggle Blame View',
-					accelerator: 'CmdOrCtrl+4',
+					accelerator: 'CmdOrCtrl+J',
 					click: () => {
 						win.webContents.send(ipc.OPEN_BLAME);
 					}
