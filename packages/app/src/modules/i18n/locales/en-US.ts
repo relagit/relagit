@@ -165,7 +165,9 @@ export default {
 	},
 	git: {
 		pushChanges: 'Push Changes',
+		push: ['Push {{count}} change', 'Push {{count}} changes'],
 		pullChanges: 'Pull Changes',
+		pull: ['Pull {{count}} change', 'Pull {{count}} changes'],
 		noChanges: 'No Changes',
 		diverged: 'Trees have diverged',
 		divergedHint: 'Stash changes and pull',

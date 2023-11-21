@@ -163,7 +163,9 @@ export default {
 	},
 	git: {
 		pushChanges: 'Push Mutationes',
+		push: ['{{count}} mutationem push', '{{count}} mutationes push'],
 		pullChanges: 'Pull Mutationes',
+		pull: ['{{count}} mutationem pull', '{{count}} mutationes pull'],
 		noChanges: 'Nulla Mutationes',
 		diverged: 'Trees abscesserint',
 		divergedHint: 'Stash Mutationes et pull',
