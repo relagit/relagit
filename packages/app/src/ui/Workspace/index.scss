@@ -59,6 +59,8 @@
 				overflow: hidden;
 				user-select: none;
 
+				@include mixins.focusable;
+
 				&:hover {
 					background-color: var(--bg-hover);
 				}
