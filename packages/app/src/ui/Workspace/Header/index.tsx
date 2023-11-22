@@ -142,17 +142,9 @@ export default () => {
 				label={(() => {
 					switch (status()) {
 						case 'ahead':
-							return t(
-								'git.push',
-								{ count: repository()?.ahead },
-								repository()?.ahead
-							);
+							return t('git.pushChanges');
 						case 'behind':
-							return t(
-								'git.pull',
-								{ count: repository()?.behind },
-								repository()?.behind
-							);
+							return t('git.pullChanges');
 						case 'diverged':
 							return t('git.diverged');
 						default:
