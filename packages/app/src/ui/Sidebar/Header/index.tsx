@@ -1,4 +1,3 @@
-import { useFocusTrap } from '@solidjs-use/integrations';
 import { Show, createSignal } from 'solid-js';
 
 import { openInEditor } from '@app/modules/code';
@@ -21,17 +20,13 @@ export default () => {
 	const [open, setOpen] = createSignal(false);
 	const ref = createSignal<HTMLDivElement>();
 
-	const { activate, deactivate } = useFocusTrap(ref[0]);
-
 	const toggle = (value: boolean) => {
 		if (value) {
 			setOpen(true);
 
-			activate();
+			ref[0]().querySelector('button,input,a,select,textarea,[tabindex]')?.['focus']();
 		} else {
 			setOpen(false);
-
-			deactivate();
 		}
 	};
 
