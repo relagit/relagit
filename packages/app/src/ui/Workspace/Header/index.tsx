@@ -238,7 +238,16 @@ export default () => {
 			</Show>
 			<div class="workspace__header__spacer" />
 			<PanelButton
-				icon="git-commit"
+				icon="git-branch"
+				name="Switch branch"
+				id="workspace-branch"
+				className={false ? 'active' : ''}
+				onClick={() => {
+					// TODO: Open branch switcher
+				}}
+			/>
+			<PanelButton
+				icon="people"
 				name="Toggle blame view"
 				id="workspace-blame"
 				className={blameOpen() ? 'active' : ''}
