@@ -3,7 +3,7 @@ import { JSX, Show, createEffect, createSignal } from 'solid-js';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
 import { showErrorModal } from '@app/ui/Modal';
-import { refetchRepository } from '@modules/actions';
+import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
 import { debug, error } from '@modules/logger';
 import { renderDate } from '@modules/time';
@@ -175,6 +175,8 @@ export default () => {
 
 							try {
 								await Git.Push(LocationStore.selectedRepository);
+
+								triggerWorkflow('push', LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
@@ -202,7 +204,11 @@ export default () => {
 							try {
 								await Git.Stash(LocationStore.selectedRepository);
 
+								triggerWorkflow('stash', LocationStore.selectedRepository);
+
 								await Git.Pull(LocationStore.selectedRepository);
+
+								triggerWorkflow('pull', LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
@@ -224,6 +230,8 @@ export default () => {
 					onClick={async () => {
 						try {
 							await Git.PopStash(LocationStore.selectedRepository);
+
+							triggerWorkflow('stash_pop', LocationStore.selectedRepository);
 
 							refetchRepository(LocationStore.selectedRepository);
 						} catch (e) {

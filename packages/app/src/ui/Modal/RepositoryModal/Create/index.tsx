@@ -1,5 +1,6 @@
 import { Signal, createEffect, createSignal } from 'solid-js';
 
+import { triggerWorkflow } from '@app/modules/actions';
 import { t } from '@app/modules/i18n';
 import { Init } from '@modules/git';
 import SettingsStore from '@stores/settings';
@@ -120,6 +121,8 @@ export default (props: ICreateRepositoryModalProps) => {
 								...SettingsStore.getSetting('repositories'),
 								props.pathSignal[0]()
 							]);
+
+							triggerWorkflow('repository_add', props.pathSignal[0]());
 						}}
 						disabled={!allowClose()}
 					>

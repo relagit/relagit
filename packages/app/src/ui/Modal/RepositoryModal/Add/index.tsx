@@ -1,5 +1,6 @@
 import { Signal, createEffect, createSignal } from 'solid-js';
 
+import { triggerWorkflow } from '@app/modules/actions';
 import { t } from '@app/modules/i18n';
 import SettingsStore from '@stores/settings';
 
@@ -106,6 +107,8 @@ export default (props: IAddRepositoryModalProps) => {
 								...SettingsStore.getSetting('repositories'),
 								props.pathSignal[0]()
 							]);
+
+							triggerWorkflow('repository_add', props.pathSignal[0]());
 
 							props.modalProps.close();
 						}}

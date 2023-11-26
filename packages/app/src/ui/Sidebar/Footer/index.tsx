@@ -160,10 +160,7 @@ export default () => {
 					LocationStore.setSelectedFile(null);
 
 					try {
-						triggerWorkflow('commit', selected(), {
-							summary: draft()?.message,
-							description: draft()?.description
-						});
+						triggerWorkflow('commit', selected(), draft());
 
 						await Git.Commit(selected(), draft()?.message, draft()?.description);
 					} catch (e) {

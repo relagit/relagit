@@ -21,14 +21,16 @@ type action =
 	| 'repository_add'
 	| 'repository_remove'
 	| 'remote_fetch'
-	| 'settings_update';
+	| 'settings_update'
+	| 'stash'
+	| 'stash_pop';
 
 const defFile = def.replace('{{VERSION}}', pkj.version);
 
 export const iconFromAction = (act: action | action[]): IconName => {
 	switch (Array.isArray(act) ? act[0] : act) {
 		case '*':
-			return 'issue-draft';
+			return 'key-asterisk';
 		case 'commit':
 			return 'git-commit';
 		case 'push':
@@ -43,6 +45,10 @@ export const iconFromAction = (act: action | action[]): IconName => {
 			return 'gear';
 		case 'remote_fetch':
 			return 'cloud';
+		case 'stash':
+			return 'archive';
+		case 'stash_pop':
+			return 'archive';
 		default:
 			return 'circle';
 	}
@@ -181,7 +187,30 @@ export const loadWorkflows = async () => {
 
 export const workflows = new Set<Workflow>();
 
-export const triggerWorkflow = async (event: action, ...params: unknown[]) => {
+type ParamsFromEventType<E extends action> = E extends 'commit'
+	? [IRepository, { message: string; description: string }]
+	: E extends 'push'
+	  ? [IRepository]
+	  : E extends 'pull'
+	    ? [IRepository]
+	    : E extends 'remote_fetch'
+	      ? [IRepository, { name: string; url: string; type: string }[]]
+	      : E extends 'repository_add'
+	        ? [string]
+	        : E extends 'repository_remove'
+	          ? [string]
+	          : E extends 'settings_update'
+	            ? []
+	            : E extends 'stash'
+	              ? [IRepository]
+	              : E extends 'stash_pop'
+	                ? [IRepository]
+	                : [];
+
+export const triggerWorkflow = async <E extends action>(
+	event: E,
+	...params: ParamsFromEventType<E>
+) => {
 	for (const workflow of workflows) {
 		if (Array.isArray(workflow.on)) {
 			if (workflow.on.includes(event) || workflow.on.includes('*')) {
@@ -204,9 +233,16 @@ const makeContext = (location: string) => {
 		Git: {
 			Push: async (repository: IRepository) => {
 				await Git.Push(repository);
+
+				triggerWorkflow('push', repository);
 			},
 			Commit: async (repository: IRepository, message: string, description: string) => {
 				await Git.Commit(repository, message, description);
+
+				triggerWorkflow('commit', repository, {
+					message,
+					description
+				});
 			}
 		},
 		Repository: {

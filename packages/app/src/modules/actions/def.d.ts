@@ -12,7 +12,9 @@ type action =
 	| 'repository_add'
 	| 'repository_remove'
 	| 'remote_fetch'
-	| 'settings_update';
+	| 'settings_update'
+	| 'stash'
+	| 'stash_pop'
 
 interface WorkflowOptions<T extends action | action[] = action> {
 	/**

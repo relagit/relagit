@@ -1,3 +1,4 @@
+import { triggerWorkflow } from '@app/modules/actions';
 import { openInEditor } from '@app/modules/code';
 import * as Git from '@app/modules/git';
 import { addToGitignore } from '@app/modules/git/gitignore';
@@ -47,6 +48,8 @@ export default (props: IFile) => {
 					onClick: async () => {
 						try {
 							await Git.Stash(selected());
+
+							triggerWorkflow('stash', selected());
 						} catch (e) {
 							showErrorModal(e, 'error.git');
 
