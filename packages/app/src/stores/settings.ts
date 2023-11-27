@@ -1,7 +1,5 @@
 import { GenericStore } from '.';
 
-import { triggerWorkflow } from '@app/modules/actions';
-
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
@@ -68,7 +66,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 		this.save();
 		this.emit();
 
-		triggerWorkflow('settings_update');
+		window._triggerWorkflow('settings_update');
 	}
 
 	save() {
