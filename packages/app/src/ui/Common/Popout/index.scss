@@ -1,0 +1,69 @@
+.popout {
+	position: absolute;
+	transform-origin: left top;
+	transform: translate(-50%, calc(-100% - var(--w-h)));
+	width: fit-content;
+	border-radius: 4px;
+	background-color: var(--bg-floating);
+	border: 1px solid var(--separator-primary);
+	box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
+	font-size: 1rem;
+	pointer-events: none;
+	z-index: 99;
+	color: var(--color-primary);
+
+	&.right {
+		top: calc(var(--y) + var(--w-h) / 2);
+		left: calc(var(--x) + var(--w-w) + 2px);
+
+		.popout__arrow {
+			rotate: 90deg;
+			top: 50%;
+			margin-top: -5px;
+			left: -5px;
+		}
+	}
+
+	&.left {
+		top: calc(var(--y) + var(--w-h) / 2);
+		left: calc(var(--x) - var(--w-w) - 2px);
+
+		.popout__arrow {
+			rotate: 270deg;
+			top: 50%;
+			margin-top: -5px;
+			left: calc(100% - 5px);
+		}
+	}
+
+	&.top {
+		top: var(--y);
+		left: var(--x);
+	}
+
+	&.bottom {
+		top: calc(var(--y) + 2 * var(--w-h));
+		left: var(--x);
+
+		.popout__arrow {
+			rotate: 180deg;
+			top: -10px;
+		}
+	}
+
+	&__wrapper {
+		display: contents;
+	}
+
+	&__arrow {
+		left: calc(50% + 0px);
+		position: absolute;
+		top: 100%;
+		margin-left: -5px;
+		border: 5px solid transparent;
+		border-top-color: var(--bg-floating);
+		width: 0;
+		height: 0;
+		filter: drop-shadow(0px 1px 0px var(--separator-primary));
+	}
+}
