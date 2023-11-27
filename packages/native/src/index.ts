@@ -17,7 +17,13 @@ app.setAboutPanelOptions({
 });
 
 app.once('ready', async () => {
-	const settings = await getSettings();
+	let settings: Map<string, unknown>;
+
+	try {
+		settings = await getSettings();
+	} catch (e) {
+		settings = new Map();
+	}
 
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
