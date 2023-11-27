@@ -228,6 +228,8 @@ export const triggerWorkflow = async <E extends action>(
 	}
 };
 
+window._triggerWorkflow = triggerWorkflow;
+
 const makeContext = (location: string) => {
 	const context = {
 		Git: {

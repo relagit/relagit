@@ -1,3 +1,4 @@
+import { triggerWorkflow } from '@app/modules/actions';
 import { IRepository } from '@app/stores/repository';
 
 import { Native as _Native } from '../native/src/preload';
@@ -13,6 +14,7 @@ declare global {
 		Native: typeof _Native;
 
 		_refetchRepository: (repo: IRepository, transitionTo?: boolean) => Promise<void>;
+		_triggerWorkflow: typeof triggerWorkflow;
 	}
 
 	export const __NODE_ENV__: 'development' | 'production' | 'test';

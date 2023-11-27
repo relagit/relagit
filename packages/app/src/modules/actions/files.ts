@@ -10,7 +10,6 @@ import { showErrorModal } from '@ui/Modal';
 
 import { warn } from '../logger';
 import { remoteStatus } from './remote';
-import { triggerWorkflow } from './workflows';
 
 const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs')
 	.promises as typeof import('fs').promises;
@@ -29,7 +28,7 @@ export const removeRepository = async (repository: IRepository) => {
 		LocationStore.setSelectedRepository(undefined);
 	}
 
-	triggerWorkflow('repository_remove', repository.path);
+	window._triggerWorkflow('repository_remove', repository.path);
 };
 
 const fileSort = (

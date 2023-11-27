@@ -1,6 +1,5 @@
 import SettingsStore from '@app/stores/settings';
 
-import { triggerWorkflow } from '../actions';
 import { Git } from './core';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
@@ -17,7 +16,7 @@ export const Clone = async (url: string, directory: string) => {
 		directory
 	]);
 
-	triggerWorkflow('repository_add', directory);
+	window._triggerWorkflow('repository_add', directory);
 
 	return result;
 };
