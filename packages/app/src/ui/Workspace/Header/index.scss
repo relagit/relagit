@@ -111,6 +111,14 @@
 						outline: none;
 					}
 				}
+
+				&__hint {
+					width: fit-content;
+					font-family: var(--font-primary);
+					height: 0.85rem;
+					font-size: 0.85rem;
+					color: var(--color-secondary);
+				}
 			}
 
 			&:hover {

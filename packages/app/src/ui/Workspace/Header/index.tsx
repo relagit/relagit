@@ -378,6 +378,7 @@ export default () => {
 											}
 										}}
 									/>
+									<kbd class="branches-picker__list__item-new__hint">↩</kbd>
 								</div>
 							</Show>
 						</div>
