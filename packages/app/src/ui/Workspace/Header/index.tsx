@@ -405,7 +405,7 @@ export default () => {
 						icon="git-branch"
 						name="Switch branch"
 						id="workspace-branch"
-						className={false ? 'active' : ''}
+						className={p.open() ? 'active' : ''}
 						onClick={(e) => {
 							p.toggle(e);
 						}}

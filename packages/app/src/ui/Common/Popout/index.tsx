@@ -1,4 +1,4 @@
-import { JSX, Setter, Show, createSignal, onCleanup, onMount } from 'solid-js';
+import { Accessor, JSX, Setter, Show, createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
@@ -9,11 +9,13 @@ export interface IPopout {
 		show: (e: MouseEvent | KeyboardEvent) => void;
 		toggle: (e: MouseEvent | KeyboardEvent) => void;
 		hide: () => void;
+		open: Accessor<boolean>;
 		ref: Setter<HTMLElement>;
 	}) => JSX.Element | JSX.Element[];
 	body: (p: {
 		show: (e: MouseEvent | KeyboardEvent) => void;
 		toggle: (e: MouseEvent | KeyboardEvent) => void;
+		open: Accessor<boolean>;
 		hide: () => void;
 	}) => JSX.Element | JSX.Element[];
 	position?: 'top' | 'bottom' | 'auto';
@@ -74,6 +76,7 @@ export default (props: IPopout) => {
 			<props.children
 				hide={hide}
 				toggle={toggle}
+				open={open}
 				show={show}
 				ref={setWrapper}
 			></props.children>
@@ -122,7 +125,7 @@ export default (props: IPopout) => {
 								?.offsetWidth}; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
 								?.offsetHeight}px; --w-w: ${wrapper()?.offsetWidth}px;`}
 						>
-							<props.body hide={hide} toggle={toggle} show={show} />
+							<props.body open={open} hide={hide} toggle={toggle} show={show} />
 							<div class="popout__arrow"></div>
 						</div>
 					</Show>
