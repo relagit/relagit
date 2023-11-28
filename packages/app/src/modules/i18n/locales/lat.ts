@@ -52,6 +52,7 @@ export default {
 				light: 'Lux',
 				dark: 'Dark',
 				system: 'Systema',
+				systemNote: 'Aspectus applicationis mutabitur secundum OS praeferentias.',
 				choose: 'Elige {{theme}} thema'
 			},
 			font: {
@@ -162,6 +163,10 @@ export default {
 		tooBigHint: 'Scapus hic tam ingens est ut rationes perficiendi non reddemus.'
 	},
 	git: {
+		publish: 'Mitte Germen',
+		publishHint: 'Hoc germen ad remotum mitte.',
+		branches: ['Germen', 'Germenes'],
+		newBranch: 'Novum germen',
 		pushChanges: 'Push Mutationes',
 		push: ['{{count}} mutationem push', '{{count}} mutationes push'],
 		pullChanges: 'Pull Mutationes',

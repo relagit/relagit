@@ -1,7 +1,9 @@
-import { JSX, Show, createEffect, createSignal } from 'solid-js';
+import { For, JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
 
+import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
+import Popout from '@app/ui/Common/Popout';
 import { showErrorModal } from '@app/ui/Modal';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
@@ -20,7 +22,7 @@ export interface IPanelButtonProps {
 	icon: IconName | keyof typeof customIcons;
 	iconVariant?: 12 | 16 | 24 | 32;
 	name?: string;
-	onClick: () => void;
+	onClick: (e: MouseEvent) => void;
 	size?: 'small' | 'medium' | 'large';
 	label?: string;
 	detail?: JSX.Element | string;
@@ -28,6 +30,7 @@ export interface IPanelButtonProps {
 	tooltipPosition?: 'top' | 'bottom' | 'auto';
 	disabled?: boolean;
 	className?: string;
+	ref?: Setter<HTMLElement>;
 }
 
 const PanelButton = (props: IPanelButtonProps) => {
@@ -42,6 +45,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 				return (
 					<button
 						{...p}
+						ref={props.ref}
 						aria-role="button"
 						aria-label={props.label || props.name}
 						disabled={props.disabled}
@@ -84,14 +88,29 @@ export default () => {
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
+	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
+	const [inputRef, setInputRef] = createSignal<HTMLElement>();
+	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashed, setStashed] = createSignal<number>(null);
-	const [status, setStatus] = createSignal<'diverged' | 'ahead' | 'behind'>(null);
+	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
 
 	createEffect(() => {
 		if (!repository()) return;
 
 		const ahead = repository()?.ahead || 0;
 		const behind = repository()?.behind || 0;
+
+		if (ahead === 0 && behind === 0) {
+			const current = branches()?.find((b) => b.name === repository()?.branch);
+
+			if (!current) return setStatus(null);
+
+			if (!current.hasUpstream) {
+				return setStatus('publish');
+			} else {
+				return setStatus(null);
+			}
+		}
 
 		if (ahead > 0 && behind > 0) {
 			setStatus('diverged');
@@ -103,10 +122,25 @@ export default () => {
 	});
 
 	createStoreListener([LocationStore, RepositoryStore], async () => {
+		if (!LocationStore.selectedRepository) {
+			setStashed(null);
+			setBranches(null);
+		}
+
 		try {
 			const res = await Git.ListStash(LocationStore.selectedRepository);
 
 			setStashed(res?.length);
+		} catch (e) {
+			showErrorModal(e, 'error.fetching');
+
+			error(e);
+		}
+
+		try {
+			const res = await Git.ListBranches(LocationStore.selectedRepository);
+
+			setBranches(res);
 		} catch (e) {
 			showErrorModal(e, 'error.fetching');
 
@@ -133,6 +167,8 @@ export default () => {
 							return 'repo-push';
 						case 'behind':
 							return 'cPull';
+						case 'publish':
+							return 'repo-push';
 						case 'diverged':
 							return 'repo-forked';
 						default:
@@ -145,6 +181,8 @@ export default () => {
 							return t('git.pushChanges');
 						case 'behind':
 							return t('git.pullChanges');
+						case 'publish':
+							return t('git.publish');
 						case 'diverged':
 							return t('git.diverged');
 						default:
@@ -164,6 +202,8 @@ export default () => {
 							return t('git.commits', { count: Math.abs(behind) }, Math.abs(behind));
 						case 'diverged':
 							return t('git.divergedHint');
+						case 'publish':
+							return t('git.publishHint');
 						default:
 							return t('git.nothingToSee');
 					}
@@ -217,6 +257,24 @@ export default () => {
 
 							refetchRepository(LocationStore.selectedRepository);
 						}
+						case 'publish': {
+							debug('Publishing');
+
+							try {
+								await Git.PushWithOrigin(
+									LocationStore.selectedRepository,
+									repository()?.branch
+								);
+
+								triggerWorkflow('push', LocationStore.selectedRepository);
+							} catch (e) {
+								showErrorModal(e, 'error.git');
+
+								error(e);
+							}
+
+							refetchRepository(LocationStore.selectedRepository);
+						}
 						default: {
 							debug('No change');
 						}
@@ -245,15 +303,114 @@ export default () => {
 				/>
 			</Show>
 			<div class="workspace__header__spacer" />
-			<PanelButton
-				icon="git-branch"
-				name="Switch branch"
-				id="workspace-branch"
-				className={false ? 'active' : ''}
-				onClick={() => {
-					// TODO: Open branch switcher
-				}}
-			/>
+			<Popout
+				position="bottom"
+				body={() => (
+					<div class="branches-picker">
+						<div class="branches-picker__label">
+							{t('git.branches', null, branches()?.length)}
+						</div>
+						<div class="branches-picker__list">
+							<For each={branches()}>
+								{(branch) => (
+									<button
+										aria-selected={branch.name === repository()?.branch}
+										aria-role="option"
+										aria-label={branch.name}
+										classList={{
+											'branches-picker__list__item': true,
+											active: branch.name === repository()?.branch
+										}}
+										onClick={async () => {
+											try {
+												await Git.CheckoutBranch(
+													LocationStore.selectedRepository,
+													branch.name
+												);
+
+												refetchRepository(LocationStore.selectedRepository);
+											} catch (e) {
+												showErrorModal(e, 'error.git');
+
+												error(e);
+											}
+										}}
+									>
+										{branch.name}
+										<div class="branches-picker__list__item__info">
+											{branch.relativeDate}
+										</div>
+									</button>
+								)}
+							</For>
+							<Show when={hasNewBranchInput()}>
+								<div
+									class="branches-picker__list__item branches-picker__list__item-new"
+									ref={setInputRef}
+								>
+									<input
+										type="text"
+										placeholder="branch-name"
+										onBlur={() => {
+											setHasNewBranchInput(false);
+										}}
+										onKeyUp={async (e) => {
+											if (e.key === 'Enter') {
+												if (!e.currentTarget.value) return;
+
+												try {
+													await Git.CreateBranch(
+														LocationStore.selectedRepository,
+														e.currentTarget.value,
+														true
+													);
+
+													setHasNewBranchInput(false);
+
+													refetchRepository(
+														LocationStore.selectedRepository
+													);
+												} catch (e) {
+													showErrorModal(e, 'error.git');
+
+													error(e);
+												}
+											}
+										}}
+									/>
+								</div>
+							</Show>
+						</div>
+						<button
+							class="branches-picker__new"
+							onClick={() => {
+								setHasNewBranchInput(true);
+
+								requestAnimationFrame(() => {
+									inputRef()?.querySelector('input')?.focus();
+								});
+							}}
+						>
+							<Icon name="plus" />
+							{t('git.newBranch')}
+						</button>
+					</div>
+				)}
+			>
+				{(p) => (
+					<PanelButton
+						disabled={!repository() || branches() === null}
+						ref={p.ref}
+						icon="git-branch"
+						name="Switch branch"
+						id="workspace-branch"
+						className={false ? 'active' : ''}
+						onClick={(e) => {
+							p.toggle(e);
+						}}
+					/>
+				)}
+			</Popout>
 			<PanelButton
 				icon="people"
 				name="Toggle blame view"

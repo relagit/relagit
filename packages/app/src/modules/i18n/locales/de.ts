@@ -2,7 +2,7 @@ export default {
 	settings: {
 		title: 'Einstellungen',
 		close: 'Einstellungen schließen',
-		restrt: 'Erfordert Neustart.',
+		restart: 'Erfordert Neustart.',
 		workflows: {
 			title: 'Workflows'
 		},
@@ -54,6 +54,8 @@ export default {
 				light: 'Hell',
 				dark: 'Dunkel',
 				system: 'System',
+				systemNote:
+					'Das Erscheinungsbild der Anwendung ändert sich je nach OS-Einstellungen.',
 				choose: 'Wähle {{theme}} Erscheinungsbild'
 			},
 			font: {
@@ -165,6 +167,10 @@ export default {
 		tooBigHint: 'Diese Datei ist soooo groß, dass wir sie aus Leistungsgründen nicht rendern.'
 	},
 	git: {
+		publish: 'Veröffentlichen',
+		publishHint: 'Veröffentliche diesen Branch auf Remote.',
+		branches: ['Branch', 'Branches'],
+		newBranch: 'Neuer Branch',
 		pushChanges: 'Änderungen pushen',
 		push: ['{{count}} Änderung pushen', '{{count}} Änderungen pushen'],
 		pullChanges: 'Änderungen pullen',

@@ -164,6 +164,10 @@ export default {
 		tooBigHint: "This file is sooo huge that we aren't rendering it for performance reasons."
 	},
 	git: {
+		publish: 'Publish Branch',
+		publishHint: 'Publish this branch to remote.',
+		branches: ['Branch', 'Branches'],
+		newBranch: 'New branch',
 		pushChanges: 'Push Changes',
 		push: ['Push {{count}} change', 'Push {{count}} changes'],
 		pullChanges: 'Pull Changes',
