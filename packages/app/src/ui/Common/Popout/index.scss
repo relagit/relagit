@@ -1,15 +1,14 @@
 .popout {
 	position: absolute;
 	transform-origin: left top;
-	transform: translate(-50%, calc(-100% - var(--w-h)));
+	transform: translateX(-50%);
 	width: fit-content;
 	border-radius: 4px;
 	background-color: var(--bg-floating);
 	border: 1px solid var(--separator-primary);
 	box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
 	font-size: 1rem;
-	pointer-events: none;
-	z-index: 99;
+	z-index: 98;
 	color: var(--color-primary);
 
 	&.right {
@@ -42,7 +41,7 @@
 	}
 
 	&.bottom {
-		top: calc(var(--y) + 2 * var(--w-h));
+		top: calc(1.5 * var(--y));
 		left: var(--x);
 
 		.popout__arrow {

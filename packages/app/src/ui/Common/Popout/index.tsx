@@ -49,14 +49,14 @@ export default (props: IPopout) => {
 	const show = (e: MouseEvent | KeyboardEvent) => {
 		e.stopPropagation();
 
-		console.log(wrapper(), popout());
-
 		setOpen(true);
 
 		const rect = wrapper()?.getBoundingClientRect();
 
 		setX(rect.left + rect.width / 2);
 		setY(rect.top + rect.height / 2);
+
+		popout()?.querySelector('button,input,a,select,textarea,[tabindex]')?.['focus']();
 	};
 
 	const toggle = (e: MouseEvent | KeyboardEvent) => {
@@ -112,9 +112,14 @@ export default (props: IPopout) => {
 				>
 					<Show when={open()}>
 						<div
+							role="menu"
+							aria-role="menu"
+							aria-expanded="true"
+							aria-haspopup="true"
 							class={`popout ${props.position ? props.position : 'top'}`}
 							ref={setPopout}
-							style={`--x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
+							style={`--h: ${popout()?.offsetHeight}; --w: ${popout()
+								?.offsetWidth}; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
 								?.offsetHeight}px; --w-w: ${wrapper()?.offsetWidth}px;`}
 						>
 							<props.body hide={hide} toggle={toggle} show={show} />
