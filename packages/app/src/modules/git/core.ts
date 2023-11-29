@@ -41,6 +41,7 @@ export const Git = async (params: IGitParams): Promise<string> => {
 		} else if (stderr) {
 			if (
 				!(cmd.startsWith('git push ') && stderr.startsWith('To ')) &&
+				!stderr.startsWith('Everything up-to-date') &&
 				!(cmd.startsWith('git clone ') && stderr.startsWith('Cloning into')) &&
 				!(cmd.startsWith('git checkout ') && stderr.startsWith('Switched to branch')) &&
 				!(cmd.startsWith('git push ') && stderr.includes('pull request for '))
