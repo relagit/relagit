@@ -87,10 +87,10 @@ export default () => {
 					class="sidebar__header"
 					onClick={() => toggle(!open())}
 					onKeyDown={(e) => {
-						e.stopPropagation();
-						e.preventDefault();
-
 						if (e.key === 'Enter') {
+							e.stopPropagation();
+							e.preventDefault();
+
 							toggle(!open());
 						}
 					}}
