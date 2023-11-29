@@ -4,6 +4,7 @@ import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
+import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
@@ -313,34 +314,62 @@ export default () => {
 						<div class="branches-picker__list">
 							<For each={branches()}>
 								{(branch) => (
-									<button
-										aria-selected={branch.name === repository()?.branch}
-										aria-role="option"
-										aria-label={branch.name}
-										classList={{
-											'branches-picker__list__item': true,
-											active: branch.name === repository()?.branch
-										}}
-										onClick={async () => {
-											try {
-												await Git.CheckoutBranch(
-													LocationStore.selectedRepository,
-													branch.name
-												);
+									<Menu
+										items={[
+											{
+												type: 'item',
+												label: t('git.deleteBranch'),
+												color: 'danger',
+												onClick: async () => {
+													try {
+														await Git.DeleteBranch(
+															LocationStore.selectedRepository,
+															branch.name
+														);
 
-												refetchRepository(LocationStore.selectedRepository);
-											} catch (e) {
-												showErrorModal(e, 'error.git');
+														refetchRepository(
+															LocationStore.selectedRepository
+														);
+													} catch (e) {
+														showErrorModal(e, 'error.git');
 
-												error(e);
+														error(e);
+													}
+												}
 											}
-										}}
+										]}
 									>
-										{branch.name}
-										<div class="branches-picker__list__item__info">
-											{branch.relativeDate}
-										</div>
-									</button>
+										<button
+											aria-selected={branch.name === repository()?.branch}
+											aria-role="option"
+											aria-label={branch.name}
+											classList={{
+												'branches-picker__list__item': true,
+												active: branch.name === repository()?.branch
+											}}
+											onClick={async () => {
+												try {
+													await Git.CheckoutBranch(
+														LocationStore.selectedRepository,
+														branch.name
+													);
+
+													refetchRepository(
+														LocationStore.selectedRepository
+													);
+												} catch (e) {
+													showErrorModal(e, 'error.git');
+
+													error(e);
+												}
+											}}
+										>
+											{branch.name}
+											<div class="branches-picker__list__item__info">
+												{branch.relativeDate}
+											</div>
+										</button>
+									</Menu>
 								)}
 							</For>
 							<Show when={hasNewBranchInput()}>
@@ -351,9 +380,8 @@ export default () => {
 									<input
 										type="text"
 										placeholder="branch-name"
-										onBlur={() => {
-											setHasNewBranchInput(false);
-										}}
+										inputmode="text"
+										autocomplete="off"
 										onKeyUp={async (e) => {
 											if (e.key === 'Enter') {
 												if (!e.currentTarget.value) return;
@@ -378,22 +406,49 @@ export default () => {
 											}
 										}}
 									/>
-									<kbd class="branches-picker__list__item-new__hint">↩</kbd>
+									<button
+										class="branches-picker__list__item-new__hint"
+										aria-label={t('git.createBranch')}
+										aria-role="button"
+										onClick={async () => {
+											const input = inputRef()?.querySelector('input');
+
+											if (!input.value) return;
+
+											try {
+												await Git.CreateBranch(
+													LocationStore.selectedRepository,
+													input.value,
+													true
+												);
+
+												setHasNewBranchInput(false);
+
+												refetchRepository(LocationStore.selectedRepository);
+											} catch (e) {
+												showErrorModal(e, 'error.git');
+
+												error(e);
+											}
+										}}
+									>
+										↩
+									</button>
 								</div>
 							</Show>
 						</div>
 						<button
 							class="branches-picker__new"
 							onClick={() => {
-								setHasNewBranchInput(true);
+								setHasNewBranchInput((v) => !v);
 
 								requestAnimationFrame(() => {
 									inputRef()?.querySelector('input')?.focus();
 								});
 							}}
 						>
-							<Icon name="plus" />
-							{t('git.newBranch')}
+							<Icon name={hasNewBranchInput() ? 'fold-up' : 'plus'} />
+							{hasNewBranchInput() ? t('git.hide') : t('git.newBranch')}
 						</button>
 					</div>
 				)}

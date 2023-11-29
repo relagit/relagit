@@ -163,10 +163,13 @@ export default {
 		tooBigHint: 'Scapus hic tam ingens est ut rationes perficiendi non reddemus.'
 	},
 	git: {
+		hide: 'Abscondere',
 		publish: 'Mitte Germen',
 		publishHint: 'Hoc germen ad remotum mitte.',
 		branches: ['Germen', 'Germenes'],
+		deleteBranch: 'Germen Aufer',
 		newBranch: 'Novum germen',
+		createBranch: 'Fac Germen',
 		pushChanges: 'Push Mutationes',
 		push: ['{{count}} mutationem push', '{{count}} mutationes push'],
 		pullChanges: 'Pull Mutationes',

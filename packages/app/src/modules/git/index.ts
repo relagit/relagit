@@ -1,4 +1,10 @@
-export { ListBranches, CheckoutBranch, CreateBranch, PushWithOrigin } from './branches';
+export {
+	ListBranches,
+	CheckoutBranch,
+	CreateBranch,
+	DeleteBranch,
+	PushWithOrigin
+} from './branches';
 export { Stash, ListStash, PopStash } from './stash';
 export { PreviousCommit } from './previous-commit';
 export { Show, ShowOrigin } from './show';

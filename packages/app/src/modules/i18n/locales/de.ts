@@ -167,10 +167,13 @@ export default {
 		tooBigHint: 'Diese Datei ist soooo groß, dass wir sie aus Leistungsgründen nicht rendern.'
 	},
 	git: {
+		hide: 'Verstecken',
 		publish: 'Veröffentlichen',
 		publishHint: 'Veröffentliche diesen Branch auf Remote.',
 		branches: ['Branch', 'Branches'],
+		deleteBranch: 'Branch löschen',
 		newBranch: 'Neuer Branch',
+		createBranch: 'Erstelle Branch',
 		pushChanges: 'Änderungen pushen',
 		push: ['{{count}} Änderung pushen', '{{count}} Änderungen pushen'],
 		pullChanges: 'Änderungen pullen',

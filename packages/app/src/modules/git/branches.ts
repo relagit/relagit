@@ -95,3 +95,17 @@ export const PushWithOrigin = async (repository: IRepository, branch: string): P
 
 	return res;
 };
+
+export const DeleteBranch = async (repository: IRepository, branch: string): Promise<string> => {
+	if (!repository) {
+		return '';
+	}
+
+	const res = await Git({
+		directory: repository.path,
+		command: 'branch',
+		args: ['-D', branch]
+	});
+
+	return res;
+};
