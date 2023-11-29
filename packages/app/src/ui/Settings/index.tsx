@@ -89,11 +89,22 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 			<For each={props.options}>
 				{(option) => {
 					return (
-						<label
+						<div
+							aria-role="radio"
+							role="radio"
+							class="settings-layer__setting__input__radio"
+							aria-disabled={props.disabled}
 							aria-label={option.element}
-							aria-selected={value() === option.value}
+							aria-checked={value() === option.value}
 							classList={{ active: value() === option.value }}
 							tabIndex={0}
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+
+								props.onChange(option.value);
+								setValue(option.value);
+							}}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') {
 									props.onChange(option.value);
@@ -101,18 +112,9 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 								}
 							}}
 						>
-							<input
-								type="radio"
-								value={option.value}
-								checked={value() === option.value}
-								onChange={(e) => {
-									props.onChange((e.target as HTMLInputElement).value);
-									setValue((e.target as HTMLInputElement).value);
-								}}
-							/>
 							<div class="check"></div>
 							{option.element}
-						</label>
+						</div>
 					);
 				}}
 			</For>
@@ -152,8 +154,9 @@ export const Switch = (props: ISwitchProps) => {
 				</div>
 				<div
 					aria-label={props.label}
-					aria-selected={props.value()}
-					aria-role="button"
+					aria-checked={props.value()}
+					aria-role="checkbox"
+					role="checkbox"
 					classList={{
 						check: true,
 						active: props.value()
@@ -171,7 +174,6 @@ export const Switch = (props: ISwitchProps) => {
 						}
 					}}
 				>
-					<input type="checkbox" checked={props.value()} />
 					<span class="slider"></span>
 				</div>
 			</label>
