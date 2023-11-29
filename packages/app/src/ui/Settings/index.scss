@@ -201,6 +201,10 @@
 		&:nth-last-child(1) {
 			border-radius: 0 0 4px 4px;
 			border-bottom-width: 1px;
+
+			&:focus {
+				padding-bottom: 11px !important;
+			}
 		}
 
 		&:hover {
@@ -220,9 +224,14 @@
 		}
 
 		&:focus {
-			outline: none;
 			border: 2px solid var(--radio-focus);
-			padding: 10px 30px;
+			outline: none;
+			padding: 11px 31px; // visually compensate for border
+			padding-bottom: 10px;
+
+			.check {
+				left: 9px;
+			}
 		}
 
 		input {
