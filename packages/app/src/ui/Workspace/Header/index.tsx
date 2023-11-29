@@ -91,6 +91,7 @@ export default () => {
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
+	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
 	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashed, setStashed] = createSignal<number>(null);
@@ -383,14 +384,28 @@ export default () => {
 										placeholder="branch-name"
 										inputmode="text"
 										autocomplete="off"
-										onKeyUp={async (e) => {
+										value={newBranch()}
+										onInput={(e) => {
+											setNewBranch(
+												e.currentTarget.value
+													.replace(/\s/g, '-')
+													.replace(/[^a-zA-Z0-9-_]/g, '')
+											);
+
+											e.currentTarget.value = newBranch();
+										}}
+										onKeyDown={async (e) => {
+											if (e.key === 'Escape') {
+												setHasNewBranchInput(false);
+											}
+
 											if (e.key === 'Enter') {
-												if (!e.currentTarget.value) return;
+												if (!newBranch()) return;
 
 												try {
 													await Git.CreateBranch(
 														LocationStore.selectedRepository,
-														e.currentTarget.value,
+														newBranch(),
 														true
 													);
 
