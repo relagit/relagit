@@ -26,8 +26,16 @@ export default (props: ITooltip) => {
 	let tooltip: HTMLDivElement;
 	let wrapper: HTMLDivElement;
 
+	let hasRecentlyHidden = false;
+
 	const hide = () => {
 		setOpen(false);
+
+		hasRecentlyHidden = true;
+
+		setTimeout(() => {
+			hasRecentlyHidden = false;
+		}, 300);
 	};
 
 	const show = (e: MouseEvent | FocusEvent) => {
@@ -43,7 +51,7 @@ export default (props: ITooltip) => {
 
 	const delay = (e: FocusEvent) => {
 		setTimeout(() => {
-			show(e);
+			if (!hasRecentlyHidden) show(e);
 		}, 200);
 	};
 
