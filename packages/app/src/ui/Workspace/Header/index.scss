@@ -20,10 +20,32 @@
 		user-select: none;
 		-webkit-app-region: no-drag;
 
-		@include mixins.focusable;
+		&:focus {
+			border-color: transparent;
+			box-shadow: none;
+			border: 2px solid var(--color-blue-500);
+			outline: none;
+			padding-inline: 33px !important;
+		}
+
+		&:hover {
+			background-color: var(--bg-hover);
+		}
+
+		&.active {
+			background-color: var(--bg-active);
+
+			svg {
+				color: var(--color-primary);
+			}
+		}
 
 		&:not(:has(.workspace__header__panelbutton__info)) {
 			padding-inline: 20px;
+
+			&:focus {
+				padding-inline: 18px !important;
+			}
 		}
 
 		&.disabled {
@@ -46,18 +68,6 @@
 			&__detail {
 				font-size: 0.85rem;
 				color: var(--color-secondary);
-			}
-		}
-
-		&:hover {
-			background-color: var(--bg-hover);
-		}
-
-		&.active {
-			background-color: var(--bg-active);
-
-			svg {
-				color: var(--color-primary);
 			}
 		}
 
