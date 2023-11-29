@@ -16,16 +16,22 @@
 		justify-content: center;
 
 		.mark {
+			height: 24px;
+
 			svg {
 				width: 24px;
 				height: 24px;
+				fill: currentColor;
 			}
 		}
 
 		.logo {
+			height: 24px;
+
 			svg {
 				width: 80px;
 				height: 24px;
+				fill: currentColor;
 			}
 		}
 	}
