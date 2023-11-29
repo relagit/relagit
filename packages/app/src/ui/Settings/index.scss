@@ -30,6 +30,12 @@
 			background-color: transparent;
 			opacity: 0.6;
 
+			&:focus {
+				color: var(--color-blue-500);
+				opacity: 1;
+				outline: none;
+			}
+
 			&:hover {
 				opacity: 1;
 			}
