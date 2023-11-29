@@ -82,10 +82,14 @@ export default () => {
 				<div
 					aria-role="button"
 					aria-label={t('sidebar.openDrawer')}
+					aria-expanded={open()}
 					tabIndex={0}
 					class="sidebar__header"
 					onClick={() => toggle(!open())}
 					onKeyDown={(e) => {
+						e.stopPropagation();
+						e.preventDefault();
+
 						if (e.key === 'Enter') {
 							toggle(!open());
 						}

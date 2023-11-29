@@ -49,6 +49,7 @@ const PanelButton = (props: IPanelButtonProps) => {
 						ref={props.ref}
 						aria-role="button"
 						aria-label={props.label || props.name}
+						aria-selected={props.className?.includes('active')}
 						disabled={props.disabled}
 						classList={{
 							workspace__header__panelbutton: true,

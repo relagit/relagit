@@ -12,6 +12,7 @@ export interface ITooltip {
 		onBlur: () => void;
 		tabIndex: number;
 		title: string;
+		'aria-labeledby': string;
 	}) => JSX.Element | JSX.Element[];
 	text: string;
 	position?: 'top' | 'bottom' | 'auto';
@@ -46,6 +47,8 @@ export default (props: ITooltip) => {
 		}, 200);
 	};
 
+	const id = Math.random().toString(36).substring(2, 9);
+
 	return (
 		<>
 			<props.children
@@ -56,6 +59,7 @@ export default (props: ITooltip) => {
 				onMouseEnter={show}
 				onMouseLeave={hide}
 				ref={wrapper}
+				aria-labeledby={open() ? id : undefined}
 			></props.children>
 			<Portal mount={document.getElementById('app-container')}>
 				<Transition
@@ -92,6 +96,10 @@ export default (props: ITooltip) => {
 				>
 					<Show when={open()}>
 						<div
+							id={id}
+							aria-hidden={!open()}
+							aria-role="tooltip"
+							role="tooltip"
 							class={`tooltip ${props.position ? props.position : 'top'}`}
 							ref={tooltip}
 							style={`--x: ${x()}px; --y: ${y()}px; --w-h: ${

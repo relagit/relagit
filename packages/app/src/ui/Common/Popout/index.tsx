@@ -50,6 +50,7 @@ export default (props: IPopout) => {
 
 	const show = (e: MouseEvent | KeyboardEvent) => {
 		e.stopPropagation();
+		e.preventDefault();
 
 		setOpen(true);
 
