@@ -389,7 +389,7 @@ export default () => {
 											setNewBranch(
 												e.currentTarget.value
 													.replace(/\s/g, '-')
-													.replace(/[^a-zA-Z0-9-_]/g, '')
+													.replace(/[^a-zA-Z0-9-_/]/g, '')
 											);
 
 											e.currentTarget.value = newBranch();
