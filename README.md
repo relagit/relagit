@@ -23,7 +23,7 @@ Builds are generated automatically upon [release](https://github.com/relagit/rel
 -   [Windows](https://github.com/relagit/relagit/releases/latest)
 -   [Linux](https://github.com/relagit/relagit/releases/latest)
 
-[^1]: macOS prebuilds are not yet available for Apple Silicon. You can build it yourself following the instructions above.
+[^1]: macOS prebuilds are not yet available for Apple Silicon. You can build it yourself following the instructions above and passing the `--arm64` flag to `pnpm make:mac`.
 
 ## Building
 
