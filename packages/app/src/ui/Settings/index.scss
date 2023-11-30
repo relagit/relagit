@@ -198,7 +198,7 @@
 		--radio-stroke: var(--separator-primary);
 		--radio-hover: var(--bg-quaternary);
 		--radio-active: var(--bg-quinary);
-		--radio-focus: #{illyrica.$color-blue-500};
+		--radio-focus: var(--color-blue-500);
 
 		&:nth-child(1) {
 			border-radius: 4px 4px 0 0;

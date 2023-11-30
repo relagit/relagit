@@ -17,7 +17,7 @@
 	--input-color: var(--color-primary);
 	--input-bg: var(--bg-tertiary);
 	--input-stroke: var(--separator-primary);
-	--input-focus: #{illyrica.$color-blue-500};
+	--input-focus: var(--color-blue-500);
 
 	@include mixins.focusable(var(--input-focus));
 

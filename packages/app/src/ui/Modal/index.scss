@@ -92,7 +92,7 @@
 
 			&:focus {
 				outline: none;
-				color: #{illyrica.$color-blue-500};
+				color: var(--color-blue-500);
 				opacity: 1;
 			}
 		}
