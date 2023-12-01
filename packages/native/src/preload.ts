@@ -1,5 +1,5 @@
 import * as starryNight from '@wooorm/starry-night';
-import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
+import { IpcRendererEvent, app, contextBridge, ipcRenderer } from 'electron';
 import fs, { WatchListener } from 'node:fs';
 
 import { Workflow } from '~/app/src/modules/actions';
@@ -13,6 +13,12 @@ export const Native = {
 		}
 
 		return require(id);
+	},
+	alert: (message: string, type: 'none' | 'info' | 'error' | 'question' | 'warning') => {
+		ipcRenderer.invoke(ipc.ALERT, message, type);
+	},
+	quit: () => {
+		app.quit();
 	},
 	libraries: {
 		starryNight

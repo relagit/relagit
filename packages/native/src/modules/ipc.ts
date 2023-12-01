@@ -24,6 +24,16 @@ export default (win: Electron.BrowserWindow) => {
 		return await dialog.showOpenDialog(win, options);
 	});
 
+	ipcMain.handle(
+		ipc.ALERT,
+		(_, message: string, type: 'none' | 'info' | 'error' | 'question' | 'warning') => {
+			dialog.showMessageBox(win, {
+				type,
+				message
+			});
+		}
+	);
+
 	ipcMain.handle(ipc.SHOW_ITEM_IN_FOLDER, async (_, path: string) => {
 		return shell.showItemInFolder(path);
 	});
@@ -31,6 +41,16 @@ export default (win: Electron.BrowserWindow) => {
 	ipcMain.handle(ipc.RELOAD_CLIENT, () => {
 		app.relaunch();
 		app.exit();
+	});
+
+	ipcMain.handle(ipc.CHECK_IS_IN_PATH, (_, bin: string) => {
+		try {
+			child_process.execSync(`command -v ${bin}`);
+
+			return true;
+		} catch (error) {
+			return false;
+		}
 	});
 
 	ipcMain.handle(ipc.SPAWN_ENV, (_, exec: string, path: string) => {

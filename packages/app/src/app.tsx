@@ -12,6 +12,7 @@ import Workspace from '@ui/Workspace';
 
 import { Git } from './modules/git/core';
 import { debug } from './modules/logger';
+import { checkIsInPath } from './modules/shell';
 
 import './app.scss';
 
@@ -33,6 +34,16 @@ export default () => {
 	});
 
 	onMount(async () => {
+		// check if git is installed
+		if (!(await checkIsInPath('git'))) {
+			window.Native.alert(
+				'Git is not found.\n\nPlease install Git and restart the app.',
+				'warning'
+			);
+
+			window.Native.quit();
+		}
+
 		// we want to load the active repository first to decrease the time to load the app
 		if (
 			SettingsStore.settings?.get('activeRepository') &&
