@@ -8,7 +8,11 @@ export default {
 			tooltip: 'Add your repositories from the repository picker.'
 		},
 		add: {
-			tooltip: 'Use this file picker to add a repository from your device.'
+			tooltip: 'Use this file picker to add a repository from your device.',
+			button: 'Now add it to your workspace.'
+		},
+		history: {
+			tooltip: 'From here, you can view your commit history.'
 		}
 	},
 	settings: {

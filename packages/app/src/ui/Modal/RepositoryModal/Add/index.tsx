@@ -25,7 +25,9 @@ export interface IAddRepositoryModalProps {
 
 export default (props: IAddRepositoryModalProps) => {
 	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
+	const onboardingStepState2 = createSignal(false);
 	const onboardingStepState = createSignal(false);
+
 	const [allowClose, setAllowClose] = createSignal(false);
 
 	onMount(() => {
@@ -33,6 +35,12 @@ export default (props: IAddRepositoryModalProps) => {
 			setTimeout(() => {
 				onboardingStepState[1](true);
 			}, 200);
+		}
+	});
+
+	createEffect(() => {
+		if (onboarding().step === 3 && onboarding().dismissed !== true) {
+			onboardingStepState2[1](true);
 		}
 	});
 
@@ -145,23 +153,56 @@ export default (props: IAddRepositoryModalProps) => {
 					<Button label="Cancel" type="default" onClick={props.modalProps.close}>
 						{t('modal.repository.cancel')}
 					</Button>
-					<Button
-						label={t('modal.repository.addRepo')}
-						type="brand"
-						onClick={() => {
-							SettingsStore.setSetting('repositories', [
-								...SettingsStore.getSetting('repositories'),
-								props.pathSignal[0]()
-							]);
-
-							triggerWorkflow('repository_add', props.pathSignal[0]());
-
-							props.modalProps.close();
-						}}
-						disabled={!allowClose()}
+					<Popout
+						position="top"
+						open={onboardingStepState2}
+						body={() => (
+							<div class="onboarding-tooltip">
+								<div class="onboarding-tooltip__title">
+									{t('onboarding.add.button')}
+								</div>
+								<div class="onboarding-tooltip__steps">
+									<For each={[1, 2, 3, 4, 5]}>
+										{(i) => (
+											<div
+												classList={{
+													'onboarding-tooltip__step': true,
+													active: onboarding().step === i
+												}}
+											/>
+										)}
+									</For>
+								</div>
+							</div>
+						)}
 					>
-						{t('modal.repository.add')}
-					</Button>
+						{(p) => (
+							<Button
+								ref={p.ref}
+								label={t('modal.repository.addRepo')}
+								type="brand"
+								onClick={() => {
+									SettingsStore.setSetting('repositories', [
+										...SettingsStore.getSetting('repositories'),
+										props.pathSignal[0]()
+									]);
+
+									triggerWorkflow('repository_add', props.pathSignal[0]());
+
+									props.modalProps.close();
+
+									if (onboardingStepState2[0]()) {
+										p.hide();
+
+										OnboardingStore.setStep(4);
+									}
+								}}
+								disabled={!allowClose()}
+							>
+								{t('modal.repository.add')}
+							</Button>
+						)}
+					</Popout>
 				</div>
 			</ModalFooter>
 		</>

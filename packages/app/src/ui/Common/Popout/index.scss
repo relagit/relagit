@@ -11,6 +11,15 @@
 	z-index: 98;
 	color: var(--color-primary);
 
+	&.end {
+		transform: translateX(calc(-100% + 20px));
+
+		.popout__arrow {
+			right: 15px;
+			left: auto;
+		}
+	}
+
 	&.right {
 		top: calc(var(--y) + var(--w-h) / 2);
 		left: calc(var(--x) + var(--w-w) + 2px);

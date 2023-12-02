@@ -1,4 +1,4 @@
-import { JSX } from 'solid-js';
+import { JSX, Setter } from 'solid-js';
 
 import './index.scss';
 
@@ -9,11 +9,13 @@ interface IButtonProps {
 	className?: string;
 	disabled?: boolean;
 	label: string;
+	ref?: Setter<HTMLElement>;
 }
 
 export default (props: IButtonProps) => {
 	return (
 		<button
+			ref={props.ref}
 			aria-role="button"
 			aria-label={props.label}
 			aria-disabled={props.disabled}

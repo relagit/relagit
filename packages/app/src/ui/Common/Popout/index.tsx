@@ -30,6 +30,7 @@ export interface IPopout {
 		hide: () => void;
 	}) => JSX.Element | JSX.Element[];
 	position?: 'top' | 'bottom' | 'auto';
+	align?: 'start' | 'end' | 'center';
 	open?: Signal<boolean>;
 }
 
@@ -103,7 +104,7 @@ export default (props: IPopout) => {
 						const a = el.animate(
 							{
 								opacity: [0, 1],
-								translate: ['0 4px', '0 0px'],
+								translate: ['0 -4px', '0 0px'],
 								scale: [0.95, 1]
 							},
 							{
@@ -118,7 +119,7 @@ export default (props: IPopout) => {
 						const a = el.animate(
 							{
 								opacity: [1, 0],
-								translate: ['0 0px', '0 4px'],
+								translate: ['0 0px', '0 -4px'],
 								scale: [1, 0.95]
 							},
 							{
@@ -136,7 +137,9 @@ export default (props: IPopout) => {
 							aria-role="menu"
 							aria-expanded="true"
 							aria-haspopup="true"
-							class={`popout ${props.position ? props.position : 'top'}`}
+							class={`popout ${props.position ? props.position : 'top'} ${
+								props.align ? props.align : 'center'
+							}`}
 							ref={setPopout}
 							style={`--h: ${popout()?.offsetHeight}px; --w: ${popout()
 								?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()

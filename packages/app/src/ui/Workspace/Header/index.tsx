@@ -2,6 +2,7 @@ import { Accessor, For, JSX, Setter, Show, createEffect, createSignal } from 'so
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
+import OnboardingStore from '@app/stores/onboarding';
 import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
@@ -90,6 +91,8 @@ export default () => {
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
+	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
+	const onboardingStepState = createSignal(false);
 	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
 	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
@@ -103,6 +106,12 @@ export default () => {
 		if (!branchesRef()) return;
 
 		branchesRef().click();
+	});
+
+	createEffect(() => {
+		if (onboarding().step === 4 && onboarding().dismissed !== true) {
+			onboardingStepState[1](true);
+		}
 	});
 
 	createEffect(() => {
@@ -504,15 +513,50 @@ export default () => {
 					LocationStore.setBlameOpen(!blameOpen());
 				}}
 			/>
-			<PanelButton
-				icon="history"
-				name="Toggle history"
-				id="workspace-history"
-				className={historyOpen() ? 'active' : ''}
-				onClick={() => {
-					LocationStore.setHistoryOpen(!historyOpen());
-				}}
-			/>
+
+			<Popout
+				position="bottom"
+				align="end"
+				open={onboardingStepState}
+				body={() => (
+					<div class="onboarding-tooltip">
+						<div class="onboarding-tooltip__title">
+							{t('onboarding.history.tooltip')}
+						</div>
+						<div class="onboarding-tooltip__steps">
+							<For each={[1, 2, 3, 4, 5]}>
+								{(i) => (
+									<div
+										classList={{
+											'onboarding-tooltip__step': true,
+											active: onboarding().step === i
+										}}
+									/>
+								)}
+							</For>
+						</div>
+					</div>
+				)}
+			>
+				{(p) => (
+					<PanelButton
+						ref={p.ref}
+						icon="history"
+						name="Toggle history"
+						id="workspace-history"
+						className={historyOpen() ? 'active' : ''}
+						onClick={() => {
+							if (onboardingStepState[0]()) {
+								p.hide();
+
+								OnboardingStore.setStep(5);
+							}
+
+							LocationStore.setHistoryOpen(!historyOpen());
+						}}
+					/>
+				)}
+			</Popout>
 		</div>
 	);
 };
