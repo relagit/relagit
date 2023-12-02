@@ -1,4 +1,14 @@
-import { Accessor, JSX, Setter, Show, createSignal, onCleanup, onMount } from 'solid-js';
+import {
+	Accessor,
+	JSX,
+	Setter,
+	Show,
+	Signal,
+	createEffect,
+	createSignal,
+	onCleanup,
+	onMount
+} from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
@@ -6,24 +16,25 @@ import './index.scss';
 
 export interface IPopout {
 	children: (p: {
-		show: (e: MouseEvent | KeyboardEvent) => void;
-		toggle: (e: MouseEvent | KeyboardEvent) => void;
+		show: (e?: MouseEvent | KeyboardEvent) => void;
+		toggle: (e?: MouseEvent | KeyboardEvent) => void;
 		hide: () => void;
 		open: Accessor<boolean>;
 		ref: Setter<HTMLElement>;
 		getRef: Accessor<HTMLElement>;
 	}) => JSX.Element | JSX.Element[];
 	body: (p: {
-		show: (e: MouseEvent | KeyboardEvent) => void;
-		toggle: (e: MouseEvent | KeyboardEvent) => void;
+		show: (e?: MouseEvent | KeyboardEvent) => void;
+		toggle: (e?: MouseEvent | KeyboardEvent) => void;
 		open: Accessor<boolean>;
 		hide: () => void;
 	}) => JSX.Element | JSX.Element[];
 	position?: 'top' | 'bottom' | 'auto';
+	open?: Signal<boolean>;
 }
 
 export default (props: IPopout) => {
-	const [open, setOpen] = createSignal(false);
+	const [open, setOpen] = props.open ?? createSignal(false);
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
 
@@ -49,22 +60,25 @@ export default (props: IPopout) => {
 		setOpen(false);
 	};
 
-	const show = (e: MouseEvent | KeyboardEvent) => {
-		e.stopPropagation();
-		e.preventDefault();
+	createEffect(() => {
+		if (open()) {
+			listener();
+		}
+	});
+
+	const show = (e?: MouseEvent | KeyboardEvent) => {
+		e?.stopPropagation();
+		e?.preventDefault();
 
 		setOpen(true);
 
-		const rect = wrapper()?.getBoundingClientRect();
-
-		setX(rect.left + rect.width / 2);
-		setY(rect.top + rect.height / 2);
+		listener();
 
 		popout()?.querySelector('button,input,a,select,textarea,[tabindex]')?.['focus']();
 	};
 
-	const toggle = (e: MouseEvent | KeyboardEvent) => {
-		e.stopPropagation();
+	const toggle = (e?: MouseEvent | KeyboardEvent) => {
+		e?.stopPropagation();
 
 		if (open()) {
 			hide();
@@ -124,8 +138,8 @@ export default (props: IPopout) => {
 							aria-haspopup="true"
 							class={`popout ${props.position ? props.position : 'top'}`}
 							ref={setPopout}
-							style={`--h: ${popout()?.offsetHeight}; --w: ${popout()
-								?.offsetWidth}; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
+							style={`--h: ${popout()?.offsetHeight}px; --w: ${popout()
+								?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
 								?.offsetHeight}px; --w-w: ${wrapper()?.offsetWidth}px;`}
 						>
 							<props.body open={open} hide={hide} toggle={toggle} show={show} />

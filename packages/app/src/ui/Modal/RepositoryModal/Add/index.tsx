@@ -1,7 +1,10 @@
-import { Signal, createEffect, createSignal } from 'solid-js';
+import { For, Signal, createEffect, createSignal, onMount } from 'solid-js';
 
 import { triggerWorkflow } from '@app/modules/actions';
 import { t } from '@app/modules/i18n';
+import { createStoreListener } from '@app/stores';
+import OnboardingStore from '@app/stores/onboarding';
+import Popout from '@app/ui/Common/Popout';
 import SettingsStore from '@stores/settings';
 
 import Button from '@ui/Common/Button';
@@ -21,6 +24,25 @@ export interface IAddRepositoryModalProps {
 }
 
 export default (props: IAddRepositoryModalProps) => {
+	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
+	const onboardingStepState = createSignal(false);
+	const [allowClose, setAllowClose] = createSignal(false);
+
+	onMount(() => {
+		if (onboarding().step === 2 && onboarding().dismissed !== true) {
+			setTimeout(() => {
+				onboardingStepState[1](true);
+			}, 200);
+		}
+	});
+
+	createEffect(() => {
+		const hasPath = props.pathSignal[0]().length > 0;
+		const valid = fileValidator(props.pathSignal[0]());
+
+		setAllowClose(hasPath && valid === true);
+	});
+
 	const fileValidator = (p: string) => {
 		if (p.length === 0) return null;
 
@@ -54,15 +76,6 @@ export default (props: IAddRepositoryModalProps) => {
 		return true;
 	};
 
-	const [allowClose, setAllowClose] = createSignal(false);
-
-	createEffect(() => {
-		const hasPath = props.pathSignal[0]().length > 0;
-		const valid = fileValidator(props.pathSignal[0]());
-
-		setAllowClose(hasPath && valid === true);
-	});
-
 	return (
 		<>
 			<ModalBody>
@@ -83,15 +96,48 @@ export default (props: IAddRepositoryModalProps) => {
 					}}
 				/>
 				<div class="repo__modal__body">
-					<FileSelect
-						input
-						initial={props.pathSignal[0]()}
-						validate={fileValidator}
-						properties={['openDirectory']}
-						onSelect={(path) => {
-							props.pathSignal[1](path);
-						}}
-					/>
+					<Popout
+						position="top"
+						open={onboardingStepState}
+						body={() => (
+							<div class="onboarding-tooltip">
+								<div class="onboarding-tooltip__title">
+									Use this file picker to add a repository from your device.
+								</div>
+								<div class="onboarding-tooltip__steps">
+									<For each={[1, 2, 3, 4, 5]}>
+										{(i) => (
+											<div
+												classList={{
+													'onboarding-tooltip__step': true,
+													active: onboarding().step === i
+												}}
+											/>
+										)}
+									</For>
+								</div>
+							</div>
+						)}
+					>
+						{(p) => (
+							<FileSelect
+								ref={p.ref}
+								input
+								initial={props.pathSignal[0]()}
+								validate={fileValidator}
+								properties={['openDirectory']}
+								onSelect={(path) => {
+									props.pathSignal[1](path);
+
+									if (onboardingStepState[0]()) {
+										p.hide();
+
+										OnboardingStore.setStep(3);
+									}
+								}}
+							/>
+						)}
+					</Popout>
 				</div>
 			</ModalBody>
 			<ModalFooter>

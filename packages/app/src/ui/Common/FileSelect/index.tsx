@@ -1,4 +1,4 @@
-import { JSX, Show, createEffect, createSignal } from 'solid-js';
+import { JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 import * as ipc from '~/common/ipc';
@@ -24,6 +24,7 @@ export interface IFileSelectProps {
 		name: string;
 		extensions: string[];
 	}[];
+	ref?: Setter<HTMLElement>;
 }
 
 export default (props: IFileSelectProps) => {
@@ -65,7 +66,7 @@ export default (props: IFileSelectProps) => {
 	};
 
 	return (
-		<div class="filepicker">
+		<div class="filepicker" ref={props.ref}>
 			<div
 				class={`filepicker__input ${
 					status() === 'valid' ? 'valid' : status() === 'invalid' ? 'invalid' : ''

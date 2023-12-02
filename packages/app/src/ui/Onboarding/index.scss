@@ -7,6 +7,43 @@
 	flex-direction: column;
 	gap: 4rem;
 
+	&-tooltip {
+		display: flex;
+		width: 215px;
+		padding: 1.5rem 0rem;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+
+		&__title {
+			width: 90%;
+			text-align: center;
+			font-weight: 400;
+			line-height: 120%;
+		}
+
+		&__steps {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 0.5rem;
+			align-self: stretch;
+		}
+
+		&__step {
+			width: 0.5rem;
+			height: 0.5rem;
+			border-radius: 50%;
+			background-color: var(--color-blue-500);
+			opacity: 0.2;
+
+			&.active {
+				opacity: 1;
+			}
+		}
+	}
+
 	&__text {
 		display: flex;
 		justify-content: center;
