@@ -167,6 +167,13 @@ app.once('ready', async () => {
 					}
 				},
 				{
+					label: 'Toggle Branches Picker',
+					accelerator: 'CmdOrCtrl+I',
+					click: () => {
+						win.webContents.send(ipc.OPEN_BRANCHES);
+					}
+				},
+				{
 					label: 'Toggle Blame View',
 					accelerator: 'CmdOrCtrl+J',
 					click: () => {

@@ -11,6 +11,7 @@ export interface IPopout {
 		hide: () => void;
 		open: Accessor<boolean>;
 		ref: Setter<HTMLElement>;
+		getRef: Accessor<HTMLElement>;
 	}) => JSX.Element | JSX.Element[];
 	body: (p: {
 		show: (e: MouseEvent | KeyboardEvent) => void;
@@ -80,6 +81,7 @@ export default (props: IPopout) => {
 				open={open}
 				show={show}
 				ref={setWrapper}
+				getRef={wrapper}
 			></props.children>
 			<Portal mount={document.getElementById('app-container')}>
 				<Transition

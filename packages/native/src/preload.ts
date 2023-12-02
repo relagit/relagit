@@ -39,6 +39,9 @@ export const Native = {
 		HISTORY: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
 		},
+		BRANCHES: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_BRANCHES, fn);
+		},
 		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BLAME, fn);
 		},

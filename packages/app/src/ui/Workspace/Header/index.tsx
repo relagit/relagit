@@ -1,4 +1,4 @@
-import { For, JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
+import { Accessor, For, JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
@@ -96,6 +96,14 @@ export default () => {
 	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashed, setStashed] = createSignal<number>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
+
+	let branchesRef: Accessor<HTMLElement>;
+
+	window.Native.listeners.BRANCHES(() => {
+		if (!branchesRef()) return;
+
+		branchesRef().click();
+	});
 
 	createEffect(() => {
 		if (!repository()) return;
@@ -469,19 +477,23 @@ export default () => {
 					</div>
 				)}
 			>
-				{(p) => (
-					<PanelButton
-						disabled={!repository() || branches() === null}
-						ref={p.ref}
-						icon="git-branch"
-						name="Switch branch"
-						id="workspace-branch"
-						className={p.open() ? 'active' : ''}
-						onClick={(e) => {
-							p.toggle(e);
-						}}
-					/>
-				)}
+				{(p) => {
+					branchesRef = p.getRef;
+
+					return (
+						<PanelButton
+							disabled={!repository() || branches() === null}
+							ref={p.ref}
+							icon="git-branch"
+							name="Switch branch"
+							id="workspace-branch"
+							className={p.open() ? 'active' : ''}
+							onClick={(e) => {
+								p.toggle(e);
+							}}
+						/>
+					);
+				}}
 			</Popout>
 			<PanelButton
 				icon="people"
