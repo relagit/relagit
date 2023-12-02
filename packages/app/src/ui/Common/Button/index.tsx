@@ -1,4 +1,6 @@
-import { JSX, Setter } from 'solid-js';
+import { JSX } from 'solid-js';
+
+import { PassthroughRef } from '@app/ui/shared';
 
 import './index.scss';
 
@@ -9,10 +11,9 @@ interface IButtonProps {
 	className?: string;
 	disabled?: boolean;
 	label: string;
-	ref?: Setter<HTMLElement>;
 }
 
-export default (props: IButtonProps) => {
+export default (props: PassthroughRef<IButtonProps>) => {
 	return (
 		<button
 			ref={props.ref}

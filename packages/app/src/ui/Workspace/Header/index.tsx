@@ -1,4 +1,4 @@
-import { Accessor, For, JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
+import { Accessor, For, JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
@@ -7,6 +7,7 @@ import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
+import { PassthroughRef } from '@app/ui/shared';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
 import { debug, error } from '@modules/logger';
@@ -32,10 +33,9 @@ export interface IPanelButtonProps {
 	tooltipPosition?: 'top' | 'bottom' | 'auto';
 	disabled?: boolean;
 	className?: string;
-	ref?: Setter<HTMLElement>;
 }
 
-const PanelButton = (props: IPanelButtonProps) => {
+const PanelButton = (props: PassthroughRef<IPanelButtonProps>) => {
 	return (
 		<Tooltip text={props.tooltip} position={props.tooltipPosition || 'auto'}>
 			{(p) => {

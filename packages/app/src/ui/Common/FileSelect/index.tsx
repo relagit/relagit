@@ -1,6 +1,7 @@
-import { JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
+import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
+import { PassthroughRef } from '@app/ui/shared';
 import * as ipc from '~/common/ipc';
 
 import Icon from '../Icon';
@@ -24,10 +25,9 @@ export interface IFileSelectProps {
 		name: string;
 		extensions: string[];
 	}[];
-	ref?: Setter<HTMLElement>;
 }
 
-export default (props: IFileSelectProps) => {
+export default (props: PassthroughRef<IFileSelectProps>) => {
 	const [inputValue, setInputValue] = createSignal(props.initial || '');
 	const [valid, setValid] = createSignal<string | boolean | JSX.Element>(null);
 	const [status, setStatus] = createSignal<'valid' | 'invalid' | null>(null);
