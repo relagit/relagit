@@ -3,7 +3,13 @@ export default {
 		takeTour: 'Take the Tour',
 		next: 'Next',
 		dismiss: 'Dismiss',
-		version: 'Version {{version}}'
+		version: 'Version {{version}}',
+		header: {
+			tooltip: 'Add your repositories from the repository picker.'
+		},
+		add: {
+			tooltip: 'Use this file picker to add a repository from your device.'
+		}
 	},
 	settings: {
 		title: 'Settings',

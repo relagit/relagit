@@ -102,7 +102,7 @@ export default (props: IAddRepositoryModalProps) => {
 						body={() => (
 							<div class="onboarding-tooltip">
 								<div class="onboarding-tooltip__title">
-									Use this file picker to add a repository from your device.
+									{t('onboarding.add.tooltip')}
 								</div>
 								<div class="onboarding-tooltip__steps">
 									<For each={[1, 2, 3, 4, 5]}>

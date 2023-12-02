@@ -3,7 +3,13 @@ export default {
 		takeTour: 'Incipio Tour',
 		next: 'Proxima',
 		dismiss: 'Dimitte',
-		version: 'Versio {{version}}'
+		version: 'Versio {{version}}',
+		header: {
+			tooltip: 'Addere repositoria tua a repository picker.'
+		},
+		add: {
+			tooltip: 'File picker uti potes ut repositorium tuum addas.'
+		}
 	},
 	settings: {
 		title: 'Optiones',

@@ -3,7 +3,14 @@ export default {
 		takeTour: 'Tour starten',
 		next: 'Weiter',
 		dismiss: 'Schließen',
-		version: 'Version {{version}}'
+		version: 'Version {{version}}',
+		header: {
+			tooltip: 'Füge deine Repositories über den Repository-Drawer hinzu.'
+		},
+		add: {
+			tooltip:
+				'Benutze den Dateiauswahl-Dialog, um ein Repository von deinem Gerät hinzuzufügen.'
+		}
 	},
 	settings: {
 		title: 'Einstellungen',

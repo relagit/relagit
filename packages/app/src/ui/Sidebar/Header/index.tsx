@@ -95,7 +95,7 @@ export default () => {
 					body={() => (
 						<div class="onboarding-tooltip">
 							<div class="onboarding-tooltip__title">
-								Add your repositories from the repository picker.
+								{t('onboarding.header.tooltip')}
 							</div>
 							<div class="onboarding-tooltip__steps">
 								<For each={[1, 2, 3, 4, 5]}>
