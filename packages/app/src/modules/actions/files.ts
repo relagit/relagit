@@ -148,6 +148,8 @@ export const getRepositoryStatus = async (
 	refetchRemotes?: boolean
 ) => {
 	try {
+		if (!directory) return;
+
 		let exists: IRepository = null;
 
 		if (RepositoryStore.getByPath(directory)) {
