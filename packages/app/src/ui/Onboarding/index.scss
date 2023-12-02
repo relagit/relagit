@@ -22,11 +22,12 @@
 			font-size: 8rem;
 			font-weight: 600;
 			letter-spacing: -0.006rem;
-			color: var(--base-white);
+			color: var(--color-contrast);
 
 			svg {
 				height: 6rem;
 				width: auto;
+				color: var(--color-contrast);
 			}
 		}
 	}

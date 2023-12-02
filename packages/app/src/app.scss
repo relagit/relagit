@@ -18,6 +18,7 @@
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 
+	--color-contrast: var(--base-black);
 	--color-primary: var(--base-dark-grey);
 	--color-secondary: var(--base-grey);
 	--color-label: var(--base-grey);
@@ -64,6 +65,7 @@
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 
+	--color-contrast: var(--base-white);
 	--color-primary: var(--dark-base-dark-grey);
 	--color-secondary: var(--dark-base-grey);
 	--color-label: var(--dark-base-grey);
