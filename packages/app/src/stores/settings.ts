@@ -7,11 +7,13 @@ const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
 const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
-export type ALL_LOCALES = 'en';
-
 export interface ISettings {
 	commitStyles: {
 		[repo: string]: string;
+	};
+	onboarding: {
+		dismissed: boolean;
+		step: number;
 	};
 	enforceCommitMessageStyle: boolean;
 	preferParens: boolean;

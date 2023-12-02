@@ -1,4 +1,10 @@
 export default {
+	onboarding: {
+		takeTour: 'Incipio Tour',
+		next: 'Proxima',
+		dismiss: 'Dimitte',
+		version: 'Versio {{version}}'
+	},
 	settings: {
 		title: 'Optiones',
 		close: 'Dimitte Optiones',

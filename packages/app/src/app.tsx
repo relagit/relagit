@@ -6,6 +6,7 @@ import SettingsStore from '@stores/settings';
 
 import Layer from '@ui/Layer';
 import Modal from '@ui/Modal';
+import Onboarding from '@ui/Onboarding';
 import Settings from '@ui/Settings';
 import Sidebar from '@ui/Sidebar';
 import Workspace from '@ui/Workspace';
@@ -13,6 +14,7 @@ import Workspace from '@ui/Workspace';
 import { Git } from './modules/git/core';
 import { debug } from './modules/logger';
 import { checkIsInPath } from './modules/shell';
+import OnboardingStore from './stores/onboarding';
 
 import './app.scss';
 
@@ -22,6 +24,7 @@ const loaded = [];
 
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
+	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
 	const [sidebar, setSidebar] = createSignal(true);
 	const [focused, setFocused] = createSignal(false);
 
@@ -113,21 +116,29 @@ export default () => {
 				}}
 			>
 				<Show
-					when={window.Native.platform === 'darwin' || window.Native.platform === 'win32'}
+					when={onboarding()?.step !== 0 || onboarding()?.dismissed}
+					fallback={<Onboarding />}
 				>
-					<div class="window-control-bar"></div>
+					<Show
+						when={
+							window.Native.platform === 'darwin' ||
+							window.Native.platform === 'win32'
+						}
+					>
+						<div class="window-control-bar"></div>
+					</Show>
+					<Layer
+						type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
+						key="settings"
+						dismissable
+						transitions={Layer.Transitions.Fade}
+					>
+						<Settings />
+					</Layer>
+					<Modal.Layer />
+					<Sidebar sidebar={sidebar()} />
+					<Workspace sidebar={sidebar()} />
 				</Show>
-				<Layer
-					type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
-					key="settings"
-					dismissable
-					transitions={Layer.Transitions.Fade}
-				>
-					<Settings />
-				</Layer>
-				<Modal.Layer />
-				<Sidebar sidebar={sidebar()} />
-				<Workspace sidebar={sidebar()} />
 			</div>
 		</>
 	);

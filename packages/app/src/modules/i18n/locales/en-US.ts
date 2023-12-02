@@ -1,4 +1,10 @@
 export default {
+	onboarding: {
+		takeTour: 'Take the Tour',
+		next: 'Next',
+		dismiss: 'Dismiss',
+		version: 'Version {{version}}'
+	},
 	settings: {
 		title: 'Settings',
 		close: 'Close Settings',

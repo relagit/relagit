@@ -35,7 +35,9 @@ export default defineConfig({
 				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production')
 			}
 		}),
-		json(),
+		json({
+			compact: true
+		}),
 		commonjs(),
 		scss({
 			fileName: 'style.css'
@@ -55,7 +57,10 @@ export default defineConfig({
 		babel({
 			presets: ['babel-preset-solid'],
 			extensions: ['.tsx'],
-			babelHelpers: 'bundled'
+			babelHelpers: 'bundled',
+			parserOpts: {
+				plugins: ['importAssertions']
+			}
 		}),
 		!IS_DEV && terser(),
 		{
