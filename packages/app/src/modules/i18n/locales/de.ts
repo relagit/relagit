@@ -9,7 +9,11 @@ export default {
 		},
 		add: {
 			tooltip:
-				'Benutze den Dateiauswahl-Dialog, um ein Repository von deinem Gerät hinzuzufügen.'
+				'Benutze den Dateiauswahl-Dialog, um ein Repository von deinem Gerät hinzuzufügen.',
+			button: 'Füge es jetzt deinem Workspace hinzu.'
+		},
+		history: {
+			tooltip: 'Von hier aus kannst du deine Commit-History ansehen.'
 		}
 	},
 	settings: {

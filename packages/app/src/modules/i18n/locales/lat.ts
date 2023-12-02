@@ -8,7 +8,11 @@ export default {
 			tooltip: 'Addere repositoria tua a repository picker.'
 		},
 		add: {
-			tooltip: 'File picker uti potes ut repositorium tuum addas.'
+			tooltip: 'File picker uti potes ut repositorium tuum addas.',
+			button: 'Addere nunc workspace tuo.'
+		},
+		history: {
+			tooltip: 'Hic tuum commit historia videre potes.'
 		}
 	},
 	settings: {
