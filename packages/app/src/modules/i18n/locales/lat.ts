@@ -13,6 +13,14 @@ export default {
 		},
 		history: {
 			tooltip: 'Hic tuum commit historia videre potes.'
+		},
+		modal: {
+			title: 'Proxima Gradus',
+			themes: 'Client Themata',
+			workflows: 'Workflows',
+			github: 'Ite ad GitHub',
+			somethingWrong: 'Aliquid abiit iniuriam?',
+			issue: 'Issue Aperi'
 		}
 	},
 	settings: {

@@ -14,6 +14,14 @@ export default {
 		},
 		history: {
 			tooltip: 'Von hier aus kannst du deine Commit-History ansehen.'
+		},
+		modal: {
+			title: 'Nächste Schritte',
+			themes: 'Durchsuche Client Themes',
+			workflows: 'Durchsuche Workflows',
+			github: 'Auf GitHub ansehen',
+			somethingWrong: 'Etwas ist schief gelaufen?',
+			issue: 'Erstelle ein Issue'
 		}
 	},
 	settings: {

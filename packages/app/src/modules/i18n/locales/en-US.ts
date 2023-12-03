@@ -13,6 +13,14 @@ export default {
 		},
 		history: {
 			tooltip: 'From here, you can view your commit history.'
+		},
+		modal: {
+			title: 'Next Steps',
+			themes: 'Browse Client Themes',
+			workflows: 'Browse Workflows',
+			github: 'View on GitHub',
+			somethingWrong: 'Find something wrong?',
+			issue: 'Open an Issue'
 		}
 	},
 	settings: {
