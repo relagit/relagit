@@ -34,7 +34,7 @@ export default (win: Electron.BrowserWindow) => {
 		}
 	);
 
-	ipcMain.handle(ipc.SHOW_ITEM_IN_FOLDER, async (_, path: string) => {
+	ipcMain.handle(ipc.SHOW_ITEM_IN_FOLDER, (_, path: string) => {
 		return shell.showItemInFolder(path);
 	});
 

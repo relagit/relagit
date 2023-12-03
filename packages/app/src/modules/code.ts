@@ -5,7 +5,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-export const openInEditor = async (path: string) => {
+export const openInEditor = (path: string) => {
 	if (!path) return;
 
 	const editorExec = SettingsStore.getSetting('externalEditor') || 'code';
