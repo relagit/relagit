@@ -37,7 +37,7 @@
 	}
 
 	&.top {
-		top: var(--y);
+		top: calc(var(--y) + 0.5 * var(--w-h));
 		left: var(--x);
 	}
 
