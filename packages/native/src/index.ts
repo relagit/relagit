@@ -25,6 +25,17 @@ app.once('ready', async () => {
 		settings = new Map();
 	}
 
+	const isOnboarding = () => {
+		const onboarding = settings.get('onboarding') as {
+			dismissed?: boolean;
+			step?: number;
+		};
+
+		if (!onboarding) return true;
+
+		return onboarding.dismissed !== true && onboarding.step === 0;
+	};
+
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
@@ -33,17 +44,34 @@ app.once('ready', async () => {
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
-		vibrancy: settings.get('vibrancy') ? 'sidebar' : undefined,
-		backgroundMaterial: settings.get('vibrancy') ? 'mica' : undefined,
-		transparent: settings.get('vibrancy') && process.platform === 'win32' ? true : undefined,
+		vibrancy: settings.get('vibrancy')
+			? 'sidebar'
+			: isOnboarding() && process.platform === 'darwin'
+			  ? 'sidebar'
+			  : undefined,
+		backgroundMaterial: settings.get('vibrancy')
+			? 'mica'
+			: isOnboarding() && process.platform === 'win32'
+			  ? 'mica'
+			  : undefined,
+		transparent:
+			settings.get('vibrancy') && process.platform === 'win32'
+				? true
+				: isOnboarding() && process.platform === 'win32'
+				  ? true
+				  : false,
 		backgroundColor:
-			settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined,
-		height: (settings.get('window.height') as number) || 850,
-		width: (settings.get('window.width') as number) || 1200,
+			settings.get('vibrancy') && process.platform === 'win32'
+				? '#00000000'
+				: isOnboarding() && process.platform === 'win32'
+				  ? '#00000000'
+				  : undefined,
+		height: (settings.get('window.height') as number) || 600,
+		width: (settings.get('window.width') as number) || 1000,
 		minWidth: 500,
 		minHeight: 500,
-		x: (settings.get('window.x') as number) || 0,
-		y: (settings.get('window.y') as number) || 0,
+		x: (settings.get('window.x') as number) || undefined,
+		y: (settings.get('window.y') as number) || undefined,
 		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
