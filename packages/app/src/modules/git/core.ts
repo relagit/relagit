@@ -32,6 +32,7 @@ export const Git = async (params: IGitParams): Promise<string> => {
 	const result: string = await new Promise(async (resolve, reject) => {
 		const { error, stdout, stderr } = await ipcRenderer.invoke(ipc.GIT_EXEC, cmd, {
 			cwd: directory,
+			maxBuffer: Infinity,
 			encoding: opts?.encoding || 'utf8'
 		});
 
