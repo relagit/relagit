@@ -3,7 +3,9 @@ import { For, Signal, createEffect, createSignal, onMount } from 'solid-js';
 import { triggerWorkflow } from '@app/modules/actions';
 import { t } from '@app/modules/i18n';
 import { createStoreListener } from '@app/stores';
+import LocationStore from '@app/stores/location';
 import OnboardingStore from '@app/stores/onboarding';
+import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
 import SettingsStore from '@stores/settings';
 
@@ -195,6 +197,12 @@ export default (props: IAddRepositoryModalProps) => {
 										p.hide();
 
 										OnboardingStore.setStep(4);
+
+										setTimeout(() => {
+											LocationStore.setSelectedRepository(
+												RepositoryStore.getByPath(props.pathSignal[0]())
+											);
+										}, 500);
 									}
 								}}
 								disabled={!allowClose()}
