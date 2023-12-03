@@ -7,6 +7,7 @@ import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
+import { finishTour } from '@app/ui/Onboarding';
 import { PassthroughRef } from '@app/ui/shared';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
@@ -550,6 +551,8 @@ export default () => {
 								p.hide();
 
 								OnboardingStore.setStep(5);
+
+								finishTour();
 							}
 
 							LocationStore.setHistoryOpen(!historyOpen());
