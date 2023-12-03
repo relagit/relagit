@@ -26,7 +26,7 @@ const config = {
 		output: 'out'
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
-	asar: false,
+	asar: false, // we cannot build as asar because vscode-oniguruma needs to be required from starry-night
 	dmg: {
 		background: './build/background.png',
 		icon: './build/dmg.icns',
