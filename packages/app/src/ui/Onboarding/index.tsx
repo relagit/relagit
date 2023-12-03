@@ -3,7 +3,6 @@ import { Show } from 'solid-js';
 import { t } from '@app/modules/i18n';
 import OnboardingStore from '@stores/onboarding';
 
-import buildInfo from '../../../../../dist/build_info.json' assert { type: 'json' };
 import pkj from '../../../../../package.json' assert { type: 'json' };
 import Button from '../Common/Button';
 import Icon from '../Common/Icon';
@@ -70,7 +69,7 @@ export default () => {
 					{t('onboarding.version', {
 						version: pkj.version
 					})}
-					<Show when={buildInfo.env === 'development'}> (Development)</Show>
+					<Show when={__NODE_ENV__ === 'development'}> (Development)</Show>
 				</div>
 			</div>
 			<div class="onboarding__actions">
