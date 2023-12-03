@@ -3,7 +3,6 @@ import { GenericStore } from '.';
 import { debug } from '@app/modules/logger';
 
 import LocationStore from './location';
-import SettingsStore from './settings';
 
 export interface IRepository {
 	draft?: boolean;
@@ -23,18 +22,6 @@ const RepositoryStore = new (class Repository extends GenericStore {
 
 	constructor() {
 		super();
-
-		setTimeout(() => {
-			if (SettingsStore.getSetting('activeRepository')) {
-				const repo = RepositoryStore.getByPath(
-					SettingsStore.getSetting('activeRepository')
-				);
-
-				if (repo) {
-					LocationStore.setSelectedRepository(repo, false);
-				}
-			}
-		}, 1000); // 1s timeout is GENERALLY enough for the repository to be loaded, if it's not, it's not a big deal
 	}
 
 	get repositories() {
