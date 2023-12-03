@@ -1,13 +1,106 @@
-import { Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
+import ModalStore from '@app/stores/modal';
 import OnboardingStore from '@stores/onboarding';
 
+import Button from '@ui/Common/Button';
+import Icon from '@ui/Common/Icon';
+import Tooltip from '@ui/Common/Tooltip';
+import Layer from '@ui/Layer';
+import Modal, { ModalBody, ModalFooter, ModalHeader } from '@ui/Modal';
+
 import pkj from '../../../../../package.json' assert { type: 'json' };
-import Button from '../Common/Button';
-import Icon from '../Common/Icon';
 
 import './index.scss';
+
+export const finishTour = () => {
+	OnboardingStore.setDismissed(true);
+
+	ModalStore.addModal({
+		type: 'tour',
+		element: (
+			<Modal size="small" dismissable transitions={Layer.Transitions.Fade}>
+				{(props) => {
+					return (
+						<>
+							<ModalHeader title={t('onboarding.modal.title')}>{}</ModalHeader>
+							<ModalBody>
+								<div class="onboarding-modal__buttons">
+									<Tooltip text={t('onboarding.modal.themes')}>
+										{(p) => (
+											<a
+												{...p}
+												tabIndex={0}
+												class="onboarding-modal__buttons__button"
+												href="https://git.rela.dev/styles"
+											>
+												<Icon name="paintbrush" />
+											</a>
+										)}
+									</Tooltip>
+									<Tooltip text={t('onboarding.modal.workflows')}>
+										{(p) => (
+											<a
+												{...p}
+												tabIndex={0}
+												class="onboarding-modal__buttons__button"
+												href="https://git.rela.dev/workflows"
+											>
+												<Icon name="project-roadmap" />
+											</a>
+										)}
+									</Tooltip>
+									<Tooltip text={t('onboarding.modal.github')}>
+										{(p) => (
+											<a
+												{...p}
+												tabIndex={0}
+												class="onboarding-modal__buttons__button"
+												href="https://git.rela.dev/redirect/github"
+											>
+												<Icon name="mark-github" />
+											</a>
+										)}
+									</Tooltip>
+								</div>
+								<div class="onboarding-modal__bugs">
+									<span>{t('onboarding.modal.somethingWrong')}</span>
+									<a href="https://github.com/relagit/relagit/issues/">
+										{t('onboarding.modal.issue')}
+									</a>
+								</div>
+								<div class="onboarding-tooltip__steps">
+									<For each={[1, 2, 3, 4, 5]}>
+										{(i) => (
+											<div
+												classList={{
+													'onboarding-tooltip__step': true,
+													active: 5 === i
+												}}
+											/>
+										)}
+									</For>
+								</div>
+							</ModalBody>
+							<ModalFooter>
+								<div class="modal__footer__buttons">
+									<Button
+										type="brand"
+										label={t('modal.closeModal')}
+										onClick={props.close}
+									>
+										{t('modal.close')}
+									</Button>
+								</div>
+							</ModalFooter>
+						</>
+					);
+				}}
+			</Modal>
+		)
+	});
+};
 
 export default () => {
 	return (

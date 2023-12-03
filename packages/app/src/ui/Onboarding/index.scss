@@ -7,6 +7,64 @@
 	flex-direction: column;
 	gap: 4rem;
 
+	&-modal {
+		&__buttons {
+			display: flex;
+			padding-bottom: 20px;
+			justify-content: center;
+			align-items: center;
+			gap: 1rem;
+
+			&__button {
+				display: flex;
+				height: 10rem;
+				width: 10rem;
+				justify-content: center;
+				align-items: center;
+				gap: 1rem;
+				border-radius: 0.25rem;
+				border: 1px solid var(--separator-secondary);
+				background: var(--bg-secondary);
+				color: var(--color-primary);
+				transition: all 0.2s ease-in-out;
+
+				svg {
+					width: 2rem;
+					height: 2rem;
+				}
+
+				&:hover {
+					background: var(--bg-hover);
+					color: var(--color-contrast);
+				}
+
+				@include mixins.focusable;
+			}
+		}
+
+		&__bugs {
+			display: flex;
+			gap: 5px;
+			margin-bottom: 2rem;
+			align-items: flex-end;
+
+			a {
+				color: var(--color-blue-500);
+				text-decoration: none;
+				font-weight: 400;
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus {
+					outline: none;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
 	&-tooltip {
 		display: flex;
 		width: 215px;
