@@ -52,7 +52,7 @@ export default (props: ITooltip) => {
 	const delay = (e: FocusEvent) => {
 		setTimeout(() => {
 			if (!hasRecentlyHidden) show(e);
-		}, 200);
+		}, 300);
 	};
 
 	const id = Math.random().toString(36).substring(2, 9);
