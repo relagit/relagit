@@ -27,6 +27,8 @@ export const queueRepositoryLoad = () => {
 
 	createStoreListener([SettingsStore], () => {
 		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
+			if (SettingsStore.settings?.get('activeRepository') === repo) continue;
+
 			if (loaded.includes(repo)) continue;
 
 			debug('Loading', repo);
