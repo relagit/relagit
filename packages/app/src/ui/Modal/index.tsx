@@ -180,3 +180,5 @@ export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 		)
 	});
 };
+
+window._showErrorModal = showErrorModal;

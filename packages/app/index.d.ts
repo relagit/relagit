@@ -1,5 +1,5 @@
-import { triggerWorkflow } from '@app/modules/actions';
-import { IRepository } from '@app/stores/repository';
+import { refetchRepository, triggerWorkflow } from '@app/modules/actions';
+import { showErrorModal } from '@app/ui/Modal';
 
 import { Native as _Native } from '../native/src/preload';
 
@@ -13,7 +13,8 @@ declare global {
 		};
 		Native: typeof _Native;
 
-		_refetchRepository: (repo: IRepository, transitionTo?: boolean) => Promise<void>;
+		_refetchRepository: typeof refetchRepository;
+		_showErrorModal: typeof showErrorModal;
 		_triggerWorkflow: typeof triggerWorkflow;
 	}
 

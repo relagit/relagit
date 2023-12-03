@@ -1,7 +1,5 @@
 import { GenericStore } from '.';
 
-import { showErrorModal } from '@app/ui/Modal';
-
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
@@ -91,7 +89,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 			try {
 				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8'));
 			} catch (error) {
-				showErrorModal(error, 'error.corruptSettings');
+				window._showErrorModal(error, 'error.corruptSettings');
 			}
 
 			for (const [key, value] of Object.entries(settings)) {
@@ -109,7 +107,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 			try {
 				repositories = JSON.parse(fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8'));
 			} catch (error) {
-				showErrorModal(error, 'error.corruptSettings');
+				window._showErrorModal(error, 'error.corruptSettings');
 			}
 
 			this.#record.set('repositories', repositories);
