@@ -57,9 +57,7 @@ app.once('ready', async () => {
 		transparent:
 			settings.get('vibrancy') && process.platform === 'win32'
 				? true
-				: isOnboarding() && process.platform === 'win32'
-				  ? true
-				  : false,
+				: isOnboarding() && process.platform === 'win32',
 		backgroundColor:
 			settings.get('vibrancy') && process.platform === 'win32'
 				? '#00000000'

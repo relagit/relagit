@@ -83,7 +83,7 @@ export default (props: IImageViewProps) => {
 			} catch (e) {
 				error(e);
 
-				threwOut[0] = e['message'] || e;
+				threwOut[0] = e.message || e;
 			}
 		}
 
@@ -116,7 +116,7 @@ export default (props: IImageViewProps) => {
 			} catch (e) {
 				error(e);
 
-				threwOut[1] = e['message'] || e;
+				threwOut[1] = e.message || e;
 			}
 		}
 

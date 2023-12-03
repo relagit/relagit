@@ -176,7 +176,7 @@ export default () => {
 				label="Sync"
 				icon="sync"
 				id="workspace-fetch-changes-and-remote"
-				disabled={repository() ? false : true}
+				disabled={!repository()}
 				onClick={() => {
 					refetchRepository(LocationStore.selectedRepository);
 				}}
