@@ -14,7 +14,9 @@ import Workspace from '@ui/Workspace';
 import { Git } from './modules/git/core';
 import { debug } from './modules/logger';
 import { checkIsInPath } from './modules/shell';
+import LocationStore from './stores/location';
 import OnboardingStore from './stores/onboarding';
+import RepositoryStore from './stores/repository';
 
 import './app.scss';
 
@@ -100,7 +102,15 @@ export default () => {
 				return;
 			}
 
-		getRepositoryStatus(SettingsStore.settings?.get('activeRepository') as string, true, true);
+		await getRepositoryStatus(
+			SettingsStore.settings?.get('activeRepository') as string,
+			true,
+			true
+		);
+
+		LocationStore.setSelectedRepository(
+			RepositoryStore.getByPath(SettingsStore.settings?.get('activeRepository') as string)
+		);
 
 		queueRepositoryLoad();
 	});
