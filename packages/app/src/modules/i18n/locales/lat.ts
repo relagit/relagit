@@ -84,6 +84,7 @@ export default {
 		}
 	},
 	error: {
+		corruptSettings: 'Unum vel plura tua configuration files sunt corrupt. Quaeso eos reset.',
 		fetching: 'Inopinatum errorem in ducens repositiory status',
 		remote: 'Inopinatum errorem inveniendo remotum statum',
 		git: 'Inopinatum errorem exequens git imperium'

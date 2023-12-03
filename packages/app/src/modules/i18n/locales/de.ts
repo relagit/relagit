@@ -89,6 +89,8 @@ export default {
 		}
 	},
 	error: {
+		corruptSettings:
+			'Eine oder mehrere deiner Konfigurationsdateien sind beschädigt. Bitte setze sie zurück.',
 		fetching: 'Unerwarteter Fehler beim Abrufen des Repository-Status',
 		remote: 'Unerwarteter Fehler beim Abrufen des Remote-Status',
 		git: 'Unerwarteter Fehler beim Ausführen des git-Befehls'

@@ -85,6 +85,7 @@ export default {
 		}
 	},
 	error: {
+		corruptSettings: 'One or more of your configuration files are corrupt. Please reset them.',
 		fetching: 'Unexpected error while fetching repository status',
 		remote: 'Unexpected error while fetching remote status',
 		git: 'Unexpected error while executing git command'
