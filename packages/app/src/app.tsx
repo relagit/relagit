@@ -22,6 +22,39 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 const loaded = [];
 
+export const queueRepositoryLoad = () => {
+	debug('Queueing repository load');
+
+	createStoreListener([SettingsStore], () => {
+		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
+			if (loaded.includes(repo)) continue;
+
+			debug('Loading', repo);
+
+			if (!fs.existsSync(repo)) {
+				SettingsStore.settings?.set(
+					'repositories',
+					(SettingsStore.settings?.get('repositories') as string[])?.filter(
+						(r) => r !== repo
+					)
+				);
+
+				continue;
+			}
+
+			loaded.push(repo);
+
+			Git({
+				directory: repo,
+				command: 'fetch',
+				args: []
+			});
+
+			getRepositoryStatus(repo, true, true);
+		}
+	});
+};
+
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
@@ -65,40 +98,9 @@ export default () => {
 				return;
 			}
 
-		await getRepositoryStatus(
-			SettingsStore.settings?.get('activeRepository') as string,
-			true,
-			true
-		);
-	});
+		getRepositoryStatus(SettingsStore.settings?.get('activeRepository') as string, true, true);
 
-	createStoreListener([SettingsStore], async () => {
-		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
-			if (loaded.includes(repo)) continue;
-
-			debug('Loading', repo);
-
-			if (!fs.existsSync(repo)) {
-				SettingsStore.settings?.set(
-					'repositories',
-					(SettingsStore.settings?.get('repositories') as string[])?.filter(
-						(r) => r !== repo
-					)
-				);
-
-				continue;
-			}
-
-			loaded.push(repo);
-
-			Git({
-				directory: repo,
-				command: 'fetch',
-				args: []
-			});
-
-			await getRepositoryStatus(repo, true, true);
-		}
+		queueRepositoryLoad();
 	});
 
 	return (
