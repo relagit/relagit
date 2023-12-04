@@ -7,6 +7,7 @@ import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
 import { getSettings, setSettings } from './modules/settings';
+import { shellNeedsPatching, updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',
@@ -15,6 +16,10 @@ app.setAboutPanelOptions({
 	copyright: 'Copyright © 2023 TheCommieAxolotl & RelaGit contributors',
 	website: 'https://rela.dev'
 });
+
+if (shellNeedsPatching(process)) {
+	updateEnvironmentForProcess();
+}
 
 app.once('ready', async () => {
 	let settings: Map<string, unknown>;
