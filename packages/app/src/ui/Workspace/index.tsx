@@ -1,17 +1,22 @@
 import { For, Show } from 'solid-js';
 
+import { openInEditor } from '@app/modules/code';
 import { t } from '@app/modules/i18n';
+import { openExternal, showItemInFolder } from '@app/modules/shell';
+import SettingsStore from '@app/stores/settings';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import RepositoryStore from '@stores/repository';
 
 import Header from '@ui/Workspace/Header';
 
+import Menu from '../Menu';
 import CodeView from './CodeView';
 
 import './index.scss';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
 export interface IWorkspaceProps {
 	sidebar: boolean;
@@ -46,63 +51,145 @@ export default (props: IWorkspaceProps) => {
 					<div class="workspace__container__files">
 						<For each={commit()?.files}>
 							{(commitFile) => (
-								<div
-									tabIndex={0}
-									aria-role="button"
-									aria-label={t('workspace.commit.open', {
-										name: commitFile.filename
-									})}
-									aria-selected={selectedCommitFile() === commitFile}
-									data-active={selectedCommitFile() === commitFile}
-									data-status={selectedCommitFile()?.status}
-									classList={{
-										workspace__container__files__file: true,
-										active: selectedCommitFile() === commitFile
-									}}
-									onClick={() => {
-										LocationStore.setSelectedCommitFile(commitFile);
-									}}
-									onKeyDown={(event) => {
-										if (event.key === 'Enter') {
-											LocationStore.setSelectedCommitFile(commitFile);
+								<Menu
+									items={[
+										{
+											type: 'item',
+											label: t('sidebar.contextMenu.viewIn', {
+												name:
+													window.Native.platform === 'darwin'
+														? 'Finder'
+														: 'Explorer'
+											}),
+											onClick: () => {
+												showItemInFolder(
+													path.join(
+														LocationStore.selectedRepository.path,
+														commitFile.path,
+														commitFile.filename
+													)
+												);
+											},
+											disabled: !fs.existsSync(
+												path.join(
+													LocationStore.selectedRepository.path,
+													commitFile.path,
+													commitFile.filename
+												)
+											)
+										},
+										{
+											label: t('sidebar.contextMenu.openRemote'),
+											disabled: !fs.existsSync(
+												path.join(
+													LocationStore.selectedRepository.path,
+													commitFile.path,
+													commitFile.filename
+												)
+											),
+											type: 'item',
+											onClick: () => {
+												openExternal(
+													LocationStore.selectedRepository.remote.replace(
+														/\.git$/,
+														''
+													) +
+														`/blob/${LocationStore.selectedRepository.branch}/` +
+														path.join(
+															commitFile.path,
+															commitFile.filename
+														)
+												);
+											}
+										},
+										{
+											label: t('sidebar.contextMenu.openIn', {
+												name: t(
+													`settings.general.editor.${
+														SettingsStore.getSetting(
+															'externalEditor'
+														) || 'code'
+													}`
+												)
+											}),
+											onClick: () => {
+												openInEditor(
+													path.join(
+														LocationStore.selectedRepository.path,
+														commitFile.path,
+														commitFile.filename
+													)
+												);
+											},
+											disabled: !fs.existsSync(
+												path.join(
+													LocationStore.selectedRepository.path,
+													commitFile.path,
+													commitFile.filename
+												)
+											),
+											type: 'item'
 										}
-									}}
+									]}
 								>
-									<div class="workspace__container__files__file__filename">
-										<span
-											class="workspace__container__files__file__filename__path"
-											title={commitFile.path}
-										>
-											{commitFile.path}
-										</span>
-										<span class="workspace__container__files__file__filename__name">
-											<span class="workspace__container__files__file__filename__name__separator">
-												{commitFile.path.length ? '/' : ''}
-											</span>
-											{commitFile.filename}
-										</span>
-									</div>
 									<div
+										tabIndex={0}
+										aria-role="button"
+										aria-label={t('workspace.commit.open', {
+											name: commitFile.filename
+										})}
+										aria-selected={selectedCommitFile() === commitFile}
+										data-active={selectedCommitFile() === commitFile}
+										data-status={selectedCommitFile()?.status}
 										classList={{
-											workspace__container__files__file__status: true,
-											[commitFile.status]: true
+											workspace__container__files__file: true,
+											active: selectedCommitFile() === commitFile
+										}}
+										onClick={() => {
+											LocationStore.setSelectedCommitFile(commitFile);
+										}}
+										onKeyDown={(event) => {
+											if (event.key === 'Enter') {
+												LocationStore.setSelectedCommitFile(commitFile);
+											}
 										}}
 									>
-										{commitFile.status === 'modified'
-											? 'M'
-											: commitFile.status === 'added'
-											  ? 'A'
-											  : commitFile.status === 'deleted'
-											    ? 'D'
-											    : commitFile.status === 'renamed'
-											      ? 'R'
-											      : commitFile.status === 'copied'
-											        ? 'C'
-											        : commitFile.status === 'unmerged'
-											          ? 'U'
-											          : '??'}
+										<div class="workspace__container__files__file__filename">
+											<span
+												class="workspace__container__files__file__filename__path"
+												title={commitFile.path}
+											>
+												{commitFile.path}
+											</span>
+											<span class="workspace__container__files__file__filename__name">
+												<span class="workspace__container__files__file__filename__name__separator">
+													{commitFile.path.length ? '/' : ''}
+												</span>
+												{commitFile.filename}
+											</span>
+										</div>
+										<div
+											classList={{
+												workspace__container__files__file__status: true,
+												[commitFile.status]: true
+											}}
+										>
+											{commitFile.status === 'modified'
+												? 'M'
+												: commitFile.status === 'added'
+												  ? 'A'
+												  : commitFile.status === 'deleted'
+												    ? 'D'
+												    : commitFile.status === 'renamed'
+												      ? 'R'
+												      : commitFile.status === 'copied'
+												        ? 'C'
+												        : commitFile.status === 'unmerged'
+												          ? 'U'
+												          : '??'}
+										</div>
 									</div>
-								</div>
+								</Menu>
 							)}
 						</For>
 					</div>
