@@ -1,7 +1,8 @@
 import * as starryNight from '@wooorm/starry-night';
-import { app, contextBridge, ipcRenderer } from 'electron';
+import { IpcRendererEvent, app, contextBridge, ipcRenderer } from 'electron';
 import fs, { WatchListener } from 'node:fs';
 
+import type { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
 
 export const Native = {
@@ -23,28 +24,28 @@ export const Native = {
 		starryNight
 	},
 	listeners: {
-		FOCUS: (fn: () => void) => {
+		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.FOCUS, fn);
 		},
 		SETTINGS: (fn: () => void) => {
 			ipcRenderer.on(ipc.OPEN_SETTINGS, fn);
 		},
-		SIDEBAR: (fn: () => void) => {
+		SIDEBAR: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_SIDEBAR, fn);
 		},
-		SWITCHER: (fn: () => void) => {
+		SWITCHER: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_SWITCHER, fn);
 		},
-		HISTORY: (fn: () => void) => {
+		HISTORY: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
 		},
-		BRANCHES: (fn: () => void) => {
+		BRANCHES: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BRANCHES, fn);
 		},
-		BLAME: (fn: () => void) => {
+		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BLAME, fn);
 		},
-		LOAD_WORKFLOW: (fn: () => void) => {
+		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},
 		WATCHER: {
