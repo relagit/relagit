@@ -176,14 +176,14 @@ app.once('ready', async () => {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Toggle Sidebar',
+					label: 'Sidebar',
 					accelerator: 'CmdOrCtrl+B',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SIDEBAR);
 					}
 				},
 				{
-					label: 'Toggle Switcher',
+					label: 'Switcher',
 					accelerator: 'CmdOrCtrl+K',
 					click: () => {
 						win.webContents.send(ipc.OPEN_SWITCHER);
@@ -191,21 +191,21 @@ app.once('ready', async () => {
 					}
 				},
 				{
-					label: 'Toggle Commit History View',
+					label: 'Commit History',
 					accelerator: 'CmdOrCtrl+L',
 					click: () => {
 						win.webContents.send(ipc.OPEN_HISTORY);
 					}
 				},
 				{
-					label: 'Toggle Branches Picker',
+					label: 'Branches',
 					accelerator: 'CmdOrCtrl+I',
 					click: () => {
 						win.webContents.send(ipc.OPEN_BRANCHES);
 					}
 				},
 				{
-					label: 'Toggle Blame View',
+					label: 'Blame View',
 					accelerator: 'CmdOrCtrl+J',
 					click: () => {
 						win.webContents.send(ipc.OPEN_BLAME);
