@@ -369,7 +369,7 @@ export default () => {
 											}}
 											onClick={async () => {
 												try {
-													await Git.CheckoutBranch(
+													await Git.Checkout(
 														LocationStore.selectedRepository,
 														branch.name
 													);

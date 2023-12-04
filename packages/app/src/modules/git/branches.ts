@@ -46,7 +46,7 @@ export const ListBranches = async (repository: IRepository): Promise<Branch[]> =
 	return map;
 };
 
-export const CheckoutBranch = async (repository: IRepository, branch: string): Promise<string> => {
+export const Checkout = async (repository: IRepository, branch: string): Promise<string> => {
 	if (!repository) {
 		return '';
 	}
@@ -76,7 +76,7 @@ export const CreateBranch = async (
 	});
 
 	if (checkout) {
-		await CheckoutBranch(repository, branch);
+		await Checkout(repository, branch);
 	}
 
 	return res;
