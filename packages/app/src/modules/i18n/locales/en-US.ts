@@ -189,6 +189,7 @@ export default {
 		tooBigHint: "This file is sooo huge that we aren't rendering it for performance reasons."
 	},
 	git: {
+		sync: 'Sync',
 		hide: 'Hide',
 		publish: 'Publish Branch',
 		publishHint: 'Publish this branch to remote.',

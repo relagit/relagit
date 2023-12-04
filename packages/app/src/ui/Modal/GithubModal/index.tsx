@@ -233,7 +233,7 @@ export default () => {
 										<div class="github-modal__details__info">
 											<div class="github-modal__details__info__actions">
 												<Button
-													label="Clone repository"
+													label={t('modal.github.clone')}
 													type="brand"
 													onClick={() => {
 														setCloneReady(true);

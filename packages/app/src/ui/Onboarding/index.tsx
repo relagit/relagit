@@ -167,7 +167,7 @@ export default () => {
 			</div>
 			<div class="onboarding__actions">
 				<Button
-					label="Take the Tour"
+					label={t('onboarding.takeTour')}
 					onClick={() => {
 						OnboardingStore.setStep(1);
 					}}

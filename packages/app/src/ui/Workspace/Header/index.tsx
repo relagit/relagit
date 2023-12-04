@@ -173,7 +173,7 @@ export default () => {
 		<div class="workspace__header">
 			<PanelButton
 				detail={renderDate(repository()?.lastFetched)()}
-				label="Sync"
+				label={t('git.sync')}
 				icon="sync"
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}

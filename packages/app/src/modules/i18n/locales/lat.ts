@@ -188,6 +188,7 @@ export default {
 		tooBigHint: 'Scapus hic tam ingens est ut rationes perficiendi non reddemus.'
 	},
 	git: {
+		sync: 'Sync',
 		hide: 'Abscondere',
 		publish: 'Mitte Germen',
 		publishHint: 'Hoc germen ad remotum mitte.',

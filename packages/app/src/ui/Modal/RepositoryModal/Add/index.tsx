@@ -152,7 +152,11 @@ export default (props: IAddRepositoryModalProps) => {
 			</ModalBody>
 			<ModalFooter>
 				<div class="modal__footer__buttons">
-					<Button label="Cancel" type="default" onClick={props.modalProps.close}>
+					<Button
+						label={t('modal.repository.cancel')}
+						type="default"
+						onClick={props.modalProps.close}
+					>
 						{t('modal.repository.cancel')}
 					</Button>
 					<Popout

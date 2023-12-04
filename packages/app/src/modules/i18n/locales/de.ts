@@ -194,6 +194,7 @@ export default {
 		tooBigHint: 'Diese Datei ist soooo groß, dass wir sie aus Leistungsgründen nicht rendern.'
 	},
 	git: {
+		sync: 'Sync',
 		hide: 'Verstecken',
 		publish: 'Veröffentlichen',
 		publishHint: 'Veröffentliche diesen Branch auf Remote.',
