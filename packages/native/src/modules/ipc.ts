@@ -1,5 +1,6 @@
-import child_process from 'child_process';
 import { BrowserWindow, OpenDialogOptions, app, dialog, ipcMain, shell } from 'electron';
+
+import child_process from 'child_process';
 
 import * as ipc from '~/common/ipc';
 

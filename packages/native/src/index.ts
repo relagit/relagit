@@ -1,4 +1,5 @@
 import { BrowserWindow, Menu, MenuItemConstructorOptions, app } from 'electron';
+
 import * as path from 'path';
 
 import * as ipc from '~/common/ipc';

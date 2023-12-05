@@ -1,5 +1,6 @@
 import * as starryNight from '@wooorm/starry-night';
 import { IpcRendererEvent, app, contextBridge, ipcRenderer } from 'electron';
+
 import fs, { WatchListener } from 'node:fs';
 
 import type { Workflow } from '~/app/src/modules/actions';

@@ -3,15 +3,16 @@ import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
+import { defineConfig } from 'rollup';
+import esbuild from 'rollup-plugin-esbuild';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+import tsconfig from 'rollup-plugin-tsconfig-paths';
+
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import Module from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'rollup';
-import esbuild from 'rollup-plugin-esbuild';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import tsconfig from 'rollup-plugin-tsconfig-paths';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
