@@ -24,7 +24,7 @@
 		&__files {
 			min-width: 300px;
 			width: 300px;
-			height: 100%;
+			height: calc(100% - 57px);
 			background-color: var(--bg-material);
 			overflow-y: auto;
 			border-right: 1px solid var(--separator-primary);
