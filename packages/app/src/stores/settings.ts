@@ -1,5 +1,7 @@
 import { GenericStore } from '.';
 
+import { ValidLocale } from '@app/modules/i18n';
+
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
@@ -24,7 +26,7 @@ export interface ISettings {
 	accentColor: string;
 	repositories: string[];
 	activeRepository: string;
-	locale: string;
+	locale: ValidLocale;
 	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl';
 	enabledThemes: string[];
 }

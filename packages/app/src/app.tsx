@@ -28,8 +28,8 @@ export const queueRepositoryLoad = () => {
 	debug('Queueing repository load');
 
 	createStoreListener([SettingsStore], () => {
-		for (const repo of SettingsStore.settings?.get('repositories') as string[]) {
-			if (SettingsStore.settings?.get('activeRepository') === repo) continue;
+		for (const repo of SettingsStore.getSetting('repositories') as string[]) {
+			if (SettingsStore.getSetting('activeRepository') === repo) continue;
 
 			if (loaded.includes(repo)) continue;
 
@@ -38,7 +38,7 @@ export const queueRepositoryLoad = () => {
 			if (!fs.existsSync(repo)) {
 				SettingsStore.settings?.set(
 					'repositories',
-					(SettingsStore.settings?.get('repositories') as string[])?.filter(
+					(SettingsStore.getSetting('repositories') as string[])?.filter(
 						(r) => r !== repo
 					)
 				);
@@ -74,6 +74,8 @@ export default () => {
 	});
 
 	onMount(async () => {
+		document.documentElement.setAttribute('lang', SettingsStore.getSetting('locale'));
+
 		// check if git is installed
 		if (!(await checkIsInPath('git'))) {
 			window.Native.alert(
@@ -86,14 +88,14 @@ export default () => {
 
 		// we want to load the active repository first to decrease the time to load the app
 		if (
-			SettingsStore.settings?.get('activeRepository') &&
-			!loaded.includes(SettingsStore.settings?.get('activeRepository') as string)
+			SettingsStore.getSetting('activeRepository') &&
+			!loaded.includes(SettingsStore.getSetting('activeRepository'))
 		)
-			if (!fs.existsSync(SettingsStore.settings?.get('activeRepository') as string)) {
+			if (!fs.existsSync(SettingsStore.getSetting('activeRepository'))) {
 				SettingsStore.settings?.set(
 					'repositories',
-					(SettingsStore.settings?.get('repositories') as string[])?.filter(
-						(r) => r !== SettingsStore.settings?.get('activeRepository')
+					SettingsStore.getSetting('repositories')?.filter(
+						(r) => r !== SettingsStore.getSetting('activeRepository')
 					)
 				);
 
@@ -102,14 +104,10 @@ export default () => {
 				return;
 			}
 
-		await getRepositoryStatus(
-			SettingsStore.settings?.get('activeRepository') as string,
-			true,
-			true
-		);
+		await getRepositoryStatus(SettingsStore.getSetting('activeRepository'), true, true);
 
 		LocationStore.setSelectedRepository(
-			RepositoryStore.getByPath(SettingsStore.settings?.get('activeRepository') as string)
+			RepositoryStore.getByPath(SettingsStore.getSetting('activeRepository'))
 		);
 
 		queueRepositoryLoad();

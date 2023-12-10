@@ -27,6 +27,8 @@ const ALL_LOCALES: Record<string, Locale> = {
 	de
 };
 
+export type ValidLocale = keyof typeof ALL_LOCALES;
+
 type Stringifyable = string | number | boolean | null | undefined;
 
 export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALES]) => {
