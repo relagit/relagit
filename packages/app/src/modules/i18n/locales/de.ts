@@ -161,7 +161,9 @@ export default {
 			ignoreExt: 'Füge alle .{{ext}} Dateien zu gitignore hinzu',
 			viewIn: 'Anzeigen in {{name}}',
 			openIn: 'Öffne in {{name}}',
-			openRemote: 'Öffne Remote'
+			openRemote: 'Öffne Remote',
+			copySha: 'Kopiere SHA',
+			checkout: 'Checkout Commit'
 		}
 	},
 	time: {

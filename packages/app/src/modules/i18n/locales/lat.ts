@@ -155,7 +155,9 @@ export default {
 			ignoreExt: 'Omnia adde .{{ext}} lima ut gitignore',
 			viewIn: 'Ite ad {{name}}',
 			openIn: 'Ite ad {{name}}',
-			openRemote: 'Ite ad Longinquus'
+			openRemote: 'Ite ad Longinquus',
+			copySha: 'Effingo SHA',
+			checkout: 'Checkout Committ'
 		}
 	},
 	time: {
