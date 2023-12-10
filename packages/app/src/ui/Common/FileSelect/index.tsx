@@ -1,7 +1,7 @@
 import { JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
-import { PassthroughRef } from '@app/ui/shared';
+import { PassthroughRef } from '@app/shared';
 import * as ipc from '~/common/ipc';
 
 import Icon from '../Icon';

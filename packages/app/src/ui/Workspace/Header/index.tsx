@@ -2,13 +2,13 @@ import { Accessor, For, JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
+import { PassthroughRef } from '@app/shared';
 import OnboardingStore from '@app/stores/onboarding';
 import RepositoryStore from '@app/stores/repository';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
 import { finishTour } from '@app/ui/Onboarding';
-import { PassthroughRef } from '@app/ui/shared';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import * as Git from '@modules/git';
 import { debug, error } from '@modules/logger';

@@ -1,6 +1,6 @@
 import { JSX } from 'solid-js';
 
-import { PassthroughRef } from '@app/ui/shared';
+import { PassthroughRef } from '@app/shared';
 
 import './index.scss';
 

@@ -1,3 +1,4 @@
+import { RecursivePartial } from '@app/shared';
 import SettingsStore from '@app/stores/settings';
 
 import de from './locales/de';
@@ -21,7 +22,7 @@ type ObjectToDotPropInternal<T extends object> = {
 		: never;
 };
 
-const ALL_LOCALES: Record<string, Locale> = {
+const ALL_LOCALES: Record<string, RecursivePartial<Locale>> = {
 	'en-US': enUS,
 	lat,
 	de
@@ -31,47 +32,56 @@ export type ValidLocale = keyof typeof ALL_LOCALES;
 
 type Stringifyable = string | number | boolean | null | undefined;
 
+const findTranslation = (
+	locale: RecursivePartial<Locale>,
+	key: LocaleKey,
+	args?: Record<string, Stringifyable>,
+	plural?: number
+) => {
+	const paths = key.split('.');
+
+	let out = '';
+
+	let current: string | object = locale;
+
+	for (const path of paths) {
+		current = current[path];
+
+		if (!current) break;
+	}
+
+	if (current) {
+		out = current as string;
+	}
+
+	if (!out) {
+		console.warn(`Missing translation for ${key}`);
+
+		if (locale !== enUS) {
+			return findTranslation(enUS, key, args, plural);
+		}
+	}
+
+	if (Array.isArray(out)) {
+		out = out[plural > 1 ? 1 : 0];
+	}
+
+	if (typeof out !== 'string') {
+		console.warn(`Translation for ${key} is not a string`);
+
+		return `{{${key}}}`;
+	}
+
+	for (const arg in args) {
+		out = out.replace(`{{${arg}}}`, args[arg] as string);
+	}
+
+	return out;
+};
+
 export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALES]) => {
 	return (key: LocaleKey, args?: Record<string, Stringifyable>, plural?: number) => {
-		const paths = key.split('.');
-
-		let out = '';
-
-		let current: string | object = locale;
-
-		for (const path of paths) {
-			current = current[path];
-
-			if (!current) break;
-		}
-
-		if (!current) {
-			out = key;
-		} else {
-			out = current as string;
-		}
-
-		if (!out) {
-			console.warn(`Missing translation for ${key}`);
-
-			return `{{${key}}}`;
-		}
-
-		if (Array.isArray(out)) {
-			out = out[plural > 1 ? 1 : 0];
-		}
-
-		if (typeof out !== 'string') {
-			console.warn(`Translation for ${key} is not a string`);
-
-			return `{{${key}}}`;
-		}
-
-		for (const arg in args) {
-			out = out.replace(`{{${arg}}}`, args[arg] as string);
-		}
-
-		return out;
+		return findTranslation(locale, key, args, plural);
 	};
 };
 
