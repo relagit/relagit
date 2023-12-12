@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { openInEditor } from '@app/modules/code';
+import { statusToAlpha } from '@app/modules/git/diff';
 import { t } from '@app/modules/i18n';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
 import SettingsStore from '@app/stores/settings';
@@ -174,19 +175,7 @@ export default (props: IWorkspaceProps) => {
 												[commitFile.status]: true
 											}}
 										>
-											{commitFile.status === 'modified'
-												? 'M'
-												: commitFile.status === 'added'
-												  ? 'A'
-												  : commitFile.status === 'deleted'
-												    ? 'D'
-												    : commitFile.status === 'renamed'
-												      ? 'R'
-												      : commitFile.status === 'copied'
-												        ? 'C'
-												        : commitFile.status === 'unmerged'
-												          ? 'U'
-												          : '??'}
+											{statusToAlpha(commitFile.status)}
 										</div>
 									</div>
 								</Menu>
@@ -197,7 +186,7 @@ export default (props: IWorkspaceProps) => {
 				<div class="workspace__container__main">
 					<div class="workspace__container__main__file">
 						<div class="workspace__container__main__file__path">
-							{(historyOpen()
+							{/* {(historyOpen()
 								? selectedCommitFile()?.path
 								: file().file?.path
 							)?.endsWith('/')
@@ -206,7 +195,21 @@ export default (props: IWorkspaceProps) => {
 									: file().file?.path
 								: ((historyOpen()
 										? selectedCommitFile()?.path
-										: file().file?.path) || '') + '/'}
+										: file().file?.path) || '') + '/'} */}
+
+							<Show
+								when={(historyOpen()
+									? selectedCommitFile()?.path || ''
+									: file().file?.path || ''
+								).endsWith('/')}
+								fallback={
+									((historyOpen()
+										? selectedCommitFile()?.path
+										: file().file?.path) || '') + '/'
+								}
+							>
+								{historyOpen() ? selectedCommitFile()?.path : file().file?.path}
+							</Show>
 						</div>
 						<div class="workspace__container__main__file__name">
 							{historyOpen() ? selectedCommitFile()?.filename : file().file?.name}

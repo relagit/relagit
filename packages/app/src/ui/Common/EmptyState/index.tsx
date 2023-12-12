@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { For, Show, createEffect, createSignal } from 'solid-js';
 
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
@@ -34,19 +34,33 @@ export interface IEmptyStateProps {
 export default (props: IEmptyStateProps) => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
+	const [imageSrc, setImageSrc] = createSignal<EMPTY_STATE_IMAGES>();
+
+	createEffect(() => {
+		if (props.image) {
+			let imageSrc: EMPTY_STATE_IMAGES;
+
+			const theme = settings()?.get('theme');
+
+			if (theme === 'dark') {
+				imageSrc = props.image.dark;
+			} else if (theme === 'light') {
+				imageSrc = props.image.light;
+			} else if (matchMedia('(prefers-color-scheme: dark)').matches) {
+				imageSrc = props.image.dark;
+			} else {
+				imageSrc = props.image.light;
+			}
+
+			setImageSrc(imageSrc);
+		}
+	});
+
 	return (
 		<div class="empty-state">
 			<Show when={props.image}>
 				<img
-					src={`assets/empty_state/${
-						settings()?.get('theme') === 'dark'
-							? props.image.dark
-							: settings()?.get('theme') === 'light'
-							  ? props.image.light
-							  : matchMedia('(prefers-color-scheme: dark)').matches
-							    ? props.image.dark
-							    : props.image.light
-					}.svg`}
+					src={`assets/empty_state/${imageSrc()}.svg`}
 					alt="Nothing here"
 					style={{ opacity: props.opacity || 1 }}
 				/>

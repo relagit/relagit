@@ -39,14 +39,23 @@ export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
 		}
 
 		const files = Number(changesLine[0]?.trim()?.split(' ')[0]);
-		const insertions = changesLine[1]?.includes('insert')
-			? Number(changesLine[1]?.trim()?.split(' ')[0])
-			: 0;
-		const deletions = changesLine[1]?.includes('del')
-			? Number(changesLine[1]?.trim()?.split(' ')[0])
-			: changesLine[2]?.includes('del')
-			  ? Number(changesLine[2]?.trim()?.split(' ')[0])
-			  : 0;
+
+		let insertions: number;
+		let deletions: number;
+
+		if (changesLine[1]?.includes('insert')) {
+			insertions = Number(changesLine[1]?.trim()?.split(' ')[0]);
+		} else {
+			insertions = 0;
+		}
+
+		if (changesLine[1]?.includes('del')) {
+			deletions = Number(changesLine[1]?.trim()?.split(' ')[0]);
+		} else if (changesLine[2]?.includes('del')) {
+			deletions = Number(changesLine[2]?.trim()?.split(' ')[0]);
+		} else {
+			deletions = 0;
+		}
 
 		return {
 			hash,

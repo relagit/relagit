@@ -42,6 +42,34 @@ app.once('ready', async () => {
 		return onboarding.dismissed !== true && onboarding.step === 0;
 	};
 
+	let vibrancy:
+		| 'sidebar'
+		| 'fullscreen-ui'
+		| 'selection'
+		| 'menu'
+		| 'popover'
+		| 'sidebar-header'
+		| 'titlebar'
+		| 'header'
+		| 'sheet'
+		| 'window'
+		| undefined = settings.get('vibrancy') ? 'sidebar' : undefined;
+	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
+		settings.get('vibrancy') ? 'mica' : undefined;
+	let transparent = settings.get('vibrancy') && process.platform === 'win32' ? true : undefined;
+	let backgroundColor =
+		settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined;
+
+	if (isOnboarding()) {
+		vibrancy = 'sidebar';
+
+		if (process.platform === 'win32') {
+			backgroundMaterial = 'mica';
+			transparent = true;
+			backgroundColor = '#00000000';
+		}
+	}
+
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
@@ -50,26 +78,10 @@ app.once('ready', async () => {
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
-		vibrancy: settings.get('vibrancy')
-			? 'sidebar'
-			: isOnboarding() && process.platform === 'darwin'
-			  ? 'sidebar'
-			  : undefined,
-		backgroundMaterial: settings.get('vibrancy')
-			? 'mica'
-			: isOnboarding() && process.platform === 'win32'
-			  ? 'mica'
-			  : undefined,
-		transparent:
-			settings.get('vibrancy') && process.platform === 'win32'
-				? true
-				: isOnboarding() && process.platform === 'win32',
-		backgroundColor:
-			settings.get('vibrancy') && process.platform === 'win32'
-				? '#00000000'
-				: isOnboarding() && process.platform === 'win32'
-				  ? '#00000000'
-				  : undefined,
+		vibrancy,
+		backgroundMaterial,
+		transparent,
+		backgroundColor,
 		height: (settings.get('window.height') as number) || 600,
 		width: (settings.get('window.width') as number) || 1000,
 		minWidth: 500,

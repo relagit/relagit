@@ -36,15 +36,19 @@ export default (props: PassthroughRef<IFileSelectProps>) => {
 		if (props.validate) {
 			setValid(props.validate(inputValue()));
 
-			const validType = typeof valid();
+			let statusValue = null;
 
-			setStatus(
-				valid() !== null
-					? validType === 'string' || valid() === false || validType === 'object'
-						? 'invalid'
-						: 'valid'
-					: null
-			);
+			if (valid() !== null) {
+				const validType = typeof valid();
+
+				if (validType === 'string' || valid() === false || validType === 'object') {
+					statusValue = 'invalid';
+				} else {
+					statusValue = 'valid';
+				}
+			}
+
+			setStatus(statusValue);
 		}
 	}, [inputValue]);
 
@@ -67,11 +71,7 @@ export default (props: PassthroughRef<IFileSelectProps>) => {
 
 	return (
 		<div class="filepicker" ref={props.ref}>
-			<div
-				class={`filepicker__input ${
-					status() === 'valid' ? 'valid' : status() === 'invalid' ? 'invalid' : ''
-				}`}
-			>
+			<div class={`filepicker__input ${status() || ''}`}>
 				<Show when={props.input}>
 					<TextArea
 						label={t('ui.filepicker.label')}
@@ -100,11 +100,7 @@ export default (props: PassthroughRef<IFileSelectProps>) => {
 					<Icon name="file-directory" />
 				</button>
 			</div>
-			<div
-				class={`filepicker__alert ${
-					status() === 'valid' ? 'valid' : status() === 'invalid' ? 'invalid' : ''
-				}`}
-			>
+			<div class={`filepicker__alert ${status() || ''}`}>
 				<Show when={status() === 'invalid'}>
 					<Icon name="alert" />
 					<span>{valid()}</span>

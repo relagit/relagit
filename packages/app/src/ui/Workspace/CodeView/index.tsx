@@ -471,12 +471,18 @@ export default (props: ICodeViewProps) => {
 																		<div
 																			class={`codeview__line__indicator ${lineStatus}`}
 																		>
-																			{lineStatus === 'added'
-																				? '+'
-																				: lineStatus ===
-																				    'deleted'
-																				  ? '-'
-																				  : ' '}
+																			<Show
+																				when={
+																					lineStatus !==
+																					'unchanged'
+																				}
+																				fallback={' '}
+																			>
+																				{lineStatus ===
+																				'added'
+																					? '+'
+																					: '-'}
+																			</Show>
 																		</div>
 																		<div
 																			class="codeview__line__content"

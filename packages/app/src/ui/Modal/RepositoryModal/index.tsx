@@ -15,7 +15,15 @@ export interface IRepositoryModalProps {
 }
 
 export default (props: IRepositoryModalProps) => {
-	const [tab, setTab] = createSignal(props.tab ? (props.tab === 'add' ? 0 : 1) : 0);
+	let initialTab = 0;
+
+	if (!props.tab || props.tab === 'add') {
+		initialTab = 0;
+	} else {
+		initialTab = 1;
+	}
+
+	const [tab, setTab] = createSignal(initialTab);
 	const draftPath = createSignal('');
 
 	return (

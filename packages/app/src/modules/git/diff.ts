@@ -16,6 +16,31 @@ export type GitStatus =
 	| 'renamed'
 	| 'type-changed';
 
+export const statusToAlpha = (status: GitStatus) => {
+	switch (status) {
+		case 'modified':
+			return 'M';
+		case 'added':
+			return 'A';
+		case 'deleted':
+			return 'D';
+		case 'renamed':
+			return 'R';
+		case 'copied':
+			return 'C';
+		case 'unmerged':
+			return 'U';
+		case 'unknown':
+			return '?';
+		case 'untracked':
+			return '!';
+		case 'type-changed':
+			return 'T';
+		default:
+			return '?';
+	}
+};
+
 export const parseDiff = (rawDiff: string) => {
 	return parseGitDiff(rawDiff);
 };

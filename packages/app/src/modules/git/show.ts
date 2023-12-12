@@ -67,26 +67,24 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 
 		const p = path.dirname(name.replace('a/', '').split(' b/').pop());
 
-		const binaryStatus = file.includes('files /dev/null')
-			? 'added'
-			: file.includes('files a/') && file.includes('and b/')
-			  ? 'modified'
-			  : 'deleted';
+		let status: GitStatus;
+
+		if (file.includes('files /dev/null')) {
+			status = 'added';
+		} else if (file.includes('files a/') && file.includes('and b/')) {
+			status = 'modified';
+		}
+
+		if (_diff.files[0]?.type === 'AddedFile') status = 'added';
+		if (_diff.files[0]?.type === 'ChangedFile') status = 'modified';
+		if (_diff.files[0]?.type === 'DeletedFile') status = 'deleted';
+		if (_diff.files[0]?.type === 'RenamedFile') status = 'renamed';
 
 		commit.files.push({
 			filename: path.basename(name.replace('a/', '').split(' b/').pop()),
 			path: p === '.' ? '' : p,
 			diff: _diff,
-			status:
-				_diff.files[0]?.type === 'ChangedFile'
-					? 'modified'
-					: _diff.files[0]?.type === 'AddedFile'
-					  ? 'added'
-					  : _diff.files[0]?.type === 'DeletedFile'
-					    ? 'deleted'
-					    : _diff.files[0]?.type === 'RenamedFile'
-					      ? 'renamed'
-					      : binaryStatus
+			status: status ?? 'deleted'
 		});
 	}
 

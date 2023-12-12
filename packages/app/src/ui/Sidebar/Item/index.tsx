@@ -1,6 +1,7 @@
 import { triggerWorkflow } from '@app/modules/actions';
 import { openInEditor } from '@app/modules/code';
 import * as Git from '@app/modules/git';
+import { statusToAlpha } from '@app/modules/git/diff';
 import { addToGitignore } from '@app/modules/git/gitignore';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
@@ -158,21 +159,7 @@ export default (props: IFile) => {
 					}}
 					class={`sidebar__item__status ${props.status} ${props.staged ? 'staged' : ''}`}
 				>
-					{props.status === 'modified'
-						? 'M'
-						: props.status === 'added'
-						  ? 'A'
-						  : props.status === 'deleted'
-						    ? 'D'
-						    : props.status === 'renamed'
-						      ? 'R'
-						      : props.status === 'copied'
-						        ? 'C'
-						        : props.status === 'unmerged'
-						          ? 'U'
-						          : props.status === 'untracked'
-						            ? '?'
-						            : ''}
+					{statusToAlpha(props.status)}
 				</button>
 			</div>
 		</Menu>

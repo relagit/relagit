@@ -38,6 +38,7 @@
 		"no-unneeded-ternary": ["error", { "defaultAssignment": false }],
 		"prefer-const": "error",
 		"prefer-spread": "error",
-		"no-unsafe-optional-chaining": "error"
+		"no-unsafe-optional-chaining": "error",
+		"no-nested-ternary": "warn"
 	}
 }
