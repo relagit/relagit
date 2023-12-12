@@ -15,7 +15,7 @@ const ModalStore = new (class Modal extends GenericStore {
 	}
 
 	addModal(modal: { type: string; element: JSX.Element }) {
-		this.#record = [...this.modals, modal];
+		this.#record.push(modal);
 		this.emit();
 	}
 

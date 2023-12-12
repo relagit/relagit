@@ -65,12 +65,15 @@ export const loadThemes = async () => {
 };
 
 export const toggleTheme = (id: string) => {
-	SettingsStore.setSetting(
-		'enabledThemes',
-		SettingsStore.getSetting('enabledThemes')?.includes(id)
-			? SettingsStore.getSetting('enabledThemes')?.filter((t) => t !== id)
-			: [...(SettingsStore.getSetting('enabledThemes') || []), id]
-	);
+	const enabled = SettingsStore.getSetting('enabledThemes') || [];
+
+	if (enabled.includes(id)) {
+		enabled.splice(enabled.indexOf(id), 1);
+	} else {
+		enabled.push(id);
+	}
+
+	SettingsStore.setSetting('enabledThemes', enabled);
 
 	enableThemes();
 };
