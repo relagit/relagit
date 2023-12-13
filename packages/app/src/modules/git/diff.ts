@@ -1,5 +1,3 @@
-import parseGitDiff from 'parse-git-diff';
-
 import { DIFF_CODES } from './constants';
 import { Git } from './core';
 
@@ -39,10 +37,6 @@ export const statusToAlpha = (status: GitStatus) => {
 		default:
 			return '?';
 	}
-};
-
-export const parseDiff = (rawDiff: string) => {
-	return parseGitDiff(rawDiff);
 };
 
 export const Diff = async (file: string, repoPath: string) => {

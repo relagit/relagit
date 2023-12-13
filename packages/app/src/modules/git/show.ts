@@ -1,7 +1,6 @@
-import parse, { GitDiff } from 'parse-git-diff';
-
 import { Git } from './core';
 import { GitStatus } from './diff';
+import { GitDiff, parseDiff } from './parse-diff';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
@@ -63,7 +62,7 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 
 		const [name, ...diff] = file.split('\n');
 
-		const _diff = parse('diff --git ' + name + '\n' + diff.join('\n') + '');
+		const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
 
 		const p = path.dirname(name.replace('a/', '').split(' b/').pop());
 

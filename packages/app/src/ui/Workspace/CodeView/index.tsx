@@ -1,10 +1,10 @@
 import type { GitDiff } from 'parse-git-diff';
 import { For, Show, createSignal } from 'solid-js';
 
+import { parseDiff } from '@app/modules/git/parse-diff';
 import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
 import { DIFF_CODES } from '@modules/git/constants';
-import { parseDiff } from '@modules/git/diff';
 import highlighter, { langFrom } from '@modules/highlighter';
 import { error } from '@modules/logger';
 import FileStore from '@stores/files';
@@ -144,6 +144,7 @@ export default (props: ICodeViewProps) => {
 					setDiff(true);
 				} else {
 					const parsed = parseDiff(_diff);
+
 					setDiff(parsed);
 				}
 
