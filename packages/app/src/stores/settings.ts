@@ -48,7 +48,7 @@ const validatePath = () => {
 };
 
 const SettingsStore = new (class Settings extends GenericStore {
-	#record: Map<keyof ISettings, ISettings[keyof ISettings]> | undefined = new Map();
+	#record: Partial<ISettings> = {};
 	constructor() {
 		super();
 
@@ -62,11 +62,11 @@ const SettingsStore = new (class Settings extends GenericStore {
 	}
 
 	getSetting<T extends keyof ISettings>(key: T): ISettings[T] {
-		return this.#record.get(key) as ISettings[T];
+		return this.#record[key] as ISettings[T];
 	}
 
 	setSetting<T extends keyof ISettings>(key: T, value: ISettings[T]) {
-		this.#record.set(key, value);
+		this.#record[key] = value;
 		this.save();
 		this.emit();
 
@@ -74,7 +74,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 	}
 
 	save() {
-		const settings = Object.fromEntries(this.#record.entries());
+		const settings = structuredClone(this.#record);
 		delete settings.repositories;
 
 		fs.writeFileSync(__SETTINGS_PATH__, JSON.stringify(settings, null, 4));
@@ -95,11 +95,11 @@ const SettingsStore = new (class Settings extends GenericStore {
 			}
 
 			for (const [key, value] of Object.entries(settings)) {
-				this.#record.set(key as keyof ISettings, value as ISettings[keyof ISettings]);
+				this.#record[key] = value;
 			}
 
-			if (!this.#record.has('theme')) {
-				this.#record.set('theme', 'system');
+			if (!this.#record['theme']) {
+				this.#record['theme'] = 'system';
 			}
 		}
 
@@ -112,7 +112,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 				window._showErrorModal(error, 'error.corruptSettings');
 			}
 
-			this.#record.set('repositories', repositories);
+			this.#record['repositories'] = repositories;
 		}
 	}
 })();

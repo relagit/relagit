@@ -28,7 +28,7 @@ export const queueRepositoryLoad = () => {
 	debug('Queueing repository load');
 
 	createStoreListener([SettingsStore], () => {
-		for (const repo of SettingsStore.getSetting('repositories') as string[]) {
+		for (const repo of SettingsStore.getSetting('repositories')) {
 			if (SettingsStore.getSetting('activeRepository') === repo) continue;
 
 			if (loaded.includes(repo)) continue;
@@ -38,9 +38,7 @@ export const queueRepositoryLoad = () => {
 			if (!fs.existsSync(repo)) {
 				SettingsStore.setSetting(
 					'repositories',
-					(SettingsStore.getSetting('repositories') as string[])?.filter(
-						(r) => r !== repo
-					)
+					SettingsStore.getSetting('repositories')?.filter((r) => r !== repo)
 				);
 
 				continue;
@@ -118,13 +116,13 @@ export default () => {
 			<div
 				id="app-container"
 				class={`platform-${window.Native.platform} theme-${
-					settings()?.get('theme') || 'system'
-				} ${settings()?.get('vibrancy') ? 'vibrancy' : ''} ${
+					settings()['theme'] || 'system'
+				} ${settings()['vibrancy'] ? 'vibrancy' : ''} ${
 					focused() ? 'focused' : 'unfocused'
 				}`}
 				style={{
-					'--settings-font-family': settings()?.get('fontFamily') as string,
-					'--settings-accent-color': settings()?.get('accentColor') as string
+					'--settings-font-family': settings()['fontFamily'],
+					'--settings-accent-color': settings()['accentColor']
 				}}
 			>
 				<Show
@@ -140,7 +138,7 @@ export default () => {
 						<div class="window-control-bar"></div>
 					</Show>
 					<Layer
-						type={settings()?.get('expandedSettings') ? 'bare' : 'rich'}
+						type={settings()['expandedSettings'] ? 'bare' : 'rich'}
 						key="settings"
 						dismissable
 						transitions={Layer.Transitions.Fade}

@@ -40,7 +40,7 @@ export default (props: IEmptyStateProps) => {
 		if (props.image) {
 			let imageSrc: EMPTY_STATE_IMAGES;
 
-			const theme = settings()?.get('theme');
+			const theme = settings()['theme'];
 
 			if (theme === 'dark') {
 				imageSrc = props.image.dark;

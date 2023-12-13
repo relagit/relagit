@@ -245,12 +245,10 @@ export default () => {
 						}
 					]}
 					disabled={!LocationStore.selectedRepository}
-					value={
-						settings()?.get('commitStyles')?.[LocationStore.selectedRepository?.path]
-					}
+					value={settings()['commitStyles']?.[LocationStore.selectedRepository?.path]}
 					onChange={(value) => {
 						SettingsStore.setSetting('commitStyles', {
-							...(settings()?.get('commitStyles') as Record<string, string>),
+							...settings()['commitStyles'],
 							[LocationStore.selectedRepository?.path]: value
 						});
 					}}
@@ -260,7 +258,7 @@ export default () => {
 				<Switch
 					label={t('settings.general.enforceCommitStyle.label')}
 					note={t('settings.general.enforceCommitStyle.description')}
-					value={() => settings()?.get('enforceCommitMessageStyle') as boolean}
+					value={() => settings()['enforceCommitMessageStyle']}
 					onChange={(value) => {
 						SettingsStore.setSetting('enforceCommitMessageStyle', value);
 					}}
@@ -270,7 +268,7 @@ export default () => {
 				<Switch
 					label={t('settings.general.preferParens.label')}
 					note={t('settings.general.preferParens.description')}
-					value={() => settings()?.get('preferParens') as boolean}
+					value={() => settings()['preferParens']}
 					onChange={(value) => {
 						SettingsStore.setSetting('preferParens', value);
 					}}
@@ -305,7 +303,7 @@ export default () => {
 							value: 'lat'
 						}
 					]}
-					value={settings()?.get('locale') as string}
+					value={settings()['locale']}
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
 
@@ -337,7 +335,7 @@ export default () => {
 							value: 'subl'
 						}
 					]}
-					value={(settings()?.get('externalEditor') as string) || 'code'}
+					value={settings()['externalEditor'] || 'code'}
 					onChange={(value) => {
 						SettingsStore.setSetting(
 							'externalEditor',
@@ -416,7 +414,7 @@ export default () => {
 					disabled={
 						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
 					}
-					value={() => settings()?.get('vibrancy') as boolean}
+					value={() => !!settings()['vibrancy']}
 					onChange={(value) => {
 						SettingsStore.setSetting('vibrancy', value);
 
@@ -438,8 +436,8 @@ export default () => {
 									aria-label={t('settings.appearance.theme.choose', {
 										theme
 									})}
-									aria-selected={settings()?.get('theme') === theme}
-									classList={{ active: settings()?.get('theme') === theme }}
+									aria-selected={settings()['theme'] === theme}
+									classList={{ active: settings()['theme'] === theme }}
 									tabIndex={0}
 									onKeyDown={(e) => {
 										if (e.key === 'Enter') {
@@ -453,7 +451,7 @@ export default () => {
 									<input
 										type="radio"
 										value={theme}
-										checked={settings()?.get('theme') === theme}
+										checked={settings()['theme'] === theme}
 										onChange={() => {
 											SettingsStore.setSetting(
 												'theme',
@@ -508,7 +506,7 @@ export default () => {
 				<TextArea
 					label={t('settings.appearance.font.label')}
 					className="settings-layer__setting__textarea"
-					value={(settings()?.get('fontFamily') as string) || ''}
+					value={settings()['fontFamily'] || ''}
 					onChange={(value) => {
 						SettingsStore.setSetting('fontFamily', value);
 					}}
@@ -534,9 +532,7 @@ export default () => {
 											.map((a) => a.name)
 											.join(', ')})`}
 										value={() =>
-											settings()
-												.get('enabledThemes')
-												?.['includes']?.(theme.id)
+											settings()['enabledThemes']?.['includes']?.(theme.id)
 										}
 										onChange={() => {
 											toggleTheme(theme.id);
