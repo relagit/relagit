@@ -36,7 +36,7 @@ export const queueRepositoryLoad = () => {
 			debug('Loading', repo);
 
 			if (!fs.existsSync(repo)) {
-				SettingsStore.settings?.set(
+				SettingsStore.setSetting(
 					'repositories',
 					(SettingsStore.getSetting('repositories') as string[])?.filter(
 						(r) => r !== repo
@@ -92,14 +92,14 @@ export default () => {
 			!loaded.includes(SettingsStore.getSetting('activeRepository'))
 		)
 			if (!fs.existsSync(SettingsStore.getSetting('activeRepository'))) {
-				SettingsStore.settings?.set(
+				SettingsStore.setSetting(
 					'repositories',
 					SettingsStore.getSetting('repositories')?.filter(
 						(r) => r !== SettingsStore.getSetting('activeRepository')
 					)
 				);
 
-				SettingsStore.settings?.set('activeRepository', null);
+				SettingsStore.setSetting('activeRepository', null);
 
 				return;
 			}
