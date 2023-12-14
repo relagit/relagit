@@ -5,6 +5,7 @@ export enum CommitStyle {
 }
 
 // temporary
+// (was not temporary)
 export interface IDraftCommit {
 	files: string[];
 }
