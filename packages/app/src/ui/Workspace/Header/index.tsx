@@ -344,7 +344,7 @@ export default () => {
 													try {
 														await Git.DeleteBranch(
 															LocationStore.selectedRepository,
-															branch.name
+															branch.gitName
 														);
 
 														refetchRepository(
@@ -360,18 +360,18 @@ export default () => {
 										]}
 									>
 										<button
-											aria-selected={branch.name === repository()?.branch}
+											aria-selected={branch.gitName === repository()?.branch}
 											aria-role="option"
-											aria-label={branch.name}
+											aria-label={branch.gitName}
 											classList={{
 												'branches-picker__list__item': true,
-												active: branch.name === repository()?.branch
+												active: branch.gitName === repository()?.branch
 											}}
 											onClick={async () => {
 												try {
 													await Git.Checkout(
 														LocationStore.selectedRepository,
-														branch.name
+														branch.gitName
 													);
 
 													refetchRepository(
@@ -384,7 +384,17 @@ export default () => {
 												}
 											}}
 										>
-											{branch.name}
+											<div class="branches-picker__list__item__name">
+												<div class="branches-picker__list__item__name__path">
+													{branch.path}
+												</div>
+												<div class="branches-picker__list__item__name__separator">
+													{branch.path ? '/' : ''}
+												</div>
+												<div class="branches-picker__list__item__name__branch">
+													{branch.name}
+												</div>
+											</div>
 											<div class="branches-picker__list__item__info">
 												{branch.relativeDate}
 											</div>

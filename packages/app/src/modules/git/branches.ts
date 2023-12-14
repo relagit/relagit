@@ -3,7 +3,9 @@ import { IRepository } from '@stores/repository';
 import { Git } from './core';
 
 export type Branch = {
+	gitName: string;
 	name: string;
+	path: string;
 	relativeDate: string;
 	isRemote: boolean;
 	hasUpstream: boolean;
@@ -28,17 +30,33 @@ export const ListBranches = async (repository: IRepository): Promise<Branch[]> =
 
 			const parts = branch.split(' ').filter((b) => b.replace('*', '').trim());
 
-			const isRemote = branch.includes('origin/');
-			const hasUpstream = res.includes(` origin/${parts[0].trim()}`);
-			const hasNonUpstream = res.includes(` ${parts[0].replace('/origin', '').trim()}`);
+			const isRemote =
+				branch.startsWith('  remotes/origin/') ||
+				branch.startsWith('* remotes/origin/') ||
+				branch.startsWith('  origin/') ||
+				branch.startsWith('* origin/');
+			const hasUpstream =
+				res.includes(`  origin/${parts[0].replace('origin/', '').trim()} `) ||
+				res.includes(`* origin/${parts[0].replace('origin/', '').trim()} `);
+			const hasNonUpstream =
+				res.includes(`  ${parts[0].replace('origin/', '').trim()} `) ||
+				res.includes(`* ${parts[0].replace('origin/', '').trim()} `);
 
 			if (isRemote && hasNonUpstream) return null;
 
+			const fullName = parts[0].trim();
+			const slashParts = fullName.split('/');
+
+			const path = slashParts.slice(0, -1).join('/');
+			const name = slashParts.pop();
+
 			return {
-				name: parts[0].trim(),
+				name: name,
+				path: path,
+				gitName: fullName,
 				relativeDate: parts.splice(1).join(' ').trim(),
-				isRemote,
-				hasUpstream
+				isRemote: isRemote,
+				hasUpstream: hasUpstream
 			};
 		})
 		.filter(Boolean);

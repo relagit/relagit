@@ -81,6 +81,8 @@
 
 .popout .branches-picker {
 	user-select: none;
+	max-width: 300px;
+	overflow: hidden;
 
 	&__label {
 		color: var(--color-secondary);
@@ -106,6 +108,28 @@
 			text-align: left;
 			min-width: 250px;
 			width: 100%;
+			gap: 8px;
+
+			&__name {
+				overflow: hidden;
+				display: flex;
+
+				&__path {
+					color: var(--color-secondary);
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+
+				&__separator {
+					color: var(--color-secondary);
+				}
+
+				&__branch {
+					color: var(--color-primary);
+					white-space: nowrap;
+				}
+			}
 
 			&-new {
 				input {
@@ -144,6 +168,7 @@
 			&__info {
 				color: var(--color-label);
 				font-size: 0.85rem;
+				white-space: nowrap;
 			}
 		}
 	}
