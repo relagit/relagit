@@ -26,7 +26,10 @@ export default (props: IconProps) => {
 			fallback={
 				<span
 					{...props}
-					class={`icon ${props.className || ''}`}
+					classList={{
+						icon: true,
+						[props.className]: true
+					}}
 					innerHTML={
 						props.variant
 							? `<svg width=${props.size || props.variant} height=${
@@ -45,7 +48,10 @@ export default (props: IconProps) => {
 		>
 			<span
 				style={props.style}
-				class={`icon ${props.className || ''}`}
+				classList={{
+					icon: true,
+					[props.className]: true
+				}}
 				innerHTML={`<svg width=${props.size} height=${props.size} viewBox="${
 					customIcons[props.name].viewBox
 				}" fill="none" xmlns="http://www.w3.org/2000/svg">${customIcons[props.name].paths

@@ -108,7 +108,10 @@ export default (props: Tooltip) => {
 							aria-hidden={!open()}
 							aria-role="tooltip"
 							role="tooltip"
-							class={`tooltip ${props.position ? props.position : 'top'}`}
+							classList={{
+								tooltip: true,
+								[props.position || 'top']: true
+							}}
 							ref={tooltip}
 							style={`--h: ${tooltip?.offsetHeight}px; --w: ${tooltip?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper?.offsetHeight}px; --w-w: ${wrapper?.offsetWidth}px;`}
 						>

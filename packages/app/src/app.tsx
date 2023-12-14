@@ -115,11 +115,13 @@ export default () => {
 		<>
 			<div
 				id="app-container"
-				class={`platform-${window.Native.platform} theme-${
-					settings()['theme'] || 'system'
-				} ${settings()['vibrancy'] ? 'vibrancy' : ''} ${
-					focused() ? 'focused' : 'unfocused'
-				}`}
+				classList={{
+					[`platform-${window.Native.platform}`]: true,
+					[`theme-${settings()['theme'] || 'system'}`]: true,
+					vibrancy: !!settings()['vibrancy'],
+					focused: focused(),
+					unfocused: !focused()
+				}}
 				style={{
 					'--settings-font-family': settings()['fontFamily'],
 					'--settings-accent-color': settings()['accentColor']

@@ -20,7 +20,11 @@ export default (props: PassthroughRef<ButtonProps>) => {
 			aria-role="button"
 			aria-label={props.label}
 			aria-disabled={props.disabled}
-			class={`button ${props.type} ${props.className || ''}`}
+			classList={{
+				button: true,
+				[props.type]: true,
+				[props.className]: true
+			}}
 			onClick={props.onClick}
 			disabled={props.disabled}
 		>

@@ -112,9 +112,11 @@ export default (props: Menu) => {
 											<div
 												aria-role="button"
 												aria-label={item.label}
-												class={`menu__item ${item.color || ''} ${
-													item.disabled ? 'disabled' : ''
-												}`}
+												classList={{
+													menu__item: true,
+													[item.color || '']: true,
+													disabled: item.disabled
+												}}
 												data-id={item.label
 													.toLowerCase()
 													.replace(/\W/g, '-')}

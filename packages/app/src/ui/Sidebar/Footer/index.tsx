@@ -55,7 +55,12 @@ export default () => {
 	});
 
 	return (
-		<div class={`sidebar__footer ${selected() && changes() && staged() ? '' : 'hidden'}`}>
+		<div
+			classList={{
+				sidebar__footer: true,
+				hidden: !(selected() && changes() && staged())
+			}}
+		>
 			<TextArea
 				label={t('sidebar.footer.summary')}
 				disabled={!(selected() && changes() && staged())}

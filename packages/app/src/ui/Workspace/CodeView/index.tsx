@@ -321,7 +321,12 @@ export default (props: CodeViewProps) => {
 									</>
 								}
 							>
-								<pre class={`codeview lang-${extname(props.file || '').slice(1)}`}>
+								<pre
+									classList={{
+										codeview: true,
+										[`lang-${extname(props.file || '').slice(1)}`]: true
+									}}
+								>
 									<Show
 										when={diff() !== true && diff() !== null}
 										fallback={
@@ -333,7 +338,12 @@ export default (props: CodeViewProps) => {
 													const lineBlame = blame()?.[index()];
 
 													return (
-														<div class={`codeview__line ${status()}`}>
+														<div
+															classList={{
+																codeview__line: true,
+																[status()]: true
+															}}
+														>
 															<div
 																class="codeview__line__number"
 																style={{
@@ -347,9 +357,11 @@ export default (props: CodeViewProps) => {
 															>
 																{index()}
 															</div>
-
 															<div
-																class={`codeview__line__indicator ${status()}`}
+																classList={{
+																	codeview__line__indicator: true,
+																	[status()]: true
+																}}
 															>
 																{status() === 'added' ? '+' : '-'}
 															</div>
@@ -439,7 +451,10 @@ export default (props: CodeViewProps) => {
 
 																return (
 																	<div
-																		class={`codeview__line ${lineStatus}`}
+																		classList={{
+																			codeview__line: true,
+																			[lineStatus]: true
+																		}}
 																	>
 																		<div
 																			class="codeview__line__number"
@@ -470,7 +485,11 @@ export default (props: CodeViewProps) => {
 																			{line_number_two}
 																		</div>
 																		<div
-																			class={`codeview__line__indicator ${lineStatus}`}
+																			classList={{
+																				codeview__line__indicator:
+																					true,
+																				[lineStatus]: true
+																			}}
 																		>
 																			<Show
 																				when={
@@ -539,6 +558,7 @@ export default (props: CodeViewProps) => {
 												);
 											}}
 										</For>
+										p
 									</Show>
 								</pre>
 							</Show>

@@ -23,7 +23,11 @@ export default (props: TextareaProps) => {
 		<div class="textarea__wrapper" style={{ height: props.expanded ? '100%' : '' }}>
 			<textarea
 				aria-label={props.label}
-				class={`textarea ${props.className || ''} ${props.expanded ? 'expanded' : ''}`}
+				classList={{
+					textarea: true,
+					[props.className]: true,
+					expanded: props.expanded
+				}}
 				value={props.value}
 				onInput={(e: Event) => {
 					const proposedValue = (e.target as HTMLTextAreaElement).value;

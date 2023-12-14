@@ -137,9 +137,11 @@ export default (props: Popout) => {
 							aria-role="menu"
 							aria-expanded="true"
 							aria-haspopup="true"
-							class={`popout ${props.position ? props.position : 'top'} ${
-								props.align ? props.align : 'center'
-							}`}
+							classList={{
+								popout: true,
+								[props.position || 'top']: true,
+								[props.align || 'center']: true
+							}}
 							ref={setPopout}
 							style={`--h: ${popout()?.offsetHeight}px; --w: ${popout()
 								?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()

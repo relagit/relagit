@@ -120,7 +120,10 @@ export default (props: GitFile) => {
 					name: path.join(props.path, props.name)
 				})}
 				aria-selected={selectedFile() === props}
-				class={`sidebar__item ${selectedFile() === props ? 'active' : ''}`}
+				classList={{
+					sidebar__item: true,
+					active: selectedFile() === props
+				}}
 				data-id={props.id}
 				data-active={selectedFile() === props}
 				data-status={props.status}
@@ -157,7 +160,11 @@ export default (props: GitFile) => {
 					onClick={() => {
 						FileStore.toggleStaged(selected().path, props);
 					}}
-					class={`sidebar__item__status ${props.status} ${props.staged ? 'staged' : ''}`}
+					classList={{
+						sidebar__item__status: true,
+						[props.status]: true,
+						staged: props.staged
+					}}
 				>
 					{statusToAlpha(props.status)}
 				</button>

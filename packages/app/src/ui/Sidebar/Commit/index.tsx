@@ -76,7 +76,10 @@ export default (props: LogCommit) => {
 					hash: props.message
 				})}
 				aria-selected={selected()?.hash === props.hash}
-				class={`sidebar__commit ${selected()?.hash === props.hash ? 'active' : ''}`}
+				classList={{
+					sidebar__commit: true,
+					active: selected()?.hash === props.hash
+				}}
 				data-id={props.hash}
 				data-active={selected()?.hash === props.hash}
 				onClick={async () => {

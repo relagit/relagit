@@ -30,7 +30,11 @@ const Layer = (props: LayerProps) => {
 
 	return (
 		<div
-			class={`layer layer-${props.type || 'bare'} ${visible() ? 'visible' : ''}`}
+			classList={{
+				layer: true,
+				[`layer-${props.type || 'bare'}`]: true,
+				visible: visible()
+			}}
 			ref={layerRef}
 			data-key={props.key}
 			onMouseDown={(e) => {

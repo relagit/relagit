@@ -19,7 +19,11 @@ export default (props: SenmentedControlProps) => {
 
 	return (
 		<div
-			class={`segmented-control ${props.disabled ? 'disabled' : ''} ${props.className || ''}`}
+			classList={{
+				segmentedControl: true,
+				disabled: props.disabled,
+				[props.className]: true
+			}}
 		>
 			<For each={props.items}>
 				{(item) => (
@@ -28,9 +32,11 @@ export default (props: SenmentedControlProps) => {
 						aria-label={item.label}
 						aria-selected={value() === item.value}
 						aria-disabled={item.disabled || props.disabled}
-						class={`segmented-control__item ${value() === item.value ? 'active' : ''} ${
-							item.disabled ? 'disabled' : ''
-						}`}
+						classList={{
+							segmentedControl__item: true,
+							active: value() === item.value,
+							disabled: item.disabled
+						}}
 						tabIndex={0}
 						onClick={() => {
 							if (item.disabled || props.disabled) return;

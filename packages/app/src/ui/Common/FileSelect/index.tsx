@@ -71,7 +71,7 @@ export default (props: PassthroughRef<FileSelectProps>) => {
 
 	return (
 		<div class="filepicker" ref={props.ref}>
-			<div class={`filepicker__input ${status() || ''}`}>
+			<div classList={{ filepicker__input: true, [status()]: true }}>
 				<Show when={props.input}>
 					<TextArea
 						label={t('ui.filepicker.label')}
@@ -100,7 +100,7 @@ export default (props: PassthroughRef<FileSelectProps>) => {
 					<Icon name="file-directory" />
 				</button>
 			</div>
-			<div class={`filepicker__alert ${status() || ''}`}>
+			<div classList={{ filepicker__alert: true, [status()]: true }}>
 				<Show when={status() === 'invalid'}>
 					<Icon name="alert" />
 					<span>{valid()}</span>

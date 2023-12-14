@@ -74,7 +74,13 @@ const Modal = (props: ModalProps) => {
 		>
 			<Transition onEnter={props.transitions.enter} onExit={props.transitions.exit}>
 				<Show when={open()}>
-					<dialog open={open()} class={`modal ${props.size || ''}`}>
+					<dialog
+						open={open()}
+						classList={{
+							modal: true,
+							[props.size || '']: true
+						}}
+					>
 						{<props.children close={close}></props.children>}
 					</dialog>
 				</Show>
