@@ -6,10 +6,10 @@ import { addToGitignore } from '@app/modules/git/gitignore';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
 import SettingsStore from '@app/stores/settings';
+import StageStore from '@app/stores/stage';
 import { showErrorModal } from '@app/ui/Modal';
 import { debug, error } from '@modules/logger';
 import { showItemInFolder } from '@modules/shell';
-import FileStore from '@stores/files';
 import type { GitFile } from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
@@ -25,6 +25,9 @@ export default (props: GitFile) => {
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
+	const staged = createStoreListener([StageStore], () =>
+		StageStore.isStaged(path.join(props.path, props.name))
+	);
 
 	const extension = (name: string) => {
 		const parts = name.split('.');
@@ -35,12 +38,12 @@ export default (props: GitFile) => {
 		<Menu
 			items={[
 				{
-					label: props.staged
+					label: staged()
 						? t('sidebar.contextMenu.unstage')
 						: t('sidebar.contextMenu.stage'),
 					type: 'item',
 					onClick: () => {
-						FileStore.toggleStaged(selected().path, props);
+						StageStore.toggleStaged(path.join(props.path, props.name));
 					}
 				},
 				{
@@ -153,17 +156,15 @@ export default (props: GitFile) => {
 				<button
 					aria-role="button"
 					aria-label={
-						props.staged
-							? t('sidebar.contextMenu.unstage')
-							: t('sidebar.contextMenu.stage')
+						staged() ? t('sidebar.contextMenu.unstage') : t('sidebar.contextMenu.stage')
 					}
 					onClick={() => {
-						FileStore.toggleStaged(selected().path, props);
+						StageStore.toggleStaged(path.join(props.path, props.name));
 					}}
 					classList={{
 						sidebar__item__status: true,
 						[props.status]: true,
-						staged: props.staged
+						staged: staged()
 					}}
 				>
 					{statusToAlpha(props.status)}

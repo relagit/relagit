@@ -2,18 +2,20 @@ import { GenericStore } from '.';
 
 import { GitStatus } from '@modules/git/diff';
 
+import StageStore from './stage';
+
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
 export interface GitFile {
 	id: string;
 	name: string;
-	staged: boolean;
 	path: string;
 	status: GitStatus;
 }
 
-const FileStore = new (class extends GenericStore {
+const FileStore = new (class FileStore extends GenericStore {
 	#record: Map<string, GitFile[]> = new Map();
+
 	constructor() {
 		super();
 	}
@@ -28,12 +30,14 @@ const FileStore = new (class extends GenericStore {
 	}
 
 	hasStagedFiles(path: string) {
-		return this.getByRepositoryPath(path)?.some((f) => f.staged);
+		return this.getByRepositoryPath(path)?.some((f) =>
+			StageStore.isStaged(nodepath.join(f.path, f.name))
+		);
 	}
 
 	getStagedFilePaths(path: string) {
 		return this.getByRepositoryPath(path)
-			?.filter((f) => f.staged)
+			?.filter((f) => StageStore.isStaged(nodepath.join(f.path, f.name)))
 			.map((f) => nodepath.join(f.path, f.name));
 	}
 
@@ -43,27 +47,6 @@ const FileStore = new (class extends GenericStore {
 		file = file.replace(repository + '/', '');
 
 		return this.getByPath(repository, file)?.status;
-	}
-
-	toggleStaged(repoPath: string, file: GitFile) {
-		const files = this.getByRepositoryPath(repoPath);
-
-		if (files) {
-			this.#record.set(
-				repoPath,
-				files.map((f) => {
-					if (f.id === file.id) {
-						return {
-							...file,
-							staged: !file.staged
-						};
-					}
-					return f;
-				})
-			);
-		}
-
-		this.emit();
 	}
 
 	getByRepositoryPath(path: string) {
