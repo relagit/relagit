@@ -14,7 +14,7 @@ import { Transition } from 'solid-transition-group';
 
 import './index.scss';
 
-export interface IPopout {
+export interface Popout {
 	children: (p: {
 		show: (e?: MouseEvent | KeyboardEvent) => void;
 		toggle: (e?: MouseEvent | KeyboardEvent) => void;
@@ -34,7 +34,7 @@ export interface IPopout {
 	open?: Signal<boolean>;
 }
 
-export default (props: IPopout) => {
+export default (props: Popout) => {
 	const [open, setOpen] = props.open ?? createSignal(false);
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);

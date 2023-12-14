@@ -16,7 +16,7 @@ export enum EMPTY_STATE_IMAGES {
 	L_ERROR = 'Error_light'
 }
 
-export interface IEmptyStateProps {
+export interface EmptyStateProps {
 	image?: {
 		light: EMPTY_STATE_IMAGES;
 		dark: EMPTY_STATE_IMAGES;
@@ -31,7 +31,7 @@ export interface IEmptyStateProps {
 	}[];
 }
 
-export default (props: IEmptyStateProps) => {
+export default (props: EmptyStateProps) => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const [imageSrc, setImageSrc] = createSignal<EMPTY_STATE_IMAGES>();

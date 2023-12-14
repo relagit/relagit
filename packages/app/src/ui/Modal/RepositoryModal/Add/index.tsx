@@ -17,7 +17,7 @@ import { ModalBody, ModalFooter } from '@ui/Modal';
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-export interface IAddRepositoryModalProps {
+export interface AddRepositoryModalProps {
 	pathSignal: Signal<string>;
 	tabSignal: Signal<number>;
 	modalProps: {
@@ -25,7 +25,7 @@ export interface IAddRepositoryModalProps {
 	};
 }
 
-export default (props: IAddRepositoryModalProps) => {
+export default (props: AddRepositoryModalProps) => {
 	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
 	const onboardingStepState2 = createSignal(false);
 	const onboardingStepState = createSignal(false);

@@ -4,7 +4,7 @@ import SegmentedControl from '../SegmentedControl';
 
 import './index.scss';
 
-export interface ITabViewProps {
+export interface TabViewProps {
 	views: {
 		element: JSX.Element;
 		value: string | number;
@@ -13,7 +13,7 @@ export interface ITabViewProps {
 	}[];
 }
 
-export default (props: ITabViewProps) => {
+export default (props: TabViewProps) => {
 	const [selectedView, setSelectedView] = createSignal<string | number>(props.views[0].value);
 
 	return (

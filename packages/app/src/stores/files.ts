@@ -4,7 +4,7 @@ import { GitStatus } from '@modules/git/diff';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
-export interface IFile {
+export interface GitFile {
 	id: string;
 	name: string;
 	staged: boolean;
@@ -12,8 +12,8 @@ export interface IFile {
 	status: GitStatus;
 }
 
-const FileStore = new (class File extends GenericStore {
-	#record: Map<string, IFile[]> = new Map();
+const FileStore = new (class extends GenericStore {
+	#record: Map<string, GitFile[]> = new Map();
 	constructor() {
 		super();
 	}
@@ -45,7 +45,7 @@ const FileStore = new (class File extends GenericStore {
 		return this.getByPath(repository, file)?.status;
 	}
 
-	toggleStaged(repoPath: string, file: IFile) {
+	toggleStaged(repoPath: string, file: GitFile) {
 		const files = this.getByRepositoryPath(repoPath);
 
 		if (files) {
@@ -74,13 +74,13 @@ const FileStore = new (class File extends GenericStore {
 		return Array.from(this.files.entries()).find(([key]) => key.split('/').pop() === name)?.[1];
 	}
 
-	getByPath(repository: string, path: string): IFile {
+	getByPath(repository: string, path: string): GitFile {
 		return this.getByRepositoryPath(repository)?.find(
 			(f) => nodepath.join(f.path, f.name) === path
 		);
 	}
 
-	addFile(repositoryPath: string, file: IFile) {
+	addFile(repositoryPath: string, file: GitFile) {
 		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
@@ -92,7 +92,7 @@ const FileStore = new (class File extends GenericStore {
 		this.emit();
 	}
 
-	removeFile(repositoryPath: string, file: IFile) {
+	removeFile(repositoryPath: string, file: GitFile) {
 		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {
@@ -105,7 +105,7 @@ const FileStore = new (class File extends GenericStore {
 		this.emit();
 	}
 
-	updateFile(repositoryPath: string, id: string, file: Partial<IFile>) {
+	updateFile(repositoryPath: string, id: string, file: Partial<GitFile>) {
 		const files = this.getByRepositoryPath(repositoryPath);
 
 		if (files) {

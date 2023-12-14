@@ -1,8 +1,8 @@
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export const Pull = async (repository: IRepository) => {
+export const Pull = async (repository: Repository) => {
 	try {
 		const res = await Git({
 			directory: repository.path,

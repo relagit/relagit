@@ -46,7 +46,7 @@ const status = (e: 'UnchangedLine' | 'AddedLine' | 'DeletedLine') => {
 	}
 };
 
-export interface ICodeViewProps {
+export interface CodeViewProps {
 	file: string;
 	repository: string;
 }
@@ -55,7 +55,7 @@ const dealWithTabs = (line: string) => {
 	return line.replaceAll(/(?<!\S)(\t|  )/g, '<span class="pl-tab">  </span>');
 };
 
-export default (props: ICodeViewProps) => {
+export default (props: CodeViewProps) => {
 	const [showOverridden, setShowOverridden] = createSignal<boolean>(false);
 	const [shouldShow, setShouldShow] = createSignal<boolean>(false);
 	const [diff, setDiff] = createSignal<GitDiff | null | true>();

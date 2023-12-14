@@ -8,7 +8,7 @@ import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
 import LayerStore from '@stores/layer';
 import LocationStore from '@stores/location';
-import SettingsStore, { ISettings } from '@stores/settings';
+import SettingsStore, { Settings } from '@stores/settings';
 import * as ipc from '~/common/ipc';
 
 import Icon from '@ui/Common/Icon';
@@ -26,7 +26,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-export interface IRadioGroupProps {
+export interface RadioGroupProps {
 	options: {
 		element: string;
 		value: string;
@@ -78,7 +78,7 @@ const showReloadModal = () => {
 	});
 };
 
-export const RadioGroup = (props: IRadioGroupProps) => {
+export const RadioGroup = (props: RadioGroupProps) => {
 	const [value, setValue] = createSignal(props.value);
 
 	return (
@@ -122,7 +122,7 @@ export const RadioGroup = (props: IRadioGroupProps) => {
 	);
 };
 
-export interface ISwitchProps {
+export interface SwitchProps {
 	value: Accessor<boolean>;
 	label: string;
 	onChange: (value: boolean) => void;
@@ -130,7 +130,7 @@ export interface ISwitchProps {
 	note?: string;
 }
 
-export const Switch = (props: ISwitchProps) => {
+export const Switch = (props: SwitchProps) => {
 	return (
 		<div
 			classList={{ 'settings-layer__setting__input switch': true, disabled: props.disabled }}
@@ -339,7 +339,7 @@ export default () => {
 					onChange={(value) => {
 						SettingsStore.setSetting(
 							'externalEditor',
-							value as ISettings['externalEditor']
+							value as Settings['externalEditor']
 						);
 
 						showReloadModal();
@@ -443,7 +443,7 @@ export default () => {
 										if (e.key === 'Enter') {
 											SettingsStore.setSetting(
 												'theme',
-												theme as ISettings['theme']
+												theme as Settings['theme']
 											);
 										}
 									}}
@@ -455,7 +455,7 @@ export default () => {
 										onChange={() => {
 											SettingsStore.setSetting(
 												'theme',
-												theme as ISettings['theme']
+												theme as Settings['theme']
 											);
 										}}
 									/>

@@ -2,7 +2,7 @@ import { Accessor, For, Setter, Show } from 'solid-js';
 
 import { openInEditor } from '@app/modules/code';
 import { t } from '@app/modules/i18n';
-import FileStore, { IFile } from '@app/stores/files';
+import FileStore, { GitFile } from '@app/stores/files';
 import SettingsStore from '@app/stores/settings';
 import { removeRepository } from '@modules/actions';
 import { debug } from '@modules/logger';
@@ -12,7 +12,7 @@ import { createStoreListener } from '@stores/index';
 import LayerStore from '@stores/layer';
 import LocationStore from '@stores/location';
 import ModalStore from '@stores/modal';
-import RepositoryStore, { IRepository } from '@stores/repository';
+import RepositoryStore, { Repository } from '@stores/repository';
 
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
@@ -23,16 +23,16 @@ import RepositoryModal from '@ui/Modal/RepositoryModal';
 
 import './index.scss';
 
-const hasUncommittedChanges = (files: Map<string, IFile[]>, repository: IRepository) => {
+const hasUncommittedChanges = (files: Map<string, GitFile[]>, repository: Repository) => {
 	return files.get(repository.path)?.length > 0;
 };
 
-export interface IHeaderDrawerProps {
+export interface HeaderDrawerProps {
 	open: [Accessor<boolean>, (value: boolean) => void];
 	ref: [Accessor<HTMLDivElement>, Setter<HTMLDivElement>];
 }
 
-export default (props: IHeaderDrawerProps) => {
+export default (props: HeaderDrawerProps) => {
 	const repositories = createStoreListener([RepositoryStore], () => RepositoryStore.repositories);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)

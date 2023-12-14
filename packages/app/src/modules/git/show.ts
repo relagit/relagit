@@ -4,7 +4,7 @@ import { GitDiff, parseDiff } from './parse-diff';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
-export interface IPastCommit {
+export interface PastCommit {
 	hash: string;
 	files: {
 		filename: string;
@@ -15,7 +15,7 @@ export interface IPastCommit {
 }
 
 export const ShowOrigin = async (
-	repository: IRepository,
+	repository: Repository,
 	file: string,
 	treeish = 'HEAD',
 	encoding: BufferEncoding = 'utf8'
@@ -39,7 +39,7 @@ export const ShowOrigin = async (
 	return res;
 };
 
-export const Show = async (repository: string, hash: string): Promise<IPastCommit | null> => {
+export const Show = async (repository: string, hash: string): Promise<PastCommit | null> => {
 	if (!repository) return null;
 
 	const res = await Git({
@@ -48,7 +48,7 @@ export const Show = async (repository: string, hash: string): Promise<IPastCommi
 		args: [hash, '"--pretty=format:"']
 	});
 
-	const commit: IPastCommit = {
+	const commit: PastCommit = {
 		hash,
 		files: []
 	};

@@ -18,7 +18,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-interface IModalProps {
+interface ModalProps {
 	transitions: {
 		enter: (el: HTMLElement, done: () => void) => void;
 		exit: (el: HTMLElement, done: () => void) => void;
@@ -30,7 +30,7 @@ interface IModalProps {
 
 let opened = 1;
 
-const Modal = (props: IModalProps) => {
+const Modal = (props: ModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement>(null);
 	const [open, setOpen] = createSignal(false);
 

@@ -11,7 +11,7 @@ export const customIcons = {
 	cPull: Pull
 };
 
-export interface IIconProps {
+export interface IconProps {
 	name: IconName | keyof typeof customIcons;
 	variant?: 12 | 16 | 24 | 32;
 	className?: string;
@@ -19,7 +19,7 @@ export interface IIconProps {
 	style?: JSX.HTMLAttributes<HTMLSpanElement>['style'];
 }
 
-export default (props: IIconProps) => {
+export default (props: IconProps) => {
 	return (
 		<Show
 			when={customIcons.hasOwnProperty(props.name)}

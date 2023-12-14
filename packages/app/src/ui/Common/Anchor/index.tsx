@@ -2,13 +2,13 @@ import { JSX } from 'solid-js';
 
 import './index.scss';
 
-export interface IAnchorProps {
+export interface AnchorProps {
 	onClick?: () => void;
 	href?: string;
 	children: JSX.Element | string | JSX.Element[];
 }
 
-export default (props: IAnchorProps) => {
+export default (props: AnchorProps) => {
 	return (
 		<button
 			aria-role="link"

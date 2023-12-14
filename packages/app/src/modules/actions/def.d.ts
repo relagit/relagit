@@ -51,13 +51,13 @@ interface WorkflowOptions<T extends action | action[] = action> {
 
 interface Context {
 	Git: {
-		Push: (repository: IRepository) => Promise<void>;
-		Commit: (repository: IRepository, message: string, description: string) => Promise<void>;
+		Push: (repository: Repository) => Promise<void>;
+		Commit: (repository: Repository, message: string, description: string) => Promise<void>;
 	};
-	Repository: IRepository;
+	Repository: Repository;
 }
 
-interface IRepository {
+interface Repository {
 	draft?: boolean;
 	id: string;
 	path: string;
@@ -70,17 +70,17 @@ interface IRepository {
 	lastFetched?: number;
 }
 
-interface IDraftCommit {
+interface DraftCommit {
 	files: string[];
 }
 
-interface ICommit {
+interface Commit {
 	message: string;
 	description: string;
 	files: string[];
 }
 
-interface IFile {
+interface GitFile {
 	id: number;
 	name: string;
 	staged: boolean;

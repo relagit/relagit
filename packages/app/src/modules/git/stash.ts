@@ -1,8 +1,8 @@
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export const Stash = async (repository: IRepository) => {
+export const Stash = async (repository: Repository) => {
 	if (!repository) return;
 
 	const res = await Git({
@@ -14,7 +14,7 @@ export const Stash = async (repository: IRepository) => {
 	return res;
 };
 
-export const ListStash = async (repository: IRepository): Promise<string[]> => {
+export const ListStash = async (repository: Repository): Promise<string[]> => {
 	if (!repository) return;
 
 	const res = await Git({
@@ -41,7 +41,7 @@ export const ListStash = async (repository: IRepository): Promise<string[]> => {
 	return files;
 };
 
-export const PopStash = async (repository: IRepository) => {
+export const PopStash = async (repository: Repository) => {
 	if (!repository) return;
 
 	const res = await Git({

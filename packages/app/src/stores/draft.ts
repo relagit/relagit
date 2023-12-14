@@ -5,13 +5,13 @@ const nullish = {
 	description: ''
 };
 
-export interface IMesssageDraft {
+export interface MesssageDraft {
 	message: string;
 	description: string;
 }
 
-const DraftStore = new (class Draft extends GenericStore {
-	#record: Map<string, IMesssageDraft | null> = new Map();
+const DraftStore = new (class extends GenericStore {
+	#record: Map<string, MesssageDraft | null> = new Map();
 
 	constructor() {
 		super();
@@ -21,13 +21,13 @@ const DraftStore = new (class Draft extends GenericStore {
 		return this.#record;
 	}
 
-	getDraft(repository: IRepository | string) {
+	getDraft(repository: Repository | string) {
 		if (!repository) return nullish;
 
 		return this.drafts.get(repository['id'] ?? repository) ?? nullish;
 	}
 
-	setDraft(repository: IRepository | string, draft: IMesssageDraft | null) {
+	setDraft(repository: Repository | string, draft: MesssageDraft | null) {
 		if (!repository) return;
 
 		this.drafts.set(repository['id'] ?? repository, draft);
@@ -35,7 +35,7 @@ const DraftStore = new (class Draft extends GenericStore {
 		this.emit();
 	}
 
-	clearDraft(repository: IRepository | string) {
+	clearDraft(repository: Repository | string) {
 		if (!repository) return;
 
 		this.drafts.delete(repository['id'] ?? repository);

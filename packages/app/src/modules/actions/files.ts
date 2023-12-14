@@ -3,7 +3,7 @@ import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import LocationStore from '@stores/location';
 import RemoteStore from '@stores/remote';
-import RepositoryStore, { IRepository } from '@stores/repository';
+import RepositoryStore, { Repository } from '@stores/repository';
 import SettingsStore from '@stores/settings';
 
 import { showErrorModal } from '@ui/Modal';
@@ -16,7 +16,7 @@ const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs')
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-export const removeRepository = (repository: IRepository) => {
+export const removeRepository = (repository: Repository) => {
 	SettingsStore.setSetting(
 		'repositories',
 		SettingsStore.getSetting('repositories').filter((r: string) => r !== repository.path)
@@ -150,7 +150,7 @@ export const getRepositoryStatus = async (
 	try {
 		if (!directory) return;
 
-		let exists: IRepository = null;
+		let exists: Repository = null;
 
 		if (RepositoryStore.getByPath(directory)) {
 			exists = RepositoryStore.getByPath(directory);
@@ -209,7 +209,7 @@ export const getRepositoryStatus = async (
 	}
 };
 
-export const refetchRepository = async (repository: IRepository) => {
+export const refetchRepository = async (repository: Repository) => {
 	if (!repository) return;
 
 	const currentFile = LocationStore.selectedFile;

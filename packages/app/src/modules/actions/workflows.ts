@@ -188,13 +188,13 @@ export const loadWorkflows = async () => {
 export const workflows = new Set<Workflow>();
 
 type ParamsFromEventType<E extends action> = E extends 'commit'
-	? [IRepository, { message: string; description: string }]
+	? [Repository, { message: string; description: string }]
 	: E extends 'push'
-	  ? [IRepository]
+	  ? [Repository]
 	  : E extends 'pull'
-	    ? [IRepository]
+	    ? [Repository]
 	    : E extends 'remote_fetch'
-	      ? [IRepository, { name: string; url: string; type: string }[]]
+	      ? [Repository, { name: string; url: string; type: string }[]]
 	      : E extends 'repository_add'
 	        ? [string]
 	        : E extends 'repository_remove'
@@ -202,9 +202,9 @@ type ParamsFromEventType<E extends action> = E extends 'commit'
 	          : E extends 'settings_update'
 	            ? []
 	            : E extends 'stash'
-	              ? [IRepository]
+	              ? [Repository]
 	              : E extends 'stash_pop'
-	                ? [IRepository]
+	                ? [Repository]
 	                : [];
 
 export const triggerWorkflow = async <E extends action>(
@@ -233,12 +233,12 @@ window._triggerWorkflow = triggerWorkflow;
 const makeContext = (location: string) => {
 	const context = {
 		Git: {
-			Push: async (repository: IRepository) => {
+			Push: async (repository: Repository) => {
 				await Git.Push(repository);
 
 				triggerWorkflow('push', repository);
 			},
-			Commit: async (repository: IRepository, message: string, description: string) => {
+			Commit: async (repository: Repository, message: string, description: string) => {
 				await Git.Commit(repository, message, description);
 
 				triggerWorkflow('commit', repository, {

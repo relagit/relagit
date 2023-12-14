@@ -1,8 +1,8 @@
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export const PreviousCommit = async (repository: IRepository, sha = 'HEAD'): Promise<string> => {
+export const PreviousCommit = async (repository: Repository, sha = 'HEAD'): Promise<string> => {
 	const res = await Git({
 		directory: repository.path,
 		command: 'rev-list',

@@ -19,11 +19,11 @@ import './index.scss';
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-export interface IWorkspaceProps {
+export interface WorkspaceProps {
 	sidebar: boolean;
 }
 
-export default (props: IWorkspaceProps) => {
+export default (props: WorkspaceProps) => {
 	const repo = createStoreListener(
 		[LocationStore, RepositoryStore],
 		() => RepositoryStore.getById(LocationStore.selectedRepository?.id)?.path

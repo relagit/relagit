@@ -16,13 +16,13 @@ export type IMenuItem =
 			type: 'separator';
 	  };
 
-export interface IMenu {
+export interface Menu {
 	children?: JSX.Element | JSX.Element[];
 	items: IMenuItem[];
 	event?: string;
 }
 
-export default (props: IMenu) => {
+export default (props: Menu) => {
 	const [open, setOpen] = createSignal(false);
 
 	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();

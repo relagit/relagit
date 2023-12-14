@@ -4,7 +4,7 @@ import { Transition } from 'solid-transition-group';
 
 import './index.scss';
 
-export interface ITooltip {
+export interface Tooltip {
 	children: (p: {
 		onMouseEnter: (e: MouseEvent) => void;
 		onMouseLeave: () => void;
@@ -18,7 +18,7 @@ export interface ITooltip {
 	position?: 'top' | 'bottom' | 'auto';
 }
 
-export default (props: ITooltip) => {
+export default (props: Tooltip) => {
 	const [open, setOpen] = createSignal(false);
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);

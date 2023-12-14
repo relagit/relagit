@@ -4,7 +4,7 @@ import { IconName, customIcons } from '../Icon';
 
 import './index.scss';
 
-interface ITextareaProps {
+interface TextareaProps {
 	value: string;
 	label: string;
 	onChange: (value: string) => void;
@@ -18,7 +18,7 @@ interface ITextareaProps {
 	icon?: IconName | keyof typeof customIcons;
 }
 
-export default (props: ITextareaProps) => {
+export default (props: TextareaProps) => {
 	return (
 		<div class="textarea__wrapper" style={{ height: props.expanded ? '100%' : '' }}>
 			<textarea

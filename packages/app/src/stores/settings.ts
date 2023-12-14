@@ -9,7 +9,7 @@ const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
 const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
-export interface ISettings {
+export interface Settings {
 	commitStyles: {
 		[repo: string]: string;
 	};
@@ -47,8 +47,8 @@ const validatePath = () => {
 	}
 };
 
-const SettingsStore = new (class Settings extends GenericStore {
-	#record: Partial<ISettings> = {};
+const SettingsStore = new (class extends GenericStore {
+	#record: Partial<Settings> = {};
 	constructor() {
 		super();
 
@@ -61,11 +61,11 @@ const SettingsStore = new (class Settings extends GenericStore {
 		return this.#record;
 	}
 
-	getSetting<T extends keyof ISettings>(key: T): ISettings[T] {
-		return this.#record[key] as ISettings[T];
+	getSetting<T extends keyof Settings>(key: T): Settings[T] {
+		return this.#record[key] as Settings[T];
 	}
 
-	setSetting<T extends keyof ISettings>(key: T, value: ISettings[T]) {
+	setSetting<T extends keyof Settings>(key: T, value: Settings[T]) {
 		this.#record[key] = value;
 		this.save();
 		this.emit();
@@ -86,7 +86,7 @@ const SettingsStore = new (class Settings extends GenericStore {
 
 	load() {
 		if (fs.existsSync(__SETTINGS_PATH__)) {
-			let settings: Partial<ISettings> = {};
+			let settings: Partial<Settings> = {};
 
 			try {
 				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8'));

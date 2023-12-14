@@ -1,20 +1,20 @@
 import { GenericStore } from '.';
 
-import { ILogCommit } from '@app/modules/git/log';
-import { IPastCommit } from '@app/modules/git/show';
+import { LogCommit } from '@app/modules/git/log';
+import { PastCommit } from '@app/modules/git/show';
 
-import { IFile } from './files';
-import type { IRepository } from './repository';
+import { GitFile } from './files';
+import type { Repository } from './repository';
 import SettingsStore from './settings';
 
-const LocationStore = new (class Location extends GenericStore {
-	#selectedFile: IFile | undefined;
-	#selectedRepository: IRepository | undefined;
+const LocationStore = new (class extends GenericStore {
+	#selectedFile: GitFile | undefined;
+	#selectedRepository: Repository | undefined;
 	#historyOpen = false;
 	#blameOpen = false;
-	#selectedCommit: ILogCommit | undefined;
-	#selectedCommitFiles: IPastCommit | undefined;
-	#selectedCommitFile: IPastCommit['files'][number] | undefined;
+	#selectedCommit: LogCommit | undefined;
+	#selectedCommitFiles: PastCommit | undefined;
+	#selectedCommitFile: PastCommit['files'][number] | undefined;
 
 	constructor() {
 		super();
@@ -66,7 +66,7 @@ const LocationStore = new (class Location extends GenericStore {
 		return this.#blameOpen;
 	}
 
-	setSelectedFile(file: IFile) {
+	setSelectedFile(file: GitFile) {
 		this.#selectedFile = file;
 		this.emit();
 	}
@@ -86,22 +86,22 @@ const LocationStore = new (class Location extends GenericStore {
 		this.emit();
 	}
 
-	setSelectedCommit(commit: ILogCommit) {
+	setSelectedCommit(commit: LogCommit) {
 		this.#selectedCommit = commit;
 		this.emit();
 	}
 
-	setSelectedCommitFiles(commit: IPastCommit) {
+	setSelectedCommitFiles(commit: PastCommit) {
 		this.#selectedCommitFiles = commit;
 		this.emit();
 	}
 
-	setSelectedCommitFile(file: IPastCommit['files'][number]) {
+	setSelectedCommitFile(file: PastCommit['files'][number]) {
 		this.#selectedCommitFile = file;
 		this.emit();
 	}
 
-	setSelectedRepository(repository: IRepository, set = true) {
+	setSelectedRepository(repository: Repository, set = true) {
 		if (!repository) {
 			return;
 		}

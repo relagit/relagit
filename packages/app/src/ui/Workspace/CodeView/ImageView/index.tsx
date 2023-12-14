@@ -35,7 +35,7 @@ const mimeFromPath = (path: string) => {
 	}
 };
 
-export interface IImageViewProps {
+export interface ImageViewProps {
 	repository: string;
 	path: string;
 	status: GitStatus;
@@ -55,7 +55,7 @@ const nearestByteFigure = (bytes: number): string => {
 	return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
 };
 
-export default (props: IImageViewProps) => {
+export default (props: ImageViewProps) => {
 	const [threw, setThrew] = createSignal<[string | null, string | null]>([null, null]);
 	const [URIs, setURIs] = createSignal<[string | null, string | null]>([null, null]);
 	const [size, setSize] = createSignal<[number, number]>([0, 0]);

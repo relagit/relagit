@@ -1,8 +1,8 @@
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export interface ILogCommit {
+export interface LogCommit {
 	hash: string;
 	author: string;
 	date: string;
@@ -12,7 +12,7 @@ export interface ILogCommit {
 	deletions: number;
 }
 
-export const Log = async (repository: IRepository): Promise<ILogCommit[]> => {
+export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 	if (!repository) return [];
 
 	const res = await Git({

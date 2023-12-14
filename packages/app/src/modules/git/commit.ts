@@ -1,11 +1,11 @@
 import FileStore from '@stores/files';
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
 const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
 
-export const Commit = async (repository: IRepository, message: string, body: string) => {
+export const Commit = async (repository: Repository, message: string, body: string) => {
 	const filePaths = FileStore.getStagedFilePaths(repository.path);
 
 	await Git({

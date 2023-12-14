@@ -7,7 +7,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 ) as typeof import('electron').ipcRenderer;
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-export interface IGitParams {
+export interface GitParams {
 	directory: string;
 	command: string;
 	args: string[];
@@ -16,7 +16,7 @@ export interface IGitParams {
 	};
 }
 
-export const Git = async (params: IGitParams): Promise<string> => {
+export const Git = async (params: GitParams): Promise<string> => {
 	const { directory, command, args } = params;
 
 	let hasError: boolean | ExecException | string = false;

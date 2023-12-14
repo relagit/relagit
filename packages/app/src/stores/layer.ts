@@ -1,11 +1,11 @@
 import { GenericStore } from '.';
 
-export interface ILayer {
+export interface Layer {
 	key: string;
 	visible: boolean;
 }
-const LayerStore = new (class Layer extends GenericStore {
-	#record: ILayer[] = [];
+const LayerStore = new (class extends GenericStore {
+	#record: Layer[] = [];
 	constructor() {
 		super();
 	}
@@ -31,12 +31,12 @@ const LayerStore = new (class Layer extends GenericStore {
 		this.emit();
 	}
 
-	addLayer(layer: ILayer) {
+	addLayer(layer: Layer) {
 		this.layers.push(layer);
 		this.emit();
 	}
 
-	removeLayer(layer: ILayer) {
+	removeLayer(layer: Layer) {
 		this.#record = this.layers.filter((f) => f.key !== layer.key);
 		this.emit();
 	}

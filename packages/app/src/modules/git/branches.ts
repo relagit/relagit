@@ -1,4 +1,4 @@
-import { IRepository } from '@stores/repository';
+import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
@@ -11,7 +11,7 @@ export type Branch = {
 	hasUpstream: boolean;
 };
 
-export const ListBranches = async (repository: IRepository): Promise<Branch[]> => {
+export const ListBranches = async (repository: Repository): Promise<Branch[]> => {
 	if (!repository) {
 		return [];
 	}
@@ -64,7 +64,7 @@ export const ListBranches = async (repository: IRepository): Promise<Branch[]> =
 	return map;
 };
 
-export const Checkout = async (repository: IRepository, branch: string): Promise<string> => {
+export const Checkout = async (repository: Repository, branch: string): Promise<string> => {
 	if (!repository) {
 		return '';
 	}
@@ -79,7 +79,7 @@ export const Checkout = async (repository: IRepository, branch: string): Promise
 };
 
 export const CreateBranch = async (
-	repository: IRepository,
+	repository: Repository,
 	branch: string,
 	checkout = true
 ): Promise<string> => {
@@ -100,7 +100,7 @@ export const CreateBranch = async (
 	return res;
 };
 
-export const PushWithOrigin = async (repository: IRepository, branch: string): Promise<string> => {
+export const PushWithOrigin = async (repository: Repository, branch: string): Promise<string> => {
 	if (!repository) {
 		return '';
 	}
@@ -114,7 +114,7 @@ export const PushWithOrigin = async (repository: IRepository, branch: string): P
 	return res;
 };
 
-export const DeleteBranch = async (repository: IRepository, branch: string): Promise<string> => {
+export const DeleteBranch = async (repository: Repository, branch: string): Promise<string> => {
 	if (!repository) {
 		return '';
 	}

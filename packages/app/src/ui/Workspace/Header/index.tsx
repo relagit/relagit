@@ -21,7 +21,7 @@ import Tooltip from '@ui/Common/Tooltip';
 
 import './index.scss';
 
-export interface IPanelButtonProps {
+export interface PanelButtonProps {
 	id: string;
 	icon: IconName | keyof typeof customIcons;
 	iconVariant?: 12 | 16 | 24 | 32;
@@ -36,7 +36,7 @@ export interface IPanelButtonProps {
 	className?: string;
 }
 
-const PanelButton = (props: PassthroughRef<IPanelButtonProps>) => {
+const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 	return (
 		<Tooltip text={props.tooltip} position={props.tooltipPosition || 'auto'}>
 			{(p) => {

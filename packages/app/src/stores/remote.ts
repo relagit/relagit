@@ -1,15 +1,15 @@
 import { GenericStore } from '.';
 
-import { IRepository } from './repository';
+import { Repository } from './repository';
 
-export interface IRemoteRepository {
-	repository: IRepository;
+export interface RemoteRepository {
+	repository: Repository;
 	name: string;
 	url: string;
 	type: 'fetch' | 'push';
 }
-const RemoteStore = new (class Remote extends GenericStore {
-	#record: IRemoteRepository[] = [];
+const RemoteStore = new (class extends GenericStore {
+	#record: RemoteRepository[] = [];
 	constructor() {
 		super();
 	}
@@ -37,17 +37,17 @@ const RemoteStore = new (class Remote extends GenericStore {
 		this.emit();
 	}
 
-	addRemote(repository: IRemoteRepository) {
+	addRemote(repository: RemoteRepository) {
 		this.remotes.push(repository);
 		this.emit();
 	}
 
-	removeRemote(repository: IRemoteRepository) {
+	removeRemote(repository: RemoteRepository) {
 		this.#record = this.remotes.filter((f) => f.repository?.id !== repository.repository.id);
 		this.emit();
 	}
 
-	updateRemote(repository: IRemoteRepository) {
+	updateRemote(repository: RemoteRepository) {
 		this.#record = this.remotes.map((f) => {
 			if (f.repository?.id === repository.repository.id) {
 				return repository;

@@ -10,11 +10,11 @@ import Create from './Create';
 
 import './index.scss';
 
-export interface IRepositoryModalProps {
+export interface RepositoryModalProps {
 	tab: 'add' | 'create';
 }
 
-export default (props: IRepositoryModalProps) => {
+export default (props: RepositoryModalProps) => {
 	let initialTab = 0;
 
 	if (!props.tab || props.tab === 'add') {

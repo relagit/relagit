@@ -6,7 +6,7 @@ import LayerStore from '@stores/layer';
 
 import './index.scss';
 
-export interface ILayerProps {
+export interface LayerProps {
 	key: string;
 	type?: 'rich' | 'bare';
 	dismissable?: boolean;
@@ -18,7 +18,7 @@ export interface ILayerProps {
 	};
 }
 
-const Layer = (props: ILayerProps) => {
+const Layer = (props: LayerProps) => {
 	LayerStore.addLayer({
 		key: props.key,
 		visible: props.initialVisible || false

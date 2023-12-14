@@ -2,7 +2,7 @@ import { For, createSignal } from 'solid-js';
 
 import './index.scss';
 
-export interface ISenmentedControlProps {
+export interface SenmentedControlProps {
 	items: {
 		label: string;
 		value: string | number;
@@ -14,7 +14,7 @@ export interface ISenmentedControlProps {
 	className?: string;
 }
 
-export default (props: ISenmentedControlProps) => {
+export default (props: SenmentedControlProps) => {
 	const [value, setValue] = createSignal(props.value || props.items[0].value);
 
 	return (

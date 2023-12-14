@@ -14,7 +14,7 @@ import './index.scss';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
 
-export interface ICreateRepositoryModalProps {
+export interface CreateRepositoryModalProps {
 	pathSignal: Signal<string>;
 	tabSignal: Signal<number>;
 	modalProps: {
@@ -22,7 +22,7 @@ export interface ICreateRepositoryModalProps {
 	};
 }
 
-export default (props: ICreateRepositoryModalProps) => {
+export default (props: CreateRepositoryModalProps) => {
 	const fileValidator = (p: string) => {
 		if (p.length === 0) return null;
 

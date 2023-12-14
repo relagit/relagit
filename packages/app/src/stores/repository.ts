@@ -4,7 +4,7 @@ import { debug } from '@app/modules/logger';
 
 import LocationStore from './location';
 
-export interface IRepository {
+export interface Repository {
 	draft?: boolean;
 	id: string;
 	path: string;
@@ -17,8 +17,8 @@ export interface IRepository {
 	lastFetched?: number;
 }
 
-const RepositoryStore = new (class Repository extends GenericStore {
-	#record: Map<string, IRepository> = new Map();
+const RepositoryStore = new (class extends GenericStore {
+	#record: Map<string, Repository> = new Map();
 
 	constructor() {
 		super();
@@ -57,20 +57,20 @@ const RepositoryStore = new (class Repository extends GenericStore {
 		});
 	}
 
-	addRepository(repository: IRepository) {
+	addRepository(repository: Repository) {
 		this.repositories.set(repository.id, repository);
 		this.emit();
 
 		this.attachListeners(repository.path);
 	}
 
-	removeRepository(repository: IRepository) {
+	removeRepository(repository: Repository) {
 		this.#record.delete(repository.id);
 
 		this.emit();
 	}
 
-	updateRepository(id: string, replacement: Partial<IRepository>) {
+	updateRepository(id: string, replacement: Partial<Repository>) {
 		this.#record.set(id, {
 			...this.getById(id),
 			...replacement

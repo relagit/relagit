@@ -2,13 +2,13 @@ import { GenericStore } from '.';
 
 import SettingsStore from './settings';
 
-export interface IOnboardingState {
+export interface OnboardingState {
 	dismissed: boolean;
 	step: number;
 }
 
-const OnboardingStore = new (class Draft extends GenericStore {
-	#state: IOnboardingState = {
+const OnboardingStore = new (class extends GenericStore {
+	#state: OnboardingState = {
 		dismissed: false,
 		step: 0
 	};

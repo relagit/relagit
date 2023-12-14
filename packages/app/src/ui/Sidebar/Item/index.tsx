@@ -10,7 +10,7 @@ import { showErrorModal } from '@app/ui/Modal';
 import { debug, error } from '@modules/logger';
 import { showItemInFolder } from '@modules/shell';
 import FileStore from '@stores/files';
-import type { IFile } from '@stores/files';
+import type { GitFile } from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 
@@ -20,7 +20,7 @@ import './index.scss';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 
-export default (props: IFile) => {
+export default (props: GitFile) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);

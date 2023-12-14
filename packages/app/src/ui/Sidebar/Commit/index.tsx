@@ -1,6 +1,6 @@
 import { Show } from 'solid-js';
 
-import { ILogCommit } from '@app/modules/git/log';
+import { LogCommit } from '@app/modules/git/log';
 import { t } from '@app/modules/i18n';
 import { openExternal } from '@app/modules/shell';
 import { renderDate } from '@app/modules/time';
@@ -17,7 +17,7 @@ const clipboard = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:clipboard'
 ) as typeof import('electron').clipboard;
 
-export default (props: ILogCommit) => {
+export default (props: LogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
 
 	return (

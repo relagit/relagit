@@ -13,7 +13,7 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
 
-export interface IFileSelectProps {
+export interface FileSelectProps {
 	input: boolean;
 	initial?: string;
 	properties: string[];
@@ -27,7 +27,7 @@ export interface IFileSelectProps {
 	}[];
 }
 
-export default (props: PassthroughRef<IFileSelectProps>) => {
+export default (props: PassthroughRef<FileSelectProps>) => {
 	const [inputValue, setInputValue] = createSignal(props.initial || '');
 	const [valid, setValid] = createSignal<string | boolean | JSX.Element>(null);
 	const [status, setStatus] = createSignal<'valid' | 'invalid' | null>(null);

@@ -6,11 +6,11 @@ export enum CommitStyle {
 
 // temporary
 // (was not temporary)
-export interface IDraftCommit {
+export interface DraftCommit {
 	files: string[];
 }
 
-export interface ICommit {
+export interface Commit {
 	message: string;
 	description: string;
 	files: string[];
@@ -59,11 +59,11 @@ const getScope = (files: string[]): string => {
 };
 
 export const getCommitStyledMessage = (
-	commit: IDraftCommit,
+	commit: DraftCommit,
 	style?: CommitStyle,
 	parens?: boolean,
 	type?: string
-): ICommit => {
+): Commit => {
 	if (!commit.files?.length) return;
 
 	const scope = getScope(commit.files);

@@ -1,8 +1,8 @@
 import { For, Show, createSignal } from 'solid-js';
 
-import { ILogCommit } from '@app/modules/git/log';
+import { LogCommit } from '@app/modules/git/log';
 import { t } from '@app/modules/i18n';
-import RepositoryStore, { IRepository } from '@app/stores/repository';
+import RepositoryStore, { Repository } from '@app/stores/repository';
 import * as Git from '@modules/git';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
@@ -19,18 +19,18 @@ import Footer from './Footer';
 
 import './index.scss';
 
-export interface ISidebarProps {
+export interface SidebarProps {
 	sidebar: boolean;
 }
 
-export default (props: ISidebarProps) => {
+export default (props: SidebarProps) => {
 	const files = createStoreListener([FileStore, LocationStore], () =>
 		FileStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
-	const [commits, setCommits] = createSignal<ILogCommit[]>([]);
+	const [commits, setCommits] = createSignal<LogCommit[]>([]);
 
-	let lastRepository: IRepository | undefined;
+	let lastRepository: Repository | undefined;
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
 		if (!LocationStore.selectedRepository) return;
