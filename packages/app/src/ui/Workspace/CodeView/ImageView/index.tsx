@@ -41,18 +41,26 @@ export interface IImageViewProps {
 	status: GitStatus;
 }
 
-const ps = (str1: string, str2: string): number => {
-	const lengthDiff = str1.length - str2.length;
-	const percentageDiff = (lengthDiff / Math.max(str1.length, str2.length)) * 100;
-
-	return Math.round(percentageDiff * -1);
+const sizeDifference = (size1: number, size2: number): number => {
+	return size1 - size2;
 };
 
-const kb = (str: string) => str.length / 1008 / 1.5;
+const nearestByteFigure = (bytes: number): string => {
+	const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+
+	if (bytes === 0) return '0 Bytes';
+
+	const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+	return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
+};
 
 export default (props: IImageViewProps) => {
 	const [threw, setThrew] = createSignal<[string | null, string | null]>([null, null]);
 	const [URIs, setURIs] = createSignal<[string | null, string | null]>([null, null]);
+	const [size, setSize] = createSignal<[number, number]>([0, 0]);
+	const [removedRef, setRemovedRef] = createSignal<HTMLImageElement>();
+	const [addedRef, setAddedRef] = createSignal<HTMLImageElement>();
 
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const commitFile = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
@@ -61,10 +69,10 @@ export default (props: IImageViewProps) => {
 	const repository = createStoreListener([RepositoryStore], () =>
 		RepositoryStore.getByPath(props.repository)
 	);
-
 	createEffect(async () => {
 		const out: [string | null, string | null] = [null, null];
 		const threwOut: [string | null, string | null] = [null, null];
+		const sizeOut: [number, number] = [0, 0];
 
 		if (props.status && props.status !== 'added') {
 			try {
@@ -79,6 +87,8 @@ export default (props: IImageViewProps) => {
 					const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
 
 					out[0] = `data:${mimeFromPath(props.path)};base64,${base64}`;
+
+					sizeOut[0] = remote.length;
 				}
 			} catch (e) {
 				error(e);
@@ -101,17 +111,17 @@ export default (props: IImageViewProps) => {
 						const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
 
 						out[1] = `data:${mimeFromPath(props.path)};base64,${base64}`;
+
+						sizeOut[1] = remote.length;
 					}
 				} else {
 					const binary = fs.readFileSync(props.path, 'binary');
 
-					if (kb(binary) > 700) {
-						throw 'File is too large to display';
-					}
-
 					const base64 = btoa(binary);
 
 					out[1] = `data:${mimeFromPath(props.path)};base64,${base64}`;
+
+					sizeOut[1] = binary.length;
 				}
 			} catch (e) {
 				error(e);
@@ -122,6 +132,7 @@ export default (props: IImageViewProps) => {
 
 		setURIs(out);
 		setThrew(threwOut);
+		setSize(sizeOut);
 	});
 
 	return (
@@ -145,9 +156,14 @@ export default (props: IImageViewProps) => {
 							<div class="image-view__images__image">
 								<div class="image-view__images__image__type removed">Removed</div>
 								<img
+									onLoad={(e) => {
+										setRemovedRef(e.currentTarget);
+									}}
 									class="image-view__images__image__image removed"
 									src={URIs()[0]}
 								/>
+								{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight} |{' '}
+								{nearestByteFigure(size()[0])}
 							</div>
 						</Show>
 					</Show>
@@ -156,25 +172,30 @@ export default (props: IImageViewProps) => {
 							<div class="image-view__images__image">
 								<div class="image-view__images__image__type added">Added</div>
 								<img
+									onLoad={(e) => {
+										setAddedRef(e.currentTarget);
+									}}
 									class="image-view__images__image__image added"
 									src={URIs()[1]}
 								/>
+								{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight} |{' '}
+								{nearestByteFigure(size()[1])}
 							</div>
 						</Show>
 					</Show>
 				</Show>
 			</div>
-			<Show when={!isNaN(ps(URIs()[0] || '', URIs()[1] || ''))}>
+			<Show when={sizeDifference(size()[0], size()[1])}>
 				<div
 					classList={{
 						'image-view__diff': true,
-						removed: ps(URIs()[0] || '', URIs()[1] || '') < 0,
-						added: ps(URIs()[0] || '', URIs()[1] || '') > 0
+						removed: sizeDifference(size()[0], size()[1]) > 0,
+						added: sizeDifference(size()[0], size()[1]) < 0
 					}}
 				>
-					{ps(URIs()[0] || '', URIs()[1] || '') > 0
-						? `+ ${ps(URIs()[0] || '', URIs()[1] || '')}%`
-						: `- ${Math.abs(ps(URIs()[0] || '', URIs()[1] || ''))}%`}
+					{sizeDifference(size()[0], size()[1]) < 0
+						? `+ ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`
+						: `- ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`}
 				</div>
 			</Show>
 		</div>
