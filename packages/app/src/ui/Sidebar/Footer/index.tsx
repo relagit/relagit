@@ -64,8 +64,6 @@ export default () => {
 
 		timeout = setTimeout(() => {
 			setDebouncedHidden(!(selected() && changes() && staged()));
-
-			console.log('timeout', !(selected() && changes() && staged()));
 		}, 500);
 	});
 
