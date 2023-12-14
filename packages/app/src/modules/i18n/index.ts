@@ -5,10 +5,20 @@ import de from './locales/de';
 import enUS from './locales/en-US';
 import lat from './locales/lat';
 
-export type Locale = typeof enUS;
+export type Locale = typeof import('./locales/en-US').default;
 export type LocaleKey = ObjectToDotProp<Locale>;
 
 // https://codeberg.org/Ven/vendicated.dev/src/branch/i18n/src/locales/index.ts#L24
+type ResolvePropDeep<T, P> = P extends ''
+	? T
+	: P extends `${infer Pre}.${infer Suf}`
+	  ? Pre extends keyof T
+			? ResolvePropDeep<T[Pre], Suf>
+			: never
+	  : P extends keyof T
+	    ? T[P]
+	    : never;
+
 type ObjectToDotProp<T extends object> = ObjectToDotPropInternal<T>[keyof T];
 
 type ObjectToDotPropInternal<T extends object> = {
@@ -22,10 +32,18 @@ type ObjectToDotPropInternal<T extends object> = {
 		: never;
 };
 
-const ALL_LOCALES: Record<string, RecursivePartial<Locale>> = {
+type Unstrict<T> = {
+	[K in keyof T]: T[K] extends Record<string, unknown>
+		? Unstrict<T[K]>
+		: T[K] extends string
+		  ? string
+		  : readonly [string, string] | string[];
+};
+
+const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 	'en-US': enUS,
-	lat,
-	de
+	lat: lat,
+	de: de
 };
 
 export type ValidLocale = keyof typeof ALL_LOCALES;
@@ -33,7 +51,7 @@ export type ValidLocale = keyof typeof ALL_LOCALES;
 type Stringifyable = string | number | boolean | null | undefined;
 
 const findTranslation = (
-	locale: RecursivePartial<Locale>,
+	locale: RecursivePartial<Unstrict<Locale>>,
 	key: LocaleKey,
 	args?: Record<string, Stringifyable>,
 	plural?: number
@@ -89,4 +107,10 @@ export const useI18n = () => {
 	return i18nFactory(ALL_LOCALES[SettingsStore.getSetting('locale') || 'en-US'] || enUS);
 };
 
-export const t = useI18n();
+export const t: <Trans extends LocaleKey>(
+	trans: Trans,
+	params?: Record<string, Stringifyable>,
+	plural?: number
+) => ResolvePropDeep<Locale, Trans> extends string
+	? ResolvePropDeep<Locale, Trans>
+	: ResolvePropDeep<Locale, Trans>[0] = useI18n();

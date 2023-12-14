@@ -247,4 +247,4 @@ export default {
 			errorHint: 'We dropped the ball while trying to gather your repositories.'
 		}
 	}
-};
+} as const;
