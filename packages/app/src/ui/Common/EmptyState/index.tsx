@@ -60,7 +60,7 @@ export default (props: EmptyStateProps) => {
 		<div class="empty-state">
 			<Show when={props.image}>
 				<img
-					src={`assets/empty_state/${imageSrc()}.svg`}
+					src={`assets/empty_state/${imageSrc() || 'Cube_dark'}.svg`}
 					alt="Nothing here"
 					style={{ opacity: props.opacity || 1 }}
 				/>
