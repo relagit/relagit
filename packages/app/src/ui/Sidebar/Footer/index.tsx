@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
@@ -21,6 +21,7 @@ import { showErrorModal } from '@ui/Modal';
 import './index.scss';
 
 export default () => {
+	const [debouncedHidden, setDebouncedHidden] = createSignal(false);
 	const [error, setError] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
@@ -54,11 +55,25 @@ export default () => {
 		return { message, style };
 	});
 
+	let timeout = null;
+
+	createEffect(() => {
+		logger.debug('footer_effect', !(selected() && changes() && staged()));
+
+		clearTimeout(timeout);
+
+		timeout = setTimeout(() => {
+			setDebouncedHidden(!(selected() && changes() && staged()));
+
+			console.log('timeout', !(selected() && changes() && staged()));
+		}, 500);
+	});
+
 	return (
 		<div
 			classList={{
 				sidebar__footer: true,
-				hidden: !(selected() && changes() && staged())
+				hidden: debouncedHidden()
 			}}
 		>
 			<TextArea
