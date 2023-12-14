@@ -558,7 +558,6 @@ export default (props: CodeViewProps) => {
 												);
 											}}
 										</For>
-										p
 									</Show>
 								</pre>
 							</Show>
