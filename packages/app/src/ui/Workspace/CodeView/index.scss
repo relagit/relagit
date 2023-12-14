@@ -6,7 +6,7 @@
 	font-variant-ligatures: none;
 	font-size: 11px; // NOT using rem to ennsure precision
 	width: 100%;
-	height: calc(100% - 110px);
+	height: 100%;
 	flex-direction: column;
 
 	::selection {
