@@ -50,7 +50,7 @@
 			}
 
 			&__image {
-				height: 50vh;
+				max-height: 50vh;
 				width: 100%;
 				object-fit: contain;
 				border: 1px solid var(--separator-primary);
