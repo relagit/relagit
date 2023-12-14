@@ -8,8 +8,9 @@ export interface RemoteRepository {
 	url: string;
 	type: 'fetch' | 'push';
 }
-const RemoteStore = new (class extends GenericStore {
+const RemoteStore = new (class RemoteStore extends GenericStore {
 	#record: RemoteRepository[] = [];
+
 	constructor() {
 		super();
 	}

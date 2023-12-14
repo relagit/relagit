@@ -7,7 +7,7 @@ import { GitFile } from './files';
 import type { Repository } from './repository';
 import SettingsStore from './settings';
 
-const LocationStore = new (class extends GenericStore {
+const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedFile: GitFile | undefined;
 	#selectedRepository: Repository | undefined;
 	#historyOpen = false;

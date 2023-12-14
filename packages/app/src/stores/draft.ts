@@ -10,7 +10,7 @@ export interface MesssageDraft {
 	description: string;
 }
 
-const DraftStore = new (class extends GenericStore {
+const DraftStore = new (class DraftStore extends GenericStore {
 	#record: Map<string, MesssageDraft | null> = new Map();
 
 	constructor() {

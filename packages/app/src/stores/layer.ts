@@ -4,8 +4,9 @@ export interface Layer {
 	key: string;
 	visible: boolean;
 }
-const LayerStore = new (class extends GenericStore {
+const LayerStore = new (class LayerStore extends GenericStore {
 	#record: Layer[] = [];
+
 	constructor() {
 		super();
 	}

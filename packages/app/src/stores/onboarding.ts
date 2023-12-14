@@ -7,7 +7,7 @@ export interface OnboardingState {
 	step: number;
 }
 
-const OnboardingStore = new (class extends GenericStore {
+const OnboardingStore = new (class OnboardingStore extends GenericStore {
 	#state: OnboardingState = {
 		dismissed: false,
 		step: 0

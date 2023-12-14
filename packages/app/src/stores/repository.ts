@@ -17,7 +17,7 @@ export interface Repository {
 	lastFetched?: number;
 }
 
-const RepositoryStore = new (class extends GenericStore {
+const RepositoryStore = new (class RepositoryStore extends GenericStore {
 	#record: Map<string, Repository> = new Map();
 
 	constructor() {

@@ -1,11 +1,12 @@
 import { GenericStore } from '.';
 import { JSX } from 'solid-js';
 
-const ModalStore = new (class extends GenericStore {
+const ModalStore = new (class ModalStore extends GenericStore {
 	#record: {
 		type: string;
 		element: JSX.Element;
 	}[] = [];
+
 	constructor() {
 		super();
 	}

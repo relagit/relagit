@@ -47,8 +47,9 @@ const validatePath = () => {
 	}
 };
 
-const SettingsStore = new (class extends GenericStore {
+const SettingsStore = new (class SettingsStore extends GenericStore {
 	#record: Partial<Settings> = {};
+
 	constructor() {
 		super();
 
