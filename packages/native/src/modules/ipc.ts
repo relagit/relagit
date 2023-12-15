@@ -46,7 +46,9 @@ export default (win: Electron.BrowserWindow) => {
 
 	ipcMain.handle(ipc.CHECK_IS_IN_PATH, (_, bin: string) => {
 		try {
-			child_process.execSync(`command -v ${bin}`);
+			const command = process.platform === 'win32' ? 'where' : 'command -v';
+
+			child_process.execSync(`${command} ${bin}`);
 
 			return true;
 		} catch (error) {
