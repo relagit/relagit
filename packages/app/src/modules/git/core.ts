@@ -13,7 +13,7 @@ export interface GitParams {
 	args: string[];
 	opts?: {
 		encoding?: BufferEncoding;
-	};
+	} & import('child_process').ExecOptions;
 }
 
 export const Git = async (params: GitParams): Promise<string> => {
