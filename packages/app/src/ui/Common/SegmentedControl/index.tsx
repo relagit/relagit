@@ -20,7 +20,7 @@ export default (props: SenmentedControlProps) => {
 	return (
 		<div
 			classList={{
-				segmentedControl: true,
+				'segmented-control': true,
 				disabled: props.disabled,
 				[props.className]: true
 			}}
@@ -33,7 +33,7 @@ export default (props: SenmentedControlProps) => {
 						aria-selected={value() === item.value}
 						aria-disabled={item.disabled || props.disabled}
 						classList={{
-							segmentedControl__item: true,
+							'segmented-control__item': true,
 							active: value() === item.value,
 							disabled: item.disabled
 						}}
