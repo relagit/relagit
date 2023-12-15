@@ -89,7 +89,6 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 		}
 
 		return FileStore.addFile(directory, {
-			staged: true,
 			id: Math.random().toString(16).split('.')[1],
 			name: path.basename(file),
 			path: file.replace(path.basename(file), '').replace(/[\/\\]$/, ''),
@@ -109,7 +108,7 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 			return {
 				status,
-				path: p.join(' ')
+				path: p.filter(Boolean).join(' ')
 			};
 		});
 
@@ -133,7 +132,6 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 		}
 
 		FileStore.addFile(directory, {
-			staged: true,
 			id: Math.random().toString(16).split('.')[1],
 			name: path.basename(p),
 			path: p.replace(path.basename(p), '').replace(/[\/\\]$/, ''),

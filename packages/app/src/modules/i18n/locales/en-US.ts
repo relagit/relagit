@@ -209,7 +209,9 @@ export default {
 		nothingToSee: 'Nothing to see here',
 		popStash: 'Pop Stash',
 		commits: ['{{count}} commit', '{{count}} commits'],
-		stashedChanges: ['{{count}} stashed change', '{{count}} stashed changes']
+		stashedChanges: ['{{stashCount}} stash ({{count}})', '{{stashCount}} stashes ({{count}})'],
+		removeStash: 'Remove Stash',
+		files: ['{{count}} file', '{{count}} files']
 	},
 	modal: {
 		closeModal: 'Close Modal',

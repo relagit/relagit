@@ -98,7 +98,7 @@ export default () => {
 	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
 	const [branches, setBranches] = createSignal<Branch[]>(null);
-	const [stashed, setStashed] = createSignal<number>(null);
+	const [stashes, setStashes] = createSignal<Record<number, string[]>>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
 
 	let branchesRef: Accessor<HTMLElement>;
@@ -144,14 +144,14 @@ export default () => {
 
 	createStoreListener([LocationStore, RepositoryStore], async () => {
 		if (!LocationStore.selectedRepository) {
-			setStashed(null);
+			setStashes(null);
 			setBranches(null);
 		}
 
 		try {
 			const res = await Git.ListStash(LocationStore.selectedRepository);
 
-			setStashed(res?.length);
+			setStashes(res);
 		} catch (e) {
 			showErrorModal(e, 'error.fetching');
 
@@ -302,26 +302,59 @@ export default () => {
 					}
 				}}
 			/>
-			<Show when={stashed() > 0}>
-				<PanelButton
-					icon="file-directory"
-					id="workspace-pop-stash"
-					onClick={async () => {
-						try {
-							await Git.PopStash(LocationStore.selectedRepository);
+			<Show when={Object.keys(stashes() || {}).length > 0}>
+				<Menu
+					items={[
+						{
+							type: 'item',
+							label: t('git.removeStash'),
+							onClick: async () => {
+								try {
+									await Git.RemoveStash(LocationStore.selectedRepository, 0);
 
-							triggerWorkflow('stash_pop', LocationStore.selectedRepository);
+									refetchRepository(LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
 
-							refetchRepository(LocationStore.selectedRepository);
-						} catch (e) {
-							showErrorModal(e, 'error.git');
-
-							error(e);
+									error(e);
+								}
+							}
 						}
-					}}
-					label={t('git.popStash')}
-					detail={t('git.stashedChanges', { count: stashed() }, stashed())}
-				/>
+					]}
+				>
+					<PanelButton
+						icon="file-directory"
+						id="workspace-pop-stash"
+						onClick={async () => {
+							try {
+								await Git.PopStash(LocationStore.selectedRepository, 0);
+
+								triggerWorkflow('stash_pop', LocationStore.selectedRepository);
+
+								refetchRepository(LocationStore.selectedRepository);
+							} catch (e) {
+								showErrorModal(e, 'error.git');
+
+								error(e);
+							}
+						}}
+						label={t('git.popStash')}
+						detail={t(
+							'git.stashedChanges',
+							{
+								stashCount: Object.keys(stashes()).length,
+								count: t(
+									'git.files',
+									{
+										count: stashes()[0].length
+									},
+									stashes()[0].length
+								)
+							},
+							Object.keys(stashes()).length
+						)}
+					/>
+				</Menu>
 			</Show>
 			<div class="workspace__header__spacer" />
 			<Popout

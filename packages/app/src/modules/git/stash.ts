@@ -8,13 +8,13 @@ export const Stash = async (repository: Repository) => {
 	const res = await Git({
 		directory: repository.path,
 		command: 'stash',
-		args: []
+		args: ['save']
 	});
 
 	return res;
 };
 
-export const ListStash = async (repository: Repository): Promise<string[]> => {
+export const ListStash = async (repository: Repository): Promise<Record<number, string[]>> => {
 	if (!repository) return;
 
 	const res = await Git({
@@ -25,29 +25,52 @@ export const ListStash = async (repository: Repository): Promise<string[]> => {
 
 	if (!res) return [];
 
-	const lines = res.split('stash@')[1].split('\n');
+	const stashes = res.split('stash@').slice(1);
 
-	const files: string[] = [];
+	const stashMap: Record<number, string[]> = {};
 
-	for (let i = 0; i < lines.length; i++) {
-		const line = lines[i];
+	for (let i = 0; i < stashes.length; i++) {
+		const stash = stashes[i];
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const [_, file] = line.split('\t');
+		const index = stash.match(/\{(\d+)\}/)[1];
 
-		if (file) files.push(file);
+		const lines = stash.split('\n');
+
+		const files: string[] = [];
+
+		for (let j = 0; j < lines.length; j++) {
+			const line = lines[j];
+
+			const [, file] = line.split('\t');
+
+			if (file) files.push(file);
+		}
+
+		stashMap[index] = files;
 	}
 
-	return files;
+	return stashMap;
 };
 
-export const PopStash = async (repository: Repository) => {
+export const PopStash = async (repository: Repository, index: number) => {
 	if (!repository) return;
 
 	const res = await Git({
 		directory: repository.path,
 		command: 'stash',
-		args: ['pop']
+		args: ['pop', `stash@{${index}}`]
+	});
+
+	return res;
+};
+
+export const RemoveStash = async (repository: Repository, index: number) => {
+	if (!repository) return;
+
+	const res = await Git({
+		directory: repository.path,
+		command: 'stash',
+		args: ['drop', `stash@{${index}}`]
 	});
 
 	return res;
