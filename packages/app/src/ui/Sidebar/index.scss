@@ -90,7 +90,8 @@
 	}
 }
 
-.platform-darwin .sidebar {
+.platform-darwin .sidebar,
+.platform-win32 .sidebar {
 	height: calc(100% - 28px);
 }
 
