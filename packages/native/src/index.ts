@@ -73,7 +73,7 @@ app.once('ready', async () => {
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
-			height: 28,
+			height: 27,
 			color: '#141515',
 			symbolColor: '#cacaca'
 		},
