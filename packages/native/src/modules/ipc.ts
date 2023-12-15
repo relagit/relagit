@@ -65,27 +65,36 @@ export default (win: Electron.BrowserWindow) => {
 		return Buffer.from(data, 'binary').toString('base64');
 	});
 
-	ipcMain.handle(ipc.GIT_EXEC, (_, cmd, opts) => {
-		const out = {
-			error: null,
-			stdout: null,
-			stderr: null
-		};
+	ipcMain.handle(
+		ipc.GIT_EXEC,
+		(
+			_,
+			cmd,
+			opts: {
+				encoding?: 'binary';
+			} & child_process.ExecOptions
+		) => {
+			const out = {
+				error: null,
+				stdout: null,
+				stderr: null
+			};
 
-		return new Promise((resolve) => {
-			const process = child_process.exec(cmd, opts, (error, stdout, stderr) => {
-				if (opts.encoding) {
-					process.stdout?.setEncoding?.(opts.encoding);
-				}
+			return new Promise((resolve) => {
+				const process = child_process.exec(cmd, opts, (error, stdout, stderr) => {
+					if (opts.encoding) {
+						process.stdout?.setEncoding?.(opts.encoding);
+					}
 
-				out.error = error;
-				out.stdout = stdout;
-				out.stderr = stderr;
+					out.error = error;
+					out.stdout = stdout;
+					out.stderr = stderr;
 
-				resolve(out);
+					resolve(out);
+				});
 			});
-		});
-	});
+		}
+	);
 };
 
 export const dispatch = (win: BrowserWindow, channel: string, ...args: unknown[]) => {
