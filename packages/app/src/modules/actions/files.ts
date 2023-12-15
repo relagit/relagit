@@ -223,6 +223,8 @@ export const refetchRepository = async (repository: Repository) => {
 
 	if (equivalent) {
 		LocationStore.setSelectedFile(equivalent);
+	} else {
+		LocationStore.setSelectedFile(undefined);
 	}
 };
 
