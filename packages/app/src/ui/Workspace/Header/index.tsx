@@ -263,7 +263,12 @@ export default () => {
 								error(e);
 							}
 
-							refetchRepository(LocationStore.selectedRepository);
+							setActioning(false);
+							setFetching(true);
+
+							refetchRepository(LocationStore.selectedRepository).then(() =>
+								setFetching(false)
+							);
 						}
 						case 'behind': {
 							debug('Pulling changes');
@@ -276,7 +281,12 @@ export default () => {
 								error(e);
 							}
 
-							refetchRepository(LocationStore.selectedRepository);
+							setActioning(false);
+							setFetching(true);
+
+							refetchRepository(LocationStore.selectedRepository).then(() =>
+								setFetching(false)
+							);
 						}
 						case 'diverged': {
 							debug('Diverged');
@@ -295,7 +305,12 @@ export default () => {
 								error(e);
 							}
 
-							refetchRepository(LocationStore.selectedRepository);
+							setActioning(false);
+							setFetching(true);
+
+							refetchRepository(LocationStore.selectedRepository).then(() =>
+								setFetching(false)
+							);
 						}
 						case 'publish': {
 							debug('Publishing');
@@ -313,14 +328,17 @@ export default () => {
 								error(e);
 							}
 
-							refetchRepository(LocationStore.selectedRepository);
+							setActioning(false);
+							setFetching(true);
+
+							refetchRepository(LocationStore.selectedRepository).then(() =>
+								setFetching(false)
+							);
 						}
 						default: {
 							debug('No change');
 						}
 					}
-
-					setActioning(false);
 				}}
 			/>
 			<Show when={Object.keys(stashes() || {}).length > 0}>
@@ -329,11 +347,23 @@ export default () => {
 						{
 							type: 'item',
 							label: t('git.removeStash'),
+							disabled: !repository(),
 							onClick: async () => {
+								if (!repository()) return;
+
+								if (Object.keys(stashes() || {}).length === 0) return;
+
+								setStashActioning(true);
+
 								try {
 									await Git.RemoveStash(LocationStore.selectedRepository, 0);
 
-									refetchRepository(LocationStore.selectedRepository);
+									setStashActioning(false);
+									setFetching(true);
+
+									refetchRepository(LocationStore.selectedRepository).then(() =>
+										setFetching(false)
+									);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -358,14 +388,17 @@ export default () => {
 
 								triggerWorkflow('stash_pop', LocationStore.selectedRepository);
 
-								refetchRepository(LocationStore.selectedRepository);
+								setStashActioning(false);
+								setFetching(true);
+
+								refetchRepository(LocationStore.selectedRepository).then(() =>
+									setFetching(false)
+								);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
 								error(e);
 							}
-
-							setStashActioning(false);
 						}}
 						loading={stashActioning()}
 						label={t('git.popStash')}
@@ -531,7 +564,11 @@ export default () => {
 
 												setHasNewBranchInput(false);
 
-												refetchRepository(LocationStore.selectedRepository);
+												setFetching(true);
+
+												refetchRepository(
+													LocationStore.selectedRepository
+												).then(() => setFetching(false));
 											} catch (e) {
 												showErrorModal(e, 'error.git');
 
