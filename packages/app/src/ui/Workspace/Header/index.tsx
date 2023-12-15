@@ -34,6 +34,7 @@ export interface PanelButtonProps {
 	tooltipPosition?: 'top' | 'bottom' | 'auto';
 	disabled?: boolean;
 	className?: string;
+	loading?: boolean;
 }
 
 const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
@@ -52,13 +53,13 @@ const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 						aria-role="button"
 						aria-label={props.label || props.name}
 						aria-selected={props.className?.includes('active')}
-						disabled={props.disabled}
+						disabled={props.loading || props.disabled}
 						classList={{
 							workspace__header__panelbutton: true,
 							'workspace__header__panelbutton-small': props.size === 'small',
 							'workspace__header__panelbutton-medium': props.size === 'medium',
 							'workspace__header__panelbutton-large': props.size === 'large',
-							disabled: props.disabled,
+							disabled: props.disabled || props.loading,
 							[props.className]: true
 						}}
 						onClick={props.onClick}
@@ -78,6 +79,9 @@ const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 									</div>
 								)}
 							</div>
+						</Show>
+						<Show when={props.loading}>
+							<div class="workspace__header__panelbutton__loading"></div>
 						</Show>
 					</button>
 				);
@@ -100,6 +104,9 @@ export default () => {
 	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashes, setStashes] = createSignal<Record<number, string[]>>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
+	const [fetching, setFetching] = createSignal(false);
+	const [actioning, setActioning] = createSignal(false);
+	const [stashActioning, setStashActioning] = createSignal(false);
 
 	let branchesRef: Accessor<HTMLElement>;
 
@@ -172,16 +179,22 @@ export default () => {
 	return (
 		<div class="workspace__header">
 			<PanelButton
+				loading={fetching()}
 				detail={renderDate(repository()?.lastFetched)()}
 				label={t('git.sync')}
 				icon="sync"
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}
 				onClick={() => {
-					refetchRepository(LocationStore.selectedRepository);
+					setFetching(true);
+
+					refetchRepository(LocationStore.selectedRepository).then(() =>
+						setFetching(false)
+					);
 				}}
 			/>
 			<PanelButton
+				loading={actioning()}
 				icon={((): IconName | keyof typeof customIcons => {
 					switch (status()) {
 						case 'ahead':
@@ -230,6 +243,12 @@ export default () => {
 					}
 				})()}
 				onClick={async () => {
+					if (!repository()) return;
+
+					if (status() === null) return;
+
+					setActioning(true);
+
 					switch (status()) {
 						case 'ahead': {
 							debug('Pushing changes');
@@ -300,6 +319,8 @@ export default () => {
 							debug('No change');
 						}
 					}
+
+					setActioning(false);
 				}}
 			/>
 			<Show when={Object.keys(stashes() || {}).length > 0}>
@@ -326,6 +347,12 @@ export default () => {
 						icon="file-directory"
 						id="workspace-pop-stash"
 						onClick={async () => {
+							if (!repository()) return;
+
+							if (Object.keys(stashes() || {}).length === 0) return;
+
+							setStashActioning(true);
+
 							try {
 								await Git.PopStash(LocationStore.selectedRepository, 0);
 
@@ -337,7 +364,10 @@ export default () => {
 
 								error(e);
 							}
+
+							setStashActioning(false);
 						}}
+						loading={stashActioning()}
 						label={t('git.popStash')}
 						detail={t(
 							'git.stashedChanges',

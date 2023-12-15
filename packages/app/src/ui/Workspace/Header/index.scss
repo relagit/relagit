@@ -1,3 +1,12 @@
+@keyframes loading {
+	0% {
+		background-position-x: -200px;
+	}
+	100% {
+		background-position-x: 200px;
+	}
+}
+
 .workspace__header {
 	display: flex;
 	align-items: center;
@@ -22,6 +31,7 @@
 		padding-inline: 35px;
 		gap: 16px;
 		user-select: none;
+		position: relative;
 		-webkit-app-region: no-drag;
 
 		&:focus {
@@ -53,8 +63,42 @@
 		}
 
 		&.disabled {
-			opacity: 0.4;
 			pointer-events: none;
+
+			> :not(.workspace__header__panelbutton__loading) {
+				opacity: 0.4;
+			}
+
+			svg {
+				opacity: 0.4;
+			}
+		}
+
+		> :not(.workspace__header__panelbutton__loading) {
+			z-index: 1;
+		}
+
+		svg {
+			z-index: 1;
+		}
+
+		&__loading {
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 0;
+			background-color: #ffffff05;
+			background-image: linear-gradient(
+				to right,
+				#ffffff00 10%,
+				var(--bg-hover) 50%,
+				#ffffff00 80%
+			);
+			background-repeat: no-repeat;
+			animation: loading 700ms linear infinite;
 		}
 
 		&__info {

@@ -20,6 +20,8 @@ export interface IconProps {
 }
 
 export default (props: IconProps) => {
+	if (!props.name) return null;
+
 	return (
 		<Show
 			when={customIcons.hasOwnProperty(props.name)}
