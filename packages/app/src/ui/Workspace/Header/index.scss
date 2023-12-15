@@ -33,6 +33,7 @@
 		user-select: none;
 		position: relative;
 		-webkit-app-region: no-drag;
+		overflow: hidden;
 
 		&:focus {
 			border-color: transparent;
@@ -107,15 +108,23 @@
 			font-weight: 400;
 			text-align: initial;
 			color: var(--color-primary);
+			overflow: hidden;
+			width: 100%;
 
 			&__label {
 				font-size: 1rem;
 				font-weight: 600;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
 			}
 
 			&__detail {
 				font-size: 0.85rem;
 				color: var(--color-secondary);
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
 			}
 		}
 
