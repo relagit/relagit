@@ -6,7 +6,9 @@ import * as ipc from '~/common/ipc';
 
 const preloadPathEnv = () => {
 	try {
-		const path = child_process.execSync('echo $PATH').toString().trim();
+		const command = process.platform === 'win32' ? 'PATH' : 'echo $PATH';
+
+		const path = child_process.execSync(command).toString().trim();
 
 		return Object.assign(process.env, { PATH: path });
 	} catch (error) {
@@ -59,7 +61,7 @@ export default (win: Electron.BrowserWindow) => {
 	ipcMain.handle(ipc.SPAWN_ENV, (_, exec: string, path: string) => {
 		child_process.spawn(exec, [path], {
 			detached: true,
-			env: preloadPathEnv() // TODO: this sometimes fails on macos when launching from applications
+			env: preloadPathEnv()
 		});
 	});
 
