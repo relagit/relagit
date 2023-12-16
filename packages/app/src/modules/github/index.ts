@@ -1,3 +1,4 @@
+import { error } from '../logger';
 import { GithubResponse } from './types';
 
 export * from './types';
@@ -34,6 +35,8 @@ export const GitHub = <T extends keyof GithubResponse>(
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
 		const res = await fetch(url, { headers });
+
+		if (res.status !== 200) throw res.statusText;
 
 		return await (headers['Accept'] === 'application/vnd.github.v3+json'
 			? res.json()
