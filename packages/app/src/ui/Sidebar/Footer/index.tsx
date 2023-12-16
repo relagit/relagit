@@ -21,7 +21,7 @@ import { showErrorModal } from '@ui/Modal';
 import './index.scss';
 
 export default () => {
-	const [debouncedHidden, setDebouncedHidden] = createSignal(false);
+	const [debouncedShowing, setDebouncedShowing] = createSignal(false);
 	const [error, setError] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
@@ -63,7 +63,7 @@ export default () => {
 		clearTimeout(timeout);
 
 		timeout = setTimeout(() => {
-			setDebouncedHidden(!(selected() && changes() && staged()));
+			setDebouncedShowing(selected() && changes() && staged());
 		}, 500);
 	});
 
@@ -71,7 +71,7 @@ export default () => {
 		<div
 			classList={{
 				sidebar__footer: true,
-				hidden: debouncedHidden()
+				showing: debouncedShowing()
 			}}
 		>
 			<TextArea

@@ -15,11 +15,17 @@
 		bottom 0.5s ease-in-out,
 		opacity 0.5s ease-in-out;
 
-	&.hidden {
-		bottom: -225px;
-		opacity: 0.5;
-		pointer-events: none;
-		user-select: none;
+	// hidden styling
+	bottom: -225px;
+	opacity: 0.5;
+	pointer-events: none;
+	user-select: none;
+
+	&.showing {
+		bottom: 0;
+		opacity: 1;
+		pointer-events: auto;
+		user-select: auto;
 	}
 
 	&__textarea-button {
