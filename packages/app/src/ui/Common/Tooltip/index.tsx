@@ -60,7 +60,7 @@ export default (props: Tooltip) => {
 	return (
 		<>
 			<props.children
-				title={props.text}
+				title={undefined}
 				tabIndex={0}
 				onFocus={delay}
 				onBlur={hide}

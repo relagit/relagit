@@ -37,7 +37,7 @@
 	}
 
 	&.top {
-		top: calc(var(--y) + 0.5 * var(--w-h));
+		top: calc(var(--y) + 0.5 * var(--w-h) - 5px);
 		left: var(--x);
 	}
 
