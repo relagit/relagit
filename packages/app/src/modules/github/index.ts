@@ -1,4 +1,3 @@
-import { error } from '../logger';
 import { GithubResponse } from './types';
 
 export * from './types';
