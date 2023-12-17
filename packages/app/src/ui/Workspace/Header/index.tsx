@@ -269,6 +269,8 @@ export default () => {
 							refetchRepository(LocationStore.selectedRepository).then(() =>
 								setFetching(false)
 							);
+
+							return;
 						}
 						case 'behind': {
 							debug('Pulling changes');
@@ -287,6 +289,8 @@ export default () => {
 							refetchRepository(LocationStore.selectedRepository).then(() =>
 								setFetching(false)
 							);
+
+							return;
 						}
 						case 'diverged': {
 							debug('Diverged');
@@ -311,6 +315,8 @@ export default () => {
 							refetchRepository(LocationStore.selectedRepository).then(() =>
 								setFetching(false)
 							);
+
+							return;
 						}
 						case 'publish': {
 							debug('Publishing');
@@ -334,9 +340,11 @@ export default () => {
 							refetchRepository(LocationStore.selectedRepository).then(() =>
 								setFetching(false)
 							);
+
+							return;
 						}
 						default: {
-							debug('No change');
+							return debug('No change');
 						}
 					}
 				}}
