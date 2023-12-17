@@ -16,7 +16,13 @@ const preloadPathEnv = () => {
 	}
 };
 
-export default (win: Electron.BrowserWindow) => {
+let win: BrowserWindow | null = null;
+
+export default (window: BrowserWindow) => {
+	if (win) return (win = window);
+
+	win = window;
+
 	win.webContents.on('will-navigate', (e, url) => {
 		e.preventDefault();
 
@@ -101,6 +107,6 @@ export default (win: Electron.BrowserWindow) => {
 	);
 };
 
-export const dispatch = (win: BrowserWindow, channel: string, ...args: unknown[]) => {
+export const dispatch = (channel: string, ...args: unknown[]) => {
 	return win.webContents.send(channel, ...args);
 };

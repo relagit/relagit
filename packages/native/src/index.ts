@@ -22,7 +22,7 @@ if (shellNeedsPatching(process)) {
 	updateEnvironmentForProcess();
 }
 
-app.once('ready', async () => {
+const constructWindow = async () => {
 	let settings: Map<string, unknown>;
 
 	try {
@@ -116,11 +116,11 @@ app.once('ready', async () => {
 	});
 
 	win.on('focus', () => {
-		win.webContents.send(ipc.FOCUS, true);
+		dispatch(ipc.FOCUS, true);
 	});
 
 	win.on('blur', () => {
-		win.webContents.send(ipc.FOCUS, false);
+		dispatch(ipc.FOCUS, false);
 	});
 
 	log('Startup' + (__NODE_ENV__ === 'development' ? ' (development)' : ' (production)'));
@@ -132,8 +132,6 @@ app.once('ready', async () => {
 	win.once('ready-to-show', () => {
 		win.show();
 	});
-
-	initIPC(win);
 
 	const menu = Menu.buildFromTemplate([
 		{
@@ -157,7 +155,7 @@ app.once('ready', async () => {
 					label: 'Preferences',
 					accelerator: 'CmdOrCtrl+,',
 					click: () => {
-						dispatch(win, ipc.OPEN_SETTINGS);
+						dispatch(ipc.OPEN_SETTINGS);
 					}
 				},
 				{
@@ -192,36 +190,43 @@ app.once('ready', async () => {
 					label: 'Sidebar',
 					accelerator: 'CmdOrCtrl+B',
 					click: () => {
-						win.webContents.send(ipc.OPEN_SIDEBAR);
+						dispatch(ipc.OPEN_SIDEBAR);
+					}
+				},
+				{
+					label: 'Information Modal',
+					accelerator: 'CmdOrCtrl+I',
+					click: () => {
+						dispatch(ipc.OPEN_INFORMATION);
 					}
 				},
 				{
 					label: 'Switcher',
 					accelerator: 'CmdOrCtrl+K',
 					click: () => {
-						win.webContents.send(ipc.OPEN_SWITCHER);
-						win.webContents.send(ipc.OPEN_SIDEBAR, true);
+						dispatch(ipc.OPEN_SWITCHER);
+						dispatch(ipc.OPEN_SIDEBAR, true);
 					}
 				},
 				{
 					label: 'Commit History',
 					accelerator: 'CmdOrCtrl+L',
 					click: () => {
-						win.webContents.send(ipc.OPEN_HISTORY);
+						dispatch(ipc.OPEN_HISTORY);
 					}
 				},
 				{
 					label: 'Branches',
 					accelerator: 'CmdOrCtrl+I',
 					click: () => {
-						win.webContents.send(ipc.OPEN_BRANCHES);
+						dispatch(ipc.OPEN_BRANCHES);
 					}
 				},
 				{
 					label: 'Blame View',
 					accelerator: 'CmdOrCtrl+J',
 					click: () => {
-						win.webContents.send(ipc.OPEN_BLAME);
+						dispatch(ipc.OPEN_BLAME);
 					}
 				}
 			]
@@ -268,4 +273,26 @@ app.once('ready', async () => {
 	]);
 
 	Menu.setApplicationMenu(menu);
+
+	return win;
+};
+
+app.once('ready', async () => {
+	const window = await constructWindow();
+
+	initIPC(window);
+
+	app.on('activate', async () => {
+		if (BrowserWindow.getAllWindows().length === 0) {
+			const newWindow = await constructWindow();
+
+			initIPC(newWindow);
+		}
+	});
+});
+
+app.on('window-all-closed', () => {
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
 });
