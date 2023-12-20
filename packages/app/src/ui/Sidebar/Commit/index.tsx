@@ -127,7 +127,10 @@ export default (props: LogCommit) => {
 				</div>
 				<div class="sidebar__commit__bottom">
 					<div class="sidebar__commit__bottom__author">{props.author}</div>
-					<div class="sidebar__commit__bottom__date">
+					<div
+						class="sidebar__commit__bottom__date"
+						title={new Date(props.date).toLocaleString()}
+					>
 						{renderDate(new Date(props.date).getTime())()}
 					</div>
 				</div>
@@ -136,6 +139,9 @@ export default (props: LogCommit) => {
 						<div class="sidebar__commit__diff__files">
 							{props.files} {t('ui.filepicker.file', {}, props.files)}
 						</div>
+						<Show when={props.tag}>
+							<div class="sidebar__commit__diff__tag">{props.tag}</div>
+						</Show>
 						<Show when={props.insertions}>
 							<div class="sidebar__commit__diff__insertions">+{props.insertions}</div>
 						</Show>

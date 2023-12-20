@@ -4,6 +4,8 @@ import { Git } from './core';
 
 export interface LogCommit {
 	hash: string;
+	tag?: string;
+	refs: string;
 	author: string;
 	date: string;
 	message: string;
@@ -18,11 +20,17 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 	const res = await Git({
 		directory: repository.path,
 		command: 'log',
-		args: ['--pretty=format:%H%n%an%n%ad%n%s%n', '--stat', '--no-color', '--stat-width=1']
+		args: ['--pretty=format:%H%n%an%n%ad%n%s%n%D%n', '--stat', '--no-color', '--stat-width=1']
 	});
 
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
-		const [hash, author, date, message] = commit.split('\n');
+		const [hash, author, date, message, refs] = commit.split('\n');
+
+		let tag: string | undefined;
+
+		if (refs.startsWith('tag: ')) {
+			tag = refs.replace(/^tag: /, '');
+		}
 
 		const changesLine = commit.split('\n')[commit.split('\n').length - 2].split(',');
 
@@ -30,8 +38,10 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 			return {
 				hash,
 				author,
+				tag,
 				date,
 				message,
+				refs,
 				files: 0,
 				insertions: 0,
 				deletions: 0
@@ -61,6 +71,8 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 			hash,
 			author,
 			date,
+			refs,
+			tag,
 			message,
 			files,
 			insertions,
