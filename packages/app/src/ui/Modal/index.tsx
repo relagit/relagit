@@ -34,7 +34,13 @@ const Modal = (props: ModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement>(null);
 	const [open, setOpen] = createSignal(false);
 
-	const { activate, deactivate } = useFocusTrap(ref);
+	const { activate, deactivate } = useFocusTrap(ref, {
+		onDeactivate: () => {
+			if (props.dismissable) {
+				close();
+			}
+		}
+	});
 
 	onMount(() => {
 		requestAnimationFrame(() => {
