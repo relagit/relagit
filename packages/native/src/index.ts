@@ -217,7 +217,7 @@ const constructWindow = async () => {
 				},
 				{
 					label: 'Branches',
-					accelerator: 'CmdOrCtrl+I',
+					accelerator: 'CmdOrCtrl+M',
 					click: () => {
 						dispatch(ipc.OPEN_BRANCHES);
 					}
