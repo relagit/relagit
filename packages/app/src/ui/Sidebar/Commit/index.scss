@@ -51,6 +51,13 @@
 		gap: 6px;
 		width: 100%;
 
+		&__tag {
+			background-color: var(--bg-active-unfocused);
+			border-radius: 2px;
+			padding: 2px 4px;
+			font-size: 0.8rem;
+		}
+
 		&__files {
 			font-family: var(--font-primary);
 			color: var(--color-secondary);
