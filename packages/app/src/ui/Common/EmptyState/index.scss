@@ -11,6 +11,10 @@
 	margin: 0 auto;
 	user-select: none;
 
+	&__spinner {
+		margin-bottom: 16px;
+	}
+
 	img {
 		width: 100%;
 		max-width: 400px;
