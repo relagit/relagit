@@ -57,10 +57,9 @@ const constructWindow = async () => {
 	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
 		settings.get('vibrancy') ? 'mica' : undefined;
 	let transparent = settings.get('vibrancy') && process.platform === 'win32' ? true : undefined;
-	let backgroundColor =
-		settings.get('vibrancy') && process.platform === 'win32'
-			? '#00000000'
-			: backgroundFromTheme(settings.get('theme') as string, nativeTheme.shouldUseDarkColors);
+	let backgroundColor = settings.get('vibrancy')
+		? '#00000000'
+		: backgroundFromTheme(settings.get('theme') as string, nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
