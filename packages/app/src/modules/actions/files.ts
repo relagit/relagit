@@ -210,6 +210,10 @@ export const getRepositoryStatus = async (
 export const refetchRepository = async (repository: Repository) => {
 	if (!repository) return;
 
+	LocationStore.setIsRefetchingSelectedRepository(
+		repository.path === LocationStore.selectedRepository?.path
+	);
+
 	const currentFile = LocationStore.selectedFile;
 
 	FileStore.removeFiles(repository.path);
@@ -226,6 +230,9 @@ export const refetchRepository = async (repository: Repository) => {
 	} else {
 		LocationStore.setSelectedFile(undefined);
 	}
+
+	if (repository.path === LocationStore.selectedRepository?.path)
+		LocationStore.setIsRefetchingSelectedRepository(false);
 };
 
 window._refetchRepository = refetchRepository;

@@ -16,6 +16,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedCommitFiles: PastCommit | undefined;
 	#selectedCommitFile: PastCommit['files'][number] | undefined;
 
+	#isRefetchingSelectedRepository = false;
+
 	constructor() {
 		super();
 
@@ -64,6 +66,10 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	get blameOpen() {
 		return this.#blameOpen;
+	}
+
+	get isRefetchingSelectedRepository() {
+		return this.#isRefetchingSelectedRepository;
 	}
 
 	setSelectedFile(file: GitFile) {
@@ -118,6 +124,11 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	clearSelectedRepository() {
 		this.#selectedRepository = undefined;
+		this.emit();
+	}
+
+	setIsRefetchingSelectedRepository(value: boolean) {
+		this.#isRefetchingSelectedRepository = value;
 		this.emit();
 	}
 })();

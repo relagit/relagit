@@ -104,9 +104,13 @@ export default () => {
 	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashes, setStashes] = createSignal<Record<number, string[]>>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
-	const [fetching, setFetching] = createSignal(false);
 	const [actioning, setActioning] = createSignal(false);
 	const [stashActioning, setStashActioning] = createSignal(false);
+
+	const fetching = createStoreListener(
+		[LocationStore],
+		() => LocationStore.isRefetchingSelectedRepository
+	);
 
 	let branchesRef: Accessor<HTMLElement>;
 
@@ -186,11 +190,7 @@ export default () => {
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}
 				onClick={() => {
-					setFetching(true);
-
-					refetchRepository(LocationStore.selectedRepository).then(() =>
-						setFetching(false)
-					);
+					refetchRepository(LocationStore.selectedRepository);
 				}}
 			/>
 			<PanelButton
@@ -264,11 +264,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -284,11 +281,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -310,12 +304,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
-
+							refetchRepository(LocationStore.selectedRepository);
 							return;
 						}
 						case 'publish': {
@@ -335,11 +325,7 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
-
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -367,11 +353,8 @@ export default () => {
 									await Git.RemoveStash(LocationStore.selectedRepository, 0);
 
 									setStashActioning(false);
-									setFetching(true);
 
-									refetchRepository(LocationStore.selectedRepository).then(() =>
-										setFetching(false)
-									);
+									refetchRepository(LocationStore.selectedRepository);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -397,11 +380,8 @@ export default () => {
 								triggerWorkflow('stash_pop', LocationStore.selectedRepository);
 
 								setStashActioning(false);
-								setFetching(true);
 
-								refetchRepository(LocationStore.selectedRepository).then(() =>
-									setFetching(false)
-								);
+								refetchRepository(LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
@@ -572,11 +552,7 @@ export default () => {
 
 												setHasNewBranchInput(false);
 
-												setFetching(true);
-
-												refetchRepository(
-													LocationStore.selectedRepository
-												).then(() => setFetching(false));
+												refetchRepository(LocationStore.selectedRepository);
 											} catch (e) {
 												showErrorModal(e, 'error.git');
 
