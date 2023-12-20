@@ -5,6 +5,14 @@ import path from 'node:path';
 
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
+export const backgroundFromTheme = (theme: string, isDark: boolean) => {
+	if (theme === 'system') {
+		return isDark ? '#141515' : '#ffffff';
+	}
+
+	return theme === 'dark' ? '#141515' : '#ffffff';
+};
+
 export const getSettings = async () => {
 	const dir = path.join(os.homedir(), '.relagit');
 

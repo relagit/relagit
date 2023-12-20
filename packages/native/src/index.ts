@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, MenuItemConstructorOptions, app } from 'electron';
+import { BrowserWindow, Menu, MenuItemConstructorOptions, app, nativeTheme } from 'electron';
 
 import * as path from 'path';
 
@@ -7,7 +7,7 @@ import * as ipc from '~/common/ipc';
 import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
-import { getSettings, setSettings } from './modules/settings';
+import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
 import { shellNeedsPatching, updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
@@ -58,7 +58,9 @@ const constructWindow = async () => {
 		settings.get('vibrancy') ? 'mica' : undefined;
 	let transparent = settings.get('vibrancy') && process.platform === 'win32' ? true : undefined;
 	let backgroundColor =
-		settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined;
+		settings.get('vibrancy') && process.platform === 'win32'
+			? '#00000000'
+			: backgroundFromTheme(settings.get('theme') as string, nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
@@ -74,7 +76,10 @@ const constructWindow = async () => {
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			height: 27,
-			color: '#141515',
+			color: backgroundFromTheme(
+				settings.get('theme') as string,
+				nativeTheme.shouldUseDarkColors
+			),
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
