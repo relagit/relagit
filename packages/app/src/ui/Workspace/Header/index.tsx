@@ -129,7 +129,7 @@ export default () => {
 		const behind = repository()?.behind || 0;
 
 		if (ahead === 0 && behind === 0) {
-			const current = branches()?.find((b) => b.name === repository()?.branch);
+			const current = branches()?.find((b) => b.gitName === repository()?.branch);
 
 			if (!current) return setStatus(null);
 
