@@ -43,6 +43,9 @@ export const Native = {
 		BRANCHES: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BRANCHES, fn);
 		},
+		INFORMATION: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_INFORMATION, fn);
+		},
 		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BLAME, fn);
 		},

@@ -15,13 +15,30 @@ const ModalStore = new (class ModalStore extends GenericStore {
 		return this.#record;
 	}
 
+	isOpen(type: string) {
+		return this.modals.some((f) => f.type === type);
+	}
+
 	addModal(modal: { type: string; element: JSX.Element }) {
 		this.#record.push(modal);
 		this.emit();
 	}
 
-	removeModal(modal: { type: string; element: JSX.Element }) {
-		this.#record = this.modals.filter((f) => f !== modal);
+	removeModal(
+		type:
+			| string
+			| {
+					type: string;
+					element: JSX.Element;
+			  }
+	) {
+		this.#record = this.modals.filter((f) => {
+			if (typeof type === 'string') {
+				return f.type !== type;
+			} else {
+				return f.type !== type?.type && f.element !== type?.element;
+			}
+		});
 		this.emit();
 	}
 

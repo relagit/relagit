@@ -218,6 +218,34 @@ export default {
 		confirm: 'Confirm',
 		cancel: 'Cancel',
 		close: 'Close',
+		information: {
+			metadata: 'Metadata',
+			graph: 'Commit Graph',
+			commitsMonth: 'Commits per Month',
+			commitsInMonth: '{{count}} commits in {{month}}',
+			gatheringInformation: 'Gathering Information to display...',
+			items: {
+				unknown: 'Unknown',
+				diskPath: 'Path on Disk',
+				diskSize: 'Disk Size',
+				updated: 'Last Updated',
+				remote: 'Remote URL'
+			},
+			month: {
+				'0': 'January',
+				'1': 'February',
+				'2': 'March',
+				'3': 'April',
+				'4': 'May',
+				'5': 'June',
+				'6': 'July',
+				'7': 'August',
+				'8': 'September',
+				'9': 'October',
+				'10': 'November',
+				'11': 'December'
+			}
+		},
 		repository: {
 			cancel: 'Cancel',
 			add: 'Add',
