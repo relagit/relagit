@@ -1,4 +1,4 @@
-import { Accessor, For, Setter, Show } from 'solid-js';
+import { Accessor, For, Setter, Show, createRoot } from 'solid-js';
 
 import { openInEditor } from '@app/modules/code';
 import { t } from '@app/modules/i18n';
@@ -62,7 +62,9 @@ export default (props: HeaderDrawerProps) => {
 										onClick: () => {
 											ModalStore.addModal({
 												type: 'add-repository',
-												element: <RepositoryModal tab="add" />
+												element: createRoot(() => (
+													<RepositoryModal tab="add" />
+												))
 											});
 										}
 									},
@@ -72,7 +74,9 @@ export default (props: HeaderDrawerProps) => {
 										onClick: () => {
 											ModalStore.addModal({
 												type: 'create-repository',
-												element: <RepositoryModal tab="create" />
+												element: createRoot(() => (
+													<RepositoryModal tab="create" />
+												))
 											});
 										}
 									},
@@ -82,7 +86,7 @@ export default (props: HeaderDrawerProps) => {
 										onClick: () => {
 											ModalStore.addModal({
 												type: 'github-repository',
-												element: <GithubModal />
+												element: createRoot(GithubModal)
 											});
 										}
 									}
