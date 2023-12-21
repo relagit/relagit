@@ -6,6 +6,9 @@ export interface LogCommit {
 	hash: string;
 	tag?: string;
 	refs: string;
+	from?: string;
+	to?: string;
+	branch?: string;
 	author: string;
 	date: string;
 	message: string;
@@ -13,6 +16,31 @@ export interface LogCommit {
 	insertions: number;
 	deletions: number;
 }
+
+const getTreeDetails = (refs: string) => {
+	if (refs.includes('->')) {
+		const [from, to] = refs.split(', ')[0].split('->');
+
+		return {
+			from: from.trim(),
+			to: to.trim()
+		};
+	}
+
+	if (refs.startsWith('tag: ')) {
+		return {
+			tag: refs.replace(/^tag: /, '').trim()
+		};
+	}
+
+	if (refs.includes(', ')) {
+		const [_, branch] = refs.split(', ');
+
+		return {
+			branch: (branch || _).trim()
+		};
+	}
+};
 
 export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 	if (!repository) return [];
@@ -26,19 +54,15 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		const [hash, author, date, message, refs] = commit.split('\n');
 
-		let tag: string | undefined;
-
-		if (refs.startsWith('tag: ')) {
-			tag = refs.replace(/^tag: /, '');
-		}
+		const treeDetails = getTreeDetails(refs);
 
 		const changesLine = commit.split('\n')[commit.split('\n').length - 2].split(',');
 
 		if (!changesLine[0].includes('file')) {
 			return {
+				...treeDetails,
 				hash,
 				author,
-				tag,
 				date,
 				message,
 				refs,
@@ -68,11 +92,11 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 		}
 
 		return {
+			...treeDetails,
 			hash,
 			author,
 			date,
 			refs,
-			tag,
 			message,
 			files,
 			insertions,
