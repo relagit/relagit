@@ -8,7 +8,7 @@ import './index.scss';
 export type IconName = keyof typeof octicons;
 
 export const customIcons = {
-	cPull: Pull
+	'x-repo-pull': Pull
 };
 
 export interface IconProps {

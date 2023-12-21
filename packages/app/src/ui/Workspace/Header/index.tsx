@@ -200,7 +200,7 @@ export default () => {
 						case 'ahead':
 							return 'repo-push';
 						case 'behind':
-							return 'cPull';
+							return 'x-repo-pull';
 						case 'publish':
 							return 'repo-push';
 						case 'diverged':
