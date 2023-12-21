@@ -5,6 +5,7 @@ import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
 import OnboardingStore from '@app/stores/onboarding';
 import RepositoryStore from '@app/stores/repository';
+import SettingsStore from '@app/stores/settings';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
@@ -112,6 +113,10 @@ export default () => {
 		() => LocationStore.isRefetchingSelectedRepository
 	);
 
+	const iconVariant = createStoreListener([SettingsStore], () => {
+		return SettingsStore.getSetting('thinIcons') ? 24 : 16;
+	});
+
 	let branchesRef: Accessor<HTMLElement>;
 
 	window.Native.listeners.BRANCHES(() => {
@@ -187,6 +192,7 @@ export default () => {
 				detail={renderDate(repository()?.lastFetched)()}
 				label={t('git.sync')}
 				icon="sync"
+				iconVariant={iconVariant()}
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}
 				onClick={() => {
@@ -209,6 +215,7 @@ export default () => {
 							return 'repo';
 					}
 				})()}
+				iconVariant={iconVariant()}
 				label={(() => {
 					switch (status()) {
 						case 'ahead':
@@ -366,6 +373,7 @@ export default () => {
 				>
 					<PanelButton
 						icon="file-directory"
+						iconVariant={iconVariant()}
 						id="workspace-pop-stash"
 						onClick={async () => {
 							if (!repository()) return;
@@ -589,6 +597,7 @@ export default () => {
 							disabled={!repository() || branches() === null}
 							ref={p.ref}
 							icon="git-branch"
+							iconVariant={iconVariant()}
 							name="Switch branch"
 							id="workspace-branch"
 							className={p.open() ? 'active' : ''}
@@ -601,6 +610,7 @@ export default () => {
 			</Popout>
 			<PanelButton
 				icon="people"
+				iconVariant={iconVariant()}
 				name="Toggle blame view"
 				id="workspace-blame"
 				className={blameOpen() ? 'active' : ''}
@@ -608,7 +618,6 @@ export default () => {
 					LocationStore.setBlameOpen(!blameOpen());
 				}}
 			/>
-
 			<Popout
 				position="bottom"
 				align="end"
@@ -637,6 +646,7 @@ export default () => {
 					<PanelButton
 						ref={p.ref}
 						icon="history"
+						iconVariant={iconVariant()}
 						name="Toggle history"
 						id="workspace-history"
 						className={historyOpen() ? 'active' : ''}
