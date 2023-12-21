@@ -155,7 +155,6 @@
 		gap: 0;
 
 		&__item {
-			@include mixins.focusable;
 			background: none;
 			display: flex;
 			padding: 8px 16px;
@@ -167,6 +166,14 @@
 			min-width: 250px;
 			width: 100%;
 			gap: 8px;
+
+			&:focus {
+				outline: none;
+				box-shadow: none;
+				border: 2px solid var(--color-blue-500);
+				padding: 6px 14px;
+				padding-top: 7px;
+			}
 
 			&__name {
 				overflow: hidden;
