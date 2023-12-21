@@ -303,6 +303,11 @@ export default () => {
 													onClick={() => {
 														setOpened(repo);
 													}}
+													onKeyDown={(e) => {
+														if (e.key === 'Enter') {
+															setOpened(repo);
+														}
+													}}
 													class="github-modal__list__item"
 												>
 													<h3 class="github-modal__list__item__name">
