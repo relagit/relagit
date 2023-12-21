@@ -162,8 +162,11 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image removed"
 									src={URIs()[0]}
 								/>
-								{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight} |{' '}
-								{nearestByteFigure(size()[0])}
+								<div class="image-view__images__image__details">
+									{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight}
+									<div class="image-view__images__image__details__separator" />
+									{nearestByteFigure(size()[0])}
+								</div>
 							</div>
 						</Show>
 					</Show>
@@ -178,8 +181,11 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image added"
 									src={URIs()[1]}
 								/>
-								{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight} |{' '}
-								{nearestByteFigure(size()[1])}
+								<div class="image-view__images__image__details">
+									{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight}
+									<div class="image-view__images__image__details__separator" />
+									{nearestByteFigure(size()[1])}
+								</div>
 							</div>
 						</Show>
 					</Show>

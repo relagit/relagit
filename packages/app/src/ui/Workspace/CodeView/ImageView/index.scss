@@ -63,6 +63,21 @@
 					border-color: var(--color-red-500);
 				}
 			}
+
+			&__details {
+				color: var(--color-secondary);
+				display: flex;
+				gap: 8px;
+				align-items: center;
+
+				&__separator {
+					width: 4px;
+					height: 4px;
+					background: var(--color-secondary);
+					border-radius: 50%;
+					opacity: 0.8;
+				}
+			}
 		}
 	}
 }
