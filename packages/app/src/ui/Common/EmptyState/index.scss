@@ -16,15 +16,15 @@
 		max-width: 400px;
 		margin-bottom: 20px;
 
-		@media screen and (max-width: 1224px) {
+		@media screen and (width <= 1224px) {
 			max-width: 300px;
 		}
 
-		@media screen and (max-width: 1024px) {
+		@media screen and (width <= 1024px) {
 			max-width: 250px;
 		}
 
-		@media screen and (max-width: 768px) {
+		@media screen and (width <= 768px) {
 			max-width: 150px;
 		}
 	}

@@ -2,6 +2,7 @@
 	0% {
 		background-position-x: -200px;
 	}
+
 	100% {
 		background-position-x: 200px;
 	}
@@ -79,10 +80,6 @@
 			z-index: 1;
 		}
 
-		svg {
-			z-index: 1;
-		}
-
 		&__loading {
 			height: 100%;
 			width: 100%;
@@ -92,12 +89,7 @@
 			right: 0;
 			z-index: 0;
 			background-color: #ffffff05;
-			background-image: linear-gradient(
-				to right,
-				#ffffff00 10%,
-				var(--bg-hover) 50%,
-				#ffffff00 80%
-			);
+			background-image: linear-gradient(to right, #fff0 10%, var(--bg-hover) 50%, #fff0 80%);
 			background-repeat: no-repeat;
 			animation: loading 700ms linear infinite;
 		}
@@ -129,6 +121,7 @@
 		}
 
 		svg {
+			z-index: 1;
 			width: 24px;
 			height: 24px;
 			flex-shrink: 0;
@@ -145,7 +138,7 @@
 	&__label {
 		color: var(--color-secondary);
 		font-size: 0.85rem;
-		padding: 16px 16px 8px 16px;
+		padding: 16px 16px 8px;
 		font-weight: 600;
 	}
 
@@ -239,7 +232,7 @@
 	}
 
 	&__new {
-		padding: 8px 16px 12px 16px;
+		padding: 8px 16px 12px;
 		color: var(--color-blue-500);
 		font-size: 0.85rem;
 		display: flex;

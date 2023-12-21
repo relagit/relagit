@@ -1,23 +1,21 @@
 @use 'illyrica/primitives' as illyrica;
 @use 'illyrica/mixins' as mixins;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono';
 
 @function opacify($amount, $color) {
-	@return rgba(red($color), green($color), blue($color), $amount);
+	@return rgba(color.red($color), color.green($color), color.blue($color), $amount);
 }
 
 @function greyscale($color) {
-	$grey: calc((red($color) + green($color) + blue($color)) / 3);
+	$grey: calc((color.red($color) + color.green($color) + color.blue($color)) / 3);
 
 	@return rgba($grey, $grey, $grey, alpha($color));
 }
 
-@mixin lightTheme {
+@mixin light-theme {
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
-
 	--color-contrast: var(--base-black);
 	--color-primary: var(--base-dark-grey);
 	--color-secondary: var(--base-grey);
@@ -26,12 +24,10 @@
 	--color-error: var(--color-red-500);
 	--color-success: var(--color-green-500);
 	--color-warning: var(--color-yellow-500);
-
 	--status-added: var(--color-green-500);
 	--status-modified: var(--color-yellow-500);
 	--status-deleted: var(--color-red-500);
 	--status-untracked: var(--color-blue-500);
-
 	--bg-primary: var(--material-primary);
 	--bg-secondary: var(--material-secondary);
 	--bg-tertiary: var(--material-tertiary);
@@ -42,29 +38,26 @@
 	--bg-floating: var(--bg-secondary);
 	--bg-tooltip: var(--base-darker-grey);
 	--bg-brand: var(--color-blue-500);
-	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
-	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
-	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
-	--bg-error: rgba(227, 83, 83, 0.05);
-	--bg-error-solid: rgba(227, 83, 83, 0.2);
-	--bg-success: rgba(82, 228, 82, 0.05);
-	--bg-success-solid: rgba(82, 228, 82, 0.2);
-	--bg-warning: rgba(236, 197, 118, 0.05);
-	--bg-warning-solid: rgba(236, 197, 118, 0.2);
-
+	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -90%))};
+	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-error: rgb(227 83 83 / 5%);
+	--bg-error-solid: rgb(227 83 83 / 20%);
+	--bg-success: rgb(82 228 82 / 5%);
+	--bg-success-solid: rgb(82 228 82 / 20%);
+	--bg-warning: rgb(236 197 118 / 5%);
+	--bg-warning-solid: rgb(236 197 118 / 20%);
 	--bg-diff-add: var(--bg-success);
 	--bg-diff-add-solid: var(--bg-success-solid);
 	--bg-diff-del: var(--bg-error);
 	--bg-diff-del-solid: var(--bg-error-solid);
-
 	--separator-primary: var(--base-light-grey);
 	--separator-secondary: var(--base-lighter-grey);
 }
 
-@mixin darkTheme {
+@mixin dark-theme {
 	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
-
 	--color-contrast: var(--base-white);
 	--color-primary: var(--dark-base-dark-grey);
 	--color-secondary: var(--dark-base-grey);
@@ -73,12 +66,10 @@
 	--color-error: var(--color-red-500);
 	--color-success: var(--color-green-500);
 	--color-warning: var(--color-yellow-500);
-
 	--status-added: var(--color-green-800);
 	--status-modified: var(--color-yellow-800);
 	--status-deleted: var(--color-red-800);
 	--status-untracked: var(--color-blue-800);
-
 	--bg-primary: var(--dark-material-primary);
 	--bg-secondary: var(--dark-material-secondary);
 	--bg-tertiary: var(--dark-material-tertiary);
@@ -89,21 +80,19 @@
 	--bg-floating: var(--bg-secondary);
 	--bg-tooltip: var(--dark-base-darker-grey);
 	--bg-brand: var(--color-blue-500);
-	--bg-hover: #{greyscale(opacify(0.1, illyrica.$color-blue-500))};
-	--bg-active: #{opacify(0.3, illyrica.$color-blue-500)};
-	--bg-active-unfocused: #{greyscale(opacify(0.3, illyrica.$color-blue-500))};
-	--bg-error: rgba(227, 83, 83, 0.05);
-	--bg-error-solid: rgba(227, 83, 83, 0.2);
-	--bg-success: rgba(82, 228, 82, 0.05);
-	--bg-success-solid: rgba(82, 228, 82, 0.2);
-	--bg-warning: rgba(236, 197, 118, 0.05);
-	--bg-warning-solid: rgba(236, 197, 118, 0.2);
-
+	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -90%))};
+	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-error: rgb(227 83 83 / 5%);
+	--bg-error-solid: rgb(227 83 83 / 20%);
+	--bg-success: rgb(82 228 82 / 5%);
+	--bg-success-solid: rgb(82 228 82 / 20%);
+	--bg-warning: rgb(236 197 118 / 5%);
+	--bg-warning-solid: rgb(236 197 118 / 20%);
 	--bg-diff-add: var(--bg-success);
 	--bg-diff-add-solid: var(--bg-success-solid);
 	--bg-diff-del: var(--bg-error);
 	--bg-diff-del-solid: var(--bg-error-solid);
-
 	--separator-primary: var(--dark-base-light-grey);
 	--separator-secondary: var(--dark-base-lighter-grey);
 }
@@ -116,19 +105,21 @@
 }
 
 html {
+	/* stylelint-disable-next-line */
 	font-size: 13px; // 14px is the default font size for macOS
+	overflow: hidden;
 }
 
 .theme-dark,
 .theme-dark ::after,
 .theme-dark ::before {
-	@include darkTheme;
+	@include dark-theme;
 }
 
 .theme-light,
 .theme-light ::after,
 .theme-light ::before {
-	@include lightTheme;
+	@include light-theme;
 }
 
 .unfocused,
@@ -141,7 +132,7 @@ html {
 	.theme-system,
 	.theme-system ::after,
 	.theme-system ::before {
-		@include darkTheme;
+		@include dark-theme;
 	}
 }
 
@@ -149,12 +140,8 @@ html {
 	.theme-system,
 	.theme-system ::after,
 	.theme-system ::before {
-		@include lightTheme;
+		@include light-theme;
 	}
-}
-
-html {
-	overflow: hidden;
 }
 
 button,
@@ -191,14 +178,12 @@ textarea {
 	background: var(--bg-primary);
 	opacity: 0.5;
 	border-bottom: 1px solid var(--separator-primary);
-
 	-webkit-app-region: drag;
 }
 
 .scroller {
 	overflow: auto;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden auto;
 	scrollbar-width: thin;
 	scrollbar-color: var(--bg-secondary) var(--bg-floating);
 

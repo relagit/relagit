@@ -1,0 +1,11 @@
+{
+	"extends": "stylelint-config-standard-scss",
+	"rules": {
+		"declaration-property-unit-allowed-list": {
+			"/^font-size/": ["rem"]
+		},
+		"selector-class-pattern": null,
+		"value-keyword-case": null,
+		"no-descending-specificity": null
+	}
+}

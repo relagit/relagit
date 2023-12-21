@@ -50,3 +50,4 @@ jobs:
 
             - run: pnpm install --frozen-lockfile
             - run: pnpm lint
+            - run: pnpm lint:styles

@@ -2,9 +2,11 @@
 	0% {
 		visibility: visible;
 	}
+
 	99% {
 		visibility: visible;
 	}
+
 	100% {
 		visibility: hidden;
 	}
@@ -30,15 +32,14 @@
 		transform: translateX(0);
 		visibility: visible;
 
-		@media screen and (max-width: 875px) {
+		@media screen and (width <= 875px) {
 			background-color: var(--bg-quaternary) !important;
 		}
 	}
 
 	&__items {
 		height: calc(100% - 336px);
-		overflow-y: auto;
-		overflow-x: hidden;
+		overflow: hidden auto;
 		padding: 0;
 		margin: 0;
 
@@ -64,8 +65,7 @@
 
 	&__commits {
 		height: calc(100% - 72px);
-		overflow-y: auto;
-		overflow-x: hidden;
+		overflow: hidden auto;
 		padding: 0;
 		margin: 0;
 

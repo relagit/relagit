@@ -183,13 +183,12 @@
 		display: flex;
 		flex-direction: row;
 		gap: 10px;
-		background-color: var(--bg-secondary);
 		align-items: center;
 		font-size: 1rem;
 		font-weight: 400;
 		padding: 12px 32px;
 		color: var(--radio-color);
-		background: var(--radio-bg);
+		background-color: var(--radio-bg);
 		border: 1px solid var(--radio-stroke);
 		border-bottom-width: 0;
 
@@ -313,7 +312,6 @@
 			height: 22px;
 			border-radius: 20px;
 			transition: transform 0.1s ease-in;
-
 			color: var(--switch-color);
 			background: var(--switch-bg);
 			border: 1px solid var(--switch-stroke);
