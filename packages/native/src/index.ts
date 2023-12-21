@@ -8,7 +8,7 @@ import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
 import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
-import { shellNeedsPatching, updateEnvironmentForProcess } from './modules/shell';
+import { updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',
@@ -17,10 +17,6 @@ app.setAboutPanelOptions({
 	copyright: 'Copyright © 2023 TheCommieAxolotl & RelaGit contributors',
 	website: 'https://rela.dev'
 });
-
-if (shellNeedsPatching(process)) {
-	updateEnvironmentForProcess();
-}
 
 const constructWindow = async () => {
 	let settings: Map<string, unknown>;
@@ -113,10 +109,6 @@ const constructWindow = async () => {
 		settings.set('window.height', win.getSize()[1]);
 
 		setSettings(settings);
-	});
-
-	win.once('ready-to-show', () => {
-		win.show();
 	});
 
 	win.on('focus', () => {
@@ -285,6 +277,7 @@ app.once('ready', async () => {
 	const window = await constructWindow();
 
 	initIPC(window);
+	if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 	app.on('activate', async () => {
 		if (BrowserWindow.getAllWindows().length === 0) {
