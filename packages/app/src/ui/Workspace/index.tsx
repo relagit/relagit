@@ -11,6 +11,7 @@ import RepositoryStore from '@stores/repository';
 
 import Header from '@ui/Workspace/Header';
 
+import Icon from '../Common/Icon';
 import Menu from '../Menu';
 import CodeView from './CodeView';
 
@@ -37,7 +38,11 @@ export default (props: WorkspaceProps) => {
 			path: file && repo ? path.join(repo.path, file.path, file.name) : undefined
 		};
 	});
-	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFiles);
+	const commitFiles = createStoreListener(
+		[LocationStore],
+		() => LocationStore.selectedCommitFiles
+	);
+	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const selectedCommitFile = createStoreListener(
 		[LocationStore],
@@ -47,10 +52,50 @@ export default (props: WorkspaceProps) => {
 	return (
 		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
 			<Header />
+			<Show when={historyOpen() && commit()}>
+				<div class="workspace__commit">
+					<div class="workspace__commit__message">{commit().message}</div>
+					<div class="workspace__commit__details">
+						<div class="workspace__commit__details__author">{commit().author}</div>
+						<div class="workspace__commit__details__hash">
+							{commit().hash.slice(0, 7)}
+						</div>
+						<div class="workspace__commit__details__diff">
+							<Show when={commit().tag}>
+								<div class="workspace__commit__details__diff__tag">
+									<Icon name="tag" />
+									{commit().tag}
+								</div>
+							</Show>
+							<Show when={commit().files}>
+								<div class="workspace__commit__details__diff__files">
+									{t(
+										'git.files',
+										{
+											count: commit().files
+										},
+										commit().files
+									)}
+								</div>
+							</Show>
+							<Show when={commit().insertions}>
+								<div class="workspace__commit__details__diff__insertions">
+									+{commit().insertions}
+								</div>
+							</Show>
+							<Show when={commit().deletions}>
+								<div class="workspace__commit__details__diff__deletions">
+									-{commit().deletions}
+								</div>
+							</Show>
+						</div>
+					</div>
+				</div>
+			</Show>
 			<div class="workspace__container">
-				<Show when={historyOpen() && commit()}>
+				<Show when={historyOpen() && commitFiles()}>
 					<div class="workspace__container__files">
-						<For each={commit()?.files}>
+						<For each={commitFiles()?.files}>
 							{(commitFile) => (
 								<Menu
 									items={[

@@ -16,6 +16,75 @@
 		}
 	}
 
+	&__commit {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: 8px 10px;
+		gap: 8px;
+		font-size: 1rem;
+		user-select: none;
+		border-bottom: 1px solid var(--separator-secondary);
+
+		&__message {
+			color: var(--color-primary);
+			font-size: 1.25rem;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 70%;
+		}
+
+		&__details {
+			display: flex;
+			gap: 8px;
+			font-size: 0.85rem;
+			align-items: center;
+
+			&__hash {
+				color: var(--color-secondary);
+				font-weight: 400;
+				font-family: var(--font-mono);
+			}
+
+			&__diff {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+
+				&__tag {
+					background-color: var(--bg-secondary);
+					border-radius: 2px;
+					padding: 2px 4px;
+					font-size: 0.8rem;
+					display: flex;
+					align-items: center;
+					gap: 4px;
+
+					svg {
+						width: 8px;
+						height: 8px;
+					}
+				}
+
+				&__files {
+					font-family: var(--font-primary);
+					color: var(--color-secondary);
+				}
+
+				&__insertions {
+					color: var(--color-green-500);
+					font-family: var(--font-mono);
+				}
+
+				&__deletions {
+					color: var(--color-red-500);
+					font-family: var(--font-mono);
+				}
+			}
+		}
+	}
+
 	&__container {
 		display: flex;
 		height: 100%;
