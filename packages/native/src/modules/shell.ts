@@ -13,6 +13,10 @@ const ExcludedEnvironmentVars = new Set(['LOCAL_GIT_DIRECTORY']);
 
 // https://github.com/desktop/desktop/blob/development/app/src/lib/shell.ts#L37
 export async function updateEnvironmentForProcess(): Promise<void> {
+	if (process.env.PWD) {
+		return;
+	}
+
 	if (process.platform !== 'darwin') {
 		return;
 	}
