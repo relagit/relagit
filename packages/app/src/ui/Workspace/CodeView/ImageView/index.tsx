@@ -115,13 +115,11 @@ export default (props: ImageViewProps) => {
 						sizeOut[1] = remote.length;
 					}
 				} else {
-					const binary = fs.readFileSync(props.path, 'binary');
-
-					const base64 = btoa(binary);
+					const base64 = fs.readFileSync(props.path, 'base64');
 
 					out[1] = `data:${mimeFromPath(props.path)};base64,${base64}`;
 
-					sizeOut[1] = binary.length;
+					sizeOut[1] = fs.statSync(props.path).size;
 				}
 			} catch (e) {
 				error(e);
