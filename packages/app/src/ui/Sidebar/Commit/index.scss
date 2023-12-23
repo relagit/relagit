@@ -9,7 +9,12 @@
 	user-select: none;
 	gap: 8px;
 
-	@include mixins.focusable;
+	&:focus {
+		outline: none;
+		box-shadow: none;
+		border: 2px solid var(--color-blue-500);
+		padding: 6px 10px 7px 10px;
+	}
 
 	&:hover {
 		background-color: var(--bg-hover);
