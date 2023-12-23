@@ -1,5 +1,7 @@
 @use 'illyrica/primitives' as illyrica;
 @use 'illyrica/mixins' as mixins;
+@use 'sass:color' as color;
+
 @import 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap';
 @import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono';
 
@@ -38,9 +40,9 @@
 	--bg-floating: var(--bg-secondary);
 	--bg-tooltip: var(--base-darker-grey);
 	--bg-brand: var(--color-blue-500);
-	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -90%))};
-	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
-	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.9))};
+	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
+	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
 	--bg-error: rgb(227 83 83 / 5%);
 	--bg-error-solid: rgb(227 83 83 / 20%);
 	--bg-success: rgb(82 228 82 / 5%);
@@ -80,9 +82,9 @@
 	--bg-floating: var(--bg-secondary);
 	--bg-tooltip: var(--dark-base-darker-grey);
 	--bg-brand: var(--color-blue-500);
-	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -90%))};
-	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
-	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -70%))};
+	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.9))};
+	--bg-active: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
+	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
 	--bg-error: rgb(227 83 83 / 5%);
 	--bg-error-solid: rgb(227 83 83 / 20%);
 	--bg-success: rgb(82 228 82 / 5%);
