@@ -1,6 +1,6 @@
 .tooltip {
 	position: absolute;
-	transform-origin: left top;
+	transform-origin: center top;
 	transform: translate(-50%, calc(-100% - var(--w-h)));
 	width: fit-content;
 	border-radius: 4px;
