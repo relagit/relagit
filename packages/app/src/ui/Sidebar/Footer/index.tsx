@@ -121,6 +121,18 @@ export default () => {
 						description: draft()?.description || ''
 					});
 				}}
+				onKeyDown={(e) => {
+					if (e.shiftKey && e.key === 'Enter') {
+						e.preventDefault();
+
+						if (draft()?.message.length) return;
+
+						DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+							message: commitMessage()?.message || '',
+							description: draft()?.description || ''
+						});
+					}
+				}}
 			/>
 			<TextArea
 				label={t('sidebar.footer.description')}
