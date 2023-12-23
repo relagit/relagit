@@ -420,7 +420,7 @@ export default () => {
 				position="bottom"
 				body={() => (
 					<div class="branches-picker">
-						<div class="branches-picker__label">
+						<div class="branches-picker__label" tabIndex={0}>
 							{t('git.branches', null, branches()?.length)}
 						</div>
 						<div class="branches-picker__list">

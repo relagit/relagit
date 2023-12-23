@@ -188,7 +188,9 @@ export default () => {
 
 	const [open, setOpen] = createSignal(LayerStore.visible('settings'));
 
-	const { activate, deactivate } = useFocusTrap(ref);
+	const { activate, deactivate } = useFocusTrap(ref, {
+		initialFocus: false
+	});
 
 	createStoreListener([LayerStore], () => {
 		setOpen(LayerStore.visible('settings'));

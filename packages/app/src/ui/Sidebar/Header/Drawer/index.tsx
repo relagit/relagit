@@ -49,7 +49,7 @@ export default (props: HeaderDrawerProps) => {
 			}}
 		>
 			<div class="sidebar__drawer__body">
-				<div class="sidebar__drawer__body__header">
+				<div class="sidebar__drawer__body__header" tabIndex={0}>
 					{t('sidebar.drawer.title')}
 					<Tooltip text={t('sidebar.drawer.contextMenu.addRepository')}>
 						{(p) => (

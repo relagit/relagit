@@ -1,4 +1,4 @@
-import { useFocusTrap } from '@solidjs-use/integrations';
+import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
@@ -30,7 +30,9 @@ export default (props: Menu) => {
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
 
-	const { activate, deactivate } = useFocusTrap(menu);
+	const { activate, deactivate } = useFocusTrap(menu, {
+		initialFocus: false
+	});
 
 	const hide = () => {
 		setOpen(false);
