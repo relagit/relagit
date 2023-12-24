@@ -49,6 +49,14 @@
 		background-color: var(--bg-primary);
 		color: var(--color-primary);
 
+		&__confetti {
+			position: absolute;
+			top: -10%;
+			left: 50%;
+			pointer-events: none;
+			z-index: 99;
+		}
+
 		&.small {
 			max-width: 500px;
 			min-height: 300px;

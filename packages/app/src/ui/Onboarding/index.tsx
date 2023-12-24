@@ -20,7 +20,7 @@ export const finishTour = () => {
 	ModalStore.addModal({
 		type: 'tour',
 		element: (
-			<Modal size="small" dismissable transitions={Layer.Transitions.Fade}>
+			<Modal size="small" dismissable transitions={Layer.Transitions.Fade} confetti>
 				{(props) => {
 					return (
 						<>

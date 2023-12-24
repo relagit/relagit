@@ -22,6 +22,9 @@ devDependencies:
   '@babel/preset-typescript':
     specifier: ^7.23.0
     version: 7.23.3(@babel/core@7.23.3)
+  '@neoconfetti/solid':
+    specifier: ^0.1.0
+    version: 0.1.0(solid-js@1.8.5)
   '@primer/octicons':
     specifier: ^18.3.0
     version: 18.3.0
@@ -1829,6 +1832,14 @@ packages:
       tmp-promise: 3.0.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@neoconfetti/solid@0.1.0(solid-js@1.8.5):
+    resolution: {integrity: sha512-CaEGO/J7fLv5Jw64O4Dyh3ldve1gB0weeQQuhZYTJNMPDoDxoMBl/YGazE3w8+oymmJJsf80Zrw25KnaDz7WFg==}
+    peerDependencies:
+      solid-js: ^1.0.0
+    dependencies:
+      solid-js: 1.8.5
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:

@@ -1,3 +1,4 @@
+import { createConfetti } from '@neoconfetti/solid';
 import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { For, JSX, Show, createEffect, createSignal, onMount } from 'solid-js';
 import { Transition } from 'solid-transition-group';
@@ -14,6 +15,9 @@ import Layer from '@ui/Layer';
 
 import './index.scss';
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+const { confetti } = createConfetti();
+
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
@@ -26,6 +30,7 @@ interface ModalProps {
 	dismissable?: boolean;
 	children: (props: { close: () => void }) => JSX.Element | JSX.Element[];
 	size: 'small' | 'medium' | 'large' | 'x-large';
+	confetti?: boolean;
 }
 
 let opened = 1;
@@ -83,6 +88,25 @@ const Modal = (props: ModalProps) => {
 							[props.size || '']: true
 						}}
 					>
+						<Show when={props.confetti}>
+							<div
+								class="modal__confetti"
+								use:confetti={{
+									particleCount: 300,
+									particleSize: 8,
+									colors: [
+										'var(--color-blue-500)',
+										'var(--color-green-500)',
+										'var(--color-yellow-500)',
+										'var(--color-red-500)',
+										'var(--color-purple-500)',
+										'var(--color-pink-500)',
+										'var(--color-orange-500)',
+										'var(--color-cyan-500)'
+									]
+								}}
+							></div>
+						</Show>
 						{<props.children close={close}></props.children>}
 					</dialog>
 				</Show>
