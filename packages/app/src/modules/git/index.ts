@@ -11,6 +11,7 @@ export { Remote } from './remote';
 export { Branch } from './branch';
 export { Clone } from './clone';
 export { Blame } from './blame';
+export { Reset } from './reset';
 export { Push } from './push';
 export { Diff } from './diff';
 export { Init } from './init';
