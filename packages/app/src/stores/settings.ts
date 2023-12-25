@@ -1,6 +1,8 @@
 import { GenericStore } from '.';
 
-import { ValidLocale } from '@app/modules/i18n';
+import { CommitStyle } from '@app/modules/commits';
+import { ObjectToDotProp, ResolvePropDeep, ValidLocale } from '@app/modules/i18n';
+import { RecursivePartial } from '@app/shared';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
@@ -9,28 +11,38 @@ const os = window.Native.DANGEROUS__NODE__REQUIRE('os') as typeof import('os');
 const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
-export interface Settings {
-	commitStyles: {
-		[repo: string]: string;
+export type Settings = RecursivePartial<{
+	commit: {
+		styles: Record<string, CommitStyle>;
+		enforceStyle: boolean;
+		preferParens: boolean;
 	};
 	onboarding: {
 		dismissed: boolean;
 		step: number;
 	};
-	thinIcons: boolean;
-	enforceCommitMessageStyle: boolean;
-	preferParens: boolean;
-	theme: 'light' | 'dark' | 'system';
-	vibrancy: string | boolean;
-	expandedSettings: boolean;
-	fontFamily: string;
-	accentColor: string;
-	repositories: string[];
-	activeRepository: string;
+	ui: {
+		theme: 'light' | 'dark' | 'system';
+		vibrancy: string | boolean;
+		expandedSettings: boolean;
+		fontFamily: string;
+		accentColor: string;
+		thinIcons: boolean;
+		userThemes: string[];
+	};
 	locale: ValidLocale;
 	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl';
-	enabledThemes: string[];
-}
+	activeRepository: string;
+	repositories: string[];
+}>;
+
+// we need to add commit.styles because `ObjectToDotProp` will only include `commit.styles.${string}`
+export type SettingsKey =
+	| ObjectToDotProp<Settings>
+	| 'commit.styles'
+	| 'commit'
+	| 'ui'
+	| 'onboarding';
 
 const validatePath = () => {
 	const settingsPath = path.join(os.homedir(), '.relagit');
@@ -49,7 +61,7 @@ const validatePath = () => {
 };
 
 const SettingsStore = new (class SettingsStore extends GenericStore {
-	#record: Partial<Settings> = {};
+	#record: Settings = {};
 
 	constructor() {
 		super();
@@ -63,12 +75,47 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		return this.#record;
 	}
 
-	getSetting<T extends keyof Settings>(key: T): Settings[T] {
-		return this.#record[key] as Settings[T];
+	/*
+	
+export const t: <Trans extends LocaleKey>(
+	trans: Trans,
+	params?: Record<string, Stringifyable>,
+	plural?: number
+) => ResolvePropDeep<Locale, Trans> extends string
+	? ResolvePropDeep<Locale, Trans>
+	: ResolvePropDeep<Locale, Trans>[0] = useI18n();
+
+	*/
+
+	getSetting<T extends SettingsKey>(key: T): ResolvePropDeep<Settings, T> {
+		const parts = key.split('.');
+
+		let current: unknown = this.#record;
+
+		for (const part of parts) {
+			current = current[part];
+
+			if (!current) break;
+		}
+
+		return current as ResolvePropDeep<Settings, T>;
 	}
 
-	setSetting<T extends keyof Settings>(key: T, value: Settings[T]) {
-		this.#record[key] = value;
+	setSetting<T extends SettingsKey>(key: T, value: ResolvePropDeep<Settings, T>) {
+		const parts = key.split('.');
+
+		let current = this.#record;
+
+		for (const part of parts.slice(0, -1)) {
+			if (!current[part]) {
+				current[part] = {};
+			}
+
+			current = current[part] as Settings;
+		}
+
+		current[parts[parts.length - 1]] = value;
+
 		this.save();
 		this.emit();
 
@@ -88,7 +135,7 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 
 	load() {
 		if (fs.existsSync(__SETTINGS_PATH__)) {
-			let settings: Partial<Settings> = {};
+			let settings: Settings = {};
 
 			try {
 				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8'));

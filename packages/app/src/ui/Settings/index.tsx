@@ -3,6 +3,7 @@ import { Accessor, For, Show, createSignal, onCleanup, onMount } from 'solid-js'
 
 import { iconFromAction, workflows } from '@app/modules/actions';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
+import { CommitStyle } from '@app/modules/commits';
 import { t } from '@app/modules/i18n';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
@@ -247,12 +248,15 @@ export default () => {
 						}
 					]}
 					disabled={!LocationStore.selectedRepository}
-					value={settings()['commitStyles']?.[LocationStore.selectedRepository?.path]}
+					value={
+						settings().commit?.styles?.[LocationStore.selectedRepository?.path] ||
+						'none'
+					}
 					onChange={(value) => {
-						SettingsStore.setSetting('commitStyles', {
-							...settings()['commitStyles'],
-							[LocationStore.selectedRepository?.path]: value
-						});
+						SettingsStore.setSetting(
+							`commit.styles.${LocationStore.selectedRepository?.path}`,
+							value as CommitStyle
+						);
 					}}
 				/>
 			</div>
@@ -260,9 +264,9 @@ export default () => {
 				<Switch
 					label={t('settings.general.enforceCommitStyle.label')}
 					note={t('settings.general.enforceCommitStyle.description')}
-					value={() => settings()['enforceCommitMessageStyle']}
+					value={() => settings().commit?.enforceStyle}
 					onChange={(value) => {
-						SettingsStore.setSetting('enforceCommitMessageStyle', value);
+						SettingsStore.setSetting('commit.enforceStyle', value);
 					}}
 				/>
 			</div>
@@ -270,9 +274,9 @@ export default () => {
 				<Switch
 					label={t('settings.general.preferParens.label')}
 					note={t('settings.general.preferParens.description')}
-					value={() => settings()['preferParens']}
+					value={() => settings().commit?.preferParens}
 					onChange={(value) => {
-						SettingsStore.setSetting('preferParens', value);
+						SettingsStore.setSetting('commit.preferParens', value);
 					}}
 				/>
 			</div>
@@ -305,7 +309,7 @@ export default () => {
 							value: 'lat'
 						}
 					]}
-					value={settings()['locale']}
+					value={settings().locale}
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
 
@@ -337,7 +341,7 @@ export default () => {
 							value: 'subl'
 						}
 					]}
-					value={settings()['externalEditor'] || 'code'}
+					value={settings().externalEditor || 'code'}
 					onChange={(value) => {
 						SettingsStore.setSetting(
 							'externalEditor',
@@ -416,9 +420,9 @@ export default () => {
 					disabled={
 						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
 					}
-					value={() => !!settings()['vibrancy']}
+					value={() => !!settings().ui?.vibrancy}
 					onChange={(value) => {
-						SettingsStore.setSetting('vibrancy', value);
+						SettingsStore.setSetting('ui.vibrancy', value);
 
 						if (value) {
 							showReloadModal();
@@ -438,14 +442,14 @@ export default () => {
 									aria-label={t('settings.appearance.theme.choose', {
 										theme
 									})}
-									aria-selected={settings()['theme'] === theme}
-									classList={{ active: settings()['theme'] === theme }}
+									aria-selected={settings().ui?.theme === theme}
+									classList={{ active: settings().ui?.theme === theme }}
 									tabIndex={0}
 									onKeyDown={(e) => {
 										if (e.key === 'Enter') {
 											SettingsStore.setSetting(
-												'theme',
-												theme as Settings['theme']
+												'ui.theme',
+												theme as Settings['ui']['theme']
 											);
 										}
 									}}
@@ -453,11 +457,11 @@ export default () => {
 									<input
 										type="radio"
 										value={theme}
-										checked={settings()['theme'] === theme}
+										checked={settings().ui?.theme === theme}
 										onChange={() => {
 											SettingsStore.setSetting(
-												'theme',
-												theme as Settings['theme']
+												'ui.theme',
+												theme as Settings['ui']['theme']
 											);
 										}}
 									/>
@@ -508,9 +512,9 @@ export default () => {
 				<TextArea
 					label={t('settings.appearance.font.label')}
 					className="settings-layer__setting__textarea"
-					value={settings()['fontFamily'] || ''}
+					value={settings().ui?.fontFamily || ''}
 					onChange={(value) => {
-						SettingsStore.setSetting('fontFamily', value);
+						SettingsStore.setSetting('ui.fontFamily', value);
 					}}
 					placeholder={t('settings.appearance.font.placeholder')}
 				/>
@@ -519,9 +523,9 @@ export default () => {
 				<Switch
 					label={t('settings.appearance.thinIcons.label')}
 					note={t('settings.appearance.thinIcons.description')}
-					value={() => settings()['thinIcons']}
+					value={() => settings().ui?.thinIcons}
 					onChange={(value) => {
-						SettingsStore.setSetting('thinIcons', value);
+						SettingsStore.setSetting('ui.thinIcons', value);
 					}}
 				/>
 			</div>
@@ -543,7 +547,7 @@ export default () => {
 											.map((a) => a.name)
 											.join(', ')})`}
 										value={() =>
-											settings()['enabledThemes']?.['includes']?.(theme.id)
+											settings().ui?.userThemes?.includes?.(theme.id)
 										}
 										onChange={() => {
 											toggleTheme(theme.id);
