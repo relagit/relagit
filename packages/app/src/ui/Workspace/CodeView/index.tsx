@@ -29,7 +29,11 @@ const extname = (file: string) => {
 	return file?.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
 };
 
-const totalLines = (file: GitDiff['files'][number]) => {
+const totalLines = (file: string | GitDiff['files'][number]) => {
+	if (typeof file === 'string') {
+		return file.split('\n').length;
+	}
+
 	return file?.chunks?.reduce((acc, curr) => {
 		return acc + curr.changes.length;
 	}, 0);
@@ -136,11 +140,13 @@ export default (props: CodeViewProps) => {
 				!BINARY_EXTENSIONS.includes(extname(props.file || commit()?.filename)) &&
 				!IMAGE_EXTENSIONS.includes(extname(props.file || commit()?.filename))
 			) {
-				setContent(highlighter(contents, langFrom(props.file || '')));
-
 				if (_diff === DIFF_CODES.REMOVE_ALL) {
+					setContent(highlighter(contents, langFrom(props.file || '')));
+
 					setDiff(null);
 				} else if (_diff === DIFF_CODES.ADD_ALL) {
+					setContent(highlighter(contents, langFrom(props.file || '')));
+
 					setDiff(true);
 				} else {
 					const parsed = parseDiff(_diff);
@@ -148,11 +154,7 @@ export default (props: CodeViewProps) => {
 					setDiff(parsed);
 				}
 
-				if (!diff() || diff() === true) {
-					setShouldShow(true);
-				} else {
-					setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
-				}
+				setShouldShow(totalLines(content() || (diff() as GitDiff)?.files?.[0]) < 250);
 			} else {
 				setShouldShow(true);
 			}
