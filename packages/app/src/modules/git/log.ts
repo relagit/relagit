@@ -63,7 +63,6 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 				...treeDetails,
 				hash,
 				author,
-				tag,
 				date,
 				message,
 				refs,
