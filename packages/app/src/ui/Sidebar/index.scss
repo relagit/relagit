@@ -97,24 +97,44 @@
 
 .theme-dark.vibrancy .sidebar {
 	background-color: #1a1b1c4a;
+
+	&__header {
+		border-bottom: 1px solid rgba(208, 215, 222, 0.1);
+	}
 }
 
 .theme-light.vibrancy .sidebar {
 	background-color: #f6f8fad4;
+
+	&__header {
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	}
 }
 
 @media (prefers-color-scheme: dark) {
 	.theme-system.vibrancy .sidebar {
 		background-color: #1a1b1c4a;
+
+		&__header {
+			border-bottom: 1px solid rgba(208, 215, 222, 0.1);
+		}
 	}
 }
 
 @media (prefers-color-scheme: light) {
 	.theme-system.vibrancy .sidebar {
 		background-color: transparent;
+
+		&__header {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		}
 	}
 
 	.theme-light.vibrancy .sidebar {
 		background-color: transparent;
+
+		&__header {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		}
 	}
 }
