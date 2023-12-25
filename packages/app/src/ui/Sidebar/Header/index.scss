@@ -21,7 +21,8 @@
 
 	&__chevron {
 		font-size: 1.5rem;
-		color: var(--color-secondary);
+		color: var(--color-primary);
+		opacity: 0.6;
 		transition: transform 0.2s ease-in-out;
 	}
 
@@ -36,7 +37,8 @@
 		display: flex;
 		gap: 4px;
 		font-size: 0.85rem;
-		color: var(--color-secondary);
+		color: var(--color-primary);
+		opacity: 0.6;
 	}
 
 	&:hover {
