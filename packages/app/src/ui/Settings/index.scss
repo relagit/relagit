@@ -67,7 +67,7 @@
 		&__description {
 			font-size: 1rem;
 			font-weight: 400;
-			color: var(--color-label);
+			color: var(--color-secondary);
 			user-select: none;
 		}
 
@@ -136,7 +136,7 @@
 					}
 
 					&__description {
-						color: var(--color-label);
+						color: var(--color-secondary);
 						font-size: 1rem;
 						font-weight: 400;
 					}
@@ -298,7 +298,7 @@
 			.note {
 				font-size: 1rem;
 				font-weight: 400;
-				color: var(--color-label);
+				color: var(--color-secondary);
 			}
 		}
 
@@ -416,7 +416,7 @@
 			padding-inline: 8px;
 
 			svg {
-				color: var(--color-label);
+				color: var(--color-secondary);
 			}
 
 			.definition:focus {
