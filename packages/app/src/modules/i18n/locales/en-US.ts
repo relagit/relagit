@@ -217,7 +217,8 @@ export default {
 		commits: ['{{count}} commit', '{{count}} commits'],
 		stashedChanges: ['{{stashCount}} stash ({{count}})', '{{stashCount}} stashes ({{count}})'],
 		removeStash: 'Remove Stash',
-		files: ['{{count}} file', '{{count}} files']
+		files: ['{{count}} file', '{{count}} files'],
+		undo: 'Undo {{sha}}'
 	},
 	modal: {
 		closeModal: 'Close Modal',
