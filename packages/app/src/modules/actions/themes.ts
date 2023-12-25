@@ -65,7 +65,7 @@ export const loadThemes = async () => {
 };
 
 export const toggleTheme = (id: string) => {
-	const enabled = SettingsStore.getSetting('enabledThemes') || [];
+	const enabled = SettingsStore.getSetting('ui.userThemes') || [];
 
 	if (enabled.includes(id)) {
 		enabled.splice(enabled.indexOf(id), 1);
@@ -73,7 +73,7 @@ export const toggleTheme = (id: string) => {
 		enabled.push(id);
 	}
 
-	SettingsStore.setSetting('enabledThemes', enabled);
+	SettingsStore.setSetting('ui.userThemes', enabled);
 
 	enableThemes();
 };
@@ -82,7 +82,7 @@ const ENABLED = new Set<string>();
 
 const enableThemes = () => {
 	for (const theme of themes) {
-		if (!SettingsStore.getSetting('enabledThemes')?.includes(theme.id)) {
+		if (!SettingsStore.getSetting('ui.userThemes')?.includes(theme.id)) {
 			removeCSS(theme.id);
 
 			ENABLED.delete(theme.id);

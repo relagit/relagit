@@ -9,7 +9,7 @@ export type Locale = typeof import('./locales/en-US').default;
 export type LocaleKey = ObjectToDotProp<Locale>;
 
 // https://codeberg.org/Ven/vendicated.dev/src/branch/i18n/src/locales/index.ts#L24
-type ResolvePropDeep<T, P> = P extends ''
+export type ResolvePropDeep<T, P> = P extends ''
 	? T
 	: P extends `${infer Pre}.${infer Suf}`
 	  ? Pre extends keyof T
@@ -19,9 +19,9 @@ type ResolvePropDeep<T, P> = P extends ''
 	    ? T[P]
 	    : never;
 
-type ObjectToDotProp<T extends object> = ObjectToDotPropInternal<T>[keyof T];
+export type ObjectToDotProp<T extends object> = ObjectToDotPropInternal<T>[keyof T];
 
-type ObjectToDotPropInternal<T extends object> = {
+export type ObjectToDotPropInternal<T extends object> = {
 	[Key in keyof T]: Key extends string
 		? T[Key] extends Record<string, unknown>
 			? ObjectToDotProp<T[Key]> extends string
@@ -32,7 +32,7 @@ type ObjectToDotPropInternal<T extends object> = {
 		: never;
 };
 
-type Unstrict<T> = {
+export type Unstrict<T> = {
 	[K in keyof T]: T[K] extends Record<string, unknown>
 		? Unstrict<T[K]>
 		: T[K] extends string

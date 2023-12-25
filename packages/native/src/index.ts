@@ -19,19 +19,10 @@ app.setAboutPanelOptions({
 });
 
 const constructWindow = async () => {
-	let settings: Map<string, unknown>;
-
-	try {
-		settings = await getSettings();
-	} catch (e) {
-		settings = new Map();
-	}
+	const settings = await getSettings();
 
 	const isOnboarding = () => {
-		const onboarding = settings.get('onboarding') as {
-			dismissed?: boolean;
-			step?: number;
-		};
+		const onboarding = settings.onboarding;
 
 		if (!onboarding) return true;
 
@@ -49,13 +40,15 @@ const constructWindow = async () => {
 		| 'header'
 		| 'sheet'
 		| 'window'
-		| undefined = settings.get('vibrancy') ? 'sidebar' : undefined;
-	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
-		settings.get('vibrancy') ? 'mica' : undefined;
-	let transparent = settings.get('vibrancy') && process.platform === 'win32' ? true : undefined;
-	let backgroundColor = settings.get('vibrancy')
+		| undefined = settings.ui?.vibrancy ? 'sidebar' : undefined;
+	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined = settings
+		.ui?.vibrancy
+		? 'mica'
+		: undefined;
+	let transparent = settings.ui?.vibrancy && process.platform === 'win32' ? true : undefined;
+	let backgroundColor = settings.ui?.vibrancy
 		? '#00000000'
-		: backgroundFromTheme(settings.get('theme') as string, nativeTheme.shouldUseDarkColors);
+		: backgroundFromTheme(settings.ui?.theme, nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
@@ -71,10 +64,7 @@ const constructWindow = async () => {
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			height: 27,
-			color: backgroundFromTheme(
-				settings.get('theme') as string,
-				nativeTheme.shouldUseDarkColors
-			),
+			color: backgroundFromTheme(settings.ui?.theme, nativeTheme.shouldUseDarkColors),
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
@@ -82,12 +72,12 @@ const constructWindow = async () => {
 		backgroundMaterial,
 		transparent,
 		backgroundColor,
-		height: (settings.get('window.height') as number) || 600,
-		width: (settings.get('window.width') as number) || 1000,
+		height: settings.window?.height || 600,
+		width: settings.window?.width || 1000,
 		minWidth: 500,
 		minHeight: 500,
-		x: (settings.get('window.x') as number) || undefined,
-		y: (settings.get('window.y') as number) || undefined,
+		x: settings.window?.x || undefined,
+		y: settings.window?.y || undefined,
 		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
@@ -98,15 +88,19 @@ const constructWindow = async () => {
 	});
 
 	win.on('move', () => {
-		settings.set('window.x', win.getPosition()[0]);
-		settings.set('window.y', win.getPosition()[1]);
+		settings.window ??= {};
+
+		settings.window.x = win.getPosition()[0];
+		settings.window.y = win.getPosition()[1];
 
 		setSettings(settings);
 	});
 
 	win.on('resize', () => {
-		settings.set('window.width', win.getSize()[0]);
-		settings.set('window.height', win.getSize()[1]);
+		settings.window ??= {};
+
+		settings.window.width = win.getSize()[0];
+		settings.window.height = win.getSize()[1];
 
 		setSettings(settings);
 	});

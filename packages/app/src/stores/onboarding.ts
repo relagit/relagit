@@ -8,7 +8,7 @@ export interface OnboardingState {
 }
 
 const OnboardingStore = new (class OnboardingStore extends GenericStore {
-	#state: OnboardingState = {
+	#state: Partial<OnboardingState> = {
 		dismissed: false,
 		step: 0
 	};
@@ -40,7 +40,7 @@ const OnboardingStore = new (class OnboardingStore extends GenericStore {
 	setDismissed(dismissed: boolean) {
 		this.#state.dismissed = dismissed;
 
-		SettingsStore.setSetting('onboarding', this.#state);
+		SettingsStore.setSetting('onboarding.dismissed', dismissed);
 
 		this.emit();
 	}
@@ -48,7 +48,7 @@ const OnboardingStore = new (class OnboardingStore extends GenericStore {
 	setStep(step: number) {
 		this.#state.step = step;
 
-		SettingsStore.setSetting('onboarding', this.#state);
+		SettingsStore.setSetting('onboarding.step', step);
 
 		this.emit();
 	}

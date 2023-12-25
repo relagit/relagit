@@ -42,14 +42,14 @@ export default () => {
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
 		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
-		const style = settings()['commitStyles']?.[selected()?.path];
+		const style = settings().commit?.styles?.[LocationStore.selectedRepository?.path];
 
 		if (!style) return { message: '', style: 'none' };
 
 		const message = getCommitStyledMessage(
 			{ files },
 			style as CommitStyle,
-			settings()['preferParens']
+			settings().commit?.preferParens
 		)?.message;
 
 		return { message, style };
@@ -81,7 +81,7 @@ export default () => {
 				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
 				onChange={(value) => {
 					if (
-						settings()['enforceCommitMessageStyle'] === true &&
+						settings().commit?.enforceStyle === true &&
 						commitMessage()?.style !== 'none'
 					) {
 						const allowed = validateCommitMessage(

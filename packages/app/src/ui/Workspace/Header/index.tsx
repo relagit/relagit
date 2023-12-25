@@ -114,7 +114,7 @@ export default () => {
 	);
 
 	const iconVariant = createStoreListener([SettingsStore], () => {
-		return SettingsStore.getSetting('thinIcons') ? 24 : 16;
+		return SettingsStore.getSetting('ui.thinIcons') ? 24 : 16;
 	});
 
 	let branchesRef: Accessor<HTMLElement>;

@@ -122,14 +122,14 @@ export default () => {
 				id="app-container"
 				classList={{
 					[`platform-${window.Native.platform}`]: true,
-					[`theme-${settings()['theme'] || 'system'}`]: true,
-					vibrancy: !!settings()['vibrancy'],
+					[`theme-${settings().ui?.theme || 'system'}`]: true,
+					vibrancy: !!settings().ui?.vibrancy,
 					focused: focused(),
 					unfocused: !focused()
 				}}
 				style={{
-					'--settings-font-family': settings()['fontFamily'],
-					'--settings-accent-color': settings()['accentColor']
+					'--settings-font-family': settings().ui?.fontFamily,
+					'--settings-accent-color': settings().ui?.accentColor
 				}}
 			>
 				<Show
@@ -145,7 +145,7 @@ export default () => {
 						<div class="window-control-bar"></div>
 					</Show>
 					<Layer
-						type={settings()['expandedSettings'] ? 'bare' : 'rich'}
+						type={settings().ui?.expandedSettings ? 'bare' : 'rich'}
 						key="settings"
 						dismissable
 						transitions={Layer.Transitions.Fade}
