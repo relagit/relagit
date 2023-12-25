@@ -107,7 +107,7 @@ export default (props: Tooltip) => {
 						a.finished.then(done);
 					}}
 				>
-					<Show when={open()}>
+					<Show when={open() && props.text}>
 						<div
 							id={id}
 							aria-hidden={!open()}
