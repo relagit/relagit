@@ -36,12 +36,14 @@
 	&__text {
 		margin-bottom: 10px;
 		font-size: 1.25rem;
-		opacity: 0.4;
+		opacity: 70%;
+		color: var(--color-secondary);
 	}
 
 	&__hint {
 		font-size: 1rem;
-		opacity: 0.3;
+		opacity: 50%;
+		color: var(--color-secondary);
 	}
 
 	&__actions {
