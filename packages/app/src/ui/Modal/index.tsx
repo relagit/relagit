@@ -18,9 +18,7 @@ import './index.scss';
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const { confetti } = createConfetti();
 
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
 interface ModalProps {
 	transitions: {

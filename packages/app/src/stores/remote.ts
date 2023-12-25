@@ -6,7 +6,7 @@ export interface RemoteRepository {
 	repository: Repository;
 	name: string;
 	url: string;
-	type: 'fetch' | 'push';
+	type: string;
 }
 const RemoteStore = new (class RemoteStore extends GenericStore {
 	#record: RemoteRepository[] = [];

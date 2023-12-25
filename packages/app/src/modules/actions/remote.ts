@@ -33,7 +33,7 @@ export const remoteStatus = async (repository: string) => {
 		RemoteStore.addRemote({
 			url,
 			name,
-			type: type as 'fetch' | 'push',
+			type: type,
 			repository: repo
 		});
 	}
@@ -66,7 +66,7 @@ export const updateRemoteStatus = async (repository: string) => {
 		RemoteStore.updateRemote({
 			url,
 			name,
-			type: type as 'fetch' | 'push',
+			type,
 			repository: RepositoryStore.getByPath(repository)
 		});
 	}

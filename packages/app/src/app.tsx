@@ -21,7 +21,7 @@ import { showInformationModal } from './ui/Modal/InformationModal';
 
 import './app.scss';
 
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 const loaded = [];
 

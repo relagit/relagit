@@ -29,11 +29,11 @@ export default (props: TextareaProps) => {
 					expanded: props.expanded
 				}}
 				value={props.value}
-				onInput={(e: Event) => {
-					const proposedValue = (e.target as HTMLTextAreaElement).value;
+				onInput={(e) => {
+					const proposedValue = e.target.value;
 
 					if (!props.expanded && proposedValue.includes('\n')) {
-						(e.target as HTMLTextAreaElement).value = proposedValue.replace('\n', '');
+						e.target.value = proposedValue.replace('\n', '');
 
 						return props.onChange(proposedValue.replace('\n', ''));
 					}

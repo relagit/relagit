@@ -141,7 +141,9 @@ export default {
 			description: 'Description',
 			summary: 'Summary',
 			commit: 'Commit to {{branch}}',
-			add: 'Add'
+			add: 'Add',
+			dangerous:
+				'You have staged files that may contain sensitive information. Please review your changes before committing.'
 		},
 		openDrawer: 'Open Repository Drawer',
 		upToDate: "You're all up to date.",

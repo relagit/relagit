@@ -2,10 +2,8 @@ import { ExecException } from 'child_process';
 
 import * as ipc from '~/common/ipc';
 
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 export interface GitParams {
 	directory: string;

@@ -16,8 +16,8 @@ import Layer from '@ui/Layer';
 
 import './index.scss';
 
-const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 let languageFile;
 

@@ -15,7 +15,7 @@ export const backgroundFromTheme = (theme: string, isDark: boolean) => {
 	return theme === 'dark' ? '#141515' : '#ffffff';
 };
 
-export const getSettings = async () => {
+export const getSettings = async (): Promise<Settings> => {
 	try {
 		const dir = path.join(os.homedir(), '.relagit');
 
@@ -27,9 +27,9 @@ export const getSettings = async () => {
 			await promises.writeFile(__SETTINGS_PATH__, '{}');
 		}
 
-		return JSON.parse(await promises.readFile(__SETTINGS_PATH__, 'utf8')) as Settings;
+		return JSON.parse(await promises.readFile(__SETTINGS_PATH__, 'utf8'));
 	} catch (e) {
-		return {} as Settings;
+		return {};
 	}
 };
 

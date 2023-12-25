@@ -18,7 +18,7 @@ import Menu from '@ui/Menu';
 
 import './index.scss';
 
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export default (props: GitFile) => {
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>

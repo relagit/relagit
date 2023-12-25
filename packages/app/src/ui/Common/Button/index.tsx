@@ -11,11 +11,13 @@ interface ButtonProps {
 	className?: string;
 	disabled?: boolean;
 	label: string;
+	rest?: JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 export default (props: PassthroughRef<ButtonProps>) => {
 	return (
 		<button
+			{...props.rest}
 			ref={props.ref}
 			aria-role="button"
 			aria-label={props.label}

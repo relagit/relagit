@@ -91,7 +91,7 @@ const findTranslation = (
 	}
 
 	for (const arg in args) {
-		out = out.replace(`{{${arg}}}`, args[arg] as string);
+		out = out.replace(`{{${arg}}}`, String(args[arg]));
 	}
 
 	return out;

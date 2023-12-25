@@ -23,9 +23,7 @@ import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '..
 
 import './index.scss';
 
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
 export interface RadioGroupProps {
 	options: {

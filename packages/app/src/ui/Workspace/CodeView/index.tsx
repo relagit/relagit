@@ -18,7 +18,7 @@ import ImageView from './ImageView';
 
 import './index.scss';
 
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 
@@ -29,7 +29,11 @@ const extname = (file: string) => {
 	return file?.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
 };
 
-const totalLines = (file: GitDiff['files'][number]) => {
+const totalLines = (file: string | GitDiff['files'][number]) => {
+	if (typeof file === 'string') {
+		return file.split('\n').length;
+	}
+
 	return file?.chunks?.reduce((acc, curr) => {
 		return acc + curr.changes.length;
 	}, 0);
@@ -136,11 +140,13 @@ export default (props: CodeViewProps) => {
 				!BINARY_EXTENSIONS.includes(extname(props.file || commit()?.filename)) &&
 				!IMAGE_EXTENSIONS.includes(extname(props.file || commit()?.filename))
 			) {
-				setContent(highlighter(contents, langFrom(props.file || '')));
-
 				if (_diff === DIFF_CODES.REMOVE_ALL) {
+					setContent(highlighter(contents, langFrom(props.file || '')));
+
 					setDiff(null);
 				} else if (_diff === DIFF_CODES.ADD_ALL) {
+					setContent(highlighter(contents, langFrom(props.file || '')));
+
 					setDiff(true);
 				} else {
 					const parsed = parseDiff(_diff);
@@ -148,11 +154,7 @@ export default (props: CodeViewProps) => {
 					setDiff(parsed);
 				}
 
-				if (!diff() || diff() === true) {
-					setShouldShow(true);
-				} else {
-					setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
-				}
+				setShouldShow(totalLines(content() || (diff() as GitDiff)?.files?.[0]) < 250);
 			} else {
 				setShouldShow(true);
 			}
@@ -387,6 +389,12 @@ export default (props: CodeViewProps) => {
 									>
 										<For each={(diff() as GitDiff)?.files?.[0]?.chunks}>
 											{(chunk) => {
+												const _diff = diff();
+
+												if (typeof _diff === 'boolean') {
+													return null;
+												}
+
 												const from =
 													chunk.type == 'Chunk'
 														? chunk.fromFileRange
@@ -394,15 +402,10 @@ export default (props: CodeViewProps) => {
 												const to = chunk.toFileRange;
 
 												const isLastChunk =
-													(diff() as GitDiff).files?.[0]?.chunks?.indexOf(
-														chunk
-													) ===
-													(diff() as GitDiff).files?.[0]?.chunks?.length -
-														1;
+													_diff.files?.[0]?.chunks?.indexOf(chunk) ===
+													_diff.files?.[0]?.chunks?.length - 1;
 												const isFirstChunk =
-													(diff() as GitDiff).files?.[0]?.chunks?.indexOf(
-														chunk
-													) === 0;
+													_diff.files?.[0]?.chunks?.indexOf(chunk) === 0;
 
 												return (
 													<>

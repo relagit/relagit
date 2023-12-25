@@ -4,9 +4,9 @@ import { addCSS, removeCSS, updateCSS } from '../dom';
 import { error } from '../logger';
 import { Theme, __RELAGIT_PATH__, makeConsole, require } from './workflows';
 
-const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase') as typeof import('sucrase');
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 const __THEMES_PATH__ = path.join(__RELAGIT_PATH__, 'themes');
 

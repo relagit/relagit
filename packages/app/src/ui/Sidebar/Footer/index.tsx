@@ -4,6 +4,7 @@ import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
 import Icon from '@app/ui/Common/Icon';
+import Tooltip from '@app/ui/Common/Tooltip';
 import Menu from '@app/ui/Menu';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
@@ -27,7 +28,6 @@ export default () => {
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
 		DraftStore.getDraft(LocationStore.selectedRepository?.path)
 	);
-
 	const changes = createStoreListener([FilesStore, LocationStore], () =>
 		FilesStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
@@ -39,20 +39,27 @@ export default () => {
 	);
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
+	const dangerous = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
+		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
+
+		if (!files?.length) return false;
+
+		const DANGEROUS = [/.*\.ENV/, /.*\.env/, /.*\.pem/, /.*\.key/, /.*\.pub/];
+
+		return files?.some((file) => DANGEROUS.some((regex) => regex.test(file)));
+	});
+
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
 		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
 		const style = settings().commit?.styles?.[LocationStore.selectedRepository?.path];
 
-		if (!style) return { message: '', style: 'none' };
+		if (!style) return { message: '', style: CommitStyle.none };
 
-		const message = getCommitStyledMessage(
-			{ files },
-			style as CommitStyle,
-			settings().commit?.preferParens
-		)?.message;
+		const message = getCommitStyledMessage({ files }, style, settings().commit?.preferParens)
+			?.message;
 
-		return { message, style };
+		return { message, style } as const;
 	});
 
 	let timeout = null;
@@ -84,10 +91,7 @@ export default () => {
 						settings().commit?.enforceStyle === true &&
 						commitMessage()?.style !== 'none'
 					) {
-						const allowed = validateCommitMessage(
-							value,
-							commitMessage()?.style as CommitStyle
-						);
+						const allowed = validateCommitMessage(value, commitMessage()?.style);
 
 						if (allowed) {
 							setError(false);
@@ -181,39 +185,48 @@ export default () => {
 				}
 				expanded={true}
 			/>
-			<Button
-				label={t('sidebar.footer.commit', {
-					branch: selected()?.branch || 'Remote'
-				})}
-				type={error() ? 'danger' : 'brand'}
-				onClick={async () => {
-					LocationStore.setSelectedFile(null);
+			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : undefined}>
+				{(props) => (
+					<Button
+						rest={props}
+						label={t('sidebar.footer.commit', {
+							branch: selected()?.branch || 'Remote'
+						})}
+						type={error() || dangerous() ? 'danger' : 'brand'}
+						onClick={async () => {
+							LocationStore.setSelectedFile(null);
 
-					try {
-						triggerWorkflow('commit', selected(), draft());
+							try {
+								triggerWorkflow('commit', selected(), draft());
 
-						await Git.Commit(selected(), draft()?.message, draft()?.description);
-					} catch (e) {
-						showErrorModal(e, 'error.git');
+								await Git.Commit(
+									selected(),
+									draft()?.message,
+									draft()?.description
+								);
+							} catch (e) {
+								showErrorModal(e, 'error.git');
 
-						logger.error(e);
+								logger.error(e);
 
-						return;
-					}
+								return;
+							}
 
-					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
-						message: '',
-						description: ''
-					});
+							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+								message: '',
+								description: ''
+							});
 
-					await refetchRepository(selected());
-				}}
-				disabled={!draft()?.message.length}
-			>
-				{t('sidebar.footer.commit', {
-					branch: selected()?.branch || 'Remote'
-				})}
-			</Button>
+							await refetchRepository(selected());
+						}}
+						disabled={!draft()?.message.length}
+					>
+						{t('sidebar.footer.commit', {
+							branch: selected()?.branch || 'Remote'
+						})}
+					</Button>
+				)}
+			</Tooltip>
 		</div>
 	);
 };

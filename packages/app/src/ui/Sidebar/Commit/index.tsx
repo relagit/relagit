@@ -13,9 +13,7 @@ import LocationStore from '@stores/location';
 
 import './index.scss';
 
-const clipboard = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:clipboard'
-) as typeof import('electron').clipboard;
+const clipboard = window.Native.DANGEROUS__NODE__REQUIRE('electron:clipboard');
 
 export default (props: LogCommit) => {
 	const selected = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
