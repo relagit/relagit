@@ -5,6 +5,7 @@ import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
 import OnboardingStore from '@app/stores/onboarding';
 import RepositoryStore from '@app/stores/repository';
+import SettingsStore from '@app/stores/settings';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
@@ -104,9 +105,17 @@ export default () => {
 	const [branches, setBranches] = createSignal<Branch[]>(null);
 	const [stashes, setStashes] = createSignal<Record<number, string[]>>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
-	const [fetching, setFetching] = createSignal(false);
 	const [actioning, setActioning] = createSignal(false);
 	const [stashActioning, setStashActioning] = createSignal(false);
+
+	const fetching = createStoreListener(
+		[LocationStore],
+		() => LocationStore.isRefetchingSelectedRepository
+	);
+
+	const iconVariant = createStoreListener([SettingsStore], () => {
+		return SettingsStore.getSetting('thinIcons') ? 24 : 16;
+	});
 
 	let branchesRef: Accessor<HTMLElement>;
 
@@ -183,14 +192,11 @@ export default () => {
 				detail={renderDate(repository()?.lastFetched)()}
 				label={t('git.sync')}
 				icon="sync"
+				iconVariant={iconVariant()}
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}
 				onClick={() => {
-					setFetching(true);
-
-					refetchRepository(LocationStore.selectedRepository).then(() =>
-						setFetching(false)
-					);
+					refetchRepository(LocationStore.selectedRepository);
 				}}
 			/>
 			<PanelButton
@@ -200,7 +206,7 @@ export default () => {
 						case 'ahead':
 							return 'repo-push';
 						case 'behind':
-							return 'cPull';
+							return 'x-repo-pull';
 						case 'publish':
 							return 'repo-push';
 						case 'diverged':
@@ -209,6 +215,7 @@ export default () => {
 							return 'repo';
 					}
 				})()}
+				iconVariant={iconVariant()}
 				label={(() => {
 					switch (status()) {
 						case 'ahead':
@@ -264,11 +271,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -284,11 +288,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -310,12 +311,8 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
 
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
-
+							refetchRepository(LocationStore.selectedRepository);
 							return;
 						}
 						case 'publish': {
@@ -335,11 +332,7 @@ export default () => {
 							}
 
 							setActioning(false);
-							setFetching(true);
-
-							refetchRepository(LocationStore.selectedRepository).then(() =>
-								setFetching(false)
-							);
+							refetchRepository(LocationStore.selectedRepository);
 
 							return;
 						}
@@ -367,11 +360,8 @@ export default () => {
 									await Git.RemoveStash(LocationStore.selectedRepository, 0);
 
 									setStashActioning(false);
-									setFetching(true);
 
-									refetchRepository(LocationStore.selectedRepository).then(() =>
-										setFetching(false)
-									);
+									refetchRepository(LocationStore.selectedRepository);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -383,6 +373,7 @@ export default () => {
 				>
 					<PanelButton
 						icon="file-directory"
+						iconVariant={iconVariant()}
 						id="workspace-pop-stash"
 						onClick={async () => {
 							if (!repository()) return;
@@ -397,11 +388,8 @@ export default () => {
 								triggerWorkflow('stash_pop', LocationStore.selectedRepository);
 
 								setStashActioning(false);
-								setFetching(true);
 
-								refetchRepository(LocationStore.selectedRepository).then(() =>
-									setFetching(false)
-								);
+								refetchRepository(LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
@@ -432,7 +420,7 @@ export default () => {
 				position="bottom"
 				body={() => (
 					<div class="branches-picker">
-						<div class="branches-picker__label">
+						<div class="branches-picker__label" tabIndex={0}>
 							{t('git.branches', null, branches()?.length)}
 						</div>
 						<div class="branches-picker__list">
@@ -572,11 +560,7 @@ export default () => {
 
 												setHasNewBranchInput(false);
 
-												setFetching(true);
-
-												refetchRepository(
-													LocationStore.selectedRepository
-												).then(() => setFetching(false));
+												refetchRepository(LocationStore.selectedRepository);
 											} catch (e) {
 												showErrorModal(e, 'error.git');
 
@@ -613,6 +597,7 @@ export default () => {
 							disabled={!repository() || branches() === null}
 							ref={p.ref}
 							icon="git-branch"
+							iconVariant={iconVariant()}
 							name="Switch branch"
 							id="workspace-branch"
 							className={p.open() ? 'active' : ''}
@@ -625,6 +610,7 @@ export default () => {
 			</Popout>
 			<PanelButton
 				icon="people"
+				iconVariant={iconVariant()}
 				name="Toggle blame view"
 				id="workspace-blame"
 				className={blameOpen() ? 'active' : ''}
@@ -632,7 +618,6 @@ export default () => {
 					LocationStore.setBlameOpen(!blameOpen());
 				}}
 			/>
-
 			<Popout
 				position="bottom"
 				align="end"
@@ -661,6 +646,7 @@ export default () => {
 					<PanelButton
 						ref={p.ref}
 						icon="history"
+						iconVariant={iconVariant()}
 						name="Toggle history"
 						id="workspace-history"
 						className={historyOpen() ? 'active' : ''}

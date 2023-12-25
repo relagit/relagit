@@ -9,6 +9,7 @@ export interface TabViewProps {
 		element: JSX.Element;
 		value: string | number;
 		label: string;
+		scroller?: boolean;
 		disabled?: boolean;
 	}[];
 }
@@ -29,7 +30,14 @@ export default (props: TabViewProps) => {
 					disabled: v.disabled
 				}))}
 			/>
-			<div class="segmented-view__body scroller no-x">
+			<div
+				classList={{
+					'segmented-view__body': true,
+					'no-x': true,
+					scroller:
+						props.views.find((v) => v.value === selectedView())?.scroller !== false
+				}}
+			>
 				<For each={props.views}>
 					{(view) => {
 						return (

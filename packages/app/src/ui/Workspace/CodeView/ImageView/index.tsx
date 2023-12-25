@@ -115,13 +115,11 @@ export default (props: ImageViewProps) => {
 						sizeOut[1] = remote.length;
 					}
 				} else {
-					const binary = fs.readFileSync(props.path, 'binary');
-
-					const base64 = btoa(binary);
+					const base64 = fs.readFileSync(props.path, 'base64');
 
 					out[1] = `data:${mimeFromPath(props.path)};base64,${base64}`;
 
-					sizeOut[1] = binary.length;
+					sizeOut[1] = fs.statSync(props.path).size;
 				}
 			} catch (e) {
 				error(e);
@@ -162,8 +160,11 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image removed"
 									src={URIs()[0]}
 								/>
-								{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight} |{' '}
-								{nearestByteFigure(size()[0])}
+								<div class="image-view__images__image__details">
+									{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight}
+									<div class="image-view__images__image__details__separator" />
+									{nearestByteFigure(size()[0])}
+								</div>
 							</div>
 						</Show>
 					</Show>
@@ -178,8 +179,11 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image added"
 									src={URIs()[1]}
 								/>
-								{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight} |{' '}
-								{nearestByteFigure(size()[1])}
+								<div class="image-view__images__image__details">
+									{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight}
+									<div class="image-view__images__image__details__separator" />
+									{nearestByteFigure(size()[1])}
+								</div>
 							</div>
 						</Show>
 					</Show>

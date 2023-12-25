@@ -188,7 +188,9 @@ export default () => {
 
 	const [open, setOpen] = createSignal(LayerStore.visible('settings'));
 
-	const { activate, deactivate } = useFocusTrap(ref);
+	const { activate, deactivate } = useFocusTrap(ref, {
+		initialFocus: false
+	});
 
 	createStoreListener([LayerStore], () => {
 		setOpen(LayerStore.visible('settings'));
@@ -513,7 +515,16 @@ export default () => {
 					placeholder={t('settings.appearance.font.placeholder')}
 				/>
 			</div>
-
+			<div class="settings-layer__setting">
+				<Switch
+					label={t('settings.appearance.thinIcons.label')}
+					note={t('settings.appearance.thinIcons.description')}
+					value={() => settings()['thinIcons']}
+					onChange={(value) => {
+						SettingsStore.setSetting('thinIcons', value);
+					}}
+				/>
+			</div>
 			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-client-themes">
 					{t('settings.appearance.clientThemes.label')}

@@ -16,6 +16,7 @@ export interface Tooltip {
 	}) => JSX.Element | JSX.Element[];
 	text: string;
 	position?: 'top' | 'bottom' | 'auto';
+	delay?: number;
 }
 
 export default (props: Tooltip) => {
@@ -38,8 +39,12 @@ export default (props: Tooltip) => {
 		}, 300);
 	};
 
-	const show = (e: MouseEvent | FocusEvent) => {
+	const show = (e: MouseEvent | FocusEvent, show?: boolean) => {
 		e.stopPropagation();
+
+		if (props.delay) {
+			if (!show) return delay(e, props.delay);
+		}
 
 		setOpen(true);
 
@@ -49,10 +54,10 @@ export default (props: Tooltip) => {
 		setY(rect.top + rect.height / 2);
 	};
 
-	const delay = (e: FocusEvent) => {
+	const delay = (e: FocusEvent | MouseEvent, ms = 300) => {
 		setTimeout(() => {
-			if (!hasRecentlyHidden) show(e);
-		}, 300);
+			if (!hasRecentlyHidden) show(e, true);
+		}, ms);
 	};
 
 	const id = Math.random().toString(36).substring(2, 9);

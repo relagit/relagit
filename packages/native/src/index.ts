@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, MenuItemConstructorOptions, app } from 'electron';
+import { BrowserWindow, Menu, MenuItemConstructorOptions, app, nativeTheme } from 'electron';
 
 import * as path from 'path';
 
@@ -7,8 +7,8 @@ import * as ipc from '~/common/ipc';
 import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
-import { getSettings, setSettings } from './modules/settings';
-import { shellNeedsPatching, updateEnvironmentForProcess } from './modules/shell';
+import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
+import { updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',
@@ -17,10 +17,6 @@ app.setAboutPanelOptions({
 	copyright: 'Copyright © 2023 TheCommieAxolotl & RelaGit contributors',
 	website: 'https://rela.dev'
 });
-
-if (shellNeedsPatching(process)) {
-	updateEnvironmentForProcess();
-}
 
 const constructWindow = async () => {
 	let settings: Map<string, unknown>;
@@ -57,8 +53,9 @@ const constructWindow = async () => {
 	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
 		settings.get('vibrancy') ? 'mica' : undefined;
 	let transparent = settings.get('vibrancy') && process.platform === 'win32' ? true : undefined;
-	let backgroundColor =
-		settings.get('vibrancy') && process.platform === 'win32' ? '#00000000' : undefined;
+	let backgroundColor = settings.get('vibrancy')
+		? '#00000000'
+		: backgroundFromTheme(settings.get('theme') as string, nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
@@ -74,7 +71,10 @@ const constructWindow = async () => {
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			height: 27,
-			color: '#141515',
+			color: backgroundFromTheme(
+				settings.get('theme') as string,
+				nativeTheme.shouldUseDarkColors
+			),
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
@@ -109,10 +109,6 @@ const constructWindow = async () => {
 		settings.set('window.height', win.getSize()[1]);
 
 		setSettings(settings);
-	});
-
-	win.once('ready-to-show', () => {
-		win.show();
 	});
 
 	win.on('focus', () => {
@@ -281,6 +277,7 @@ app.once('ready', async () => {
 	const window = await constructWindow();
 
 	initIPC(window);
+	if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 	app.on('activate', async () => {
 		if (BrowserWindow.getAllWindows().length === 0) {

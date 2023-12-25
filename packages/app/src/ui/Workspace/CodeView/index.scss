@@ -1,9 +1,9 @@
 .codeview {
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden auto;
 	display: flex;
 	font-family: var(--font-mono);
 	font-variant-ligatures: none;
+	/* stylelint-disable-next-line */
 	font-size: 11px; // NOT using rem to ennsure precision
 	width: 100%;
 	height: 100%;
@@ -114,6 +114,7 @@
 
 		&.message {
 			min-height: 30px;
+
 			--bg-c: var(--bg-secondary);
 			--bg-c-hover: var(--bg-secondary);
 

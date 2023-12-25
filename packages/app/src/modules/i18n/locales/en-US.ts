@@ -86,6 +86,10 @@ export default {
 					'This will override the default code font. You can use any font that is installed on your system.',
 				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
 			},
+			thinIcons: {
+				label: 'Thin Icons',
+				description: 'Use thinner icon variants in the header.'
+			},
 			clientThemes: {
 				label: 'Client Themes',
 				description: 'Pick user-made themes to use in the client.'

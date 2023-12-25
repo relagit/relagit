@@ -17,6 +17,7 @@ export interface Settings {
 		dismissed: boolean;
 		step: number;
 	};
+	thinIcons: boolean;
 	enforceCommitMessageStyle: boolean;
 	preferParens: boolean;
 	theme: 'light' | 'dark' | 'system';

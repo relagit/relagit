@@ -6,6 +6,10 @@ import fs, { WatchListener } from 'node:fs';
 import type { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
 
+import { updateEnvironmentForProcess } from './modules/shell';
+
+if (process.platform === 'darwin') updateEnvironmentForProcess();
+
 export const Native = {
 	DANGEROUS__NODE__REQUIRE: (id: string) => {
 		if (id.startsWith('electron:')) {
