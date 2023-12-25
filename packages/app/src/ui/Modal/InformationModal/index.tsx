@@ -173,6 +173,7 @@ export const InformationModal = () => {
 		</>
 	);
 
+	// TODO: do soemthing here
 	const Graph = <>hi</>;
 
 	return (
