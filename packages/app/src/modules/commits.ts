@@ -96,7 +96,7 @@ export const getCommitStyledMessage = (
 };
 
 const CONVENTIONAL_REGEX = /^(?<type>\w+)(\((?<scope>\w+)\))?: (?<message>.+)$/;
-const RELATIONAL_REGEX = /^\[(?<scope>.+)\] (?:(?<type>.+): )?(?<message>.+)$/;
+const RELATIONAL_REGEX = /^\!?[\[\(](?<scope>.+)[\]\)] (?:(?<type>.+): )?(?<message>.+)$/;
 
 export const validateCommitMessage = (message: string, style?: CommitStyle): boolean => {
 	switch (style) {
