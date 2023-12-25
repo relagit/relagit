@@ -12,7 +12,7 @@ export const Pull = async (repository: Repository) => {
 
 		return res;
 	} catch (error) {
-		if ((error as string).startsWith?.('From ')) return;
+		if (error.startsWith?.('From ')) return;
 
 		throw error;
 	}

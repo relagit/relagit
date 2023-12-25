@@ -5,7 +5,10 @@ import { LocaleKey, t } from './i18n';
 export const relative = (ms: number) => {
 	const seconds = Math.floor((Date.now() - ms) / 1000);
 
-	const timeIntervals = [
+	const timeIntervals: {
+		interval: number;
+		label: LocaleKey;
+	}[] = [
 		{ interval: 31536000, label: 'time.year' },
 		{ interval: 2592000, label: 'time.month' },
 		{ interval: 86400, label: 'time.day' },
@@ -18,7 +21,7 @@ export const relative = (ms: number) => {
 		const quotient = Math.floor(seconds / interval);
 
 		if (quotient > 0) {
-			return t(label as LocaleKey, { count: quotient }, quotient) + ' ' + t('time.ago');
+			return t(label, { count: quotient }, quotient) + ' ' + t('time.ago');
 		}
 	}
 

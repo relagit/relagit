@@ -387,6 +387,12 @@ export default (props: CodeViewProps) => {
 									>
 										<For each={(diff() as GitDiff)?.files?.[0]?.chunks}>
 											{(chunk) => {
+												const _diff = diff();
+
+												if (typeof _diff === 'boolean') {
+													return null;
+												}
+
 												const from =
 													chunk.type == 'Chunk'
 														? chunk.fromFileRange
@@ -394,15 +400,10 @@ export default (props: CodeViewProps) => {
 												const to = chunk.toFileRange;
 
 												const isLastChunk =
-													(diff() as GitDiff).files?.[0]?.chunks?.indexOf(
-														chunk
-													) ===
-													(diff() as GitDiff).files?.[0]?.chunks?.length -
-														1;
+													_diff.files?.[0]?.chunks?.indexOf(chunk) ===
+													_diff.files?.[0]?.chunks?.length - 1;
 												const isFirstChunk =
-													(diff() as GitDiff).files?.[0]?.chunks?.indexOf(
-														chunk
-													) === 0;
+													_diff.files?.[0]?.chunks?.indexOf(chunk) === 0;
 
 												return (
 													<>

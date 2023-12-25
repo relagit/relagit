@@ -54,15 +54,12 @@ export default () => {
 
 		const style = settings().commit?.styles?.[LocationStore.selectedRepository?.path];
 
-		if (!style) return { message: '', style: 'none' };
+		if (!style) return { message: '', style: CommitStyle.none };
 
-		const message = getCommitStyledMessage(
-			{ files },
-			style as CommitStyle,
-			settings().commit?.preferParens
-		)?.message;
+		const message = getCommitStyledMessage({ files }, style, settings().commit?.preferParens)
+			?.message;
 
-		return { message, style };
+		return { message, style } as const;
 	});
 
 	let timeout = null;
@@ -94,10 +91,7 @@ export default () => {
 						settings().commit?.enforceStyle === true &&
 						commitMessage()?.style !== 'none'
 					) {
-						const allowed = validateCommitMessage(
-							value,
-							commitMessage()?.style as CommitStyle
-						);
+						const allowed = validateCommitMessage(value, commitMessage()?.style);
 
 						if (allowed) {
 							setError(false);

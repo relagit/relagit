@@ -22,7 +22,7 @@ export default (props: TabViewProps) => {
 			<SegmentedControl
 				value={selectedView()}
 				onChange={(v) => {
-					setSelectedView(v as string);
+					setSelectedView(v);
 				}}
 				items={Object.values(props.views).map((v) => ({
 					value: v.value,

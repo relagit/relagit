@@ -111,7 +111,7 @@ export const t: <Trans extends LocaleKey>(
 				current[part] = {};
 			}
 
-			current = current[part] as Settings;
+			current = current[part];
 		}
 
 		current[parts[parts.length - 1]] = value;

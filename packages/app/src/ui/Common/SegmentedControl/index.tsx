@@ -2,7 +2,7 @@ import { For, createSignal } from 'solid-js';
 
 import './index.scss';
 
-export interface SenmentedControlProps {
+export interface SegmentedControlProps {
 	items: {
 		label: string;
 		value: string | number;
@@ -14,7 +14,7 @@ export interface SenmentedControlProps {
 	className?: string;
 }
 
-export default (props: SenmentedControlProps) => {
+export default (props: SegmentedControlProps) => {
 	const [value, setValue] = createSignal(props.value || props.items[0].value);
 
 	return (
