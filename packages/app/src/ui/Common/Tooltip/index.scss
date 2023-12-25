@@ -11,6 +11,7 @@
 	pointer-events: none;
 	z-index: 99;
 	color: rgb(190 194 199); // hardcoded
+	max-width: 330px;
 
 	&.right {
 		top: calc(var(--y) + var(--w-h) / 2);
