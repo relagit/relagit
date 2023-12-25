@@ -38,6 +38,11 @@ const Modal = (props: ModalProps) => {
 	const [open, setOpen] = createSignal(false);
 
 	const { activate, deactivate } = useFocusTrap(ref, {
+		onDeactivate: () => {
+			if (props.dismissable) {
+				close();
+			}
+		},
 		initialFocus: false
 	});
 

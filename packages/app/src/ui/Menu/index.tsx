@@ -104,7 +104,12 @@ export default (props: Menu) => {
 							'--y': `${y()}px`
 						}}
 					>
-						<For each={props.items}>
+						<Show when={props.items.filter(Boolean).length === 0}>
+							<div tabIndex={0} aria-disabled class="menu__item disabled face">
+								{'＼(´ ε｀ )／'}
+							</div>
+						</Show>
+						<For each={props.items.filter(Boolean)}>
 							{(item) => {
 								switch (item.type) {
 									case 'separator':

@@ -107,6 +107,7 @@ export default () => {
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
 	const [actioning, setActioning] = createSignal(false);
 	const [stashActioning, setStashActioning] = createSignal(false);
+	const [previous, setPrevious] = createSignal('');
 
 	const fetching = createStoreListener(
 		[LocationStore],
@@ -125,6 +126,16 @@ export default () => {
 		branchesRef().click();
 	});
 
+	createEffect(async () => {
+		if (!repository()) return;
+
+		const previous = await Git.PreviousCommit(repository());
+
+		if (!previous) return setPrevious(null);
+
+		setPrevious(previous);
+	});
+
 	createEffect(() => {
 		if (onboarding().step === 4 && onboarding().dismissed !== true) {
 			onboardingStepState[1](true);
@@ -138,7 +149,7 @@ export default () => {
 		const behind = repository()?.behind || 0;
 
 		if (ahead === 0 && behind === 0) {
-			const current = branches()?.find((b) => b.name === repository()?.branch);
+			const current = branches()?.find((b) => b.gitName === repository()?.branch);
 
 			if (!current) return setStatus(null);
 
@@ -199,149 +210,182 @@ export default () => {
 					refetchRepository(LocationStore.selectedRepository);
 				}}
 			/>
-			<PanelButton
-				loading={actioning()}
-				icon={((): IconName | keyof typeof customIcons => {
-					switch (status()) {
-						case 'ahead':
-							return 'repo-push';
-						case 'behind':
-							return 'x-repo-pull';
-						case 'publish':
-							return 'repo-push';
-						case 'diverged':
-							return 'repo-forked';
-						default:
-							return 'repo';
-					}
-				})()}
-				iconVariant={iconVariant()}
-				label={(() => {
-					switch (status()) {
-						case 'ahead':
-							return t('git.pushChanges');
-						case 'behind':
-							return t('git.pullChanges');
-						case 'publish':
-							return t('git.publish');
-						case 'diverged':
-							return t('git.diverged');
-						default:
-							return t('git.noChanges');
-					}
-				})()}
-				id="workspace-pull"
-				disabled={!repository() || status() === null}
-				detail={(() => {
-					const ahead = repository()?.ahead || 0;
-					const behind = repository()?.behind || 0;
-
-					switch (status()) {
-						case 'ahead':
-							return t('git.commits', { count: Math.abs(ahead) }, Math.abs(ahead));
-						case 'behind':
-							return t('git.commits', { count: Math.abs(behind) }, Math.abs(behind));
-						case 'diverged':
-							return t('git.divergedHint');
-						case 'publish':
-							return t('git.publishHint');
-						default:
-							return t('git.nothingToSee');
-					}
-				})()}
-				onClick={async () => {
-					if (!repository()) return;
-
-					if (status() === null) return;
-
-					setActioning(true);
-
-					switch (status()) {
-						case 'ahead': {
-							debug('Pushing changes');
-
+			<Menu
+				items={[
+					status() === 'ahead' && {
+						label: t('git.undo', {
+							sha: previous()?.substring(0, 7)
+						}),
+						onClick: async () => {
 							try {
-								await Git.Push(LocationStore.selectedRepository);
-
-								triggerWorkflow('push', LocationStore.selectedRepository);
-							} catch (e) {
-								showErrorModal(e, 'error.git');
-
-								error(e);
-							}
-
-							setActioning(false);
-
-							refetchRepository(LocationStore.selectedRepository);
-
-							return;
-						}
-						case 'behind': {
-							debug('Pulling changes');
-
-							try {
-								await Git.Pull(LocationStore.selectedRepository);
-							} catch (e) {
-								showErrorModal(e, 'error.git');
-
-								error(e);
-							}
-
-							setActioning(false);
-
-							refetchRepository(LocationStore.selectedRepository);
-
-							return;
-						}
-						case 'diverged': {
-							debug('Diverged');
-
-							try {
-								await Git.Stash(LocationStore.selectedRepository);
-
-								triggerWorkflow('stash', LocationStore.selectedRepository);
-
-								await Git.Pull(LocationStore.selectedRepository);
-
-								triggerWorkflow('pull', LocationStore.selectedRepository);
-							} catch (e) {
-								showErrorModal(e, 'error.git');
-
-								error(e);
-							}
-
-							setActioning(false);
-
-							refetchRepository(LocationStore.selectedRepository);
-							return;
-						}
-						case 'publish': {
-							debug('Publishing');
-
-							try {
-								await Git.PushWithOrigin(
+								await Git.Reset(
 									LocationStore.selectedRepository,
-									repository()?.branch
+									await Git.PreviousCommit(repository(), previous())
 								);
 
-								triggerWorkflow('push', LocationStore.selectedRepository);
+								refetchRepository(LocationStore.selectedRepository);
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
 								error(e);
 							}
-
-							setActioning(false);
-							refetchRepository(LocationStore.selectedRepository);
-
-							return;
-						}
-						default: {
-							return debug('No change');
-						}
+						},
+						type: 'item'
 					}
-				}}
-			/>
+				]}
+			>
+				<PanelButton
+					loading={actioning()}
+					icon={((): IconName | keyof typeof customIcons => {
+						switch (status()) {
+							case 'ahead':
+								return 'repo-push';
+							case 'behind':
+								return 'x-repo-pull';
+							case 'publish':
+								return 'repo-push';
+							case 'diverged':
+								return 'repo-forked';
+							default:
+								return 'repo';
+						}
+					})()}
+					iconVariant={iconVariant()}
+					label={(() => {
+						switch (status()) {
+							case 'ahead':
+								return t('git.pushChanges');
+							case 'behind':
+								return t('git.pullChanges');
+							case 'publish':
+								return t('git.publish');
+							case 'diverged':
+								return t('git.diverged');
+							default:
+								return t('git.noChanges');
+						}
+					})()}
+					id="workspace-pull"
+					disabled={!repository() || status() === null}
+					detail={(() => {
+						const ahead = repository()?.ahead || 0;
+						const behind = repository()?.behind || 0;
+
+						switch (status()) {
+							case 'ahead':
+								return t(
+									'git.commits',
+									{ count: Math.abs(ahead) },
+									Math.abs(ahead)
+								);
+							case 'behind':
+								return t(
+									'git.commits',
+									{ count: Math.abs(behind) },
+									Math.abs(behind)
+								);
+							case 'diverged':
+								return t('git.divergedHint');
+							case 'publish':
+								return t('git.publishHint');
+							default:
+								return t('git.nothingToSee');
+						}
+					})()}
+					onClick={async () => {
+						if (!repository()) return;
+
+						if (status() === null) return;
+
+						setActioning(true);
+
+						switch (status()) {
+							case 'ahead': {
+								debug('Pushing changes');
+
+								try {
+									await Git.Push(LocationStore.selectedRepository);
+
+									triggerWorkflow('push', LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
+
+									error(e);
+								}
+
+								setActioning(false);
+
+								refetchRepository(LocationStore.selectedRepository);
+
+								return;
+							}
+							case 'behind': {
+								debug('Pulling changes');
+
+								try {
+									await Git.Pull(LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
+
+									error(e);
+								}
+
+								setActioning(false);
+
+								refetchRepository(LocationStore.selectedRepository);
+
+								return;
+							}
+							case 'diverged': {
+								debug('Diverged');
+
+								try {
+									await Git.Stash(LocationStore.selectedRepository);
+
+									triggerWorkflow('stash', LocationStore.selectedRepository);
+
+									await Git.Pull(LocationStore.selectedRepository);
+
+									triggerWorkflow('pull', LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
+
+									error(e);
+								}
+
+								setActioning(false);
+
+								refetchRepository(LocationStore.selectedRepository);
+								return;
+							}
+							case 'publish': {
+								debug('Publishing');
+
+								try {
+									await Git.PushWithOrigin(
+										LocationStore.selectedRepository,
+										repository()?.branch
+									);
+
+									triggerWorkflow('push', LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
+
+									error(e);
+								}
+
+								setActioning(false);
+								refetchRepository(LocationStore.selectedRepository);
+
+								return;
+							}
+							default: {
+								return debug('No change');
+							}
+						}
+					}}
+				/>
+			</Menu>
 			<Show when={Object.keys(stashes() || {}).length > 0}>
 				<Menu
 					items={[

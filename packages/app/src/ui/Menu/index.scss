@@ -19,6 +19,10 @@
 
 		@include mixins.focusable;
 
+		&.face {
+			text-align: center;
+		}
+
 		&.disabled {
 			pointer-events: none;
 			opacity: 0.5;

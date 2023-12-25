@@ -17,6 +17,7 @@ import { checkIsInPath } from './modules/shell';
 import LocationStore from './stores/location';
 import OnboardingStore from './stores/onboarding';
 import RepositoryStore from './stores/repository';
+import { showInformationModal } from './ui/Modal/InformationModal';
 
 import './app.scss';
 
@@ -69,6 +70,10 @@ export default () => {
 
 	window.Native.listeners.FOCUS((_, value) => {
 		setFocused(value);
+	});
+
+	window.Native.listeners.INFORMATION(() => {
+		showInformationModal();
 	});
 
 	onMount(async () => {

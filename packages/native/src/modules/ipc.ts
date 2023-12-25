@@ -71,6 +71,14 @@ export default (window: BrowserWindow) => {
 		});
 	});
 
+	ipcMain.handle(ipc.DISK_SIZE, (_, path: string) => {
+		if (!path) return;
+
+		if (path.includes('../')) return;
+
+		return child_process.execSync(`du -sh "${path}"`).toString().trim();
+	});
+
 	ipcMain.handle(ipc.BASE64_FROM_BINARY, (_, data: string) => {
 		return Buffer.from(data, 'binary').toString('base64');
 	});

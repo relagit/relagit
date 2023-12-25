@@ -39,13 +39,13 @@ export const ShowOrigin = async (
 	return res;
 };
 
-export const Show = async (repository: string, hash: string): Promise<PastCommit | null> => {
+export const Show = async (repository: string, hash?: string): Promise<PastCommit | null> => {
 	if (!repository) return null;
 
 	const res = await Git({
 		directory: repository,
 		command: 'show',
-		args: [hash, '"--pretty=format:"']
+		args: hash ? [hash, '"--pretty=format:"'] : ['--pretty=format:']
 	});
 
 	const commit: PastCommit = {
