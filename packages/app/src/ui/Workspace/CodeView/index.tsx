@@ -18,7 +18,7 @@ import ImageView from './ImageView';
 
 import './index.scss';
 
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 

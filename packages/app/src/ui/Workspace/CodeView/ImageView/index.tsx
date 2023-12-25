@@ -12,10 +12,8 @@ import * as ipc from '~/common/ipc';
 
 import './index.scss';
 
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 const mimeFromPath = (path: string) => {
 	const ext = path.split('.').pop();

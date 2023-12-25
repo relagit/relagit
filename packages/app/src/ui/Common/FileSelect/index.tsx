@@ -9,9 +9,7 @@ import TextArea from '../TextArea';
 
 import './index.scss';
 
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
-	'electron:ipcRenderer'
-) as typeof import('electron').ipcRenderer;
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
 export interface FileSelectProps {
 	input: boolean;

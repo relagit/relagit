@@ -4,7 +4,7 @@ import { GitStatus } from '@modules/git/diff';
 
 import StageStore from './stage';
 
-const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export interface GitFile {
 	id: string;

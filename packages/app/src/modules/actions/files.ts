@@ -11,10 +11,9 @@ import { showErrorModal } from '@ui/Modal';
 import { warn } from '../logger';
 import { remoteStatus } from './remote';
 
-const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs')
-	.promises as typeof import('fs').promises;
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
-const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs') as typeof import('fs');
+const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs/promises');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 export const removeRepository = (repository: Repository) => {
 	SettingsStore.setSetting(

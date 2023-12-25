@@ -2,7 +2,7 @@ import { Git } from './core';
 import { GitStatus } from './diff';
 import { GitDiff, parseDiff } from './parse-diff';
 
-const path = window.Native.DANGEROUS__NODE__REQUIRE('path') as typeof import('path');
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export interface PastCommit {
 	hash: string;
