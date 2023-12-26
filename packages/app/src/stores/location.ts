@@ -72,13 +72,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		return this.#isRefetchingSelectedRepository;
 	}
 
-	setSelectedFile(file: GitFile) {
+	setSelectedFile(file: GitFile | undefined) {
 		this.#selectedFile = file;
-		this.emit();
-	}
-
-	clearSelectedFile() {
-		this.#selectedFile = undefined;
 		this.emit();
 	}
 
@@ -92,22 +87,22 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		this.emit();
 	}
 
-	setSelectedCommit(commit: LogCommit) {
+	setSelectedCommit(commit: LogCommit | undefined) {
 		this.#selectedCommit = commit;
 		this.emit();
 	}
 
-	setSelectedCommitFiles(commit: PastCommit) {
+	setSelectedCommitFiles(commit: PastCommit | undefined) {
 		this.#selectedCommitFiles = commit;
 		this.emit();
 	}
 
-	setSelectedCommitFile(file: PastCommit['files'][number]) {
+	setSelectedCommitFile(file: PastCommit['files'][number] | undefined) {
 		this.#selectedCommitFile = file;
 		this.emit();
 	}
 
-	setSelectedRepository(repository: Repository, set = true) {
+	setSelectedRepository(repository: Repository | undefined, set = true) {
 		if (!repository) {
 			return;
 		}

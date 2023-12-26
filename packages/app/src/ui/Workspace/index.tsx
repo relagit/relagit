@@ -54,38 +54,38 @@ export default (props: WorkspaceProps) => {
 			<Header />
 			<Show when={historyOpen() && commit()}>
 				<div class="workspace__commit">
-					<div class="workspace__commit__message">{commit().message}</div>
+					<div class="workspace__commit__message">{commit()!.message}</div>
 					<div class="workspace__commit__details">
-						<div class="workspace__commit__details__author">{commit().author}</div>
+						<div class="workspace__commit__details__author">{commit()!.author}</div>
 						<div class="workspace__commit__details__hash">
-							{commit().hash.slice(0, 7)}
+							{commit()!.hash.slice(0, 7)}
 						</div>
 						<div class="workspace__commit__details__diff">
-							<Show when={commit().tag}>
+							<Show when={commit()!.tag}>
 								<div class="workspace__commit__details__diff__tag">
 									<Icon name="tag" />
-									{commit().tag}
+									{commit()!.tag}
 								</div>
 							</Show>
-							<Show when={commit().files}>
+							<Show when={commit()!.files}>
 								<div class="workspace__commit__details__diff__files">
 									{t(
 										'git.files',
 										{
-											count: commit().files
+											count: commit()!.files
 										},
-										commit().files
+										commit()!.files
 									)}
 								</div>
 							</Show>
-							<Show when={commit().insertions}>
+							<Show when={commit()!.insertions}>
 								<div class="workspace__commit__details__diff__insertions">
-									+{commit().insertions}
+									+{commit()!.insertions}
 								</div>
 							</Show>
-							<Show when={commit().deletions}>
+							<Show when={commit()!.deletions}>
 								<div class="workspace__commit__details__diff__deletions">
-									-{commit().deletions}
+									-{commit()!.deletions}
 								</div>
 							</Show>
 						</div>
@@ -110,7 +110,7 @@ export default (props: WorkspaceProps) => {
 											onClick: () => {
 												showItemInFolder(
 													path.join(
-														LocationStore.selectedRepository.path,
+														LocationStore.selectedRepository!.path,
 														commitFile.path,
 														commitFile.filename
 													)
@@ -118,7 +118,7 @@ export default (props: WorkspaceProps) => {
 											},
 											disabled: !fs.existsSync(
 												path.join(
-													LocationStore.selectedRepository.path,
+													LocationStore.selectedRepository!.path,
 													commitFile.path,
 													commitFile.filename
 												)
@@ -128,7 +128,7 @@ export default (props: WorkspaceProps) => {
 											label: t('sidebar.contextMenu.openRemote'),
 											disabled: !fs.existsSync(
 												path.join(
-													LocationStore.selectedRepository.path,
+													LocationStore.selectedRepository!.path,
 													commitFile.path,
 													commitFile.filename
 												)
@@ -136,11 +136,11 @@ export default (props: WorkspaceProps) => {
 											type: 'item',
 											onClick: () => {
 												openExternal(
-													LocationStore.selectedRepository.remote.replace(
+													LocationStore.selectedRepository?.remote.replace(
 														/\.git$/,
 														''
 													) +
-														`/blob/${LocationStore.selectedRepository.branch}/` +
+														`/blob/${LocationStore.selectedRepository?.branch}/` +
 														path.join(
 															commitFile.path,
 															commitFile.filename
@@ -161,7 +161,7 @@ export default (props: WorkspaceProps) => {
 											onClick: () => {
 												openInEditor(
 													path.join(
-														LocationStore.selectedRepository.path,
+														LocationStore.selectedRepository!.path,
 														commitFile.path,
 														commitFile.filename
 													)
@@ -169,7 +169,7 @@ export default (props: WorkspaceProps) => {
 											},
 											disabled: !fs.existsSync(
 												path.join(
-													LocationStore.selectedRepository.path,
+													LocationStore.selectedRepository!.path,
 													commitFile.path,
 													commitFile.filename
 												)
@@ -245,22 +245,22 @@ export default (props: WorkspaceProps) => {
 							<Show
 								when={(historyOpen()
 									? selectedCommitFile()?.path || ''
-									: file().file?.path || ''
+									: file()?.file?.path || ''
 								).endsWith('/')}
 								fallback={
 									((historyOpen()
 										? selectedCommitFile()?.path
-										: file().file?.path) || '') + '/'
+										: file()?.file?.path) || '') + '/'
 								}
 							>
-								{historyOpen() ? selectedCommitFile()?.path : file().file?.path}
+								{historyOpen() ? selectedCommitFile()?.path : file()?.file?.path}
 							</Show>
 						</div>
 						<div class="workspace__container__main__file__name">
-							{historyOpen() ? selectedCommitFile()?.filename : file().file?.name}
+							{historyOpen() ? selectedCommitFile()?.filename : file()?.file?.name}
 						</div>
 					</div>
-					<CodeView file={file().path} repository={repo()} />
+					<CodeView file={file()?.path || ''} repository={repo()!} />
 				</div>
 			</div>
 		</div>

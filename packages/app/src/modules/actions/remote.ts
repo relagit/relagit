@@ -6,7 +6,9 @@ import RepositoryStore from '@stores/repository';
 
 import { triggerWorkflow } from './workflows';
 
-export const remoteStatus = async (repository: string) => {
+export const remoteStatus = async (directory: string) => {
+	if (!directory) return;
+
 	let status: {
 		name: string;
 		url: string;
@@ -14,7 +16,7 @@ export const remoteStatus = async (repository: string) => {
 	}[];
 
 	try {
-		status = await Git.Remote(repository);
+		status = await Git.Remote(directory);
 	} catch (e) {
 		showErrorModal(e, 'error.remote');
 
@@ -23,9 +25,11 @@ export const remoteStatus = async (repository: string) => {
 		return;
 	}
 
-	const repo = RepositoryStore.getByPath(repository);
+	const repository = RepositoryStore.getByPath(directory);
 
-	triggerWorkflow('remote_fetch', repo, status);
+	if (!repository) return;
+
+	triggerWorkflow('remote_fetch', repository, status);
 
 	for (const remote of status) {
 		const { name, url, type } = remote;
@@ -33,14 +37,14 @@ export const remoteStatus = async (repository: string) => {
 		RemoteStore.addRemote({
 			url,
 			name,
-			type: type,
-			repository: repo
+			type,
+			repository
 		});
 	}
 };
 
-export const updateRemoteStatus = async (repository: string) => {
-	const remote = RemoteStore.getByRepoPath(repository);
+export const updateRemoteStatus = async (directory: string) => {
+	const remote = RemoteStore.getByRepoPath(directory);
 
 	if (!remote) return;
 
@@ -51,7 +55,7 @@ export const updateRemoteStatus = async (repository: string) => {
 	}[];
 
 	try {
-		status = await Git.Remote(repository);
+		status = await Git.Remote(directory);
 	} catch (e) {
 		showErrorModal(e, 'error.remote');
 
@@ -60,6 +64,10 @@ export const updateRemoteStatus = async (repository: string) => {
 		return;
 	}
 
+	const repository = RepositoryStore.getByPath(directory);
+
+	if (!repository) return;
+
 	for (const remote of status) {
 		const { name, url, type } = remote;
 
@@ -67,7 +75,7 @@ export const updateRemoteStatus = async (repository: string) => {
 			url,
 			name,
 			type,
-			repository: RepositoryStore.getByPath(repository)
+			repository
 		});
 	}
 };

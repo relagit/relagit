@@ -15,7 +15,7 @@ export interface PastCommit {
 }
 
 export const ShowOrigin = async (
-	repository: Repository,
+	repository: Repository | undefined,
 	file: string,
 	treeish = 'HEAD',
 	encoding: BufferEncoding = 'utf8'
@@ -39,8 +39,11 @@ export const ShowOrigin = async (
 	return res;
 };
 
-export const Show = async (repository: string, hash?: string): Promise<PastCommit | null> => {
-	if (!repository) return null;
+export const Show = async (
+	repository: string | undefined,
+	hash: string
+): Promise<PastCommit | undefined> => {
+	if (!repository) return undefined;
 
 	const res = await Git({
 		directory: repository,
@@ -64,9 +67,9 @@ export const Show = async (repository: string, hash?: string): Promise<PastCommi
 
 		const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
 
-		const p = path.dirname(name.replace('a/', '').split(' b/').pop());
+		const p = path.dirname(name.replace('a/', '').split(' b/').pop()!);
 
-		let status: GitStatus;
+		let status: GitStatus | undefined = undefined;
 
 		if (file.includes('files /dev/null')) {
 			status = 'added';
@@ -80,7 +83,7 @@ export const Show = async (repository: string, hash?: string): Promise<PastCommi
 		if (_diff.files[0]?.type === 'RenamedFile') status = 'renamed';
 
 		commit.files.push({
-			filename: path.basename(name.replace('a/', '').split(' b/').pop()),
+			filename: path.basename(name.replace('a/', '').split(' b/').pop()!),
 			path: p === '.' ? '' : p,
 			diff: _diff,
 			status: status ?? 'deleted'

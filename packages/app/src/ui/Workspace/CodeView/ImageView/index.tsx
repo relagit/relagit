@@ -91,11 +91,11 @@ export default (props: ImageViewProps) => {
 			} catch (e) {
 				error(e);
 
-				threwOut[0] = e.message || e;
+				threwOut[0] = (e as Error).message || (e as string);
 			}
 		}
 
-		if (historyOpen() ? commitFile().status !== 'deleted' : fs.existsSync(props.path)) {
+		if (historyOpen() ? commitFile()!.status !== 'deleted' : fs.existsSync(props.path)) {
 			try {
 				if (historyOpen()) {
 					const remote = await Git.ShowOrigin(
@@ -122,7 +122,7 @@ export default (props: ImageViewProps) => {
 			} catch (e) {
 				error(e);
 
-				threwOut[1] = e.message || e;
+				threwOut[1] = (e as Error).message || (e as string);
 			}
 		}
 
@@ -138,16 +138,20 @@ export default (props: ImageViewProps) => {
 					when={URIs()[0] || URIs()[1]}
 					fallback={
 						<EmptyState
-							image={{
-								light: threw ? EMPTY_STATE_IMAGES.L_ERROR : undefined,
-								dark: threw ? EMPTY_STATE_IMAGES.D_ERROR : undefined
-							}}
+							image={
+								threw()
+									? {
+											light: EMPTY_STATE_IMAGES.L_ERROR,
+											dark: EMPTY_STATE_IMAGES.D_ERROR
+									  }
+									: undefined
+							}
 							detail={t('codeview.imageview.error')}
 							hint={t('codeview.imageview.errorHint')}
 						/>
 					}
 				>
-					<Show when={!threw()[0]} fallback={<EmptyState hint={threw()[0]} />}>
+					<Show when={!threw()[0]} fallback={<EmptyState hint={threw()[0] || ''} />}>
 						<Show when={URIs()[0]}>
 							<div class="image-view__images__image">
 								<div class="image-view__images__image__type removed">Removed</div>
@@ -156,7 +160,7 @@ export default (props: ImageViewProps) => {
 										setRemovedRef(e.currentTarget);
 									}}
 									class="image-view__images__image__image removed"
-									src={URIs()[0]}
+									src={URIs()[0] || ''}
 								/>
 								<div class="image-view__images__image__details">
 									{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight}
@@ -166,7 +170,7 @@ export default (props: ImageViewProps) => {
 							</div>
 						</Show>
 					</Show>
-					<Show when={!threw()[1]} fallback={<EmptyState hint={threw()[1]} />}>
+					<Show when={!threw()[1]} fallback={<EmptyState hint={threw()[1] || ''} />}>
 						<Show when={URIs()[1]}>
 							<div class="image-view__images__image">
 								<div class="image-view__images__image__type added">Added</div>
@@ -175,7 +179,7 @@ export default (props: ImageViewProps) => {
 										setAddedRef(e.currentTarget);
 									}}
 									class="image-view__images__image__image added"
-									src={URIs()[1]}
+									src={URIs()[1] || ''}
 								/>
 								<div class="image-view__images__image__details">
 									{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight}

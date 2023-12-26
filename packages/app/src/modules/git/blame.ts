@@ -3,11 +3,11 @@ import { Git } from './core';
 export const parseBlame = (
 	rawBlame: string
 ): {
-	hash: string;
-	author: string;
+	hash?: string;
+	author?: string;
 	date: Date;
-	message: string;
-	line: string;
+	message?: string;
+	line?: string;
 }[] => {
 	const lines = rawBlame.split('boundary');
 	const blame = [];

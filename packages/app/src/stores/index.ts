@@ -1,4 +1,4 @@
-import { createRenderEffect, from } from 'solid-js';
+import { Accessor, createRenderEffect, from } from 'solid-js';
 
 export class GenericStore {
 	listeners: Set<() => void> = new Set();
@@ -25,9 +25,12 @@ export class GenericStore {
 	}
 }
 
-export function createStoreListener<T>(stores: GenericStore[], factory: () => T): () => T {
+export function createStoreListener<T>(
+	stores: GenericStore[],
+	factory: () => T
+): Accessor<T | undefined> {
 	return from((set) => {
-		const defer = [];
+		const defer: (() => unknown)[] = [];
 
 		for (const store of stores) {
 			// @ts-expect-error - not doing gymnastics to make this work

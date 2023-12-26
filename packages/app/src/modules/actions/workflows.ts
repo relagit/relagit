@@ -230,7 +230,9 @@ export const triggerWorkflow = async <E extends action>(
 
 window._triggerWorkflow = triggerWorkflow;
 
-const makeContext = (location: string) => {
+const makeContext = (location: string | undefined) => {
+	if (!location) return null;
+
 	const context = {
 		Git: {
 			Push: async (repository: Repository) => {

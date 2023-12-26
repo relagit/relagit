@@ -52,17 +52,19 @@ export default () => {
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
 		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
-		const style = settings().commit?.styles?.[LocationStore.selectedRepository?.path];
+		if (!files?.length) return { message: '', style: CommitStyle.none };
+
+		const style = settings()?.commit?.styles?.[LocationStore.selectedRepository?.path || ''];
 
 		if (!style) return { message: '', style: CommitStyle.none };
 
-		const message = getCommitStyledMessage({ files }, style, settings().commit?.preferParens)
+		const message = getCommitStyledMessage({ files }, style, settings()?.commit?.preferParens)
 			?.message;
 
 		return { message, style } as const;
 	});
 
-	let timeout = null;
+	let timeout: ReturnType<typeof setTimeout>;
 
 	createEffect(() => {
 		logger.debug('footer_effect', !(selected() && changes() && staged()));
@@ -70,7 +72,7 @@ export default () => {
 		clearTimeout(timeout);
 
 		timeout = setTimeout(() => {
-			setDebouncedShowing(selected() && changes() && staged());
+			setDebouncedShowing((selected() && changes() && staged()) || false);
 		}, 500);
 	});
 
@@ -84,11 +86,11 @@ export default () => {
 			<TextArea
 				label={t('sidebar.footer.summary')}
 				disabled={!(selected() && changes() && staged())}
-				value={draft()?.message}
+				value={draft()?.message || ''}
 				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
 				onChange={(value) => {
 					if (
-						settings().commit?.enforceStyle === true &&
+						settings()?.commit?.enforceStyle === true &&
 						commitMessage()?.style !== 'none'
 					) {
 						const allowed = validateCommitMessage(value, commitMessage()?.style);
@@ -141,7 +143,7 @@ export default () => {
 			<TextArea
 				label={t('sidebar.footer.description')}
 				disabled={!(selected() && changes() && staged())}
-				value={draft()?.description}
+				value={draft()?.description || ''}
 				placeholder={t('sidebar.footer.description')}
 				onChange={(value) => {
 					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
@@ -185,7 +187,7 @@ export default () => {
 				}
 				expanded={true}
 			/>
-			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : undefined}>
+			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : ''}>
 				{(props) => (
 					<Button
 						rest={props}
@@ -194,13 +196,13 @@ export default () => {
 						})}
 						type={error() || dangerous() ? 'danger' : 'brand'}
 						onClick={async () => {
-							LocationStore.setSelectedFile(null);
+							LocationStore.setSelectedFile(undefined);
 
 							try {
-								triggerWorkflow('commit', selected(), draft());
+								triggerWorkflow('commit', selected()!, draft()!);
 
 								await Git.Commit(
-									selected(),
+									selected()!,
 									draft()?.message,
 									draft()?.description
 								);

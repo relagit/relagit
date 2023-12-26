@@ -22,8 +22,8 @@ const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer
 
 interface ModalProps {
 	transitions: {
-		enter: (el: HTMLElement, done: () => void) => void;
-		exit: (el: HTMLElement, done: () => void) => void;
+		enter: (el: Element, done: () => void) => void;
+		exit: (el: Element, done: () => void) => void;
 	};
 	dismissable?: boolean;
 	children: (props: { close: () => void }) => JSX.Element | JSX.Element[];
@@ -34,7 +34,7 @@ interface ModalProps {
 let opened = 1;
 
 const Modal = (props: ModalProps) => {
-	const [ref, setRef] = createSignal<HTMLElement>(null);
+	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const [open, setOpen] = createSignal(false);
 
 	const { activate, deactivate } = useFocusTrap(ref, {
@@ -62,8 +62,8 @@ const Modal = (props: ModalProps) => {
 		setTimeout(() => {
 			// allow any transitions to finish
 
-			ModalStore.removeModal(ModalStore.modals.find((m) => m.element === ref()));
-		}, 1000);
+			ModalStore.removeModal(ModalStore.modals.find((m) => m.element === ref())!);
+		}, 500);
 	};
 
 	return (
@@ -157,7 +157,7 @@ Modal.Layer = () => {
 	const modals = createStoreListener([ModalStore], () => ModalStore.modals);
 
 	createEffect(() => {
-		if (modals().length > 0) {
+		if (modals()!.length > 0) {
 			LayerStore.setVisible('modal', true);
 		} else {
 			LayerStore.setVisible('modal', false);
@@ -171,7 +171,7 @@ Modal.Layer = () => {
 	);
 };
 
-export const showErrorModal = (error: Error | string, message: LocaleKey) => {
+export const showErrorModal = (error: Error | string | unknown, message: LocaleKey) => {
 	ModalStore.addModal({
 		type: 'error',
 		element: (
@@ -183,9 +183,13 @@ export const showErrorModal = (error: Error | string, message: LocaleKey) => {
 								<ModalCloseButton close={props.close} />
 							</ModalHeader>
 							<ModalBody>
-								<p class="error-modal__message">{error['message'] || error}</p>
-								<Show when={error['stack']}>
-									<pre class="error-modal__stack">{error['stack']}</pre>
+								<p class="error-modal__message">
+									{(error as Error)['message'] || (error as string)}
+								</p>
+								<Show when={(error as Error)['stack']}>
+									<pre class="error-modal__stack">
+										{(error as Error)['stack']}
+									</pre>
 								</Show>
 							</ModalBody>
 							<ModalFooter>

@@ -48,14 +48,18 @@ const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 
 export type ValidLocale = keyof typeof ALL_LOCALES;
 
+type TResult<Trans extends LocaleKey> = ResolvePropDeep<Locale, Trans> extends string
+	? ResolvePropDeep<Locale, Trans>
+	: ResolvePropDeep<Locale, Trans>[0];
+
 type Stringifyable = string | number | boolean | null | undefined;
 
-const findTranslation = (
+const findTranslation = <Trans extends LocaleKey>(
 	locale: RecursivePartial<Unstrict<Locale>>,
 	key: LocaleKey,
 	args?: Record<string, Stringifyable>,
 	plural?: number
-) => {
+): TResult<Trans> => {
 	const paths = key.split('.');
 
 	let out = '';
@@ -63,7 +67,7 @@ const findTranslation = (
 	let current: string | object = locale;
 
 	for (const path of paths) {
-		current = current[path];
+		current = (current as Record<string, string>)[path];
 
 		if (!current) break;
 	}
@@ -81,25 +85,29 @@ const findTranslation = (
 	}
 
 	if (Array.isArray(out)) {
-		out = out[plural > 1 ? 1 : 0];
+		out = out[plural! > 1 ? 1 : 0];
 	}
 
 	if (typeof out !== 'string') {
 		console.warn(`Translation for ${key} is not a string`);
 
-		return `{{${key}}}`;
+		return `{{${key}}}` as TResult<Trans>;
 	}
 
 	for (const arg in args) {
 		out = out.replace(`{{${arg}}}`, String(args[arg]));
 	}
 
-	return out;
+	return out as TResult<Trans>;
 };
 
 export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALES]) => {
-	return (key: LocaleKey, args?: Record<string, Stringifyable>, plural?: number) => {
-		return findTranslation(locale, key, args, plural);
+	return <Trans extends LocaleKey>(
+		trans: Trans,
+		params?: Record<string, Stringifyable>,
+		plural?: number
+	): TResult<Trans> => {
+		return findTranslation(locale, trans, params, plural);
 	};
 };
 
@@ -111,6 +119,4 @@ export const t: <Trans extends LocaleKey>(
 	trans: Trans,
 	params?: Record<string, Stringifyable>,
 	plural?: number
-) => ResolvePropDeep<Locale, Trans> extends string
-	? ResolvePropDeep<Locale, Trans>
-	: ResolvePropDeep<Locale, Trans>[0] = useI18n();
+) => TResult<Trans> = useI18n();

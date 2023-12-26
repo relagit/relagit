@@ -24,12 +24,16 @@ import RepositoryModal from '@ui/Modal/RepositoryModal';
 import './index.scss';
 
 const hasUncommittedChanges = (files: Map<string, GitFile[]>, repository: Repository) => {
-	return files.get(repository.path)?.length > 0;
+	const changes = files.get(repository.path);
+
+	if (!changes) return false;
+
+	return changes.length > 0;
 };
 
 export interface HeaderDrawerProps {
 	open: [Accessor<boolean>, (value: boolean) => void];
-	ref: [Accessor<HTMLDivElement>, Setter<HTMLDivElement>];
+	ref: [Accessor<HTMLDivElement | undefined>, Setter<HTMLDivElement | undefined>];
 }
 
 export default (props: HeaderDrawerProps) => {
@@ -106,12 +110,11 @@ export default (props: HeaderDrawerProps) => {
 				</div>
 				<div class="sidebar__drawer__body__content">
 					<For
-						each={Array.from(repositories()).sort((a, b) =>
+						each={Array.from(repositories() || []).sort((a, b) =>
 							a[1].name.localeCompare(b[1].name)
 						)}
 					>
-						{/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-						{([_, repository]) => (
+						{([, repository]) => (
 							<>
 								<Menu
 									items={[
@@ -186,10 +189,10 @@ export default (props: HeaderDrawerProps) => {
 											{repository.name}
 											<div class="sidebar__drawer__body__content__item__text__details">
 												{repository.branch} -{' '}
-												{renderDate(repository.lastFetched)()}
+												{renderDate(repository.lastFetched || 0)()}
 											</div>
 										</div>
-										<Show when={hasUncommittedChanges(files(), repository)}>
+										<Show when={hasUncommittedChanges(files()!, repository)}>
 											<div class="sidebar__drawer__body__content__item__indicator" />
 										</Show>
 									</button>

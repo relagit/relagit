@@ -3,6 +3,7 @@ import promises from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import type { RecursivePartial } from '~/app/src/shared';
 import type { Settings } from '~/app/src/stores/settings';
 
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
@@ -15,7 +16,7 @@ export const backgroundFromTheme = (theme: string, isDark: boolean) => {
 	return theme === 'dark' ? '#141515' : '#ffffff';
 };
 
-export const getSettings = async (): Promise<Settings> => {
+export const getSettings = async (): Promise<RecursivePartial<Settings>> => {
 	try {
 		const dir = path.join(os.homedir(), '.relagit');
 
@@ -33,9 +34,6 @@ export const getSettings = async (): Promise<Settings> => {
 	}
 };
 
-export const setSettings = async (settings: Settings) => {
-	await promises.writeFile(
-		__SETTINGS_PATH__,
-		JSON.stringify(Object.fromEntries(settings), null, 2)
-	);
+export const setSettings = async (settings: RecursivePartial<Settings>) => {
+	await promises.writeFile(__SETTINGS_PATH__, JSON.stringify(settings, null, 2));
 };

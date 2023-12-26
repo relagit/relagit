@@ -108,8 +108,8 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 };
 
 export const getMonthCounts = (commits: LogCommit[]): number[] => {
-	const monthsYears: [number, number][] = commits.map((commit) => [
-		new Date(commit.date).getMonth(),
+	const monthsYears: [keyof typeof monthCounts, number][] = commits.map((commit) => [
+		new Date(commit.date).getMonth() as keyof typeof monthCounts,
 		new Date(commit.date).getFullYear()
 	]);
 
