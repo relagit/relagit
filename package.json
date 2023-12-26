@@ -27,6 +27,7 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"@total-typescript/ts-reset": "^0.5.1",
 		"sucrase": "^3.34.0",
 		"vscode-oniguruma": "^1.7.0"
 	},
