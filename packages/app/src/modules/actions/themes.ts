@@ -29,10 +29,15 @@ export const loadThemes = async () => {
 				path.join(__THEMES_PATH__, themePath, 'index.js')
 			];
 
-			const data = await fs.promises.readFile(
-				possiblePaths.find((p) => fs.existsSync(p)),
-				'utf8'
-			);
+			const exists = possiblePaths.find((p) => fs.existsSync(p));
+
+			if (!exists) {
+				error('Failed to load theme', themePath);
+
+				continue;
+			}
+
+			const data = await fs.promises.readFile(exists, 'utf8');
 
 			const fn = new Function(
 				'require',
@@ -51,6 +56,8 @@ export const loadThemes = async () => {
 			theme = { ...th, filename: themePath, id: themePath.replace(/[^\w]/g, '-') };
 		} catch (e) {
 			error('Failed to load theme', e);
+
+			continue;
 		}
 
 		window.Native.listeners.WATCHER.add(

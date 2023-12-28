@@ -11,7 +11,6 @@ export interface Tooltip {
 		onFocus: (e: FocusEvent) => void;
 		onBlur: () => void;
 		tabIndex: number;
-		title: string;
 		'aria-labeledby': string;
 	}) => JSX.Element | JSX.Element[];
 	text: string;
@@ -24,8 +23,8 @@ export default (props: Tooltip) => {
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
 
-	let tooltip: HTMLDivElement;
-	let wrapper: HTMLDivElement;
+	const [tooltip, setTooltip] = createSignal<HTMLDivElement>();
+	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();
 
 	let hasRecentlyHidden = false;
 
@@ -48,7 +47,9 @@ export default (props: Tooltip) => {
 
 		setOpen(true);
 
-		const rect = wrapper.getBoundingClientRect();
+		const rect = wrapper()?.getBoundingClientRect();
+
+		if (!rect) return;
 
 		setX(rect.left + rect.width / 2);
 		setY(rect.top + rect.height / 2);
@@ -65,16 +66,15 @@ export default (props: Tooltip) => {
 	return (
 		<>
 			<props.children
-				title={undefined}
 				tabIndex={0}
 				onFocus={delay}
 				onBlur={hide}
 				onMouseEnter={show}
 				onMouseLeave={hide}
-				ref={wrapper}
-				aria-labeledby={open() ? id : undefined}
+				ref={setWrapper}
+				aria-labeledby={open() ? id : ''}
 			></props.children>
-			<Portal mount={document.getElementById('app-container')}>
+			<Portal mount={document.getElementById('app-container')!}>
 				<Transition
 					onEnter={(el, done) => {
 						const a = el.animate(
@@ -117,8 +117,10 @@ export default (props: Tooltip) => {
 								tooltip: true,
 								[props.position || 'top']: true
 							}}
-							ref={tooltip}
-							style={`--h: ${tooltip?.offsetHeight}px; --w: ${tooltip?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper?.offsetHeight}px; --w-w: ${wrapper?.offsetWidth}px;`}
+							ref={setTooltip}
+							style={`--h: ${tooltip()?.offsetHeight}px; --w: ${tooltip()
+								?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
+								?.offsetHeight}px; --w-w: ${wrapper()?.offsetWidth}px;`}
 						>
 							{props.text}
 							<div class="tooltip__arrow"></div>

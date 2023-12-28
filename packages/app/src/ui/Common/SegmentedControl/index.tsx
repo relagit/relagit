@@ -22,7 +22,7 @@ export default (props: SegmentedControlProps) => {
 			classList={{
 				'segmented-control': true,
 				disabled: props.disabled,
-				[props.className]: true
+				[props.className!]: true
 			}}
 		>
 			<For each={props.items}>

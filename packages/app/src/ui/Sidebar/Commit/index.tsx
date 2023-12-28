@@ -47,7 +47,7 @@ export default (props: LogCommit) => {
 							if (url.includes('bitbucket')) return `/commits/${props.hash}`;
 						};
 
-						const remote = LocationStore.selectedRepository.remote.replace(
+						const remote = LocationStore.selectedRepository?.remote.replace(
 							/\.git$/,
 							''
 						);
@@ -85,12 +85,12 @@ export default (props: LogCommit) => {
 
 					try {
 						const commit = await Git.Show(
-							LocationStore.selectedRepository.path,
+							LocationStore.selectedRepository?.path,
 							props.hash
 						);
 
 						LocationStore.setSelectedCommitFiles(commit);
-						LocationStore.setSelectedCommitFile(commit.files[0]);
+						LocationStore.setSelectedCommitFile(commit?.files[0]);
 					} catch (e) {
 						showErrorModal(e, 'error.git');
 
@@ -104,12 +104,12 @@ export default (props: LogCommit) => {
 
 						try {
 							const commit = await Git.Show(
-								LocationStore.selectedRepository.path,
+								LocationStore.selectedRepository?.path,
 								props.hash
 							);
 
 							LocationStore.setSelectedCommitFiles(commit);
-							LocationStore.setSelectedCommitFile(commit.files[0]);
+							LocationStore.setSelectedCommitFile(commit?.files[0]);
 						} catch (e) {
 							showErrorModal(e, 'error.git');
 

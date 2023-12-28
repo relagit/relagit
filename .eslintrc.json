@@ -39,6 +39,7 @@
 		"prefer-const": "error",
 		"prefer-spread": "error",
 		"no-unsafe-optional-chaining": "error",
-		"no-nested-ternary": "warn"
+		"no-nested-ternary": "warn",
+		"@typescript-eslint/no-non-null-assertion": "off"
 	}
 }

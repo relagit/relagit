@@ -19,11 +19,11 @@ import './index.scss';
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
-let languageFile;
+let languageFile: Record<string, { color: string }>;
 
 fetch('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json')
 	.then((r) => r.json())
-	.then((r) => (languageFile = r));
+	.then((r) => (languageFile = r as Record<string, { color: string }>));
 
 const getLanguageColor = (language: string) => {
 	return languageFile[language]?.color || '#000';
@@ -40,9 +40,13 @@ export default () => {
 		null
 	);
 	const [searchQuery, setSearchQuery] = createSignal('');
-	const [readme, setReadme] = createSignal<GithubResponse['repos/:username/:repo/readme'][1]>();
+	const [readme, setReadme] = createSignal<
+		GithubResponse['repos/:username/:repo/readme'][1] | null
+	>();
 	const [readmeHtml, setReadmeHtml] = createSignal<string | null>(null);
-	const [opened, setOpened] = createSignal<GithubResponse['users/:username/repos'][1][number]>();
+	const [opened, setOpened] = createSignal<
+		GithubResponse['users/:username/repos'][1][number] | null
+	>();
 	const [cloneReady, setCloneReady] = createSignal(false);
 	const [error, setError] = createSignal(false);
 	const [path, setPath] = createSignal('');
@@ -81,13 +85,13 @@ export default () => {
 		try {
 			const readme = await GitHub('repos/:username/:repo/readme').get(
 				searchQuery(),
-				opened().name
+				opened()!.name
 			);
 			const html = await GitHub('repos/:username/:repo/readme')
 				.headers<string>({
 					Accept: 'application/vnd.github.v3.html'
 				})
-				.get(searchQuery(), opened().name);
+				.get(searchQuery(), opened()!.name);
 
 			setReadme(readme);
 			setReadmeHtml(html);
@@ -183,31 +187,33 @@ export default () => {
 										>
 											<Icon name="arrow-left" /> {t('modal.github.back')}
 										</Button>
-										<h2 class="github-modal__header__title">{opened().name}</h2>
+										<h2 class="github-modal__header__title">
+											{opened()?.name}
+										</h2>
 										<div class="github-modal__header__social">
-											<Show when={opened().stargazers_count}>
+											<Show when={opened()?.stargazers_count}>
 												<div class="github-modal__header__social__stars">
 													<Icon name="star" />
-													{opened().stargazers_count}
+													{opened()?.stargazers_count}
 												</div>
 											</Show>
-											<Show when={opened().forks_count}>
+											<Show when={opened()?.forks_count}>
 												<div class="github-modal__header__social__forks">
 													<Icon name="git-branch" />
-													{opened().forks_count}
+													{opened()?.forks_count}
 												</div>
-												<Show when={opened().language}>
+												<Show when={opened()?.language}>
 													<div class="github-modal__header__social__language">
 														<div
 															class="github-modal__header__social__language__indicator"
 															style={{
 																'background-color':
 																	getLanguageColor(
-																		opened().language
+																		opened()?.language || ''
 																	)
 															}}
 														></div>
-														{opened().language}
+														{opened()?.language}
 													</div>
 												</Show>
 											</Show>
@@ -224,7 +230,7 @@ export default () => {
 													innerHTML={readmeHtml()?.replace(
 														'src="./',
 														`src="${nodepath.dirname(
-															readme()?.download_url
+															readme()?.download_url || ''
 														)}/`
 													)}
 												></div>
@@ -246,7 +252,7 @@ export default () => {
 													label={t('modal.github.viewOnGithub')}
 													type="default"
 													onClick={() => {
-														openExternal(opened().html_url);
+														openExternal(opened()!.html_url);
 													}}
 												>
 													{t('modal.github.viewOnGithub')}
@@ -292,7 +298,7 @@ export default () => {
 
 								<Show when={response()}>
 									<div class="github-modal__list">
-										<For each={response().sort(makeSorter())}>
+										<For each={response()!.sort(makeSorter())}>
 											{(repo) => (
 												<div
 													aria-role="button"
@@ -371,7 +377,7 @@ export default () => {
 										disabled={!path()}
 										onClick={async () => {
 											try {
-												await Git.Clone(opened().clone_url, path());
+												await Git.Clone(opened()!.clone_url, path());
 
 												props.close();
 											} catch (e) {

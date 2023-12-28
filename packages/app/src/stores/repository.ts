@@ -28,7 +28,9 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 		return this.#record;
 	}
 
-	getById(id: string) {
+	getById(id: string | undefined) {
+		if (!id) return;
+
 		return this.repositories.get(id);
 	}
 
@@ -49,7 +51,7 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 
 			debug('Filesystem change detected', changepath);
 
-			window._refetchRepository(this.getByPath(path));
+			window._refetchRepository(this.getByPath(path)!);
 
 			fsTimeout = setTimeout(() => {
 				fsTimeout = null;
@@ -72,7 +74,7 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 
 	updateRepository(id: string, replacement: Partial<Repository>) {
 		this.#record.set(id, {
-			...this.getById(id),
+			...this.getById(id)!,
 			...replacement
 		});
 

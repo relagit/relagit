@@ -2,11 +2,19 @@ import { GithubResponse } from './types';
 
 export * from './types';
 
+type _HeadersInit = HeadersInit & {
+	Accept:
+		| 'application/vnd.github.v3+json'
+		| 'application/vnd.github.v3.html'
+		| 'text/plain'
+		| 'text/html';
+};
+
 export const GitHub = <T extends keyof GithubResponse>(
 	path: T
 ): {
 	headers: <R = GithubResponse[T][1]>(
-		headers: HeadersInit
+		headers: _HeadersInit
 	) => {
 		get: (...params: GithubResponse[T][0]) => Promise<R>;
 	};
@@ -30,16 +38,16 @@ export const GitHub = <T extends keyof GithubResponse>(
 		Accept: 'application/vnd.github.v3+json'
 	};
 
-	const get = async (...params: GithubResponse[T][0]) => {
+	const get = async <R = GithubResponse[T][1]>(...params: GithubResponse[T][0]): Promise<R> => {
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
 		const res = await fetch(url, { headers });
 
 		if (res.status !== 200) throw res.statusText;
 
-		return await (headers['Accept'] === 'application/vnd.github.v3+json'
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
 			? res.json()
-			: res.text());
+			: res.text())) as R;
 	};
 
 	const headersFn = (newHeaders: HeadersInit) => {
@@ -55,5 +63,3 @@ export const GitHub = <T extends keyof GithubResponse>(
 		get
 	};
 };
-
-GitHub('users/:username').get('octocat');

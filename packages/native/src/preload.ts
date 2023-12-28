@@ -38,7 +38,9 @@ export const Native = {
 		                    : unknown => {
 		if (id.startsWith('electron:')) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			return require('electron')[id.replace('electron:', '')];
+			return require('electron')[
+				id.replace('electron:', '') as keyof typeof import('electron')
+			] as ReturnType<typeof require>;
 		}
 
 		return require(id);

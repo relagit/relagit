@@ -1,4 +1,4 @@
-import { JSX, Show } from 'solid-js';
+import { JSX, Show, createSignal } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
@@ -13,8 +13,8 @@ export interface LayerProps {
 	initialVisible?: boolean;
 	children: JSX.Element | JSX.Element[];
 	transitions?: {
-		enter?: (el: HTMLElement, done: () => void) => void;
-		exit?: (el: HTMLElement, done: () => void) => void;
+		enter?: (el: Element, done: () => void) => void;
+		exit?: (el: Element, done: () => void) => void;
 	};
 }
 
@@ -26,7 +26,7 @@ const Layer = (props: LayerProps) => {
 
 	const visible = createStoreListener([LayerStore], () => LayerStore.visible(props.key));
 
-	let layerRef: HTMLDivElement;
+	const [ref, setRef] = createSignal<HTMLDivElement>();
 
 	return (
 		<div
@@ -35,10 +35,10 @@ const Layer = (props: LayerProps) => {
 				[`layer-${props.type || 'bare'}`]: true,
 				visible: visible()
 			}}
-			ref={layerRef}
+			ref={setRef}
 			data-key={props.key}
 			onMouseDown={(e) => {
-				if (props.dismissable && e.target === layerRef)
+				if (props.dismissable && e.target === ref())
 					LayerStore.setVisible(props.key, false);
 			}}
 		>
@@ -51,7 +51,13 @@ const Layer = (props: LayerProps) => {
 
 export default Layer;
 
-Layer.Transitions = {
+const transitions: Record<
+	'None' | 'Fade',
+	{
+		enter: (el: Element, done: () => void) => void;
+		exit: (el: Element, done: () => void) => void;
+	}
+> = {
 	None: {
 		enter: (el, done) => {
 			done();
@@ -103,3 +109,5 @@ Layer.Transitions = {
 		}
 	}
 };
+
+Layer.Transitions = transitions;

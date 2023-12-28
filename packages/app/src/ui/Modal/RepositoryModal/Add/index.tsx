@@ -33,7 +33,7 @@ export default (props: AddRepositoryModalProps) => {
 	const [allowClose, setAllowClose] = createSignal(false);
 
 	onMount(() => {
-		if (onboarding().step === 2 && onboarding().dismissed !== true) {
+		if (onboarding()!.step === 2 && onboarding()!.dismissed !== true) {
 			setTimeout(() => {
 				onboardingStepState[1](true);
 			}, 200);
@@ -41,7 +41,7 @@ export default (props: AddRepositoryModalProps) => {
 	});
 
 	createEffect(() => {
-		if (onboarding().step === 3 && onboarding().dismissed !== true) {
+		if (onboarding()!.step === 3 && onboarding()!.dismissed !== true) {
 			onboardingStepState2[1](true);
 		}
 	});
@@ -120,7 +120,7 @@ export default (props: AddRepositoryModalProps) => {
 											<div
 												classList={{
 													'onboarding-tooltip__step': true,
-													active: onboarding().step === i
+													active: onboarding()!.step === i
 												}}
 											/>
 										)}
@@ -173,7 +173,7 @@ export default (props: AddRepositoryModalProps) => {
 											<div
 												classList={{
 													'onboarding-tooltip__step': true,
-													active: onboarding().step === i
+													active: onboarding()!.step === i
 												}}
 											/>
 										)}

@@ -19,7 +19,7 @@ export type IMenuItem =
 export interface Menu {
 	children?: JSX.Element | JSX.Element[];
 	items: IMenuItem[];
-	event?: string;
+	event?: keyof HTMLElementEventMap;
 }
 
 export default (props: Menu) => {
@@ -40,17 +40,21 @@ export default (props: Menu) => {
 		deactivate();
 	};
 
-	const click = (e) => {
+	const click = (e: MouseEvent) => {
 		if (menu() === e.target) return;
 
-		if (!menu().contains(e.target)) return hide();
+		if (!menu()?.contains(e.target as HTMLElement)) return hide();
 	};
 
-	const wrapperListener = (e: MouseEvent) => {
+	const wrapperListener = (e: Event) => {
 		e.stopPropagation();
 
-		setX(e.clientX || e.target?.['getBoundingClientRect']?.()?.x);
-		setY(e.clientY || e.target?.['getBoundingClientRect']?.()?.y);
+		setX(
+			(e as MouseEvent).clientX || (e.target as HTMLElement)?.['getBoundingClientRect']?.()?.x
+		);
+		setY(
+			(e as MouseEvent).clientY || (e.target as HTMLElement)?.['getBoundingClientRect']?.()?.y
+		);
 
 		const alreadyOpen = open();
 
@@ -68,12 +72,12 @@ export default (props: Menu) => {
 		const menuWidth = menu()?.offsetWidth;
 		const windowWidth = window.innerWidth;
 
-		if (y() + menuHeight > windowHeight - 10) {
-			setY((v) => v - (v + menuHeight - windowHeight) - 10);
+		if (y() + menuHeight! > windowHeight - 10) {
+			setY((v) => v - (v + menuHeight! - windowHeight) - 10);
 		}
 
-		if (x() + menuWidth > windowWidth - 10) {
-			setX((v) => v - (v + menuWidth - windowWidth) - 10);
+		if (x() + menuWidth! > windowWidth - 10) {
+			setX((v) => v - (v + menuWidth! - windowWidth) - 10);
 		}
 
 		if (open()) {
@@ -84,13 +88,13 @@ export default (props: Menu) => {
 			document.removeEventListener('contextmenu', hide);
 		}
 
-		wrapper().addEventListener(props.event || 'contextmenu', wrapperListener);
+		wrapper()?.addEventListener(props.event || 'contextmenu', wrapperListener);
 	});
 
 	return (
 		<>
 			<Show when={open()}>
-				<Portal mount={document.getElementById('app-container')}>
+				<Portal mount={document.getElementById('app-container')!}>
 					<div
 						onKeyDown={(e) => {
 							if (e.key === 'Escape') {

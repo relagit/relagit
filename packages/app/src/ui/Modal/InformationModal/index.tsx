@@ -74,7 +74,7 @@ export const InformationModal = () => {
 
 		setSize(size);
 
-		const months = getMonthCounts(await Git.Log(repository()));
+		const months = getMonthCounts(await Git.Log(repository()!));
 
 		setMonths(months);
 
@@ -89,9 +89,9 @@ export const InformationModal = () => {
 				<div class="information-modal__metadata__panel metadata">
 					<MetadataItem
 						label={t('modal.information.items.diskPath')}
-						value={repository()?.path}
+						value={repository()?.path || t('modal.information.items.unknown')}
 						openExternal={() => {
-							showItemInFolder(repository()?.path);
+							showItemInFolder(repository()?.path || '');
 						}}
 					/>
 					<MetadataItem
@@ -100,13 +100,13 @@ export const InformationModal = () => {
 					/>
 					<MetadataItem
 						label={t('modal.information.items.updated')}
-						value={renderDate(repository()?.lastFetched)()}
+						value={renderDate(repository()?.lastFetched || 0)()!}
 					/>
 					<MetadataItem
 						label={t('modal.information.items.remote')}
-						value={repository()?.remote}
+						value={repository()?.remote || t('modal.information.items.unknown')}
 						openExternal={() => {
-							openExternal(repository()?.remote);
+							openExternal(repository()?.remote || '');
 						}}
 					/>
 				</div>
@@ -136,18 +136,18 @@ export const InformationModal = () => {
 											{(p) => (
 												<div
 													{...p}
-													tabIndex={months()?.[i() as 0] > 0 ? 0 : -1}
+													tabIndex={months()![i() as 0] > 0 ? 0 : -1}
 													class="information-modal__metadata__panel__graph__values__item"
 													style={{
 														'--alpha-factor': `${
 															((months()?.[i() as 0] || 0) /
-																largestMonth()) *
+																largestMonth()!) *
 																0.5 +
 															0.3
 														}`,
 														height: `${
 															((months()?.[i() as 0] || 0) /
-																largestMonth()) *
+																largestMonth()!) *
 															100
 														}%`
 													}}

@@ -48,7 +48,7 @@ const constructWindow = async () => {
 	let transparent = settings.ui?.vibrancy && process.platform === 'win32' ? true : undefined;
 	let backgroundColor = settings.ui?.vibrancy
 		? '#00000000'
-		: backgroundFromTheme(settings.ui?.theme, nativeTheme.shouldUseDarkColors);
+		: backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
@@ -64,7 +64,7 @@ const constructWindow = async () => {
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			height: 27,
-			color: backgroundFromTheme(settings.ui?.theme, nativeTheme.shouldUseDarkColors),
+			color: backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors),
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',

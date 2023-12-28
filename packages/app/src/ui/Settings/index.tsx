@@ -1,7 +1,7 @@
 import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { Accessor, For, Show, createSignal, onCleanup, onMount } from 'solid-js';
 
-import { iconFromAction, workflows } from '@app/modules/actions';
+import { Workflow, iconFromAction, workflows } from '@app/modules/actions';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
 import { t } from '@app/modules/i18n';
@@ -183,7 +183,7 @@ export const Switch = (props: SwitchProps) => {
 export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
-	const [ref, setRef] = createSignal<HTMLElement>(null);
+	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 
 	const [open, setOpen] = createSignal(LayerStore.visible('settings'));
 
@@ -247,8 +247,9 @@ export default () => {
 					]}
 					disabled={!LocationStore.selectedRepository}
 					value={
-						settings().commit?.styles?.[LocationStore.selectedRepository?.path] ||
-						'none'
+						settings()?.commit?.styles?.[
+							LocationStore.selectedRepository?.path || ''
+						] || 'none'
 					}
 					onChange={(value) => {
 						SettingsStore.setSetting(
@@ -262,7 +263,7 @@ export default () => {
 				<Switch
 					label={t('settings.general.enforceCommitStyle.label')}
 					note={t('settings.general.enforceCommitStyle.description')}
-					value={() => settings().commit?.enforceStyle}
+					value={() => settings()?.commit?.enforceStyle || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.enforceStyle', value);
 					}}
@@ -272,7 +273,7 @@ export default () => {
 				<Switch
 					label={t('settings.general.preferParens.label')}
 					note={t('settings.general.preferParens.description')}
-					value={() => settings().commit?.preferParens}
+					value={() => settings()?.commit?.preferParens || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.preferParens', value);
 					}}
@@ -307,7 +308,7 @@ export default () => {
 							value: 'lat'
 						}
 					]}
-					value={settings().locale}
+					value={settings()?.locale || 'en-US'}
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
 
@@ -339,7 +340,7 @@ export default () => {
 							value: 'subl'
 						}
 					]}
-					value={settings().externalEditor || 'code'}
+					value={settings()?.externalEditor || 'code'}
 					onChange={(value) => {
 						SettingsStore.setSetting(
 							'externalEditor',
@@ -353,7 +354,7 @@ export default () => {
 		</>
 	);
 
-	const [openWorkflows, setOpenWorkflows] = createSignal(null);
+	const [openWorkflows, setOpenWorkflows] = createSignal<Workflow | null>(null);
 
 	const Workflows = (
 		<>
@@ -418,7 +419,7 @@ export default () => {
 					disabled={
 						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
 					}
-					value={() => !!settings().ui?.vibrancy}
+					value={() => !!settings()?.ui?.vibrancy}
 					onChange={(value) => {
 						SettingsStore.setSetting('ui.vibrancy', value);
 
@@ -440,8 +441,8 @@ export default () => {
 									aria-label={t('settings.appearance.theme.choose', {
 										theme
 									})}
-									aria-selected={settings().ui?.theme === theme}
-									classList={{ active: settings().ui?.theme === theme }}
+									aria-selected={settings()?.ui?.theme === theme}
+									classList={{ active: settings()?.ui?.theme === theme }}
 									tabIndex={0}
 									onKeyDown={(e) => {
 										if (e.key === 'Enter') {
@@ -455,7 +456,7 @@ export default () => {
 									<input
 										type="radio"
 										value={theme}
-										checked={settings().ui?.theme === theme}
+										checked={settings()?.ui?.theme === theme}
 										onChange={() => {
 											SettingsStore.setSetting(
 												'ui.theme',
@@ -510,7 +511,7 @@ export default () => {
 				<TextArea
 					label={t('settings.appearance.font.label')}
 					className="settings-layer__setting__textarea"
-					value={settings().ui?.fontFamily || ''}
+					value={settings()?.ui?.fontFamily || ''}
 					onChange={(value) => {
 						SettingsStore.setSetting('ui.fontFamily', value);
 					}}
@@ -521,7 +522,7 @@ export default () => {
 				<Switch
 					label={t('settings.appearance.thinIcons.label')}
 					note={t('settings.appearance.thinIcons.description')}
-					value={() => settings().ui?.thinIcons}
+					value={() => settings()?.ui?.thinIcons || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('ui.thinIcons', value);
 					}}
@@ -545,7 +546,8 @@ export default () => {
 											.map((a) => a.name)
 											.join(', ')})`}
 										value={() =>
-											settings().ui?.userThemes?.includes?.(theme.id)
+											settings()?.ui?.userThemes?.includes?.(theme.id) ||
+											false
 										}
 										onChange={() => {
 											toggleTheme(theme.id);
