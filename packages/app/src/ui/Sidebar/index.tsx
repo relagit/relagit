@@ -30,6 +30,8 @@ export default (props: SidebarProps) => {
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [commits, setCommits] = createSignal<LogCommit[]>([]);
 
+	const [footerShowing, setFooterShowing] = createSignal(false);
+
 	let lastRepository: Repository | undefined;
 
 	createStoreListener([RepositoryStore, LocationStore], async () => {
@@ -70,7 +72,12 @@ export default (props: SidebarProps) => {
 				</div>
 			</Show>
 			<Show when={!historyOpen()}>
-				<div class="sidebar__items">
+				<div
+					class="sidebar__items"
+					style={{
+						height: footerShowing() ? 'calc(100% - 336px)' : 'calc(100% - 92px)'
+					}}
+				>
 					<Show
 						when={files()?.length}
 						fallback={<EmptyState hint={t('sidebar.upToDate')} />}
@@ -86,7 +93,7 @@ export default (props: SidebarProps) => {
 				</div>
 			</Show>
 			<Show when={!historyOpen()}>
-				<Footer />
+				<Footer showingSignal={[footerShowing, setFooterShowing]} />
 			</Show>
 		</div>
 	);

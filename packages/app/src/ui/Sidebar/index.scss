@@ -42,6 +42,7 @@
 		overflow: hidden auto;
 		padding: 0;
 		margin: 0;
+		transition: height 0.5s ease-in-out;
 
 		&::-webkit-scrollbar {
 			width: 4px;

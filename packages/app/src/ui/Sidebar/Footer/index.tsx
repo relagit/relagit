@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js';
+import { Signal, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
@@ -21,8 +21,8 @@ import { showErrorModal } from '@ui/Modal';
 
 import './index.scss';
 
-export default () => {
-	const [debouncedShowing, setDebouncedShowing] = createSignal(false);
+export default (props: { showingSignal: Signal<boolean> }) => {
+	const [debouncedShowing, setDebouncedShowing] = props.showingSignal;
 	const [error, setError] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
