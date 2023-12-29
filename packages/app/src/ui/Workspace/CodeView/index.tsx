@@ -25,7 +25,9 @@ type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
 export const BINARY_EXTENSIONS = ['.DS_Store', '.exe', '.dll', '.so', '.dylib', '.o', '.a'];
 
-const extname = (file: string) => {
+const extname = (file: string | undefined) => {
+	if (!file) return '';
+
 	return file?.split('.').length > 1 ? `.${file.split('.').pop()}` : file;
 };
 
@@ -65,7 +67,7 @@ export default (props: CodeViewProps) => {
 	const [diff, setDiff] = createSignal<GitDiff | null | true>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
-	const [blame, setBlame] = createSignal<GitBlame>();
+	const [blame, setBlame] = createSignal<GitBlame | null>();
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
@@ -115,7 +117,7 @@ export default (props: CodeViewProps) => {
 				contents = await Git.Content(props.file, props.repository);
 				_diff = await Git.Diff(props.file, props.repository);
 			} catch (e) {
-				setThrew(e);
+				setThrew(e as Error);
 
 				setSwitching(false);
 
@@ -141,15 +143,15 @@ export default (props: CodeViewProps) => {
 				!IMAGE_EXTENSIONS.includes(extname(props.file || commit()?.filename))
 			) {
 				if (_diff === DIFF_CODES.REMOVE_ALL) {
-					setContent(highlighter(contents, langFrom(props.file || '')));
+					setContent(highlighter(contents!, langFrom(props.file || '')));
 
 					setDiff(null);
 				} else if (_diff === DIFF_CODES.ADD_ALL) {
-					setContent(highlighter(contents, langFrom(props.file || '')));
+					setContent(highlighter(contents!, langFrom(props.file || '')));
 
 					setDiff(true);
 				} else {
-					const parsed = parseDiff(_diff);
+					const parsed = parseDiff(_diff!);
 
 					setDiff(parsed);
 				}
@@ -159,7 +161,7 @@ export default (props: CodeViewProps) => {
 				setShouldShow(true);
 			}
 		} catch (e) {
-			setThrew(e);
+			setThrew(e as Error);
 
 			setSwitching(false);
 
@@ -199,7 +201,7 @@ export default (props: CodeViewProps) => {
 					fallback={
 						<EmptyState
 							detail={t('codeview.errorHint')}
-							hint={threw().message}
+							hint={threw()?.message}
 							image={{
 								light: EMPTY_STATE_IMAGES.L_ERROR,
 								dark: EMPTY_STATE_IMAGES.D_ERROR
@@ -274,12 +276,12 @@ export default (props: CodeViewProps) => {
 												historyOpen()
 													? path.join(
 															props.repository,
-															commit()?.path,
-															commit()?.filename
+															commit()!.path,
+															commit()!.filename
 													  )
 													: props.file
 											}
-											status={fileStatus()}
+											status={fileStatus()!}
 										/>
 									</Show>
 									<Show
@@ -377,8 +379,8 @@ export default (props: CodeViewProps) => {
 																	{...props}
 																	class="codeview__line__blame"
 																>
-																	{lineBlame.author},{' '}
-																	{lineBlame.message}
+																	{lineBlame!.author},{' '}
+																	{lineBlame!.message}
 																</div>
 															</Show>
 														</div>
@@ -391,7 +393,7 @@ export default (props: CodeViewProps) => {
 											{(chunk) => {
 												const _diff = diff();
 
-												if (typeof _diff === 'boolean') {
+												if (typeof _diff === 'boolean' || !_diff) {
 													return null;
 												}
 
@@ -530,8 +532,8 @@ export default (props: CodeViewProps) => {
 																				{...props}
 																				class="codeview__line__blame"
 																			>
-																				{lineBlame.author},{' '}
-																				{lineBlame.message}
+																				{lineBlame!.author},{' '}
+																				{lineBlame!.message}
 																			</div>
 																		</Show>
 																	</div>

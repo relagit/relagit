@@ -7,7 +7,7 @@ import './index.scss';
 interface ButtonProps {
 	children: JSX.Element | JSX.Element[];
 	type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
-	onClick: () => void;
+	onClick?: () => void;
 	className?: string;
 	disabled?: boolean;
 	label: string;
@@ -25,7 +25,7 @@ export default (props: PassthroughRef<ButtonProps>) => {
 			classList={{
 				button: true,
 				[props.type]: true,
-				[props.className]: true
+				[props.className || '']: true
 			}}
 			onClick={props.onClick}
 			disabled={props.disabled}

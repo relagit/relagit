@@ -25,7 +25,7 @@ import './index.scss';
 export interface PanelButtonProps {
 	id: string;
 	icon: IconName | keyof typeof customIcons;
-	iconVariant?: 12 | 16 | 24 | 32;
+	iconVariant?: 12 | 16 | 24;
 	name?: string;
 	onClick: (e: MouseEvent) => void;
 	size?: 'small' | 'medium' | 'large';
@@ -40,13 +40,8 @@ export interface PanelButtonProps {
 
 const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 	return (
-		<Tooltip text={props.tooltip} position={props.tooltipPosition || 'auto'}>
+		<Tooltip text={props.tooltip || ''} position={props.tooltipPosition || 'auto'}>
 			{(p) => {
-				if (!props.tooltip) {
-					// @ts-expect-error - we are just removing the tooltip props
-					p = {};
-				}
-
 				return (
 					<button
 						{...p}
@@ -61,7 +56,7 @@ const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 							'workspace__header__panelbutton-medium': props.size === 'medium',
 							'workspace__header__panelbutton-large': props.size === 'large',
 							disabled: props.disabled || props.loading,
-							[props.className]: true
+							[props.className!]: true
 						}}
 						onClick={props.onClick}
 						id={props.id}
@@ -102,12 +97,14 @@ export default () => {
 	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
 	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
-	const [branches, setBranches] = createSignal<Branch[]>(null);
-	const [stashes, setStashes] = createSignal<Record<number, string[]>>(null);
-	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind'>(null);
+	const [branches, setBranches] = createSignal<Branch[] | null>(null);
+	const [stashes, setStashes] = createSignal<Record<number, string[]> | null>(null);
+	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind' | null>(
+		null
+	);
 	const [actioning, setActioning] = createSignal(false);
 	const [stashActioning, setStashActioning] = createSignal(false);
-	const [previous, setPrevious] = createSignal('');
+	const [previous, setPrevious] = createSignal<string | undefined>('');
 
 	const fetching = createStoreListener(
 		[LocationStore],
@@ -118,12 +115,12 @@ export default () => {
 		return SettingsStore.getSetting('ui.thinIcons') ? 24 : 16;
 	});
 
-	let branchesRef: Accessor<HTMLElement>;
+	let branchesRef: Accessor<HTMLElement | undefined>;
 
 	window.Native.listeners.BRANCHES(() => {
 		if (!branchesRef()) return;
 
-		branchesRef().click();
+		branchesRef()?.click();
 	});
 
 	createEffect(async () => {
@@ -131,13 +128,13 @@ export default () => {
 
 		const previous = await Git.PreviousCommit(repository());
 
-		if (!previous) return setPrevious(null);
+		if (!previous) return setPrevious(undefined);
 
 		setPrevious(previous);
 	});
 
 	createEffect(() => {
-		if (onboarding().step === 4 && onboarding().dismissed !== true) {
+		if (onboarding()!.step === 4 && onboarding()!.dismissed !== true) {
 			onboardingStepState[1](true);
 		}
 	});
@@ -176,7 +173,7 @@ export default () => {
 		}
 
 		try {
-			const res = await Git.ListStash(LocationStore.selectedRepository);
+			const res = await Git.ListStash(LocationStore.selectedRepository!);
 
 			setStashes(res);
 		} catch (e) {
@@ -200,7 +197,7 @@ export default () => {
 		<div class="workspace__header">
 			<PanelButton
 				loading={fetching()}
-				detail={renderDate(repository()?.lastFetched)()}
+				detail={renderDate(repository()?.lastFetched || 0)()}
 				label={t('git.sync')}
 				icon="sync"
 				iconVariant={iconVariant()}
@@ -212,27 +209,28 @@ export default () => {
 			/>
 			<Menu
 				items={[
-					status() === 'ahead' && {
-						label: t('git.undo', {
-							sha: previous()?.substring(0, 7)
-						}),
-						onClick: async () => {
-							try {
-								await Git.Reset(
-									LocationStore.selectedRepository,
-									await Git.PreviousCommit(repository(), previous())
-								);
+					status() === 'ahead' &&
+						({
+							label: t('git.undo', {
+								sha: previous()?.substring(0, 7)
+							}),
+							onClick: async () => {
+								try {
+									await Git.Reset(
+										LocationStore.selectedRepository,
+										await Git.PreviousCommit(repository(), previous())
+									);
 
-								refetchRepository(LocationStore.selectedRepository);
-							} catch (e) {
-								showErrorModal(e, 'error.git');
+									refetchRepository(LocationStore.selectedRepository);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
 
-								error(e);
-							}
-						},
-						type: 'item'
-					}
-				]}
+									error(e);
+								}
+							},
+							type: 'item'
+						} as const)
+				].filter(Boolean)}
 			>
 				<PanelButton
 					loading={actioning()}
@@ -306,7 +304,7 @@ export default () => {
 								try {
 									await Git.Push(LocationStore.selectedRepository);
 
-									triggerWorkflow('push', LocationStore.selectedRepository);
+									triggerWorkflow('push', LocationStore.selectedRepository!);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -342,11 +340,11 @@ export default () => {
 								try {
 									await Git.Stash(LocationStore.selectedRepository);
 
-									triggerWorkflow('stash', LocationStore.selectedRepository);
+									triggerWorkflow('stash', LocationStore.selectedRepository!);
 
 									await Git.Pull(LocationStore.selectedRepository);
 
-									triggerWorkflow('pull', LocationStore.selectedRepository);
+									triggerWorkflow('pull', LocationStore.selectedRepository!);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -367,7 +365,7 @@ export default () => {
 										repository()?.branch
 									);
 
-									triggerWorkflow('push', LocationStore.selectedRepository);
+									triggerWorkflow('push', LocationStore.selectedRepository!);
 								} catch (e) {
 									showErrorModal(e, 'error.git');
 
@@ -429,7 +427,7 @@ export default () => {
 							try {
 								await Git.PopStash(LocationStore.selectedRepository, 0);
 
-								triggerWorkflow('stash_pop', LocationStore.selectedRepository);
+								triggerWorkflow('stash_pop', LocationStore.selectedRepository!);
 
 								setStashActioning(false);
 
@@ -445,16 +443,16 @@ export default () => {
 						detail={t(
 							'git.stashedChanges',
 							{
-								stashCount: Object.keys(stashes()).length,
+								stashCount: Object.keys(stashes()!).length,
 								count: t(
 									'git.files',
 									{
-										count: stashes()[0].length
+										count: stashes()![0].length
 									},
-									stashes()[0].length
+									stashes()![0].length
 								)
 							},
-							Object.keys(stashes()).length
+							Object.keys(stashes()!).length
 						)}
 					/>
 				</Menu>
@@ -465,7 +463,7 @@ export default () => {
 				body={() => (
 					<div class="branches-picker">
 						<div class="branches-picker__label" tabIndex={0}>
-							{t('git.branches', null, branches()?.length)}
+							{t('git.branches', {}, branches()?.length)}
 						</div>
 						<div class="branches-picker__list">
 							<For each={branches()}>
@@ -593,7 +591,7 @@ export default () => {
 										onClick={async () => {
 											const input = inputRef()?.querySelector('input');
 
-											if (!input.value) return;
+											if (!input?.value) return;
 
 											try {
 												await Git.CreateBranch(
@@ -677,7 +675,7 @@ export default () => {
 									<div
 										classList={{
 											'onboarding-tooltip__step': true,
-											active: onboarding().step === i
+											active: onboarding()!.step === i
 										}}
 									/>
 								)}

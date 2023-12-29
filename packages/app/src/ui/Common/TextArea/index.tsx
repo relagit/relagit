@@ -25,7 +25,7 @@ export default (props: TextareaProps) => {
 				aria-label={props.label}
 				classList={{
 					textarea: true,
-					[props.className]: true,
+					[props.className!]: true,
 					expanded: props.expanded
 				}}
 				value={props.value}

@@ -23,6 +23,8 @@ export default (window: BrowserWindow) => {
 
 	win = window;
 
+	if (!win) return;
+
 	win.webContents.on('will-navigate', (e, url) => {
 		e.preventDefault();
 
@@ -30,13 +32,13 @@ export default (window: BrowserWindow) => {
 	});
 
 	ipcMain.handle(ipc.OPEN_FILE_DIALOG, async (_, options: OpenDialogOptions) => {
-		return await dialog.showOpenDialog(win, options);
+		return await dialog.showOpenDialog(win!, options);
 	});
 
 	ipcMain.handle(
 		ipc.ALERT,
 		(_, message: string, type: 'none' | 'info' | 'error' | 'question' | 'warning') => {
-			dialog.showMessageBox(win, {
+			dialog.showMessageBox(win!, {
 				type,
 				message
 			});
@@ -92,7 +94,11 @@ export default (window: BrowserWindow) => {
 				encoding?: 'binary';
 			} & child_process.ExecOptions
 		) => {
-			const out = {
+			const out: {
+				error: child_process.ExecException | null;
+				stdout: string | null;
+				stderr: string | null;
+			} = {
 				error: null,
 				stdout: null,
 				stderr: null
@@ -116,5 +122,5 @@ export default (window: BrowserWindow) => {
 };
 
 export const dispatch = (channel: string, ...args: unknown[]) => {
-	return win.webContents.send(channel, ...args);
+	return win?.webContents.send(channel, ...args);
 };

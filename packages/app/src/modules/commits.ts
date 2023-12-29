@@ -63,7 +63,7 @@ export const getCommitStyledMessage = (
 	style?: CommitStyle,
 	parens?: boolean,
 	type?: string
-): Commit => {
+): Commit | undefined => {
 	if (!commit.files?.length) return;
 
 	const scope = getScope(commit.files);
@@ -102,8 +102,9 @@ export const validateCommitMessage = (message: string, style?: CommitStyle): boo
 	switch (style) {
 		case CommitStyle.conventional:
 			return CONVENTIONAL_REGEX.test(message);
-
 		case CommitStyle.relational:
 			return RELATIONAL_REGEX.test(message);
+		default:
+			return true;
 	}
 };

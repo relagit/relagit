@@ -5,8 +5,20 @@ import { Git } from './core';
 
 const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
 
-export const Commit = async (repository: Repository, message: string, body: string) => {
+export const Commit = async (
+	repository: Repository,
+	message: string | undefined,
+	body?: string
+) => {
+	if (!repository || !message) {
+		return;
+	}
+
 	const filePaths = FileStore.getStagedFilePaths(repository.path);
+
+	if (!filePaths || !filePaths.length) {
+		return;
+	}
 
 	await Git({
 		directory: repository.path,
@@ -17,7 +29,7 @@ export const Commit = async (repository: Repository, message: string, body: stri
 	const res = await Git({
 		directory: repository.path,
 		command: 'commit',
-		args: ['-m', `"${escape(message)}"`, '-m', `"${escape(body)}"`]
+		args: ['-m', `"${escape(message)}"`, '-m', `"${escape(body || '')}"`]
 	});
 
 	return res;

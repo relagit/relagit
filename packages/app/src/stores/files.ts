@@ -29,13 +29,13 @@ const FileStore = new (class FileStore extends GenericStore {
 		this.emit();
 	}
 
-	hasStagedFiles(path: string) {
+	hasStagedFiles(path: string | undefined) {
 		return this.getByRepositoryPath(path)?.some((f) =>
 			StageStore.isStaged(nodepath.join(f.path, f.name))
 		);
 	}
 
-	getStagedFilePaths(path: string) {
+	getStagedFilePaths(path: string | undefined) {
 		return this.getByRepositoryPath(path)
 			?.filter((f) => StageStore.isStaged(nodepath.join(f.path, f.name)))
 			.map((f) => nodepath.join(f.path, f.name));
@@ -49,15 +49,19 @@ const FileStore = new (class FileStore extends GenericStore {
 		return this.getByPath(repository, file)?.status;
 	}
 
-	getByRepositoryPath(path: string) {
+	getByRepositoryPath(path: string | undefined) {
+		if (!path) return;
+
 		return this.files.get(path);
 	}
 
-	getByRepositoryName(name: string) {
+	getByRepositoryName(name: string | undefined) {
+		if (!name) return;
+
 		return Array.from(this.files.entries()).find(([key]) => key.split('/').pop() === name)?.[1];
 	}
 
-	getByPath(repository: string, path: string): GitFile {
+	getByPath(repository: string, path: string): GitFile | undefined {
 		return this.getByRepositoryPath(repository)?.find(
 			(f) => nodepath.join(f.path, f.name) === path
 		);

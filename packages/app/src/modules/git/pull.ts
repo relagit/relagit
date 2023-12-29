@@ -2,7 +2,9 @@ import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export const Pull = async (repository: Repository) => {
+export const Pull = async (repository: Repository | undefined) => {
+	if (!repository) return;
+
 	try {
 		const res = await Git({
 			directory: repository.path,
@@ -12,7 +14,7 @@ export const Pull = async (repository: Repository) => {
 
 		return res;
 	} catch (error) {
-		if (error.startsWith?.('From ')) return;
+		if ((error as string).startsWith?.('From ')) return;
 
 		throw error;
 	}

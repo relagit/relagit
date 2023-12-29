@@ -18,7 +18,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 export const removeRepository = (repository: Repository) => {
 	SettingsStore.setSetting(
 		'repositories',
-		SettingsStore.getSetting('repositories').filter((r: string) => r !== repository.path)
+		SettingsStore.getSetting('repositories')?.filter((r: string) => r !== repository.path)
 	);
 
 	RepositoryStore.removeRepository(repository);
@@ -140,14 +140,14 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 };
 
 export const getRepositoryStatus = async (
-	directory: string,
+	directory: string | undefined,
 	refetchFiles?: boolean,
 	refetchRemotes?: boolean
 ) => {
 	try {
 		if (!directory) return;
 
-		let exists: Repository = null;
+		let exists: Repository | undefined = undefined;
 
 		if (RepositoryStore.getByPath(directory)) {
 			exists = RepositoryStore.getByPath(directory);
@@ -185,11 +185,11 @@ export const getRepositoryStatus = async (
 					id: Math.random().toString(16).split('.')[1],
 					path: directory,
 					name: path.basename(directory),
-					remote: null,
-					branch: null,
-					commit: null,
-					ahead: null,
-					behind: null,
+					remote: '',
+					branch: '',
+					commit: '',
+					ahead: 0,
+					behind: 0,
 					lastFetched: Date.now()
 				});
 			}
@@ -198,7 +198,7 @@ export const getRepositoryStatus = async (
 		if (refetchFiles) await getFileStatus(directory);
 		if (refetchRemotes) await remoteStatus(directory);
 
-		return RepositoryStore.getByPath(directory);
+		return RepositoryStore.getByPath(directory)!;
 	} catch (error) {
 		showErrorModal(error, 'error.fetching');
 
@@ -206,7 +206,7 @@ export const getRepositoryStatus = async (
 	}
 };
 
-export const refetchRepository = async (repository: Repository) => {
+export const refetchRepository = async (repository: Repository | undefined) => {
 	if (!repository) return;
 
 	LocationStore.setIsRefetchingSelectedRepository(
@@ -220,7 +220,7 @@ export const refetchRepository = async (repository: Repository) => {
 
 	const repo = await getRepositoryStatus(repository.path, true, true);
 
-	const equivalent = FileStore.getByRepositoryName(repo.name)?.find(
+	const equivalent = FileStore.getByRepositoryName(repo!.name)?.find(
 		(f) => f.path === currentFile?.path
 	);
 

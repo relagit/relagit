@@ -11,7 +11,7 @@ export type Branch = {
 	hasUpstream: boolean;
 };
 
-export const ListBranches = async (repository: Repository): Promise<Branch[]> => {
+export const ListBranches = async (repository: Repository | undefined): Promise<Branch[]> => {
 	if (!repository) {
 		return [];
 	}
@@ -51,7 +51,7 @@ export const ListBranches = async (repository: Repository): Promise<Branch[]> =>
 			const name = slashParts.pop();
 
 			return {
-				name: name,
+				name: name!,
 				path: path,
 				gitName: fullName,
 				relativeDate: parts.splice(1).join(' ').trim(),
@@ -64,7 +64,10 @@ export const ListBranches = async (repository: Repository): Promise<Branch[]> =>
 	return map;
 };
 
-export const Checkout = async (repository: Repository, branch: string): Promise<string> => {
+export const Checkout = async (
+	repository: Repository | undefined,
+	branch: string
+): Promise<string> => {
 	if (!repository) {
 		return '';
 	}
@@ -79,7 +82,7 @@ export const Checkout = async (repository: Repository, branch: string): Promise<
 };
 
 export const CreateBranch = async (
-	repository: Repository,
+	repository: Repository | undefined,
 	branch: string,
 	checkout = true
 ): Promise<string> => {
@@ -100,8 +103,11 @@ export const CreateBranch = async (
 	return res;
 };
 
-export const PushWithOrigin = async (repository: Repository, branch: string): Promise<string> => {
-	if (!repository) {
+export const PushWithOrigin = async (
+	repository: Repository | undefined,
+	branch: string | undefined
+): Promise<string> => {
+	if (!repository || !branch) {
 		return '';
 	}
 
@@ -114,7 +120,10 @@ export const PushWithOrigin = async (repository: Repository, branch: string): Pr
 	return res;
 };
 
-export const DeleteBranch = async (repository: Repository, branch: string): Promise<string> => {
+export const DeleteBranch = async (
+	repository: Repository | undefined,
+	branch: string
+): Promise<string> => {
 	if (!repository) {
 		return '';
 	}

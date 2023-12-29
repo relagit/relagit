@@ -1,4 +1,4 @@
-import octicons from '@primer/octicons';
+import octicons, { IconHeights } from '@primer/octicons';
 import { JSX, Show } from 'solid-js';
 
 import Pull from './Pull';
@@ -11,7 +11,7 @@ export const customIcons: Record<
 	string,
 	{
 		variants: Partial<{
-			[variant in 12 | 16 | 24 | 32]: {
+			[variant in 12 | 16 | 24]: {
 				viewBox: string;
 				paths: Record<string, string>[];
 			};
@@ -23,7 +23,7 @@ export const customIcons: Record<
 
 export interface IconProps {
 	name: IconName | keyof typeof customIcons;
-	variant?: 12 | 16 | 24 | 32;
+	variant?: 12 | 16 | 24;
 	className?: string;
 	size?: number;
 	style?: JSX.HTMLAttributes<HTMLSpanElement>['style'];
@@ -40,7 +40,7 @@ export default (props: IconProps) => {
 					{...props}
 					classList={{
 						icon: true,
-						[props.className]: true
+						[props.className!]: true
 					}}
 					innerHTML={
 						props.variant
@@ -49,9 +49,9 @@ export default (props: IconProps) => {
 							  } viewBox="0 0 ${props.size || props.variant} ${
 									props.size || props.variant
 							  }" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        ${octicons[props.name].heights[props.variant].path}
+                        ${octicons[props.name as IconName].heights[props.variant]!.path}
                     </svg>`
-							: octicons[props.name].toSVG({
+							: octicons[props.name as IconName].toSVG({
 									width: props.size || props.variant || 16
 							  })
 					}
@@ -62,20 +62,18 @@ export default (props: IconProps) => {
 				style={props.style}
 				classList={{
 					icon: true,
-					[props.className]: true
+					[props.className!]: true
 				}}
 				innerHTML={`<svg width=${props.size} height=${props.size} viewBox="${
-					customIcons[props.name].variants[props.variant || 16].viewBox
+					customIcons[props.name].variants[props.variant || 16]!.viewBox
 				}" fill="none" xmlns="http://www.w3.org/2000/svg">${customIcons[
 					props.name
-				].variants[props.variant || 16].paths
-					.map(
-						(p) => `<path ${Object.entries(p)
-							.map(([k, v]) => `${k}="${v}"`)
-							.join(' ')}
+				].variants[props.variant || 16]!.paths.map(
+					(p) => `<path ${Object.entries(p)
+						.map(([k, v]) => `${k}="${v}"`)
+						.join(' ')}
         } />`
-					)
-					.join('')}</svg>`}
+				).join('')}</svg>`}
 			></span>
 		</Show>
 	);

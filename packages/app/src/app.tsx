@@ -23,7 +23,7 @@ import './app.scss';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
-const loaded = [];
+const loaded: string[] = [];
 
 export const queueRepositoryLoad = () => {
 	debug('Queueing repository load');
@@ -92,9 +92,9 @@ export default () => {
 		// we want to load the active repository first to decrease the time to load the app
 		if (
 			SettingsStore.getSetting('activeRepository') &&
-			!loaded.includes(SettingsStore.getSetting('activeRepository'))
+			!loaded.includes(SettingsStore.getSetting('activeRepository')!)
 		)
-			if (!fs.existsSync(SettingsStore.getSetting('activeRepository'))) {
+			if (!fs.existsSync(SettingsStore.getSetting('activeRepository') || '')) {
 				SettingsStore.setSetting(
 					'repositories',
 					SettingsStore.getSetting('repositories')?.filter(
@@ -107,10 +107,10 @@ export default () => {
 				return;
 			}
 
-		await getRepositoryStatus(SettingsStore.getSetting('activeRepository'), true, true);
+		await getRepositoryStatus(SettingsStore.getSetting('activeRepository')!, true, true);
 
 		LocationStore.setSelectedRepository(
-			RepositoryStore.getByPath(SettingsStore.getSetting('activeRepository'))
+			RepositoryStore.getByPath(SettingsStore.getSetting('activeRepository')!)
 		);
 
 		queueRepositoryLoad();
@@ -122,14 +122,14 @@ export default () => {
 				id="app-container"
 				classList={{
 					[`platform-${window.Native.platform}`]: true,
-					[`theme-${settings().ui?.theme || 'system'}`]: true,
-					vibrancy: !!settings().ui?.vibrancy,
+					[`theme-${settings()?.ui?.theme || 'system'}`]: true,
+					vibrancy: !!settings()?.ui?.vibrancy,
 					focused: focused(),
 					unfocused: !focused()
 				}}
 				style={{
-					'--settings-font-family': settings().ui?.fontFamily,
-					'--settings-accent-color': settings().ui?.accentColor
+					'--settings-font-family': settings()?.ui?.fontFamily,
+					'--settings-accent-color': settings()?.ui?.accentColor
 				}}
 			>
 				<Show
@@ -145,7 +145,7 @@ export default () => {
 						<div class="window-control-bar"></div>
 					</Show>
 					<Layer
-						type={settings().ui?.expandedSettings ? 'bare' : 'rich'}
+						type={settings()?.ui?.expandedSettings ? 'bare' : 'rich'}
 						key="settings"
 						dismissable
 						transitions={Layer.Transitions.Fade}

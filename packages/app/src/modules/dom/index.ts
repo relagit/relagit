@@ -8,8 +8,8 @@ export const addCSS = (id: string, cssOrPath: string, local = false) => {
 	if (local) {
 		el = document.createElement('link');
 
-		el['rel'] = 'stylesheet';
-		el['href'] = cssOrPath;
+		(el as HTMLLinkElement)['rel'] = 'stylesheet';
+		(el as HTMLLinkElement)['href'] = cssOrPath;
 
 		head.appendChild(el);
 	} else {
@@ -30,7 +30,7 @@ export const updateCSS = (id: string, cssOrPath: string, local = false) => {
 
 	switch (local) {
 		case true:
-			el['href'] = cssOrPath + '?';
+			(el as HTMLLinkElement)['href'] = cssOrPath + '?';
 			break;
 		case false:
 			el.innerHTML = cssOrPath;

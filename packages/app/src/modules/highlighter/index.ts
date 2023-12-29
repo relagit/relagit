@@ -46,8 +46,8 @@ export default (code: string, language: string) => {
 	}
 };
 
-export const langFrom = (filename: string) => {
-	const known = {
+export const langFrom = (filename: string | undefined) => {
+	const known: Record<string, string> = {
 		'.html': 'text.html.basic'
 	};
 

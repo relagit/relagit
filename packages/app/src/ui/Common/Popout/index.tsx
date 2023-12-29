@@ -20,8 +20,8 @@ export interface Popout {
 		toggle: (e?: MouseEvent | KeyboardEvent) => void;
 		hide: () => void;
 		open: Accessor<boolean>;
-		ref: Setter<HTMLElement>;
-		getRef: Accessor<HTMLElement>;
+		ref: Setter<HTMLElement | undefined>;
+		getRef: Accessor<HTMLElement | undefined>;
 	}) => JSX.Element | JSX.Element[];
 	body: (p: {
 		show: (e?: MouseEvent | KeyboardEvent) => void;
@@ -44,6 +44,8 @@ export default (props: Popout) => {
 
 	const listener = () => {
 		const rect = wrapper()?.getBoundingClientRect();
+
+		if (!rect) return;
 
 		setX(rect.left + rect.width / 2);
 		setY(rect.top + rect.height / 2);
@@ -75,7 +77,13 @@ export default (props: Popout) => {
 
 		listener();
 
-		popout()?.querySelector('button,input,a,select,textarea,[tabindex]')?.['focus']();
+		const el: HTMLElement | null | undefined = popout()?.querySelector(
+			'button,input,a,select,textarea,[tabindex]'
+		);
+
+		if (el) {
+			el.focus();
+		}
 	};
 
 	const toggle = (e?: MouseEvent | KeyboardEvent) => {
@@ -98,7 +106,7 @@ export default (props: Popout) => {
 				ref={setWrapper}
 				getRef={wrapper}
 			></props.children>
-			<Portal mount={document.getElementById('app-container')}>
+			<Portal mount={document.getElementById('app-container')!}>
 				<Transition
 					onEnter={(el, done) => {
 						const a = el.animate(

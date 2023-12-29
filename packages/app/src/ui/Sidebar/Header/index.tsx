@@ -28,7 +28,11 @@ export default () => {
 		if (value) {
 			setOpen(true);
 
-			ref[0]().querySelector('button,input,a,select,textarea,[tabindex]')?.['focus']();
+			const el: HTMLElement | null | undefined = ref[0]()?.querySelector(
+				'button,input,a,select,textarea,[tabindex]'
+			);
+
+			if (el) el.focus();
 		} else {
 			setOpen(false);
 		}
@@ -43,7 +47,7 @@ export default () => {
 	);
 
 	onMount(() => {
-		if (onboarding().step === 1 && onboarding().dismissed !== true) {
+		if (onboarding()!.step === 1 && onboarding()!.dismissed !== true) {
 			onboardingStepState[1](true);
 		}
 	});
@@ -59,7 +63,7 @@ export default () => {
 							name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
 						}),
 						onClick: () => {
-							showItemInFolder(selected().path);
+							showItemInFolder(selected()?.path || '');
 						},
 						disabled: !selected()
 					},
@@ -68,7 +72,7 @@ export default () => {
 						disabled: !selected(),
 						type: 'item',
 						onClick: () => {
-							const remotes = RemoteStore.getByRepoPath(selected().path);
+							const remotes = RemoteStore.getByRepoPath(selected()?.path || '');
 
 							if (remotes[0]?.url) openExternal(remotes[0].url);
 						}
@@ -82,7 +86,7 @@ export default () => {
 							)
 						}),
 						onClick: () => {
-							openInEditor(selected()?.path);
+							openInEditor(selected()?.path || '');
 						},
 						disabled: !selected(),
 						type: 'item'
@@ -103,7 +107,7 @@ export default () => {
 										<div
 											classList={{
 												'onboarding-tooltip__step': true,
-												active: onboarding().step === i
+												active: onboarding()!.step === i
 											}}
 										/>
 									)}

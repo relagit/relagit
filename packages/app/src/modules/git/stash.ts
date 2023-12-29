@@ -2,7 +2,7 @@ import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-export const Stash = async (repository: Repository) => {
+export const Stash = async (repository: Repository | undefined) => {
 	if (!repository) return;
 
 	const res = await Git({
@@ -14,8 +14,10 @@ export const Stash = async (repository: Repository) => {
 	return res;
 };
 
-export const ListStash = async (repository: Repository): Promise<Record<number, string[]>> => {
-	if (!repository) return;
+export const ListStash = async (
+	repository: Repository | undefined
+): Promise<Record<number, string[]>> => {
+	if (!repository) return {};
 
 	const res = await Git({
 		directory: repository.path,
@@ -32,7 +34,7 @@ export const ListStash = async (repository: Repository): Promise<Record<number, 
 	for (let i = 0; i < stashes.length; i++) {
 		const stash = stashes[i];
 
-		const index = stash.match(/\{(\d+)\}/)[1];
+		const index = Number(stash.match(/\{(\d+)\}/)![1]);
 
 		const lines = stash.split('\n');
 
@@ -52,7 +54,7 @@ export const ListStash = async (repository: Repository): Promise<Record<number, 
 	return stashMap;
 };
 
-export const PopStash = async (repository: Repository, index: number) => {
+export const PopStash = async (repository: Repository | undefined, index: number) => {
 	if (!repository) return;
 
 	const res = await Git({
@@ -64,7 +66,7 @@ export const PopStash = async (repository: Repository, index: number) => {
 	return res;
 };
 
-export const RemoveStash = async (repository: Repository, index: number) => {
+export const RemoveStash = async (repository: Repository | undefined, index: number) => {
 	if (!repository) return;
 
 	const res = await Git({

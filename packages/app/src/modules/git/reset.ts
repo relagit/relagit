@@ -2,7 +2,7 @@ import { Repository } from '@app/stores/repository';
 
 import { Git } from './core';
 
-export const Reset = async (repository: Repository, ref?: string) => {
+export const Reset = async (repository: Repository | undefined, ref?: string) => {
 	if (!repository) {
 		return;
 	}

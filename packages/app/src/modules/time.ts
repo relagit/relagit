@@ -1,4 +1,4 @@
-import { createRenderEffect, from } from 'solid-js';
+import { Accessor, createRenderEffect, from } from 'solid-js';
 
 import { LocaleKey, t } from './i18n';
 
@@ -28,9 +28,9 @@ export const relative = (ms: number) => {
 	return t('time.now');
 };
 
-export const renderDate = (ms: number): (() => string) => {
+export const renderDate = (ms: number): Accessor<string | undefined> => {
 	return from((set) => {
-		const defer = [];
+		const defer: (() => unknown)[] = [];
 
 		const listener = () => set(relative(ms));
 		defer.push(listener);

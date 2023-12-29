@@ -11,7 +11,7 @@ const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
 const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
-export type Settings = RecursivePartial<{
+export type Settings = {
 	commit: {
 		styles: Record<string, CommitStyle>;
 		enforceStyle: boolean;
@@ -30,11 +30,17 @@ export type Settings = RecursivePartial<{
 		thinIcons: boolean;
 		userThemes: string[];
 	};
+	window: {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	};
 	locale: ValidLocale;
 	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl';
-	activeRepository: string;
+	activeRepository: string | null;
 	repositories: string[];
-}>;
+};
 
 // we need to add commit.styles because `ObjectToDotProp` will only include `commit.styles.${string}`
 export type SettingsKey =
@@ -61,7 +67,7 @@ const validatePath = () => {
 };
 
 const SettingsStore = new (class SettingsStore extends GenericStore {
-	#record: Settings = {};
+	#record: RecursivePartial<Settings> = {};
 
 	constructor() {
 		super();
@@ -75,25 +81,13 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		return this.#record;
 	}
 
-	/*
-	
-export const t: <Trans extends LocaleKey>(
-	trans: Trans,
-	params?: Record<string, Stringifyable>,
-	plural?: number
-) => ResolvePropDeep<Locale, Trans> extends string
-	? ResolvePropDeep<Locale, Trans>
-	: ResolvePropDeep<Locale, Trans>[0] = useI18n();
-
-	*/
-
 	getSetting<T extends SettingsKey>(key: T): ResolvePropDeep<Settings, T> {
 		const parts = key.split('.');
 
-		let current: unknown = this.#record;
+		let current: string | object = this.#record;
 
-		for (const part of parts) {
-			current = current[part];
+		for (const path of parts) {
+			current = (current as Record<string, string>)[path];
 
 			if (!current) break;
 		}
@@ -104,17 +98,17 @@ export const t: <Trans extends LocaleKey>(
 	setSetting<T extends SettingsKey>(key: T, value: ResolvePropDeep<Settings, T>) {
 		const parts = key.split('.');
 
-		let current = this.#record;
+		let current: string | object = this.#record;
 
 		for (const part of parts.slice(0, -1)) {
-			if (!current[part]) {
-				current[part] = {};
+			if (!(current as Record<string, object>)[part]) {
+				(current as Record<string, object>)[part] = {};
 			}
 
-			current = current[part];
+			current = (current as Record<string, object>)[part];
 		}
 
-		current[parts[parts.length - 1]] = value;
+		(current as Record<string, unknown>)[parts[parts.length - 1]] = value;
 
 		this.save();
 		this.emit();
@@ -135,20 +129,20 @@ export const t: <Trans extends LocaleKey>(
 
 	load() {
 		if (fs.existsSync(__SETTINGS_PATH__)) {
-			let settings: Settings = {};
+			let settings: RecursivePartial<Settings> = {};
 
 			try {
-				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8'));
+				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8')) as Settings;
 			} catch (error) {
 				window._showErrorModal(error, 'error.corruptSettings');
 			}
 
 			for (const [key, value] of Object.entries(settings)) {
-				this.#record[key] = value;
+				(this.#record as Record<string, unknown>)[key] = value;
 			}
 
-			if (!this.#record['theme']) {
-				this.#record['theme'] = 'system';
+			if (!(this.#record as Record<string, unknown>)['theme']) {
+				(this.#record as Record<string, unknown>)['theme'] = 'system';
 			}
 		}
 
@@ -156,7 +150,9 @@ export const t: <Trans extends LocaleKey>(
 			let repositories: string[] = [];
 
 			try {
-				repositories = JSON.parse(fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8'));
+				repositories = JSON.parse(
+					fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8')
+				) as string[];
 			} catch (error) {
 				window._showErrorModal(error, 'error.corruptSettings');
 			}
