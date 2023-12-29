@@ -75,7 +75,7 @@ export default (props: SidebarProps) => {
 				<div
 					class="sidebar__items"
 					style={{
-						height: footerShowing() ? 'calc(100% - 336px)' : 'calc(100% - 92px)'
+						height: footerShowing() ? 'calc(100% - 336px)' : 'calc(100% - 112px)'
 					}}
 				>
 					<Show
