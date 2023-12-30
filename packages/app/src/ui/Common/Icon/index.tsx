@@ -1,4 +1,4 @@
-import octicons, { IconHeights } from '@primer/octicons';
+import octicons from '@primer/octicons';
 import { JSX, Show } from 'solid-js';
 
 import Pull from './Pull';
@@ -8,7 +8,7 @@ import './index.scss';
 export type IconName = keyof typeof octicons;
 
 export const customIcons: Record<
-	string,
+	'x-repo-pull',
 	{
 		variants: Partial<{
 			[variant in 12 | 16 | 24]: {
@@ -34,7 +34,7 @@ export default (props: IconProps) => {
 
 	return (
 		<Show
-			when={customIcons.hasOwnProperty(props.name)}
+			when={props.name in customIcons}
 			fallback={
 				<span
 					{...props}
@@ -65,9 +65,11 @@ export default (props: IconProps) => {
 					[props.className!]: true
 				}}
 				innerHTML={`<svg width=${props.size} height=${props.size} viewBox="${
-					customIcons[props.name].variants[props.variant || 16]!.viewBox
+					customIcons[props.name as keyof typeof customIcons].variants[
+						props.variant || 16
+					]!.viewBox
 				}" fill="none" xmlns="http://www.w3.org/2000/svg">${customIcons[
-					props.name
+					props.name as keyof typeof customIcons
 				].variants[props.variant || 16]!.paths.map(
 					(p) => `<path ${Object.entries(p)
 						.map(([k, v]) => `${k}="${v}"`)
