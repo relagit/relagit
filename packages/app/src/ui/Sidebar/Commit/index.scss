@@ -42,7 +42,8 @@
 		}
 
 		&__hash {
-			color: var(--color-secondary);
+			color: var(--color-primary);
+			opacity: 0.6;
 			font-size: 1rem;
 			font-weight: 400;
 			font-family: var(--font-mono);
@@ -55,18 +56,40 @@
 		display: flex;
 		gap: 6px;
 		width: 100%;
+		align-items: center;
+
+		&__left {
+			margin-right: auto;
+			align-items: center;
+			display: flex;
+			gap: 6px;
+
+			&__files {
+				font-family: var(--font-primary);
+				color: var(--color-primary);
+				opacity: 0.6;
+			}
+
+			&__push {
+				background-color: var(--bg-active-unfocused);
+				border-radius: 8px;
+				padding: 2px 6px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				svg {
+					width: 12px;
+					height: 12px;
+				}
+			}
+		}
 
 		&__tag {
 			background-color: var(--bg-active-unfocused);
 			border-radius: 2px;
 			padding: 2px 4px;
 			font-size: 0.8rem;
-		}
-
-		&__files {
-			font-family: var(--font-primary);
-			color: var(--color-secondary);
-			margin-right: auto;
 		}
 
 		&__insertions {
@@ -87,7 +110,8 @@
 		gap: 8px;
 
 		&__author {
-			color: var(--color-secondary);
+			color: var(--color-primary);
+			opacity: 0.6;
 			font-size: 0.9rem;
 			font-weight: 400;
 			overflow: hidden;
@@ -97,7 +121,8 @@
 		}
 
 		&__date {
-			color: var(--color-secondary);
+			color: var(--color-primary);
+			opacity: 0.6;
 			font-size: 0.9rem;
 			font-weight: 400;
 			margin-left: auto;

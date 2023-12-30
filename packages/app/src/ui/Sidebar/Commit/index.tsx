@@ -5,6 +5,7 @@ import { LogCommit } from '@app/modules/git/log';
 import { t } from '@app/modules/i18n';
 import { openExternal } from '@app/modules/shell';
 import { renderDate } from '@app/modules/time';
+import Icon from '@app/ui/Common/Icon';
 import Menu from '@app/ui/Menu';
 import { showErrorModal } from '@app/ui/Modal';
 import * as Git from '@modules/git';
@@ -148,10 +149,21 @@ export default (props: LogCommit) => {
 						{renderDate(new Date(props.date).getTime())()}
 					</div>
 				</div>
-				<Show when={props.insertions || props.deletions || props.files}>
+				<Show
+					when={
+						props.insertions || props.deletions || props.files || props.from === 'HEAD'
+					}
+				>
 					<div class="sidebar__commit__diff">
-						<div class="sidebar__commit__diff__files">
-							{props.files} {t('ui.filepicker.file', {}, props.files)}
+						<div class="sidebar__commit__diff__left">
+							<div class="sidebar__commit__diff__left__files">
+								{props.files} {t('ui.filepicker.file', {}, props.files)}
+							</div>
+							<Show when={props.from === 'HEAD'}>
+								<div class="sidebar__commit__diff__left__push">
+									<Icon name="arrow-up" />
+								</div>
+							</Show>
 						</div>
 						<Show when={props.tag}>
 							<div class="sidebar__commit__diff__tag">{props.tag}</div>
