@@ -157,7 +157,8 @@ export default {
 			openIn: 'Ite ad {{name}}',
 			openRemote: 'Ite ad Longinquus',
 			copySha: 'Effingo SHA',
-			checkout: 'Checkout Committ'
+			checkout: 'Checkout Committ',
+			revert: 'Revert Committ'
 		}
 	},
 	time: {

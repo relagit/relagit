@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { refetchRepository } from '@app/modules/actions';
 import { LogCommit } from '@app/modules/git/log';
 import { t } from '@app/modules/i18n';
 import { openExternal } from '@app/modules/shell';
@@ -27,6 +28,21 @@ export default (props: LogCommit) => {
 					onClick: async () => {
 						try {
 							await Git.Checkout(LocationStore.selectedRepository, props.hash);
+						} catch (e) {
+							showErrorModal(e, 'error.git');
+
+							error('Failed to checkout commit', e);
+						}
+					}
+				},
+				{
+					type: 'item',
+					label: t('sidebar.contextMenu.revert'),
+					onClick: async () => {
+						try {
+							await Git.Revert(LocationStore.selectedRepository, props.hash);
+
+							refetchRepository(LocationStore.selectedRepository);
 						} catch (e) {
 							showErrorModal(e, 'error.git');
 

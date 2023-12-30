@@ -164,7 +164,8 @@ export default {
 			openIn: 'Open in {{name}}',
 			openRemote: 'Open Remote',
 			copySha: 'Copy SHA',
-			checkout: 'Checkout Commit'
+			checkout: 'Checkout Commit',
+			revert: 'Revert Commit'
 		}
 	},
 	time: {

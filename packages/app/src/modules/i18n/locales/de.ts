@@ -163,7 +163,8 @@ export default {
 			openIn: 'Öffne in {{name}}',
 			openRemote: 'Öffne Remote',
 			copySha: 'Kopiere SHA',
-			checkout: 'Checkout Commit'
+			checkout: 'Checkout Commit',
+			revert: 'Revert Commit'
 		}
 	},
 	time: {
