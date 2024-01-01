@@ -20,6 +20,40 @@ const { confetti } = createConfetti();
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
+const SHAKE: Parameters<HTMLDivElement['animate']> = [
+	[
+		{
+			rotate: '0deg'
+		},
+		{
+			rotate: '-5deg'
+		},
+
+		{
+			rotate: '4deg'
+		},
+		{
+			rotate: '-3deg'
+		},
+		{
+			rotate: '2deg'
+		},
+		{
+			rotate: '-1deg'
+		},
+		{
+			rotate: '0.5deg'
+		},
+		{
+			rotate: '0deg'
+		}
+	],
+	{
+		duration: 1000,
+		easing: 'ease-out'
+	}
+];
+
 interface ModalProps {
 	transitions: {
 		enter: (el: Element, done: () => void) => void;
@@ -40,8 +74,12 @@ const Modal = (props: ModalProps) => {
 	const { activate, deactivate } = useFocusTrap(ref, {
 		onDeactivate: () => {
 			if (props.dismissable) {
-				close();
+				return close();
 			}
+
+			activate();
+
+			(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
 		},
 		initialFocus: false
 	});
@@ -70,8 +108,10 @@ const Modal = (props: ModalProps) => {
 		<div
 			ref={setRef}
 			onMouseDown={(e) => {
-				if (props.dismissable && e.target === ref()) {
-					close();
+				if (e.target === ref()) {
+					if (props.dismissable) return close();
+
+					(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
 				}
 			}}
 			classList={{
