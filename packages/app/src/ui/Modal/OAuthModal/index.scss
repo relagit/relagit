@@ -1,0 +1,57 @@
+.modal__body:has(.oauth-modal__code) {
+	display: flex;
+	flex-direction: column;
+}
+
+.oauth-modal {
+	&__code {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		width: 100%;
+		justify-content: center;
+
+		&__char {
+			padding: 4px 6px;
+			font-size: 3rem;
+			font-family: var(--font-mono);
+			background: var(--bg-tertiary);
+			border: 1px solid var(--separator-secondary);
+			border-radius: 4px;
+		}
+
+		&__dash {
+			font-size: 3rem;
+			color: var(--color-secondary);
+		}
+	}
+
+	&__footer {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		margin-top: auto;
+
+		&__text {
+			color: var(--color-secondary);
+			font-size: 1rem;
+			font-weight: 400;
+
+			&.error {
+				color: var(--color-red-500);
+			}
+
+			&.success {
+				color: var(--color-green-500);
+			}
+		}
+
+		&__buttons {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+	}
+}

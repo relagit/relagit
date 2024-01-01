@@ -4,6 +4,7 @@ import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
+import dotenv from 'dotenv';
 import { defineConfig } from 'rollup';
 import esbuild from 'rollup-plugin-esbuild';
 import scss from 'rollup-plugin-scss';
@@ -18,6 +19,11 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const IS_DEV = process.env.npm_lifecycle_event.startsWith('dev');
+let ENV = {};
+
+try {
+	ENV = dotenv.parse(fs.readFileSync(path.resolve(__dirname, '.env.client'), 'utf-8'));
+} catch {}
 
 export default defineConfig({
 	input: path.join(__dirname, 'src', 'index.tsx'),
@@ -33,7 +39,10 @@ export default defineConfig({
 		replace({
 			preventAssignment: true,
 			values: {
-				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production')
+				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production'),
+				__GITHUB_CLIENT_ID__: JSON.stringify(
+					process.env.GITHUB_CLIENT_ID || ENV.GITHUB_CLIENT_ID
+				)
 			}
 		}),
 		json({

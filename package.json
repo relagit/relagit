@@ -57,6 +57,7 @@
 		"@wooorm/starry-night": "^2.2.0",
 		"babel-preset-solid": "^1.7.12",
 		"dompurify": "^3.0.6",
+		"dotenv": "^16.3.1",
 		"electron": "^25.8.4",
 		"electron-builder": "^24.6.4",
 		"esbuild": "^0.17.19",

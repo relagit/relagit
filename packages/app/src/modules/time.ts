@@ -2,7 +2,7 @@ import { Accessor, createRenderEffect, from } from 'solid-js';
 
 import { LocaleKey, t } from './i18n';
 
-export const relative = (ms: number) => {
+export const relative = (ms: number, useSeconds = false) => {
 	const seconds = Math.floor((Date.now() - ms) / 1000);
 
 	const timeIntervals: {
@@ -19,26 +19,33 @@ export const relative = (ms: number) => {
 	for (let i = 0; i < timeIntervals.length; i++) {
 		const { interval, label } = timeIntervals[i];
 		const quotient = Math.floor(seconds / interval);
+		const negativeQuotient = Math.floor(seconds / (-1 * interval));
 
 		if (quotient > 0) {
 			return t(label, { count: quotient }, quotient) + ' ' + t('time.ago');
 		}
+
+		if (negativeQuotient > 0) {
+			return t('time.in') + ' ' + t(label, { count: Math.abs(quotient) }, Math.abs(quotient));
+		}
 	}
 
-	return t('time.now');
+	return useSeconds
+		? t('time.second', { count: Math.abs(seconds) }, Math.abs(seconds))
+		: t('time.now');
 };
 
-export const renderDate = (ms: number): Accessor<string | undefined> => {
+export const renderDate = (ms: number, seconds = false): Accessor<string | undefined> => {
 	return from((set) => {
 		const defer: (() => unknown)[] = [];
 
-		const listener = () => set(relative(ms));
+		const listener = () => set(relative(ms, seconds));
 		defer.push(listener);
 
 		const interval = setInterval(listener, 1000);
 		defer.push(() => clearInterval(interval));
 
-		createRenderEffect(() => set(relative(ms)));
+		createRenderEffect(() => set(relative(ms, seconds)));
 
 		return () => {
 			for (const cleanup of defer) {

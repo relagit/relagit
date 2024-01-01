@@ -68,7 +68,13 @@ export default (props: PassthroughRef<FileSelectProps>) => {
 	};
 
 	return (
-		<div class="filepicker" ref={props.ref}>
+		<div
+			classList={{
+				filepicker: true,
+				[props.className || '']: true
+			}}
+			ref={props.ref}
+		>
 			<div classList={{ filepicker__input: true, [status()!]: true }}>
 				<Show when={props.input}>
 					<TextArea

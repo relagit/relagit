@@ -18,7 +18,7 @@ import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import Menu from '@ui/Menu';
-import GithubModal from '@ui/Modal/GithubModal';
+import CloneModal from '@ui/Modal/CloneModal';
 import RepositoryModal from '@ui/Modal/RepositoryModal';
 
 import './index.scss';
@@ -86,11 +86,11 @@ export default (props: HeaderDrawerProps) => {
 									},
 									{
 										type: 'item',
-										label: t('sidebar.drawer.contextMenu.cloneFromGitHub'),
+										label: t('sidebar.drawer.contextMenu.cloneRepository'),
 										onClick: () => {
 											ModalStore.addModal({
-												type: 'github-repository',
-												element: createRoot(GithubModal)
+												type: 'clone-repository',
+												element: createRoot(CloneModal)
 											});
 										}
 									}

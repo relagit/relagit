@@ -45,7 +45,7 @@ export default (props: TabViewProps) => {
 								<div
 									classList={{
 										'segmented-view__body__view': true,
-										selected: view.value === selectedView()
+										active: view.value === selectedView()
 									}}
 								>
 									{view.element}

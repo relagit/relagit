@@ -108,7 +108,7 @@ export interface GitHubReadme {
 	};
 }
 
-interface GithubUser {
+export interface GithubUser {
 	login: string;
 	id: number;
 	node_id: string;
@@ -147,4 +147,6 @@ export interface GithubResponse {
 	'users/:username/repos': [[string], GitHubRepository[]];
 	'users/:username': [[string], GithubUser];
 	'repos/:username/:repo/readme': [[string, string], GitHubReadme];
+	'user/repos': [[], GitHubRepository[]];
+	user: [[], GithubUser];
 }

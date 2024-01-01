@@ -1,4 +1,12 @@
-import { BrowserWindow, OpenDialogOptions, app, dialog, ipcMain, shell } from 'electron';
+import {
+	BrowserWindow,
+	OpenDialogOptions,
+	app,
+	dialog,
+	ipcMain,
+	safeStorage,
+	shell
+} from 'electron';
 
 import child_process from 'child_process';
 
@@ -83,6 +91,22 @@ export default (window: BrowserWindow) => {
 
 	ipcMain.handle(ipc.BASE64_FROM_BINARY, (_, data: string) => {
 		return Buffer.from(data, 'binary').toString('base64');
+	});
+
+	ipcMain.handle(ipc.GET_ENCRYPTED, (_, data: string) => {
+		if (safeStorage.isEncryptionAvailable()) {
+			return safeStorage.encryptString(data).toString('hex');
+		}
+
+		return Buffer.from(data, 'utf8').toString('base64');
+	});
+
+	ipcMain.handle(ipc.GET_DECRYPTED, (_, data: string) => {
+		if (safeStorage.isEncryptionAvailable()) {
+			return safeStorage.decryptString(Buffer.from(data, 'hex'));
+		}
+
+		return Buffer.from(data, 'base64').toString('utf8');
 	});
 
 	ipcMain.handle(

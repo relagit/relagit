@@ -11,6 +11,12 @@
 	margin: 0 auto;
 	user-select: none;
 
+	svg {
+		margin-bottom: 16px;
+		width: 48px;
+		height: 48px;
+	}
+
 	&__spinner {
 		margin-bottom: 16px;
 	}
