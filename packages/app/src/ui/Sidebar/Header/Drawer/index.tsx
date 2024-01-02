@@ -205,7 +205,13 @@ export default (props: HeaderDrawerProps) => {
 												{renderDate(repository.lastFetched || 0)()}
 											</div>
 										</div>
-										<Show when={hasUncommittedChanges(files()!, repository)}>
+										<Show
+											when={
+												hasUncommittedChanges(files()!, repository) ||
+												repository.ahead ||
+												repository.behind
+											}
+										>
 											<div class="sidebar__drawer__body__content__item__indicator" />
 										</Show>
 									</button>
