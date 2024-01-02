@@ -11,7 +11,7 @@ import Settings from '@ui/Settings';
 import Sidebar from '@ui/Sidebar';
 import Workspace from '@ui/Workspace';
 
-import { Git } from './modules/git/core';
+import { Fetch } from './modules/git/fetch';
 import { debug } from './modules/logger';
 import { checkIsInPath } from './modules/shell';
 import LocationStore from './stores/location';
@@ -47,11 +47,7 @@ export const queueRepositoryLoad = () => {
 
 			loaded.push(repo);
 
-			Git({
-				directory: repo,
-				command: 'fetch',
-				args: []
-			});
+			Fetch(repo);
 
 			getRepositoryStatus(repo, true, true);
 		}
@@ -106,6 +102,8 @@ export default () => {
 
 				return;
 			}
+
+		Fetch(SettingsStore.getSetting('activeRepository'));
 
 		await getRepositoryStatus(SettingsStore.getSetting('activeRepository')!, true, true);
 
