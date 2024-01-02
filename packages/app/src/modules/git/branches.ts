@@ -1,6 +1,7 @@
 import { Repository } from '@stores/repository';
 
 import { Git } from './core';
+import { Fetch } from './fetch';
 
 export type Branch = {
 	gitName: string;
@@ -77,6 +78,8 @@ export const Checkout = async (
 		command: 'checkout',
 		args: [branch]
 	});
+
+	Fetch(repository.path);
 
 	return res;
 };
