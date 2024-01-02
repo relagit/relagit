@@ -185,20 +185,17 @@ const constructWindow = async () => {
 					}
 				},
 				{
-					label: 'Information Modal',
-					accelerator: 'CmdOrCtrl+I',
-					click: () => {
-						dispatch(ipc.OPEN_INFORMATION);
-					}
-				},
-				{
-					label: 'Switcher',
+					label: 'Repositories',
 					accelerator: 'CmdOrCtrl+K',
 					click: () => {
 						dispatch(ipc.OPEN_SWITCHER);
 						dispatch(ipc.OPEN_SIDEBAR, true);
 					}
 				},
+				{
+					type: 'separator'
+				},
+
 				{
 					label: 'Commit History',
 					accelerator: 'CmdOrCtrl+L',
@@ -218,6 +215,16 @@ const constructWindow = async () => {
 					accelerator: 'CmdOrCtrl+J',
 					click: () => {
 						dispatch(ipc.OPEN_BLAME);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Information Modal',
+					accelerator: 'CmdOrCtrl+I',
+					click: () => {
+						dispatch(ipc.OPEN_INFORMATION);
 					}
 				}
 			]
