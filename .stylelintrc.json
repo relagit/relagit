@@ -1,4 +1,5 @@
 {
+	"ignoreFiles": "dist/**/*",
 	"extends": "stylelint-config-standard-scss",
 	"rules": {
 		"declaration-property-unit-allowed-list": {
