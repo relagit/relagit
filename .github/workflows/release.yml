@@ -28,9 +28,9 @@ jobs:
                   cache: 'pnpm'
 
             - run: |
-                  echo node -v
-                  echo npm -v
-                  echo pnpm -v
+                  node -v
+                  npm -v
+                  pnpm -v
 
             - run: pnpm i --frozen-lockfile
               name: Install
