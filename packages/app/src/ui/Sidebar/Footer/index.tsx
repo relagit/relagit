@@ -3,6 +3,7 @@ import { Signal, createEffect, createSignal } from 'solid-js';
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
+import StageStore from '@app/stores/stage';
 import Icon from '@app/ui/Common/Icon';
 import Tooltip from '@app/ui/Common/Tooltip';
 import Menu from '@app/ui/Menu';
@@ -32,7 +33,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 		FilesStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
 	const staged = createStoreListener([FilesStore, LocationStore], () =>
-		FilesStore.hasStagedFiles(LocationStore.selectedRepository?.path)
+		StageStore.hasStagedFiles(LocationStore.selectedRepository?.path)
 	);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
@@ -40,7 +41,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const dangerous = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
-		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
+		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
 		if (!files?.length) return false;
 
@@ -50,7 +51,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	});
 
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
-		const files = FilesStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
+		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
 		if (!files?.length) return { message: '', style: CommitStyle.none };
 
