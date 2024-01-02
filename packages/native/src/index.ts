@@ -247,6 +247,9 @@ const constructWindow = async () => {
 					}
 				},
 				{
+					type: 'separator'
+				},
+				{
 					label: 'Clone Repository',
 					accelerator: 'CmdOrCtrl+Shift+O',
 					click: () => {
