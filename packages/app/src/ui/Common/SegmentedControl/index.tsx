@@ -1,4 +1,6 @@
-import { For, createSignal } from 'solid-js';
+import { For, Show, createSignal } from 'solid-js';
+
+import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
@@ -7,6 +9,7 @@ export interface SegmentedControlProps {
 		label: string;
 		value: string | number;
 		disabled?: boolean;
+		icon?: IconName;
 	}[];
 	value: string | number;
 	onChange: (value: string | number) => void;
@@ -55,6 +58,9 @@ export default (props: SegmentedControlProps) => {
 							}
 						}}
 					>
+						<Show when={item.icon}>
+							<Icon name={item.icon!} />
+						</Show>
 						{item.label}
 					</div>
 				)}

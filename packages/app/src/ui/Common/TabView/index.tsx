@@ -1,5 +1,6 @@
 import { For, JSX, Show, createSignal } from 'solid-js';
 
+import { IconName } from '../Icon';
 import SegmentedControl from '../SegmentedControl';
 
 import './index.scss';
@@ -11,6 +12,7 @@ export interface TabViewProps {
 		label: string;
 		scroller?: boolean;
 		disabled?: boolean;
+		icon?: IconName;
 	}[];
 }
 
@@ -27,7 +29,8 @@ export default (props: TabViewProps) => {
 				items={Object.values(props.views).map((v) => ({
 					value: v.value,
 					label: v.label,
-					disabled: v.disabled
+					disabled: v.disabled,
+					icon: v.icon
 				}))}
 			/>
 			<div
