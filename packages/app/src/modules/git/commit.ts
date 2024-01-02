@@ -1,4 +1,4 @@
-import FileStore from '@stores/files';
+import StageStore from '@app/stores/stage';
 import { Repository } from '@stores/repository';
 
 import { Git } from './core';
@@ -14,7 +14,7 @@ export const Commit = async (
 		return;
 	}
 
-	const filePaths = FileStore.getStagedFilePaths(repository.path);
+	const filePaths = StageStore.getStagedFilePaths(repository.path);
 
 	if (!filePaths || !filePaths.length) {
 		return;
