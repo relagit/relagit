@@ -1,5 +1,5 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader, showErrorModal } from '..';
-import { Accessor, Show, createSignal, onMount } from 'solid-js';
+import { Accessor, Show, createRoot, createSignal, onMount } from 'solid-js';
 
 import * as Git from '@app/modules/git';
 import {
@@ -10,6 +10,7 @@ import {
 	initialiseOAuthFlow
 } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
+import ModalStore from '@app/stores/modal';
 import Button from '@app/ui/Common/Button';
 import EmptyState from '@app/ui/Common/EmptyState';
 import FileSelect from '@app/ui/Common/FileSelect';
@@ -68,7 +69,7 @@ const fileValidator = (path: string) => {
 	return true;
 };
 
-export default () => {
+const CloneModal = () => {
 	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
 		null
 	);
@@ -285,4 +286,13 @@ export default () => {
 			)}
 		</Modal>
 	);
+};
+
+export default CloneModal;
+
+export const showCloneModal = () => {
+	ModalStore.addModal({
+		type: 'clone-repository',
+		element: createRoot(CloneModal)
+	});
 };

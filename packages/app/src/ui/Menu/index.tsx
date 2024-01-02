@@ -4,12 +4,22 @@ import { Portal } from 'solid-js/web';
 
 import './index.scss';
 
+export type Accelerator = {
+	shift?: boolean;
+	meta?: boolean;
+	alt?: boolean;
+	key: string;
+};
+
+const meta = window.Native.platform === 'win32' ? '⌃' : '⌘';
+
 export type IMenuItem =
 	| {
 			type: 'item';
 			label: string;
 			disabled?: boolean;
 			onClick?: () => void;
+			accelerator?: Accelerator;
 			color?: 'default' | 'danger';
 	  }
 	| {
@@ -31,13 +41,34 @@ export default (props: Menu) => {
 	const [y, setY] = createSignal(0);
 
 	const { activate, deactivate } = useFocusTrap(menu, {
-		initialFocus: false
+		initialFocus: false,
+		onDeactivate: () => {
+			hide();
+		}
 	});
+
+	const accListener = (e: KeyboardEvent) => {
+		for (const item of props.items) {
+			if (item.type !== 'item') continue;
+
+			if (!item.accelerator) continue;
+
+			if (item.accelerator.shift && !e.shiftKey) continue;
+			if (item.accelerator.meta && !e.metaKey) continue;
+			if (item.accelerator.alt && !e.altKey) continue;
+
+			if (item.accelerator.key === e.key) {
+				return hide();
+			}
+		}
+	};
 
 	const hide = () => {
 		setOpen(false);
 
 		deactivate();
+
+		document.removeEventListener('keydown', accListener);
 	};
 
 	const click = (e: MouseEvent) => {
@@ -61,6 +92,8 @@ export default (props: Menu) => {
 		if (alreadyOpen) return hide();
 
 		setOpen(true);
+
+		document.addEventListener('keydown', accListener);
 
 		activate();
 	};
@@ -150,6 +183,20 @@ export default (props: Menu) => {
 												tabIndex={0}
 											>
 												{item.label}
+												<Show when={item.accelerator}>
+													<div class="menu__item__accelerator">
+														<span>
+															{item.accelerator?.shift ? '⇧' : null}
+														</span>
+														<span>
+															{item.accelerator?.meta ? meta : null}
+														</span>
+														<span>
+															{item.accelerator?.alt ? '⌥' : null}
+														</span>
+														<span>{item.accelerator?.key}</span>
+													</div>
+												</Show>
 											</div>
 										);
 								}

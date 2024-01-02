@@ -14,10 +14,10 @@ import Workspace from '@ui/Workspace';
 import { Fetch } from './modules/git/fetch';
 import { debug } from './modules/logger';
 import { checkIsInPath } from './modules/shell';
+import { registerAccelorators } from './native';
 import LocationStore from './stores/location';
 import OnboardingStore from './stores/onboarding';
 import RepositoryStore from './stores/repository';
-import { showInformationModal } from './ui/Modal/InformationModal';
 
 import './app.scss';
 
@@ -68,9 +68,7 @@ export default () => {
 		setFocused(value);
 	});
 
-	window.Native.listeners.INFORMATION(() => {
-		showInformationModal();
-	});
+	registerAccelorators();
 
 	onMount(async () => {
 		document.documentElement.setAttribute('lang', SettingsStore.getSetting('locale'));

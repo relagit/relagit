@@ -223,6 +223,32 @@ const constructWindow = async () => {
 			]
 		},
 		{
+			label: 'Repository',
+			submenu: [
+				{
+					label: 'Create Repository',
+					accelerator: 'CmdOrCtrl+N',
+					click: () => {
+						dispatch(ipc.OPEN_CREATE);
+					}
+				},
+				{
+					label: 'Add Repository',
+					accelerator: 'CmdOrCtrl+O',
+					click: () => {
+						dispatch(ipc.OPEN_ADD);
+					}
+				},
+				{
+					label: 'Clone Repository',
+					accelerator: 'CmdOrCtrl+Shift+O',
+					click: () => {
+						dispatch(ipc.OPEN_CLONE);
+					}
+				}
+			]
+		},
+		{
 			label: 'Window',
 			submenu: [
 				{

@@ -16,6 +16,21 @@
 		padding: 10px;
 		border-radius: 2px;
 		user-select: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		&__accelerator {
+			display: flex;
+			gap: 1px;
+			color: var(--color-secondary);
+			text-transform: uppercase;
+			font-size: 0.9rem;
+
+			> * {
+				display: block;
+			}
+		}
 
 		@include mixins.focusable;
 

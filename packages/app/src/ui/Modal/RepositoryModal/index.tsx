@@ -1,7 +1,8 @@
 import Modal, { ModalCloseButton, ModalHeader } from '..';
-import { Show, createSignal } from 'solid-js';
+import { Show, createRoot, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
+import ModalStore from '@app/stores/modal';
 
 import Layer from '@ui/Layer';
 
@@ -14,7 +15,7 @@ export interface RepositoryModalProps {
 	tab: 'add' | 'create';
 }
 
-export default (props: RepositoryModalProps) => {
+const RepositoryModal = (props: RepositoryModalProps) => {
 	let initialTab = 0;
 
 	if (!props.tab || props.tab === 'add') {
@@ -53,4 +54,13 @@ export default (props: RepositoryModalProps) => {
 			}}
 		</Modal>
 	);
+};
+
+export default RepositoryModal;
+
+export const showRepoModal = (tab: RepositoryModalProps['tab'] = 'add') => {
+	ModalStore.addModal({
+		type: 'repository',
+		element: createRoot(() => <RepositoryModal tab={tab} />)
+	});
 };

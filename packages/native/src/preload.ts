@@ -58,6 +58,15 @@ export const Native = {
 		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.FOCUS, fn);
 		},
+		CREATE: (fn: () => void) => {
+			ipcRenderer.on(ipc.OPEN_CREATE, fn);
+		},
+		ADD: (fn: () => void) => {
+			ipcRenderer.on(ipc.OPEN_ADD, fn);
+		},
+		CLONE: (fn: () => void) => {
+			ipcRenderer.on(ipc.OPEN_CLONE, fn);
+		},
 		SETTINGS: (fn: () => void) => {
 			ipcRenderer.on(ipc.OPEN_SETTINGS, fn);
 		},

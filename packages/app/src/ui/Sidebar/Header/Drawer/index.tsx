@@ -62,6 +62,10 @@ export default (props: HeaderDrawerProps) => {
 								items={[
 									{
 										type: 'item',
+										accelerator: {
+											key: 'o',
+											meta: true
+										},
 										label: t('sidebar.drawer.contextMenu.addRepository'),
 										onClick: () => {
 											ModalStore.addModal({
@@ -74,6 +78,10 @@ export default (props: HeaderDrawerProps) => {
 									},
 									{
 										type: 'item',
+										accelerator: {
+											key: 'n',
+											meta: true
+										},
 										label: t('sidebar.drawer.contextMenu.createRepository'),
 										onClick: () => {
 											ModalStore.addModal({
@@ -86,6 +94,11 @@ export default (props: HeaderDrawerProps) => {
 									},
 									{
 										type: 'item',
+										accelerator: {
+											key: 'o',
+											shift: true,
+											meta: true
+										},
 										label: t('sidebar.drawer.contextMenu.cloneRepository'),
 										onClick: () => {
 											ModalStore.addModal({
