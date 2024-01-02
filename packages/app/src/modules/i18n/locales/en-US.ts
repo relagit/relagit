@@ -33,6 +33,15 @@ export default {
 		commits: {
 			title: 'Commits'
 		},
+		accounts: {
+			title: 'Accounts',
+			github: {
+				label: 'GitHub',
+				note: 'Allow RelaGit to access private repositories and issues/pull requests.',
+				signIn: 'Sign In',
+				signOut: 'Sign Out'
+			}
+		},
 		general: {
 			title: 'General',
 			language: {

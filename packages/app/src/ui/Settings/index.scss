@@ -1,6 +1,12 @@
+.layer:has(> .settings-layer) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .settings-layer {
-	width: 100%;
-	height: 100%;
+	width: min(100%, 800px);
+	height: min(100%, 600px);
 	box-sizing: border-box;
 	border-radius: 4px;
 	border: 1px solid var(--separator-secondary);
@@ -57,11 +63,26 @@
 		border-bottom: thin solid var(--separator-secondary);
 		gap: 10px;
 
+		&.account {
+			gap: 20px;
+		}
+
 		&__label {
 			font-size: 1rem;
 			font-weight: 400;
 			color: var(--color-primary);
 			user-select: none;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			gap: 4px;
+
+			&__note {
+				font-size: 1rem;
+				font-weight: 400;
+				color: var(--color-secondary);
+			}
 		}
 
 		&__description {
@@ -360,6 +381,41 @@
 				}
 			}
 		}
+	}
+}
+
+.settings-layer__setting__account {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+
+	&__image {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		margin-right: 32px;
+
+		&__name {
+			font-size: 1rem;
+			font-weight: 400;
+			color: var(--color-primary);
+		}
+
+		&__login {
+			font-size: 1rem;
+			font-weight: 400;
+			color: var(--color-secondary);
+		}
+	}
+
+	.button {
+		white-space: nowrap;
 	}
 }
 
