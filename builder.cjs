@@ -48,7 +48,18 @@ const config = {
 	mac: {
 		identity: null,
 		category: 'public.app-category.developer-tools',
-		darkModeSupport: true
+		darkModeSupport: true,
+		artifactName: '${productName}-${os}-${arch}.${ext}',
+		target: [
+			{
+				target: 'dmg',
+				arch: ['arm64', 'x64']
+			},
+			{
+				target: 'zip',
+				arch: ['arm64', 'x64']
+			}
+		]
 	},
 	linux: {
 		category: 'Developer',

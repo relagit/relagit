@@ -40,7 +40,7 @@ jobs:
               env:
                   GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
 
-            - run: pnpm make:${{ matrix.os }} --publish always --arm64 --x64
+            - run: pnpm make:${{ matrix.os }} --publish always
               name: Make
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
