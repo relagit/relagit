@@ -19,11 +19,12 @@ A next-generation git client. Enables you to take back control over your git wor
 
 Builds are generated automatically upon [release](https://github.com/relagit/relagit/releases).
 
--   [macOS](https://github.com/relagit/relagit/releases/latest)[^1]
--   [Windows](https://github.com/relagit/relagit/releases/latest)
--   [Linux](https://github.com/relagit/relagit/releases/latest)
-
-[^1]: macOS prebuilds are not yet available for Apple Silicon. You can build it yourself following the instructions above and passing the `--arm64` flag to `pnpm make:mac`.
+-   [macOS (Intel)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-mac-x64.dmg)
+-   [macOS (Apple Silicon)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-mac-arm64.dmg)
+-   [Windows](https://github.com/relagit/relagit/releases/latest/download/RelaGit-win.zip)
+-   [Linux (rpm)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-linux.rpm)
+-   [Linux (tar.gz)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-linux.tar.gz)
+-   [Linux (deb)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-linux.deb)
 
 ## Building
 
