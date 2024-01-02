@@ -24,6 +24,13 @@
 		padding: 0 10px;
 		padding-block: 6px;
 		border-radius: 2px;
+		gap: 8px;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			color: var(--color-secondary);
+		}
 
 		@include mixins.focusable;
 

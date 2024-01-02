@@ -1,4 +1,61 @@
-.github-modal {
+.clone-modal {
+	&__footer {
+		justify-content: space-between !important;
+		gap: 16px;
+
+		@media screen and (width <= 724px) {
+			flex-direction: column !important;
+			align-items: flex-start !important;
+		}
+
+		.filepicker {
+			flex-direction: row;
+			align-items: center;
+
+			&__input {
+				height: fit-content;
+				width: 300px;
+			}
+
+			&__alert {
+				white-space: nowrap;
+			}
+		}
+
+		.modal__footer__buttons {
+			margin-left: auto;
+		}
+	}
+
+	&__oauth {
+		font-size: 0.85rem;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		background: none;
+		color: var(--color-secondary);
+
+		&:focus {
+			outline: none;
+			text-decoration: underline;
+		}
+
+		&.verified {
+			color: var(--color-green-500);
+		}
+
+		svg {
+			width: 14px;
+			height: 14px;
+		}
+
+		&__avatar {
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+		}
+	}
+
 	&__clone {
 		display: flex;
 		flex-direction: column;
@@ -9,30 +66,18 @@
 		}
 	}
 
-	&__logo {
-		gap: 2px;
+	&__url {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
+		gap: 8px;
 
-		.mark {
-			height: 24px;
-
-			svg {
-				width: 24px;
-				height: 24px;
-				fill: currentColor;
-			}
+		&__label {
+			color: var(--color-secondary);
+			font-size: 0.85rem;
 		}
 
-		.logo {
-			height: 24px;
-
-			svg {
-				width: 80px;
-				height: 24px;
-				fill: currentColor;
-			}
+		.textarea {
+			margin-bottom: 8px;
 		}
 	}
 
@@ -142,19 +187,43 @@
 			display: flex;
 			flex-direction: column;
 			gap: 8px;
-			height: 150px;
+			height: 100%;
 
-			@include mixins.focusable;
+			&:focus {
+				outline: none;
+				border: 2px solid var(--color-blue-500);
+				padding: 15px;
+			}
 
 			&:hover {
 				background-color: var(--bg-quaternary);
 			}
 
+			&.active {
+				background: var(--bg-active);
+				border-color: var(--color-blue-500);
+			}
+
 			&__name {
-				font-size: 1.25rem;
-				font-weight: 600;
+				font-size: 1rem;
+				font-weight: 400;
 				margin: 0;
 				color: var(--color-primary);
+				display: flex;
+				align-items: center;
+				gap: 4px;
+
+				&__slash {
+					color: var(--color-secondary);
+				}
+
+				&__image {
+					width: 20px;
+					height: 20px;
+					border-radius: 4px;
+					border: 1px solid var(--separator-primary);
+					margin-right: 4px;
+				}
 			}
 
 			&__description {
@@ -169,6 +238,7 @@
 				align-items: center;
 				gap: 16px;
 				margin-top: auto;
+				padding-top: 8px;
 				color: var(--color-secondary);
 				font-size: 0.85rem;
 
@@ -204,7 +274,7 @@
 
 /* stylelint-disable */
 
-.github-modal__details__readme__content {
+.clone-modal__details__readme__content {
 	@media (prefers-color-scheme: dark) {
 		--color-prettylights-syntax-comment: #8b949e;
 		--color-prettylights-syntax-constant: #79c0ff;

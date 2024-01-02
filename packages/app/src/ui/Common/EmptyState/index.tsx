@@ -4,6 +4,7 @@ import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
 import Button from '../Button';
+import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
@@ -24,6 +25,7 @@ export interface EmptyStateProps {
 	detail?: string;
 	hint?: string;
 	opacity?: number;
+	icon?: IconName;
 	actions?: {
 		label: string;
 		type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
@@ -59,6 +61,9 @@ export default (props: EmptyStateProps) => {
 
 	return (
 		<div class="empty-state">
+			<Show when={props.icon}>
+				<Icon name={props.icon!} variant={24} />
+			</Show>
 			<Show when={props.spinner}>
 				<div class="empty-state__spinner">
 					<svg

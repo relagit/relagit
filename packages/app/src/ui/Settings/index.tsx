@@ -4,6 +4,7 @@ import { Accessor, For, Show, createSignal, onCleanup, onMount } from 'solid-js'
 import { Workflow, iconFromAction, workflows } from '@app/modules/actions';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
+import { getUser, initialiseOAuthFlow } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
@@ -20,6 +21,7 @@ import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
 import Layer from '../Layer';
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '../Modal';
+import { showOAuthModal } from '../Modal/OAuthModal';
 
 import './index.scss';
 
@@ -278,6 +280,61 @@ export default () => {
 						SettingsStore.setSetting('commit.preferParens', value);
 					}}
 				/>
+			</div>
+		</>
+	);
+
+	const Accounts = (
+		<>
+			<div class="settings-layer__setting account">
+				<label class="settings-layer__setting__label" id="settings-github">
+					{t('settings.accounts.github.label')}
+					<div class="settings-layer__setting__label__note">
+						{t('settings.accounts.github.note')}
+					</div>
+				</label>
+				<div class="settings-layer__setting__account">
+					<Show
+						when={getUser() && localStorage.getItem('__x_github_token')}
+						fallback={
+							<Button
+								type="brand"
+								label={t('settings.accounts.github.signIn')}
+								onClick={() => {
+									close();
+
+									initialiseOAuthFlow().then((i) => showOAuthModal(i));
+								}}
+							>
+								{t('settings.accounts.github.signIn')}
+							</Button>
+						}
+					>
+						<img
+							src={getUser().avatar_url}
+							alt={getUser().login}
+							class="settings-layer__setting__account__image"
+						/>
+						<div class="settings-layer__setting__account__text">
+							<p class="settings-layer__setting__account__text__name">
+								{getUser().name}
+							</p>
+							<p class="settings-layer__setting__account__text__login">
+								@{getUser().login}
+							</p>
+						</div>
+						<Button
+							type="default"
+							label={t('settings.accounts.github.signOut')}
+							onClick={() => {
+								localStorage.removeItem('__x_github_token');
+								localStorage.removeItem('__x_github_user');
+							}}
+						>
+							{t('settings.accounts.github.signOut')}
+						</Button>
+					</Show>
+				</div>
 			</div>
 		</>
 	);
@@ -582,22 +639,32 @@ export default () => {
 					{
 						label: t('settings.general.title'),
 						value: 'general',
-						element: General
+						element: General,
+						icon: 'gear'
+					},
+					{
+						label: t('settings.accounts.title'),
+						value: 'accounts',
+						element: Accounts,
+						icon: 'people'
 					},
 					{
 						label: t('settings.commits.title'),
 						value: 'commits',
-						element: Commits
+						element: Commits,
+						icon: 'git-commit'
 					},
 					{
 						label: t('settings.appearance.title'),
 						value: 'appearance',
-						element: Appearance
+						element: Appearance,
+						icon: 'eye'
 					},
 					{
 						label: t('settings.workflows.title'),
 						value: 'workflows',
-						element: Workflows
+						element: Workflows,
+						icon: 'workflow'
 					}
 				]}
 			/>

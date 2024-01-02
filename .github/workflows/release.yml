@@ -37,6 +37,8 @@ jobs:
 
             - run: pnpm run build
               name: Build
+              env:
+                  GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
 
             - run: pnpm make:${{ matrix.os }} --publish always
               name: Make

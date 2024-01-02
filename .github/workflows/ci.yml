@@ -30,6 +30,8 @@ jobs:
 
             - run: pnpm install --frozen-lockfile
             - run: pnpm build
+              env:
+                  GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
             - name: log dist size
               run: |
                   echo $(du -sh dist | cut -f1)

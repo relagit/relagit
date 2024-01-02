@@ -6,7 +6,7 @@ import { Git } from './core';
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
-export const Discard = async (repository: Repository, file: GitFile) => {
+export const Discard = async (repository: Repository | undefined, file: GitFile) => {
 	if (!repository || !file) {
 		return;
 	}

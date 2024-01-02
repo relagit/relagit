@@ -49,6 +49,10 @@
 		background-color: var(--bg-primary);
 		color: var(--color-primary);
 
+		&:focus {
+			outline: none;
+		}
+
 		&__confetti {
 			position: absolute;
 			top: -10%;
@@ -117,7 +121,8 @@
 				font-size: 2rem;
 				font-weight: 500;
 				display: flex;
-				gap: 7px;
+				gap: 16px;
+				align-items: center;
 			}
 		}
 

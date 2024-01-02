@@ -51,7 +51,7 @@ export const finishTour = () => {
 											</a>
 										)}
 									</Tooltip>
-									<Tooltip text={t('onboarding.modal.github')}>
+									<Tooltip text={t('onboarding.modal.clone')}>
 										{(p) => (
 											<a
 												{...p}

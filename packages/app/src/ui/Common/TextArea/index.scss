@@ -18,7 +18,11 @@
 	--input-stroke: var(--separator-primary);
 	--input-focus: var(--color-blue-500);
 
-	@include mixins.focusable(var(--input-focus));
+	&:focus {
+		outline: none;
+		padding: 6px 15px;
+		border: 2px solid var(--input-focus);
+	}
 
 	&__wrapper {
 		position: relative;

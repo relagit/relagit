@@ -53,7 +53,7 @@ export default (props: GitFile) => {
 						try {
 							await Git.Stash(selected());
 
-							triggerWorkflow('stash', selected());
+							triggerWorkflow('stash', selected()!);
 						} catch (e) {
 							showErrorModal(e, 'error.git');
 
@@ -97,7 +97,7 @@ export default (props: GitFile) => {
 					}),
 					type: 'item',
 					onClick: () => {
-						showItemInFolder(path.join(selected().path, props.path, props.name));
+						showItemInFolder(path.join(selected()!.path, props.path, props.name));
 					},
 					disabled: props.status === 'deleted'
 				},
@@ -112,7 +112,7 @@ export default (props: GitFile) => {
 					type: 'item',
 					disabled: props.status === 'deleted',
 					onClick: () => {
-						openInEditor(path.join(selected().path, props.path, props.name));
+						openInEditor(path.join(selected()!.path, props.path, props.name));
 					}
 				}
 			]}
@@ -160,6 +160,21 @@ export default (props: GitFile) => {
 					}
 					onClick={() => {
 						StageStore.toggleStaged(path.join(props.path, props.name));
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+
+							if (e.shiftKey) {
+								StageStore.invert(selected());
+								return;
+							}
+
+							StageStore.toggleStaged(path.join(props.path, props.name));
+						}
+					}}
+					onDblClick={() => {
+						StageStore.invert(selected());
 					}}
 					classList={{
 						sidebar__item__status: true,

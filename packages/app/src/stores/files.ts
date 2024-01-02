@@ -2,8 +2,6 @@ import { GenericStore } from '.';
 
 import { GitStatus } from '@modules/git/diff';
 
-import StageStore from './stage';
-
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export interface GitFile {
@@ -27,18 +25,6 @@ const FileStore = new (class FileStore extends GenericStore {
 	removeFiles(path: string) {
 		this.#record.delete(path);
 		this.emit();
-	}
-
-	hasStagedFiles(path: string | undefined) {
-		return this.getByRepositoryPath(path)?.some((f) =>
-			StageStore.isStaged(nodepath.join(f.path, f.name))
-		);
-	}
-
-	getStagedFilePaths(path: string | undefined) {
-		return this.getByRepositoryPath(path)
-			?.filter((f) => StageStore.isStaged(nodepath.join(f.path, f.name)))
-			.map((f) => nodepath.join(f.path, f.name));
 	}
 
 	getStatus(repository: string, file: string) {

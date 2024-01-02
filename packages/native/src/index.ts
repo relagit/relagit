@@ -7,6 +7,7 @@ import * as ipc from '~/common/ipc';
 import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
+import initProtocol from './modules/protocol';
 import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
 import { updateEnvironmentForProcess } from './modules/shell';
 
@@ -271,6 +272,7 @@ app.once('ready', async () => {
 	const window = await constructWindow();
 
 	initIPC(window);
+	initProtocol();
 	if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 	app.on('activate', async () => {

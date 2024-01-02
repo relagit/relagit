@@ -18,7 +18,7 @@ export default {
 			title: 'Proxima Gradus',
 			themes: 'Client Themata',
 			workflows: 'Workflows',
-			github: 'Ite ad GitHub',
+			clone: 'Ite ad GitHub',
 			somethingWrong: 'Aliquid abiit iniuriam?',
 			issue: 'Issue Aperi'
 		}
@@ -124,7 +124,7 @@ export default {
 			contextMenu: {
 				addRepository: 'Add Repository',
 				createRepository: 'Fac Repository',
-				cloneFromGitHub: 'Exemplum fac a GitHub',
+				cloneRepository: 'Exemplum fac Repository',
 				viewIn: 'Ite ad {{name}}',
 				remove: 'Aufer'
 			},
@@ -232,8 +232,8 @@ export default {
 			reload: 'Reload',
 			reloadClient: 'Reload clientis'
 		},
-		github: {
-			title: 'Exemplum fac a ',
+		clone: {
+			title: 'Exemplum fac Repository',
 			back: 'Retro',
 			clone: 'Exemplum fac',
 			backToSearch: 'Retro ad Search',

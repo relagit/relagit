@@ -19,7 +19,7 @@ export default {
 			title: 'Nächste Schritte',
 			themes: 'Durchsuche Client Themes',
 			workflows: 'Durchsuche Workflows',
-			github: 'Auf GitHub ansehen',
+			clone: 'Auf GitHub ansehen',
 			somethingWrong: 'Etwas ist schief gelaufen?',
 			issue: 'Erstelle ein Issue'
 		}
@@ -130,7 +130,7 @@ export default {
 			contextMenu: {
 				addRepository: 'Füge Repository hinzu',
 				createRepository: 'Erstelle Repository',
-				cloneFromGitHub: 'Klone von GitHub',
+				cloneRepository: 'Klone Repository',
 				viewIn: 'Anzeigen in {{name}}',
 				remove: 'Entfernen'
 			},
@@ -239,8 +239,8 @@ export default {
 			reload: 'Neu laden',
 			reloadClient: 'Client neu laden'
 		},
-		github: {
-			title: 'Klone von ',
+		clone: {
+			title: 'Klone Repository',
 			back: 'Zurück',
 			clone: 'Klonen',
 			backToSearch: 'Zurück zur Suche',

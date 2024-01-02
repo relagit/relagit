@@ -18,7 +18,7 @@ export default {
 			title: 'Next Steps',
 			themes: 'Browse Client Themes',
 			workflows: 'Browse Workflows',
-			github: 'View on GitHub',
+			clone: 'View on GitHub',
 			somethingWrong: 'Find something wrong?',
 			issue: 'Open an Issue'
 		}
@@ -32,6 +32,15 @@ export default {
 		},
 		commits: {
 			title: 'Commits'
+		},
+		accounts: {
+			title: 'Accounts',
+			github: {
+				label: 'GitHub',
+				note: 'Allow RelaGit to access private repositories and issues/pull requests.',
+				signIn: 'Sign In',
+				signOut: 'Sign Out'
+			}
 		},
 		general: {
 			title: 'General',
@@ -129,7 +138,7 @@ export default {
 			contextMenu: {
 				addRepository: 'Add Repository',
 				createRepository: 'Create Repository',
-				cloneFromGitHub: 'Clone from GitHub',
+				cloneRepository: 'Clone Repository',
 				viewIn: 'View in {{name}}',
 				remove: 'Remove'
 			},
@@ -176,6 +185,7 @@ export default {
 		month: ['{{count}} month', '{{count}} months'],
 		year: ['{{count}} year', '{{count}} years'],
 		ago: 'ago',
+		in: 'in',
 		now: 'Just now'
 	},
 	codeview: {
@@ -271,18 +281,39 @@ export default {
 			reload: 'Reload',
 			reloadClient: 'Reload Client'
 		},
-		github: {
-			title: 'Clone from ',
+		auth: {
+			title: 'Complete Authentication',
+			expired: 'Your verification code expire {{time}}. Please try again.',
+			willExpire: 'Your verification code will expire {{time}}.',
+			error: 'An error occurred while authenticating. Please try again.',
+			success: 'Success! You may now close this modal.',
+			copyCode: 'Copy Code',
+			openInBrowser: 'Open in Browser'
+		},
+		clone: {
+			title: 'Clone Repository ',
 			back: 'Back',
 			clone: 'Clone',
 			backToSearch: 'Back to Search',
 			search: 'Search',
 			viewOnGithub: 'View on GitHub',
 			searchPlaceholder: 'Enter a GitHub User or Organisation',
+			searchPlaceholderVerified:
+				'Enter a GitHub User or @me to search repositories you have access to',
 			loading: 'Loading...',
 			loadingHint: 'Please wait while we fetch your repositories.',
 			error: 'Oops! Something went wrong.',
-			errorHint: 'We dropped the ball while trying to gather your repositories.'
+			errorHint: 'We dropped the ball while trying to gather your repositories.',
+			auth: 'You need to authenticate with GitHub to view your repositories.',
+			authHint: 'Click the button below to begin the OAuth process.',
+			authButton: 'Authenticate',
+			authenticated: 'Authenticated',
+			authenticate: 'Authenticate via OAuth',
+			github: 'GitHub.com',
+			url: 'URL',
+			urlLabel: 'Repository URL',
+			urlPlaceholder: 'https://github.com/relagit/relagit',
+			localLabel: 'Local Path'
 		}
 	}
 } as const;
