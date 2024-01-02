@@ -161,6 +161,21 @@ export default (props: GitFile) => {
 					onClick={() => {
 						StageStore.toggleStaged(path.join(props.path, props.name));
 					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+
+							if (e.shiftKey) {
+								StageStore.invert(selected());
+								return;
+							}
+
+							StageStore.toggleStaged(path.join(props.path, props.name));
+						}
+					}}
+					onDblClick={() => {
+						StageStore.invert(selected());
+					}}
 					classList={{
 						sidebar__item__status: true,
 						[props.status]: true,
