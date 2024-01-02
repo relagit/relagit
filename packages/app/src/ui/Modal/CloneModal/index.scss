@@ -66,30 +66,18 @@
 		}
 	}
 
-	&__logo {
-		gap: 2px;
+	&__url {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
+		gap: 8px;
 
-		.mark {
-			height: 24px;
-
-			svg {
-				width: 24px;
-				height: 24px;
-				fill: currentColor;
-			}
+		&__label {
+			color: var(--color-secondary);
+			font-size: 0.85rem;
 		}
 
-		.logo {
-			height: 24px;
-
-			svg {
-				width: 80px;
-				height: 24px;
-				fill: currentColor;
-			}
+		.textarea {
+			margin-bottom: 8px;
 		}
 	}
 

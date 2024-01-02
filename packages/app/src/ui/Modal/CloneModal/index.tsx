@@ -15,6 +15,7 @@ import EmptyState from '@app/ui/Common/EmptyState';
 import FileSelect from '@app/ui/Common/FileSelect';
 import Icon from '@app/ui/Common/Icon';
 import TabView from '@app/ui/Common/TabView';
+import TextArea from '@app/ui/Common/TextArea';
 import * as logger from '@modules/logger';
 
 import Layer from '@ui/Layer';
@@ -32,6 +33,41 @@ const isEmpty = (path: string) => {
 	return files.length === 0;
 };
 
+const fileValidator = (path: string) => {
+	if (path.length === 0) return null;
+
+	const exists = fs.existsSync(path);
+
+	if (!exists) {
+		return t('ui.filepicker.doesNotExist', {
+			type: t('ui.filepicker.directory')
+		});
+	}
+
+	let isDirectory = false;
+
+	try {
+		fs.opendirSync(path);
+
+		isDirectory = true;
+	} catch (e) {
+		isDirectory = false;
+	}
+
+	if (!isDirectory)
+		return t('ui.filepicker.isNot', {
+			type: t('ui.filepicker.file'),
+			expected: t('ui.filepicker.directory')
+		});
+
+	if (!isEmpty(path))
+		return t('ui.filepicker.notEmpty', {
+			type: t('ui.filepicker.directory')
+		});
+
+	return true;
+};
+
 export default () => {
 	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
 		null
@@ -40,7 +76,10 @@ export default () => {
 		GithubResponse['users/:username/repos'][1][number] | null
 	>();
 	const [error, setError] = createSignal(false);
+	const [dirError, setDirError] = createSignal<string>('');
 	const [path, setPath] = createSignal('');
+	const [url, setURL] = createSignal('');
+	const [tab, setTab] = createSignal<string | number>('github');
 
 	onMount(() => {
 		try {
@@ -54,7 +93,28 @@ export default () => {
 		}
 	});
 
-	const Url = <></>;
+	const Url = () => (
+		<div class="clone-modal__url">
+			<label class="clone-modal__url__label">{t('modal.clone.urlLabel')}</label>
+			<TextArea
+				label={t('modal.clone.urlLabel')}
+				value={url()}
+				placeholder={t('modal.clone.urlPlaceholder')}
+				onChange={(val) => {
+					setURL(val);
+				}}
+			/>
+			<label class="clone-modal__url__label">{t('modal.clone.localLabel')}</label>
+			<FileSelect
+				input
+				setError={setDirError}
+				validate={fileValidator}
+				initial={path()}
+				properties={['openDirectory', 'createDirectory']}
+				onSelect={setPath}
+			/>
+		</div>
+	);
 
 	const Github = (props: {
 		close: () => void;
@@ -97,7 +157,11 @@ export default () => {
 	);
 
 	return (
-		<Modal size="x-large" dismissable transitions={Layer.Transitions.Fade}>
+		<Modal
+			size={tab() === 'github' ? 'x-large' : 'medium'}
+			dismissable
+			transitions={Layer.Transitions.Fade}
+		>
 			{(props) => (
 				<>
 					<ModalHeader
@@ -149,6 +213,7 @@ export default () => {
 					</ModalHeader>
 					<ModalBody>
 						<TabView
+							signal={[tab, setTab]}
 							views={[
 								{
 									label: t('modal.clone.github'),
@@ -158,53 +223,23 @@ export default () => {
 								{
 									label: t('modal.clone.url'),
 									value: 'url',
-									element: Url
+									element: <Url />
 								}
 							]}
 						/>
 					</ModalBody>
-					<Show when={selected()}>
+					<Show when={tab() === 'url' || (tab() === 'github' && selected())}>
 						<div class="modal__footer clone-modal__footer">
-							<FileSelect
-								input
-								validate={(path) => {
-									if (path.length === 0) return null;
-
-									const exists = fs.existsSync(path);
-
-									if (!exists) {
-										return t('ui.filepicker.doesNotExist', {
-											type: t('ui.filepicker.directory')
-										});
-									}
-
-									let isDirectory = false;
-
-									try {
-										fs.opendirSync(path);
-
-										isDirectory = true;
-									} catch (e) {
-										isDirectory = false;
-									}
-
-									if (!isDirectory)
-										return t('ui.filepicker.isNot', {
-											type: t('ui.filepicker.file'),
-											expected: t('ui.filepicker.directory')
-										});
-
-									if (!isEmpty(path))
-										return t('ui.filepicker.notEmpty', {
-											type: t('ui.filepicker.directory')
-										});
-
-									return true;
-								}}
-								initial={path()}
-								properties={['openDirectory', 'createDirectory']}
-								onSelect={setPath}
-							/>
+							<Show when={tab() === 'github'} fallback={<div />}>
+								<FileSelect
+									input
+									setError={setDirError}
+									validate={fileValidator}
+									initial={path()}
+									properties={['openDirectory', 'createDirectory']}
+									onSelect={setPath}
+								/>
+							</Show>
 							<div class="modal__footer__buttons">
 								<Button
 									label={t('modal.clone.clone')}
@@ -218,10 +253,20 @@ export default () => {
 								<Button
 									label={t('modal.clone.clone')}
 									type="brand"
-									disabled={!path()}
+									disabled={
+										!!dirError() ||
+										!(
+											path() &&
+											((tab() === 'url' && url()) ||
+												(tab() === 'github' && selected()))
+										)
+									}
 									onClick={async () => {
 										try {
-											await Git.Clone(selected()!.clone_url, path());
+											const cloneLike =
+												tab() === 'url' ? url() : selected()!.clone_url!;
+
+											await Git.Clone(cloneLike, path());
 
 											props.close();
 										} catch (e) {

@@ -310,7 +310,10 @@ export default {
 			authenticated: 'Authenticated',
 			authenticate: 'Authenticate via OAuth',
 			github: 'GitHub.com',
-			url: 'URL'
+			url: 'URL',
+			urlLabel: 'Repository URL',
+			urlPlaceholder: 'https://github.com/relagit/relagit',
+			localLabel: 'Local Path'
 		}
 	}
 } as const;

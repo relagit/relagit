@@ -1,4 +1,4 @@
-import { For, JSX, Show, createSignal } from 'solid-js';
+import { For, JSX, Show, Signal, createSignal } from 'solid-js';
 
 import { IconName } from '../Icon';
 import SegmentedControl from '../SegmentedControl';
@@ -6,6 +6,7 @@ import SegmentedControl from '../SegmentedControl';
 import './index.scss';
 
 export interface TabViewProps {
+	signal?: Signal<string | number>;
 	views: {
 		element: JSX.Element;
 		value: string | number;
@@ -17,7 +18,8 @@ export interface TabViewProps {
 }
 
 export default (props: TabViewProps) => {
-	const [selectedView, setSelectedView] = createSignal<string | number>(props.views[0].value);
+	const [selectedView, setSelectedView] =
+		props.signal || createSignal<string | number>(props.views[0].value);
 
 	return (
 		<div class="segmented-view">

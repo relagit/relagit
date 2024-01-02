@@ -1,4 +1,4 @@
-import { JSX, Show, createEffect, createSignal } from 'solid-js';
+import { JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
 
 import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
@@ -17,6 +17,7 @@ export interface FileSelectProps {
 	properties: string[];
 	validate?: (path: string) => string | boolean | JSX.Element | null;
 	onSelect: (path: string) => void;
+	setError?: Setter<string>;
 	disabled?: boolean;
 	className?: string;
 	filters?: {
