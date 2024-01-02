@@ -1,5 +1,7 @@
 import * as ipc from '~/common/ipc';
 
+import { populateUser } from './http';
+
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
 const CLIENT_ID = __GITHUB_CLIENT_ID__;
@@ -110,4 +112,6 @@ export const saveTokens = async (tokens: OAuthAccessTokenResponse) => {
 	const encrypted = await ipcRenderer.invoke(ipc.GET_ENCRYPTED, tokens.access_token || '');
 
 	localStorage.setItem('__x_github_token', encrypted);
+
+	populateUser();
 };

@@ -1,7 +1,7 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import { For, Show, createRoot, createSignal, onMount } from 'solid-js';
 
-import { OAuthInitResponse, SECONDS, pollForToken, populateUser } from '@app/modules/github';
+import { OAuthInitResponse, SECONDS, pollForToken } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import { openExternal } from '@app/modules/shell';
 import { renderDate } from '@app/modules/time';
@@ -35,8 +35,6 @@ const OAuthModal = (props: { init: OAuthInitResponse }) => {
 
 		if (res.access_token) {
 			setHasVerified(true);
-
-			populateUser();
 		}
 	});
 
