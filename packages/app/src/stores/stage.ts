@@ -34,7 +34,10 @@ const StageStore = new (class StageStore extends GenericStore {
 		const files = FileStore.getByRepositoryPath(repository.path);
 
 		for (const file of files || []) {
-			this.toggleStaged(nodepath.join(file.path, file.name));
+			this.#record.set(
+				nodepath.join(file.path, file.name),
+				!this.isStaged(nodepath.join(file.path, file.name))
+			);
 		}
 
 		this.emit();
