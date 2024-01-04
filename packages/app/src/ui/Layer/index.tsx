@@ -51,13 +51,7 @@ const Layer = (props: LayerProps) => {
 
 export default Layer;
 
-const transitions: Record<
-	'None' | 'Fade',
-	{
-		enter: (el: Element, done: () => void) => void;
-		exit: (el: Element, done: () => void) => void;
-	}
-> = {
+const transitions = {
 	None: {
 		enter: (el, done) => {
 			done();
@@ -108,6 +102,12 @@ const transitions: Record<
 			a.finished.then(done);
 		}
 	}
-};
+} satisfies Record<
+	string,
+	{
+		enter: (el: Element, done: () => void) => void;
+		exit: (el: Element, done: () => void) => void;
+	}
+>;
 
 Layer.Transitions = transitions;

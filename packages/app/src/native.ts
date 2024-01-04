@@ -1,10 +1,20 @@
+import { workflows } from './modules/actions/workflows';
 import { showCloneModal } from './ui/Modal/CloneModal';
 import { showInformationModal } from './ui/Modal/InformationModal';
 import { showRepoModal } from './ui/Modal/RepositoryModal';
+import { showSettingsModal } from './ui/Settings';
 
-export const registerAccelorators = () => {
+export const registerAccelerators = () => {
+	window.Native.listeners.LOAD_WORKFLOW((_, wf) => {
+		workflows.add(wf);
+	});
+
 	window.Native.listeners.INFORMATION(() => {
 		showInformationModal();
+	});
+
+	window.Native.listeners.SETTINGS(() => {
+		showSettingsModal();
 	});
 
 	window.Native.listeners.CREATE(() => {

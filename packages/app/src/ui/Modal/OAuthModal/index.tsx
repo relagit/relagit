@@ -8,7 +8,6 @@ import { renderDate } from '@app/modules/time';
 import ModalStore from '@app/stores/modal';
 import Button from '@app/ui/Common/Button';
 import Icon from '@app/ui/Common/Icon';
-import Layer from '@app/ui/Layer';
 
 import './index.scss';
 
@@ -41,8 +40,8 @@ const OAuthModal = (props: { init: OAuthInitResponse }) => {
 	return (
 		<Modal
 			size="medium"
-			transitions={Layer.Transitions.Fade}
 			dismissable={!!hasVerified() || !!hasErrored() || !!hasExpired()}
+			id={'oauth'}
 		>
 			{(p) => (
 				<>
@@ -130,8 +129,8 @@ const OAuthModal = (props: { init: OAuthInitResponse }) => {
 export default OAuthModal;
 
 export const showOAuthModal = (init: OAuthInitResponse) => {
-	ModalStore.addModal({
-		type: 'oauth',
-		element: createRoot(() => <OAuthModal init={init} />)
-	});
+	ModalStore.pushState(
+		'oauth',
+		createRoot(() => <OAuthModal init={init} />)
+	);
 };

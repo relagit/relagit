@@ -68,12 +68,10 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.addRepository'),
 										onClick: () => {
-											ModalStore.addModal({
-												type: 'add-repository',
-												element: createRoot(() => (
-													<RepositoryModal tab="add" />
-												))
-											});
+											ModalStore.pushState(
+												'add',
+												createRoot(() => <RepositoryModal tab="add" />)
+											);
 										}
 									},
 									{
@@ -84,12 +82,10 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.createRepository'),
 										onClick: () => {
-											ModalStore.addModal({
-												type: 'create-repository',
-												element: createRoot(() => (
-													<RepositoryModal tab="create" />
-												))
-											});
+											ModalStore.pushState(
+												'create',
+												createRoot(() => <RepositoryModal tab="create" />)
+											);
 										}
 									},
 									{
@@ -101,10 +97,7 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.cloneRepository'),
 										onClick: () => {
-											ModalStore.addModal({
-												type: 'clone-repository',
-												element: createRoot(CloneModal)
-											});
+											ModalStore.pushState('clone', createRoot(CloneModal));
 										}
 									}
 								]}
