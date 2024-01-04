@@ -65,11 +65,67 @@ const Modal = (props: ModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const [open, setOpen] = createSignal(false);
 
+	const focusTrap = (e: KeyboardEvent) => {
+		if (
+			Array.isArray(props.id)
+				? !props.id.includes(ModalStore.state?.active?.type || '')
+				: props.id !== ModalStore.state?.active?.type
+		)
+			return;
+
+		ref()?.focus();
+
+		if (e.key === 'Tab') {
+			e.preventDefault();
+
+			const focusableElements = ref()?.querySelectorAll(
+				':is(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):not([disabled])'
+			);
+
+			if (!focusableElements) return;
+
+			const activeElementIndex = Array.from(focusableElements).indexOf(
+				document.activeElement as HTMLElement
+			);
+
+			if (e.shiftKey) {
+				if (activeElementIndex === 0) {
+					(focusableElements[focusableElements.length - 1] as HTMLElement).focus();
+
+					return;
+				}
+
+				(focusableElements[activeElementIndex - 1] as HTMLElement).focus();
+			} else {
+				if (activeElementIndex === focusableElements.length - 1) {
+					(focusableElements[0] as HTMLElement).focus();
+
+					return;
+				}
+
+				(focusableElements[activeElementIndex + 1] as HTMLElement).focus();
+			}
+		}
+
+		if (e.key === 'Escape') {
+			if (props.dismissable) return close();
+
+			if (matchMedia('(prefers-reduced-motion: no-preference)'))
+				(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
+
+			return;
+		}
+	};
+
 	ModalStore.onModalVisible(props.id, () => {
 		setOpen(true);
+
+		window.addEventListener('keydown', focusTrap);
 	});
 
 	const close = () => {
+		window.removeEventListener('keydown', focusTrap);
+
 		ModalStore.removeModalVisible(props.id);
 
 		// for whatever reason, the animation will not play any other way.
