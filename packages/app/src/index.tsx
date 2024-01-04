@@ -3,11 +3,9 @@ import { render } from 'solid-js/web';
 
 import { loadWorkflows } from '@modules/actions';
 import { loadThemes } from '@modules/actions/themes';
-import initIPC from '@modules/ipc';
 
 import Main from './app';
 
-initIPC();
 loadWorkflows();
 loadThemes();
 
@@ -32,7 +30,7 @@ DO NOT paste any code into this console that you have not written yourself or th
 	);
 }
 
-const root = document.getElementById('root');
+const root = document.getElementById('root')!;
 
 if (__NODE_ENV__ === 'development') {
 	import('@solid-devtools/overlay').then((devtools) => {
