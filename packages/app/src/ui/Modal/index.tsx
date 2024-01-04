@@ -1,5 +1,4 @@
 import { createConfetti } from '@neoconfetti/solid';
-import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { JSX, Show, createEffect, createRoot, createSignal } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
@@ -66,50 +65,12 @@ const Modal = (props: ModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const [open, setOpen] = createSignal(false);
 
-	const onDeactivate = () => {
-		if (!open()) return;
-
-		if (props.dismissable) {
-			return setTimeout(() => close(false), 20);
-		}
-
-		activate();
-
-		if (matchMedia('(prefers-reduced-motion: no-preference)'))
-			(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
-	};
-
-	const { activate, deactivate } = useFocusTrap(ref, {
-		onDeactivate,
-		initialFocus: false
-	});
-
 	ModalStore.onModalVisible(props.id, () => {
 		setOpen(true);
-
-		setTimeout(() => {
-			try {
-				activate();
-			} catch (e) {
-				console.error(e);
-				// it's not vital, so we can ignore it.
-			}
-		}, 100); // wait for the modal to be rendered
 	});
 
-	const close = (doDeactivate = true) => {
+	const close = () => {
 		ModalStore.removeModalVisible(props.id);
-
-		try {
-			if (doDeactivate)
-				deactivate({
-					onDeactivate: () => {
-						// noop
-					}
-				});
-		} catch (e) {
-			// same as above
-		}
 
 		// for whatever reason, the animation will not play any other way.
 		Layer.Transitions.Fade.exit(ref()?.firstChild as HTMLElement, () => {
