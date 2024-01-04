@@ -1,3 +1,9 @@
+.layer[data-key='modal'] {
+	&.visible {
+		background: rgb(0 0 0 / 50%);
+	}
+}
+
 .modal-container {
 	position: absolute;
 	inset: 0;
@@ -8,7 +14,6 @@
 	align-items: center;
 	justify-content: center;
 	pointer-events: none;
-	transition: background-color 0.2s ease-in-out;
 
 	::-webkit-scrollbar {
 		width: 8px;
@@ -31,7 +36,6 @@
 	}
 
 	&.visible {
-		background-color: rgb(0 0 0 / 50%);
 		pointer-events: all;
 	}
 

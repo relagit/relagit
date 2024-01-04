@@ -1,6 +1,6 @@
 import { createConfetti } from '@neoconfetti/solid';
 import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
-import { For, JSX, Show, createEffect, createSignal, onMount } from 'solid-js';
+import { JSX, Show, createEffect, createRoot, createSignal } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { LocaleKey, t } from '@modules/i18n';
@@ -16,7 +16,7 @@ import Layer from '@ui/Layer';
 import './index.scss';
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-const { confetti } = createConfetti();
+const { confetti } = createConfetti(); // THIS VARIABLE IS USED BY THE use:confetti DIRECTIVE, DO NOT REMOVE IT
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
@@ -55,105 +55,124 @@ const SHAKE: Parameters<HTMLDivElement['animate']> = [
 ];
 
 interface ModalProps {
-	transitions: {
-		enter: (el: Element, done: () => void) => void;
-		exit: (el: Element, done: () => void) => void;
-	};
 	dismissable?: boolean;
 	children: (props: { close: () => void }) => JSX.Element | JSX.Element[];
 	size: 'small' | 'medium' | 'large' | 'x-large';
 	confetti?: boolean;
+	id: string | string[];
 }
-
-let opened = 1;
 
 const Modal = (props: ModalProps) => {
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const [open, setOpen] = createSignal(false);
 
-	const { activate, deactivate } = useFocusTrap(ref, {
-		onDeactivate: () => {
-			if (props.dismissable) {
-				return close();
-			}
+	const onDeactivate = () => {
+		if (!open()) return;
 
-			activate();
+		if (props.dismissable) {
+			return setTimeout(() => close(false), 20);
+		}
 
+		activate();
+
+		if (matchMedia('(prefers-reduced-motion: no-preference)'))
 			(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
-		},
+	};
+
+	const { activate, deactivate } = useFocusTrap(ref, {
+		onDeactivate,
 		initialFocus: false
 	});
 
-	onMount(() => {
-		requestAnimationFrame(() => {
-			setOpen(true);
-
-			activate();
-		});
-	});
-
-	const close = () => {
-		setOpen(false);
-
-		deactivate();
+	ModalStore.onModalVisible(props.id, () => {
+		setOpen(true);
 
 		setTimeout(() => {
-			// allow any transitions to finish
+			try {
+				activate();
+			} catch (e) {
+				console.error(e);
+				// it's not vital, so we can ignore it.
+			}
+		}, 100); // wait for the modal to be rendered
+	});
 
-			ModalStore.removeModal(ModalStore.modals.find((m) => m.element === ref())!);
-		}, 500);
+	const close = (doDeactivate = true) => {
+		ModalStore.removeModalVisible(props.id);
+
+		try {
+			if (doDeactivate)
+				deactivate({
+					onDeactivate: () => {
+						// noop
+					}
+				});
+		} catch (e) {
+			// same as above
+		}
+
+		// for whatever reason, the animation will not play any other way.
+		Layer.Transitions.Fade.exit(ref()?.firstChild as HTMLElement, () => {
+			setOpen(false);
+
+			ModalStore.popState();
+		});
 	};
 
 	return (
 		<div
 			ref={setRef}
 			onMouseDown={(e) => {
-				if (e.target === ref()) {
-					if (props.dismissable) return close();
+				if (e.target !== ref()) return;
 
+				if (props.dismissable) return close();
+
+				if (matchMedia('(prefers-reduced-motion: no-preference)'))
 					(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
-				}
 			}}
 			classList={{
 				'modal-container': true,
 				visible: open()
 			}}
 			style={{
-				'z-index': 98 + opened++
+				'z-index': 98
 			}}
 		>
-			<Transition onEnter={props.transitions.enter} onExit={props.transitions.exit}>
-				<Show when={open()}>
-					<dialog
-						open={open()}
-						classList={{
-							modal: true,
-							[props.size || '']: true
-						}}
+			<Show when={open()}>
+				<dialog
+					open={open()}
+					classList={{
+						modal: true,
+						[props.size || '']: true
+					}}
+				>
+					<Show
+						when={
+							props.confetti && matchMedia('(prefers-reduced-motion: no-preference)')
+						}
 					>
-						<Show when={props.confetti}>
-							<div
-								class="modal__confetti"
-								use:confetti={{
-									particleCount: 300,
-									particleSize: 8,
-									colors: [
-										'var(--color-blue-500)',
-										'var(--color-green-500)',
-										'var(--color-yellow-500)',
-										'var(--color-red-500)',
-										'var(--color-purple-500)',
-										'var(--color-pink-500)',
-										'var(--color-orange-500)',
-										'var(--color-cyan-500)'
-									]
-								}}
-							></div>
-						</Show>
-						{<props.children close={close}></props.children>}
-					</dialog>
-				</Show>
-			</Transition>
+						<div
+							class="modal__confetti"
+							use:confetti={{
+								// yay
+								particleCount: 300,
+								particleSize: 8,
+								colors: [
+									'var(--color-blue-500)',
+									'var(--color-green-500)',
+									'var(--color-yellow-500)',
+									'var(--color-red-500)',
+									'var(--color-purple-500)',
+									'var(--color-pink-500)',
+									'var(--color-orange-500)',
+									'var(--color-cyan-500)'
+								]
+							}}
+						></div>
+					</Show>
+					{<props.children close={close}></props.children>}
+				</dialog>
+			</Show>
 		</div>
 	);
 };
@@ -194,10 +213,11 @@ export const ModalFooter = (props: { children: JSX.Element | JSX.Element[] }) =>
 export default Modal;
 
 Modal.Layer = () => {
-	const modals = createStoreListener([ModalStore], () => ModalStore.modals);
+	const modalState = createStoreListener([ModalStore], () => ModalStore.state);
+	const active = createStoreListener([ModalStore], () => ModalStore.state?.active);
 
 	createEffect(() => {
-		if (modals()!.length > 0) {
+		if (modalState()?.active) {
 			LayerStore.setVisible('modal', true);
 		} else {
 			LayerStore.setVisible('modal', false);
@@ -206,16 +226,18 @@ Modal.Layer = () => {
 
 	return (
 		<Layer key="modal" transitions={Layer.Transitions.None} type="bare">
-			<For each={modals()}>{(modal) => modal.element}</For>
+			<Transition onEnter={Layer.Transitions.Fade.enter} onExit={Layer.Transitions.Fade.exit}>
+				<Show when={active()}>{modalState()?.active?.component}</Show>
+			</Transition>
 		</Layer>
 	);
 };
 
 export const showErrorModal = (error: Error | string | unknown, message: LocaleKey) => {
-	ModalStore.addModal({
-		type: 'error',
-		element: (
-			<Modal size="small" dismissable transitions={Layer.Transitions.Fade}>
+	ModalStore.pushState(
+		'error',
+		createRoot(() => (
+			<Modal size="small" dismissable id={'error'}>
 				{(props) => {
 					return (
 						<>
@@ -256,8 +278,8 @@ export const showErrorModal = (error: Error | string | unknown, message: LocaleK
 					);
 				}}
 			</Modal>
-		)
-	});
+		))
+	);
 };
 
 window._showErrorModal = showErrorModal;

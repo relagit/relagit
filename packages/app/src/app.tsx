@@ -4,17 +4,15 @@ import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
-import Layer from '@ui/Layer';
 import Modal from '@ui/Modal';
 import Onboarding from '@ui/Onboarding';
-import Settings from '@ui/Settings';
 import Sidebar from '@ui/Sidebar';
 import Workspace from '@ui/Workspace';
 
 import { Fetch } from './modules/git/fetch';
 import { debug } from './modules/logger';
 import { checkIsInPath } from './modules/shell';
-import { registerAccelorators } from './native';
+import { registerAccelerators } from './native';
 import LocationStore from './stores/location';
 import OnboardingStore from './stores/onboarding';
 import RepositoryStore from './stores/repository';
@@ -68,7 +66,7 @@ export default () => {
 		setFocused(value);
 	});
 
-	registerAccelorators();
+	registerAccelerators();
 
 	onMount(async () => {
 		document.documentElement.setAttribute('lang', SettingsStore.getSetting('locale'));
@@ -140,14 +138,6 @@ export default () => {
 					>
 						<div class="window-control-bar"></div>
 					</Show>
-					<Layer
-						type={settings()?.ui?.expandedSettings ? 'bare' : 'rich'}
-						key="settings"
-						dismissable
-						transitions={Layer.Transitions.Fade}
-					>
-						<Settings />
-					</Layer>
 					<Modal.Layer />
 					<Sidebar sidebar={sidebar()} />
 					<Workspace sidebar={sidebar()} />

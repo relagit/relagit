@@ -4,8 +4,6 @@ import { Show, createRoot, createSignal } from 'solid-js';
 import { t } from '@app/modules/i18n';
 import ModalStore from '@app/stores/modal';
 
-import Layer from '@ui/Layer';
-
 import Add from './Add';
 import Create from './Create';
 
@@ -14,6 +12,8 @@ import './index.scss';
 export interface RepositoryModalProps {
 	tab: 'add' | 'create';
 }
+
+let latestSetTab: (tab: number) => void;
 
 const RepositoryModal = (props: RepositoryModalProps) => {
 	let initialTab = 0;
@@ -27,8 +27,10 @@ const RepositoryModal = (props: RepositoryModalProps) => {
 	const [tab, setTab] = createSignal(initialTab);
 	const draftPath = createSignal('');
 
+	latestSetTab = setTab;
+
 	return (
-		<Modal size="medium" dismissable transitions={Layer.Transitions.Fade}>
+		<Modal size="medium" dismissable id={`repository-${props.tab}`}>
 			{(props) => {
 				return (
 					<>
@@ -59,8 +61,11 @@ const RepositoryModal = (props: RepositoryModalProps) => {
 export default RepositoryModal;
 
 export const showRepoModal = (tab: RepositoryModalProps['tab'] = 'add') => {
-	ModalStore.addModal({
-		type: 'repository',
-		element: createRoot(() => <RepositoryModal tab={tab} />)
-	});
+	if (ModalStore.state.active?.type.startsWith('repository'))
+		return latestSetTab(tab === 'add' ? 0 : 1);
+
+	ModalStore.pushState(
+		`repository-${tab}`,
+		createRoot(() => <RepositoryModal tab={tab} />)
+	);
 };
