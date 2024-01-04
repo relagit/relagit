@@ -5,11 +5,13 @@ on:
             - main
             - actions-test
     issues:
-        types: [labeled]
+        types: [labeled, opened]
     pull_request_target:
         types: [labeled]
 
 env:
+    OPENED: |
+        Thanks for opening an issue @${{ github.actor }}! We'll get back to you as soon as possible. Please be respectful and keep in mind issue comments are recorded in our logs.
     TRIAGE: |
         This issue has been labeled with the `triage` label. This means that it needs attention from a maintainer. (@${{ github.actor }})
     DUPLICATE: |
@@ -22,6 +24,15 @@ permissions:
     pull-requests: write
 
 jobs:
+    opened:
+        runs-on: ubuntu-latest
+        if: github.repository == 'relagit/relagit' && github.event_name == 'issues' && github.event.action == 'opened'
+        steps:
+            - name: Comment
+              env:
+                  NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh issue comment "$NUMBER" --repo ${{ github.repository }} --body "$OPENED"
     triage:
         runs-on: ubuntu-latest
         if: github.repository == 'relagit/relagit' && (github.event.label.name == 'triage' || github.event.issue.labels.*.name == 'triage')
