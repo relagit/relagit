@@ -1,3 +1,5 @@
+import { Repository } from '@app/stores/repository';
+
 import { Git } from './core';
 import { GitStatus } from './diff';
 import { GitDiff, parseDiff } from './parse-diff';

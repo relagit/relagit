@@ -1,9 +1,9 @@
 import def from '@content/modules/actions/def.d.ts';
 
-import { IconName } from '@app/ui/Common/Icon';
+import { type IconName } from '@app/ui/Common/Icon';
 import * as Git from '@modules/git';
 import LocationStore from '@stores/location';
-import RepositoryStore from '@stores/repository';
+import RepositoryStore, { type Repository } from '@stores/repository';
 
 import pkj from '../../../../../package.json' assert { type: 'json' };
 import { error } from '../logger';
@@ -14,7 +14,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
 type action =
-	| '*'
+	| 'all'
 	| 'commit'
 	| 'pull'
 	| 'push'
@@ -29,7 +29,7 @@ const defFile = def.replace('{{VERSION}}', pkj.version);
 
 export const iconFromAction = (act: action | action[]): IconName => {
 	switch (Array.isArray(act) ? act[0] : act) {
-		case '*':
+		case 'all':
 			return 'key-asterisk';
 		case 'commit':
 			return 'git-commit';
@@ -56,13 +56,14 @@ export const iconFromAction = (act: action | action[]): IconName => {
 
 export interface Workflow {
 	filename: string;
-	on: action | action[];
 	name: string;
 	description?: string;
-	steps: {
-		name?: string;
-		run: (event: action, ...params: unknown[]) => Promise<void> | void;
-	}[];
+	hooks?: {
+		[K in action]?: (
+			event: K | action,
+			...params: ParamsFromEventType<K>
+		) => Promise<void> | void;
+	};
 }
 
 export interface Theme {
@@ -83,7 +84,10 @@ if (!fs.existsSync(__RELAGIT_PATH__)) {
 	fs.mkdirSync(__RELAGIT_PATH__);
 }
 
-if (!fs.existsSync(path.join(__RELAGIT_PATH__, 'index.d.ts'))) {
+if (
+	!fs.existsSync(path.join(__RELAGIT_PATH__, 'index.d.ts')) ||
+	defFile !== fs.readFileSync(path.join(__RELAGIT_PATH__, 'index.d.ts'), 'utf8')
+) {
 	fs.promises.writeFile(path.join(__RELAGIT_PATH__, 'index.d.ts'), defFile);
 }
 
@@ -101,7 +105,7 @@ export const require = (id: string) => {
 		switch (submodule) {
 			case 'themes':
 				return {
-					Theme: class CTheme {
+					Theme: class _Theme {
 						name: string;
 						description?: string;
 						accent?: string;
@@ -122,20 +126,20 @@ export const require = (id: string) => {
 				};
 			case 'actions':
 				return {
-					Workflow: class CWorkflow {
-						on: action | action[];
+					Workflow: class _Workflow {
 						name: string;
 						description?: string;
-						steps: {
-							name?: string;
-							run: (event: action) => Promise<void> | void;
-						}[];
+						hooks?: {
+							[K in action]?: (
+								event: K,
+								...params: ParamsFromEventType<K>
+							) => Promise<void> | void;
+						};
 
 						constructor(options: Workflow) {
-							this.on = options.on;
 							this.name = options.name;
 							this.description = options.description;
-							this.steps = options.steps;
+							this.hooks = options.hooks;
 						}
 					},
 					context: getContext
@@ -205,24 +209,28 @@ type ParamsFromEventType<E extends action> = E extends 'commit'
 	              ? [Repository]
 	              : E extends 'stash_pop'
 	                ? [Repository]
-	                : [];
+	                : E extends 'all'
+	                  ? unknown[]
+	                  : [Repository];
 
 export const triggerWorkflow = async <E extends action>(
 	event: E,
 	...params: ParamsFromEventType<E>
 ) => {
 	for (const workflow of workflows) {
-		if (Array.isArray(workflow.on)) {
-			if (workflow.on.includes(event) || workflow.on.includes('*')) {
-				for (const step of workflow.steps) {
-					await step.run(event, ...params);
-				}
+		if (workflow.hooks?.[event]) {
+			try {
+				await workflow.hooks[event]!(event, ...params);
+			} catch (e) {
+				error(`Failed to trigger workflow "${workflow.name}"`, e);
 			}
-		} else {
-			if (workflow.on === event || workflow.on === '*') {
-				for (const step of workflow.steps) {
-					await step.run(event, ...params);
-				}
+		}
+
+		if (workflow.hooks?.all) {
+			try {
+				await workflow.hooks.all(event, ...params);
+			} catch (e) {
+				error(`Failed to trigger workflow "${workflow.name}"`, e);
 			}
 		}
 	}
@@ -234,21 +242,7 @@ const makeContext = (location: string | undefined) => {
 	if (!location) return null;
 
 	const context = {
-		Git: {
-			Push: async (repository: Repository) => {
-				await Git.Push(repository);
-
-				triggerWorkflow('push', repository);
-			},
-			Commit: async (repository: Repository, message: string, description: string) => {
-				await Git.Commit(repository, message, description);
-
-				triggerWorkflow('commit', repository, {
-					message,
-					description
-				});
-			}
-		},
+		Git,
 		Repository: {
 			path: location,
 			...(RepositoryStore.getByPath(location) ?? {})

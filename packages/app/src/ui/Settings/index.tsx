@@ -1,15 +1,15 @@
-
 import { Accessor, For, Show, createRoot, createSignal } from 'solid-js';
 
-import { Workflow, iconFromAction, workflows } from '@app/modules/actions';
+import { __WORKFLOWS_PATH__, workflows } from '@app/modules/actions';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
 import { getUser, initialiseOAuthFlow } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
+import { showItemInFolder } from '@app/modules/shell';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
-import SettingsStore, { Settings } from '@stores/settings';
+import SettingsStore, { type Settings } from '@stores/settings';
 import * as ipc from '~/common/ipc';
 
 import Icon from '@ui/Common/Icon';
@@ -24,6 +24,7 @@ import { showOAuthModal } from '../Modal/OAuthModal';
 import './index.scss';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export interface RadioGroupProps {
 	options: {
@@ -180,7 +181,7 @@ export const Switch = (props: SwitchProps) => {
 	);
 };
 
-const Settings =  () => {
+const SettingsModal = () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const Commits = (
@@ -369,8 +370,6 @@ const Settings =  () => {
 		</>
 	);
 
-	const [openWorkflows, setOpenWorkflows] = createSignal<Workflow | null>(null);
-
 	const Workflows = (
 		<>
 			<div class="settings-layer__workflows">
@@ -382,11 +381,15 @@ const Settings =  () => {
 								aria-label={workflow.name}
 								aria-role="button"
 								onClick={() => {
-									setOpenWorkflows(workflow);
+									showItemInFolder(
+										nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
+									);
 								}}
 								onKeyDown={(e) => {
 									if (e.key === 'Enter') {
-										setOpenWorkflows(workflow);
+										showItemInFolder(
+											nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
+										);
 									}
 								}}
 								tabIndex={0}
@@ -395,26 +398,15 @@ const Settings =  () => {
 									<div class="settings-layer__workflows__workflow__content__text">
 										<h2 class="settings-layer__workflows__workflow__content__text__header">
 											{workflow.name}
+											<div class="settings-layer__workflows__workflow__content__text__header__filename">
+												{workflow.filename}
+											</div>
 										</h2>
 										<p class="settings-layer__workflows__workflow__content__text__description">
 											{workflow.description}
 										</p>
 									</div>
-									<Icon name={iconFromAction(workflow.on)} />
 								</div>
-								<Show when={openWorkflows() === workflow}>
-									<div class="settings-layer__workflows__workflow__steps">
-										<For each={workflow.steps}>
-											{(step) => {
-												return (
-													<div class="settings-layer__workflows__workflow__steps__step">
-														{step.name}
-													</div>
-												);
-											}}
-										</For>
-									</div>
-								</Show>
 							</div>
 						);
 					}}
@@ -579,11 +571,11 @@ const Settings =  () => {
 
 	return (
 		<Modal size="x-large" dismissable id={'settings'}>
-			{(p) => 
+			{(p) => (
 				<>
 					<ModalHeader title={t('settings.title')}>
 						<div class="settings-layer__title__buttons">
-							<ModalCloseButton close={p.close}/>
+							<ModalCloseButton close={p.close} />
 						</div>
 					</ModalHeader>
 					<ModalBody>
@@ -623,13 +615,13 @@ const Settings =  () => {
 						/>
 					</ModalBody>
 				</>
-				}
+			)}
 		</Modal>
 	);
 };
 
-export default Settings;
+export default SettingsModal;
 
 export const showSettingsModal = () => {
-	ModalStore.pushState('settings', createRoot(Settings));
+	ModalStore.pushState('settings', createRoot(SettingsModal));
 };

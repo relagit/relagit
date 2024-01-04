@@ -114,7 +114,7 @@
 			font-size: 1rem;
 			border-radius: 4px;
 			font-weight: 400;
-			padding: 24px;
+			padding: 16px;
 			user-select: none;
 			color: var(--color-primary);
 			border: 1px solid var(--separator-primary);
@@ -125,7 +125,8 @@
 
 			&:focus {
 				outline: none;
-				background-color: var(--bg-active);
+				border: 2px solid var(--color-blue-500);
+				padding: 15px;
 			}
 
 			svg {
@@ -145,15 +146,22 @@
 					display: flex;
 					flex-direction: column;
 					width: 100%;
+					gap: 4px;
 
 					&__header {
 						display: flex;
 						width: 100%;
 						justify-content: space-between;
 						align-items: center;
-						font-size: 1.5rem !important;
-						font-weight: 600;
+						font-size: 1rem;
+						font-weight: 500;
 						gap: 16px;
+
+						&__filename {
+							font-size: 0.85rem;
+							font-weight: 400;
+							color: var(--color-secondary);
+						}
 					}
 
 					&__description {

@@ -19,7 +19,7 @@ export { Init } from './init';
 export { Pull } from './pull';
 export { Log } from './log';
 
-export { GitParams } from './core';
+export { type GitParams } from './core';
 
 export const statusFrom = (shorthand: string) => {
 	switch (shorthand) {
