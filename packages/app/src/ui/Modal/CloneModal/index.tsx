@@ -19,8 +19,6 @@ import TabView from '@app/ui/Common/TabView';
 import TextArea from '@app/ui/Common/TextArea';
 import * as logger from '@modules/logger';
 
-import Layer from '@ui/Layer';
-
 import { showOAuthModal } from '../OAuthModal';
 import { RepoList } from './components';
 
@@ -133,13 +131,9 @@ const CloneModal = () => {
 							label: t('modal.clone.authButton'),
 							type: 'brand',
 							onClick: () => {
-								props.close();
-
-								setTimeout(() => {
-									initialiseOAuthFlow().then((r) => {
-										showOAuthModal(r);
-									});
-								}, 500);
+								initialiseOAuthFlow().then((r) => {
+									showOAuthModal(r);
+								});
 							}
 						}
 					]}
@@ -158,11 +152,7 @@ const CloneModal = () => {
 	);
 
 	return (
-		<Modal
-			size={tab() === 'github' ? 'x-large' : 'medium'}
-			dismissable
-			transitions={Layer.Transitions.Fade}
-		>
+		<Modal size={tab() === 'github' ? 'x-large' : 'medium'} dismissable id={'clone'}>
 			{(props) => (
 				<>
 					<ModalHeader
@@ -174,13 +164,9 @@ const CloneModal = () => {
 										'clone-modal__oauth': true
 									}}
 									onClick={() => {
-										props.close();
-
-										setTimeout(() => {
-											initialiseOAuthFlow().then((r) => {
-												showOAuthModal(r);
-											});
-										}, 500);
+										initialiseOAuthFlow().then((r) => {
+											showOAuthModal(r);
+										});
 									}}
 								>
 									<Show
@@ -291,8 +277,5 @@ const CloneModal = () => {
 export default CloneModal;
 
 export const showCloneModal = () => {
-	ModalStore.addModal({
-		type: 'clone-repository',
-		element: createRoot(CloneModal)
-	});
+	ModalStore.pushState('clone', createRoot(CloneModal));
 };

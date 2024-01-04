@@ -14,7 +14,6 @@ import EmptyState from '@app/ui/Common/EmptyState';
 import Icon from '@app/ui/Common/Icon';
 import TabView from '@app/ui/Common/TabView';
 import Tooltip from '@app/ui/Common/Tooltip';
-import Layer from '@app/ui/Layer';
 import * as ipc from '~/common/ipc';
 
 import './index.scss';
@@ -22,10 +21,6 @@ import './index.scss';
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE(
 	'electron:ipcRenderer'
 ) as typeof import('electron').ipcRenderer;
-
-let close = () => {
-	// noop
-};
 
 const MetadataItem = (props: {
 	label: string;
@@ -177,10 +172,8 @@ export const InformationModal = () => {
 	const Graph = <>hi</>;
 
 	return (
-		<Modal size="x-large" dismissable transitions={Layer.Transitions.Fade}>
+		<Modal size="x-large" dismissable id={'information'}>
 			{(p) => {
-				close = p.close;
-
 				return (
 					<>
 						<ModalHeader title={repository()?.name}>
@@ -210,10 +203,5 @@ export const InformationModal = () => {
 };
 
 export const showInformationModal = () => {
-	if (ModalStore.isOpen('information')) return close?.();
-
-	ModalStore.addModal({
-		type: 'information',
-		element: createRoot(InformationModal)
-	});
+	ModalStore.pushState('information', createRoot(InformationModal));
 };

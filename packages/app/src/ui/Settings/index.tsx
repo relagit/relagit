@@ -1,5 +1,5 @@
-import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
-import { Accessor, For, Show, createSignal, onCleanup, onMount } from 'solid-js';
+
+import { Accessor, For, Show, createRoot, createSignal } from 'solid-js';
 
 import { Workflow, iconFromAction, workflows } from '@app/modules/actions';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
@@ -8,7 +8,6 @@ import { getUser, initialiseOAuthFlow } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
-import LayerStore from '@stores/layer';
 import LocationStore from '@stores/location';
 import SettingsStore, { Settings } from '@stores/settings';
 import * as ipc from '~/common/ipc';
@@ -19,7 +18,6 @@ import TextArea from '@ui/Common/TextArea';
 import Button from '../Common/Button';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
-import Layer from '../Layer';
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '../Modal';
 import { showOAuthModal } from '../Modal/OAuthModal';
 
@@ -38,10 +36,10 @@ export interface RadioGroupProps {
 }
 
 const showReloadModal = () => {
-	ModalStore.addModal({
-		type: 'error',
-		element: (
-			<Modal size="small" dismissable transitions={Layer.Transitions.Fade}>
+	ModalStore.pushState(
+		'reload',
+		createRoot(() => (
+			<Modal size="small" dismissable id="reload">
 				{(props) => {
 					return (
 						<>
@@ -75,8 +73,8 @@ const showReloadModal = () => {
 					);
 				}}
 			</Modal>
-		)
-	});
+		))
+	);
 };
 
 export const RadioGroup = (props: RadioGroupProps) => {
@@ -182,46 +180,8 @@ export const Switch = (props: SwitchProps) => {
 	);
 };
 
-export default () => {
+const Settings =  () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
-
-	const [ref, setRef] = createSignal<HTMLElement | null>(null);
-
-	const [open, setOpen] = createSignal(LayerStore.visible('settings'));
-
-	const { activate, deactivate } = useFocusTrap(ref, {
-		initialFocus: false
-	});
-
-	createStoreListener([LayerStore], () => {
-		setOpen(LayerStore.visible('settings'));
-
-		if (LayerStore.visible('settings')) {
-			activate();
-		}
-	});
-
-	const close = () => {
-		LayerStore.setVisible('settings', false);
-
-		setOpen(false);
-
-		deactivate();
-	};
-
-	const listener = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			close();
-		}
-	};
-
-	onMount(() => {
-		window.addEventListener('keydown', listener);
-	});
-
-	onCleanup(() => {
-		window.removeEventListener('keydown', listener);
-	});
 
 	const Commits = (
 		<>
@@ -301,8 +261,6 @@ export default () => {
 								type="brand"
 								label={t('settings.accounts.github.signIn')}
 								onClick={() => {
-									close();
-
 									initialiseOAuthFlow().then((i) => showOAuthModal(i));
 								}}
 							>
@@ -620,54 +578,58 @@ export default () => {
 	);
 
 	return (
-		<dialog open={open()} class="settings-layer" ref={setRef}>
-			<div class="settings-layer__title">
-				<h1>{t('settings.title')}</h1>
-				<div class="settings-layer__title__buttons">
-					<button
-						aria-role="button"
-						aria-label={t('settings.close')}
-						class="settings-layer__title__buttons__close"
-						onClick={close}
-					>
-						<Icon size={24} variant={24} name="x-circle" />
-					</button>
-				</div>
-			</div>
-			<TabView
-				views={[
-					{
-						label: t('settings.general.title'),
-						value: 'general',
-						element: General,
-						icon: 'gear'
-					},
-					{
-						label: t('settings.accounts.title'),
-						value: 'accounts',
-						element: Accounts,
-						icon: 'people'
-					},
-					{
-						label: t('settings.commits.title'),
-						value: 'commits',
-						element: Commits,
-						icon: 'git-commit'
-					},
-					{
-						label: t('settings.appearance.title'),
-						value: 'appearance',
-						element: Appearance,
-						icon: 'eye'
-					},
-					{
-						label: t('settings.workflows.title'),
-						value: 'workflows',
-						element: Workflows,
-						icon: 'workflow'
-					}
-				]}
-			/>
-		</dialog>
+		<Modal size="x-large" dismissable id={'settings'}>
+			{(p) => 
+				<>
+					<ModalHeader title={t('settings.title')}>
+						<div class="settings-layer__title__buttons">
+							<ModalCloseButton close={p.close}/>
+						</div>
+					</ModalHeader>
+					<ModalBody>
+						<TabView
+							views={[
+								{
+									label: t('settings.general.title'),
+									value: 'general',
+									element: General,
+									icon: 'gear'
+								},
+								{
+									label: t('settings.accounts.title'),
+									value: 'accounts',
+									element: Accounts,
+									icon: 'people'
+								},
+								{
+									label: t('settings.commits.title'),
+									value: 'commits',
+									element: Commits,
+									icon: 'git-commit'
+								},
+								{
+									label: t('settings.appearance.title'),
+									value: 'appearance',
+									element: Appearance,
+									icon: 'eye'
+								},
+								{
+									label: t('settings.workflows.title'),
+									value: 'workflows',
+									element: Workflows,
+									icon: 'workflow'
+								}
+							]}
+						/>
+					</ModalBody>
+				</>
+				}
+		</Modal>
 	);
+};
+
+export default Settings;
+
+export const showSettingsModal = () => {
+	ModalStore.pushState('settings', createRoot(Settings));
 };
