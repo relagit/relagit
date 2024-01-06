@@ -143,7 +143,7 @@ export default (props: ImageViewProps) => {
 									? {
 											light: EMPTY_STATE_IMAGES.L_ERROR,
 											dark: EMPTY_STATE_IMAGES.D_ERROR
-									  }
+										}
 									: undefined
 							}
 							detail={t('codeview.imageview.error')}

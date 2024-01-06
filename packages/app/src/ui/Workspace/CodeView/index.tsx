@@ -278,7 +278,7 @@ export default (props: CodeViewProps) => {
 															props.repository,
 															commit()!.path,
 															commit()!.filename
-													  )
+														)
 													: props.file
 											}
 											status={fileStatus()!}

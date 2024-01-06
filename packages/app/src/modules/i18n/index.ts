@@ -12,12 +12,12 @@ export type LocaleKey = ObjectToDotProp<Locale>;
 export type ResolvePropDeep<T, P> = P extends ''
 	? T
 	: P extends `${infer Pre}.${infer Suf}`
-	  ? Pre extends keyof T
+		? Pre extends keyof T
 			? ResolvePropDeep<T[Pre], Suf>
 			: never
-	  : P extends keyof T
-	    ? T[P]
-	    : never;
+		: P extends keyof T
+			? T[P]
+			: never;
 
 export type ObjectToDotProp<T extends object> = ObjectToDotPropInternal<T>[keyof T];
 
@@ -26,7 +26,7 @@ export type ObjectToDotPropInternal<T extends object> = {
 		? T[Key] extends Record<string, unknown>
 			? ObjectToDotProp<T[Key]> extends string
 				? // @ts-expect-error "Type instantiation is excessively deep and possibly infinite"
-				  `${Key}.${ObjectToDotProp<T[Key]>}`
+					`${Key}.${ObjectToDotProp<T[Key]>}`
 				: never
 			: Key
 		: never;
@@ -36,8 +36,8 @@ export type Unstrict<T> = {
 	[K in keyof T]: T[K] extends Record<string, unknown>
 		? Unstrict<T[K]>
 		: T[K] extends string
-		  ? string
-		  : readonly [string, string] | string[];
+			? string
+			: readonly [string, string] | string[];
 };
 
 const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
