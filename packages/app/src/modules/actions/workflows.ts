@@ -194,24 +194,24 @@ export const workflows = new Set<Workflow>();
 type ParamsFromEventType<E extends action> = E extends 'commit'
 	? [Repository, { message: string; description: string }]
 	: E extends 'push'
-	  ? [Repository]
-	  : E extends 'pull'
-	    ? [Repository]
-	    : E extends 'remote_fetch'
-	      ? [Repository, { name: string; url: string; type: string }[]]
-	      : E extends 'repository_add'
-	        ? [string]
-	        : E extends 'repository_remove'
-	          ? [string]
-	          : E extends 'settings_update'
-	            ? []
-	            : E extends 'stash'
-	              ? [Repository]
-	              : E extends 'stash_pop'
-	                ? [Repository]
-	                : E extends 'all'
-	                  ? unknown[]
-	                  : [Repository];
+		? [Repository]
+		: E extends 'pull'
+			? [Repository]
+			: E extends 'remote_fetch'
+				? [Repository, { name: string; url: string; type: string }[]]
+				: E extends 'repository_add'
+					? [string]
+					: E extends 'repository_remove'
+						? [string]
+						: E extends 'settings_update'
+							? []
+							: E extends 'stash'
+								? [Repository]
+								: E extends 'stash_pop'
+									? [Repository]
+									: E extends 'all'
+										? unknown[]
+										: [Repository];
 
 export const triggerWorkflow = async <E extends action>(
 	event: E,
