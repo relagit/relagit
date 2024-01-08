@@ -67,7 +67,6 @@ const validatePath = () => {
 	}
 
 	if (!fs.existsSync(__REPOSITORIES_PATH__)) {
-		console.log('writing', fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8'), performance.now());
 		fs.writeFileSync(__REPOSITORIES_PATH__, '[]');
 	}
 };
@@ -148,8 +147,6 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		fs.writeFileSync(__SETTINGS_PATH__, JSON.stringify(settings, null, 4));
 
 		const repositories = this.getSetting('repositories');
-
-		console.log('writing', repositories, performance.now());
 
 		fs.writeFileSync(__REPOSITORIES_PATH__, JSON.stringify(repositories, null, 4));
 	}

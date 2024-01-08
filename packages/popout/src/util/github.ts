@@ -23,8 +23,6 @@ export const runsToStatus = (
 ): 'success' | 'pending' | 'failed' | 'skipped' => {
 	if (!runs?.length) return 'skipped';
 
-	if (runs?.[0].head_sha.startsWith('117c66c')) console.log(runs);
-
 	const hasFail = runs.some((run) => run.conclusion === 'failure');
 
 	if (hasFail) return 'failed';
