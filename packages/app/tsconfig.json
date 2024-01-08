@@ -6,10 +6,10 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"paths": {
-			"@app/*": ["./*"],
-			"@ui/*": ["./ui/*"],
-			"@stores/*": ["./stores/*"],
-			"@modules/*": ["./modules/*"],
+			"@app/*": ["../../app/src/*"],
+			"@ui/*": ["../../app/src/ui/*"],
+			"@stores/*": ["../../app/src/stores/*"],
+			"@modules/*": ["../../app/src/modules/*"],
 			"~/*": ["../../*"]
 		}
 	}

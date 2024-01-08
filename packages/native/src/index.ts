@@ -1,4 +1,11 @@
-import { BrowserWindow, Menu, MenuItemConstructorOptions, app, nativeTheme } from 'electron';
+import {
+	BrowserWindow,
+	Menu,
+	MenuItemConstructorOptions,
+	app,
+	nativeImage,
+	nativeTheme
+} from 'electron';
 
 import * as path from 'path';
 
@@ -7,6 +14,7 @@ import * as ipc from '~/common/ipc';
 import pkj from '../../../package.json' assert { type: 'json' };
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
+import openPopout, { popout, reposition } from './modules/popout';
 import initProtocol from './modules/protocol';
 import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
 import { updateEnvironmentForProcess } from './modules/shell';
@@ -137,9 +145,6 @@ const constructWindow = async () => {
 					type: 'separator'
 				},
 				{
-					role: 'services'
-				},
-				{
 					type: 'separator'
 				},
 				{
@@ -259,6 +264,51 @@ const constructWindow = async () => {
 			]
 		},
 		{
+			label: 'Popout',
+			submenu: [
+				{
+					label: 'Show Popout',
+					accelerator: 'CmdOrCtrl+P',
+					click: () => {
+						openPopout();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Align',
+					submenu: [
+						{
+							icon: nativeImage.createFromNamedImage('NSRectangle'),
+							label: 'Top Left',
+							click: () => {
+								reposition('top-left');
+							}
+						},
+						{
+							label: 'Top Right',
+							click: () => {
+								reposition('top-right');
+							}
+						},
+						{
+							label: 'Bottom Left',
+							click: () => {
+								reposition('bottom-left');
+							}
+						},
+						{
+							label: 'Bottom Right',
+							click: () => {
+								reposition('bottom-right');
+							}
+						}
+					]
+				}
+			]
+		},
+		{
 			label: 'Window',
 			submenu: [
 				{
@@ -312,7 +362,11 @@ app.once('ready', async () => {
 	if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 	app.on('activate', async () => {
-		if (BrowserWindow.getAllWindows().length === 0) {
+		// either no windows, or the only window is the popout
+		if (
+			BrowserWindow.getAllWindows().length === 0 ||
+			(BrowserWindow.getAllWindows().length === 1 && popout?.isVisible())
+		) {
 			const newWindow = await constructWindow();
 
 			initIPC(newWindow);

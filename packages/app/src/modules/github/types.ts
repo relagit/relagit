@@ -143,7 +143,43 @@ export interface GithubUser {
 	updated_at: string;
 }
 
+export interface GitHubActionRuns {
+	total_count: number;
+	workflow_runs: {
+		id: number;
+		node_id: string;
+		head_branch: string;
+		head_sha: string;
+		run_number: number;
+		event: string;
+		status: string;
+		conclusion: string;
+		url: string;
+		html_url: string;
+		created_at: string;
+		updated_at: string;
+		jobs_url: string;
+		logs_url: string;
+		check_suite_url: string;
+		artifacts_url: string;
+		cancel_url: string;
+		retry_url: string;
+		workflow_url: string;
+		actor: GithubUser;
+		head_commit: {
+			id: string;
+			tree_id: string;
+			message: string;
+			timestamp: string;
+			author: GithubUser;
+			committer: GithubUser;
+		};
+		head_repository: GitHubRepository;
+	}[];
+}
+
 export interface GithubResponse {
+	'repos/:username/:repo/actions/runs': [[string, string], GitHubActionRuns];
 	'users/:username/repos': [[string], GitHubRepository[]];
 	'users/:username': [[string], GithubUser];
 	'repos/:username/:repo/readme': [[string, string], GitHubReadme];

@@ -1,0 +1,78 @@
+.panelbutton {
+	display: flex;
+	width: 32px;
+	padding: 4px 6px;
+	justify-content: center;
+	align-items: center;
+	border-radius: 4px;
+	background: none;
+	height: fit-content;
+	border: none;
+	position: relative;
+	color: var(--text-vibrant-tertiary);
+	-webkit-app-region: no-drag;
+	transition:
+		opacity 200ms ease-in-out,
+		margin 200ms ease-in-out;
+	will-change: opacity, margin;
+
+	&:hover {
+		color: var(--text-vibrant-secondary);
+		background: var(--fill-vibrant-quaternary);
+	}
+
+	&:active,
+	&.active {
+		color: var(--text-vibrant-primary);
+		background: var(--fill-vibrant-tertiary);
+	}
+
+	&:focus {
+		outline: 2px solid var(--accent, --text-blue);
+	}
+
+	.panelbutton-items {
+		position: absolute;
+		translate: 0 calc(-75% - 4px);
+		transform-origin: bottom right;
+		right: 0;
+		z-index: 10;
+		background: var(--fill-vibrant-quaternary);
+		border-radius: 4px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+
+		.panelbutton-item {
+			padding: 4px 8px;
+			display: flex;
+			width: 32px;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+			gap: 8px;
+			border: none;
+			background: transparent;
+			color: var(--text-vibrant-tertiary);
+
+			&:hover {
+				color: var(--text-vibrant-secondary);
+				background: var(--fill-vibrant-quaternary);
+			}
+
+			&:active {
+				color: var(--text-vibrant-primary);
+				background: var(--fill-vibrant-tertiary);
+			}
+
+			&:focus {
+				outline: 2px solid var(--accent, --text-blue);
+			}
+		}
+	}
+}
+
+html:not(:hover, html:has(.panelbutton:focus-within, .panelbutton:focus)) {
+	.panelbutton {
+		opacity: 0;
+	}
+}

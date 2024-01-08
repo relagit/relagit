@@ -1,0 +1,139 @@
+.scroller {
+	overflow-x: hidden;
+	scrollbar-gutter: stable;
+	padding-bottom: 11px;
+	width: 100%;
+
+	&::-webkit-scrollbar {
+		width: 2px;
+		height: 2px;
+	}
+
+	.scroller-item {
+		padding: 6px 8px;
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		justify-content: space-between;
+		border-radius: 4px;
+		-webkit-app-region: no-drag;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		border: none;
+		background: none;
+		width: 100%;
+
+		&:hover {
+			background: var(--fill-vibrant-quaternary);
+		}
+
+		&:active {
+			background: var(--fill-vibrant-tertiary);
+		}
+
+		&:focus {
+			border: 2px solid var(--accent, --text-blue);
+			padding: 4px 6px;
+			outline: none;
+		}
+
+		.content {
+			font-size: 0.9rem;
+			white-space: nowrap;
+			color: var(--text-vibrant-primary);
+			display: flex;
+			font-weight: 400;
+			overflow: hidden;
+			align-items: center;
+			width: 100%;
+
+			.success {
+				color: var(--text-green);
+			}
+
+			.failed {
+				color: var(--text-red);
+			}
+
+			.pending {
+				color: var(--text-yellow);
+			}
+
+			.commit-status {
+				display: flex;
+			}
+
+			svg {
+				margin-right: 8px;
+				width: 12px;
+				height: 12px;
+			}
+
+			&.message {
+				span {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+			}
+
+			.path {
+				color: var(--text-vibrant-secondary);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.name {
+				color: var(--text-vibrant-primary);
+				white-space: nowrap;
+
+				.separator {
+					color: var(--text-vibrant-secondary);
+				}
+			}
+		}
+
+		.file-status,
+		.date {
+			font-size: 0.8rem;
+			color: var(--text-vibrant-secondary);
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
+
+			&.added {
+				color: var(--text-green);
+			}
+
+			&.modified {
+				color: var(--text-yellow);
+			}
+
+			&.deleted {
+				color: var(--text-red);
+			}
+
+			&.untracked,
+			&.unknown {
+				color: var(--text-vibrant-secondary);
+			}
+
+			&.ignored {
+				color: var(--text-vibrant-tertiary);
+			}
+
+			&.renamed {
+				color: var(--text-magenta);
+			}
+		}
+	}
+}
+
+#popout-container.platform-darwin .scroller-item:focus {
+	padding: 6px 8px;
+	outline: none;
+	border: unset;
+
+	// os accent color
+	background: color-mix(in lab, var(--accent) 38%, transparent);
+}

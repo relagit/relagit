@@ -10,7 +10,11 @@
 		"jsxImportSource": "solid-js",
 		"resolveJsonModule": true,
 		"paths": {
-			"~/*": ["./packages/*"]
+			"~/*": ["./packages/*"],
+			"@app/*": ["./packages/app/src/*"],
+			"@ui/*": ["./packages/app/src/ui/*"],
+			"@stores/*": ["./packages/app/src/stores/*"],
+			"@modules/*": ["./packages/app/src/modules/*"]
 		}
 	}
 }
