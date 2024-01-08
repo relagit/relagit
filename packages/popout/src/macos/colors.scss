@@ -12,7 +12,20 @@ $dark-mode-colors: (
 	'text-magenta': #bf5af2,
 	'text-cyan': #5ac8f5
 );
-$light-mode-colors: ();
+$light-mode-colors: (
+	'text-vibrant-primary': #000,
+	'text-vibrant-secondary': color-mix(in lch, rgb(105 105 105) 33%, rgb(0 0 0 / 57.5%)),
+	'text-vibrant-tertiary': rgb(77 77 77 / 78.5%),
+	'fill-vibrant-tertiary': color-mix(in lch, rgb(0 0 0) 15%, rgb(77 77 77 / 30.5%)),
+	'fill-vibrant-quaternary': rgb(0 0 0 / 10%),
+	'fill-vibrant-quinary': rgb(0 0 0 / 5%),
+	'text-green': #28cd41,
+	'text-yellow': #ffcc00,
+	'text-red': #ff3b30,
+	'text-blue': #007aff,
+	'text-magenta': #af52de,
+	'text-cyan': #55bef0
+);
 
 @each $color, $value in $light-mode-colors {
 	@media screen and (prefers-color-scheme: light) {
