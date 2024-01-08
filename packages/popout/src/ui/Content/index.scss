@@ -59,6 +59,10 @@
 				color: var(--text-yellow);
 			}
 
+			.commit-status {
+				display: flex;
+			}
+
 			svg {
 				margin-right: 8px;
 				width: 12px;
