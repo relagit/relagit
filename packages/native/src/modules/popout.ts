@@ -4,9 +4,11 @@ import path from 'path';
 
 import * as ipc from '~/common/ipc';
 
+import { getSettings, setSettings } from './settings';
+
 export let popout: BrowserWindow | null = null;
 
-export default () => {
+export default async () => {
 	try {
 		if (popout && !popout.isDestroyed()) {
 			popout.show();
@@ -16,6 +18,8 @@ export default () => {
 		console.error(e);
 	}
 
+	const settings = await getSettings();
+
 	popout = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		title: 'RelaGit Popout',
@@ -23,15 +27,16 @@ export default () => {
 		backgroundMaterial: 'mica',
 		transparent: process.platform !== 'darwin',
 		visualEffectState: 'active',
-		resizable: false,
 		backgroundColor: '#00000000',
-		height: 150,
-		width: 430,
-		minWidth: 200,
+		height: settings?.popout?.height || 150,
+		width: settings?.popout?.width || 430,
+		minWidth: 350,
 		minHeight: 100,
+		maxWidth: 600,
+		maxHeight: 500,
 		alwaysOnTop: true,
-		x: 994,
-		y: 16,
+		x: settings?.popout?.x || 16,
+		y: settings?.popout?.y || 16,
 		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
@@ -68,6 +73,34 @@ export default () => {
 
 	popout.on('ready-to-show', () => {
 		popout?.show();
+	});
+
+	popout.on('resize', () => {
+		const [width, height] = popout?.getSize() || [0, 0];
+		const [x, y] = popout?.getPosition() || [0, 0];
+
+		settings.popout ??= {};
+
+		settings.popout.width = width;
+		settings.popout.height = height;
+		settings.popout.x = x;
+		settings.popout.y = y;
+
+		setSettings(settings);
+	});
+
+	popout.on('move', () => {
+		const [width, height] = popout?.getSize() || [0, 0];
+		const [x, y] = popout?.getPosition() || [0, 0];
+
+		settings.popout ??= {};
+
+		settings.popout.width = width;
+		settings.popout.height = height;
+		settings.popout.x = x;
+		settings.popout.y = y;
+
+		setSettings(settings);
 	});
 
 	ipcMain.once(ipc.POPOUT_CLOSE, () => {
