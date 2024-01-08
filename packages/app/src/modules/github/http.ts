@@ -1,3 +1,5 @@
+import * as logger from '@app/modules/logger';
+
 import { getToken } from './shared';
 import { GithubResponse } from './types';
 
@@ -25,6 +27,24 @@ export const GitHub = <T extends keyof GithubResponse>(
 		) => Promise<R>;
 	};
 	get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
+	query: (query: Record<string, string>) => {
+		get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
+		headers: <R = GithubResponse[T][1]>(
+			headers: _HeadersInit
+		) => {
+			get: (...params: GithubResponse[T][0]) => Promise<R>;
+			stream: (
+				limit: number,
+				cb?: (response: R) => void,
+				...params: GithubResponse[T][0]
+			) => Promise<R>;
+		};
+		stream: (
+			limit: number,
+			cb?: (response: GithubResponse[T][1]) => void,
+			...params: GithubResponse[T][0]
+		) => Promise<GithubResponse[T][1]>;
+	};
 	stream: (
 		limit: number,
 		cb?: (response: GithubResponse[T][1]) => void,
@@ -34,6 +54,9 @@ export const GitHub = <T extends keyof GithubResponse>(
 	let url = 'https://api.github.com/';
 
 	switch (path) {
+		case 'repos/:username/:repo/actions/runs':
+			url += 'repos/[username]/[repo]/actions/runs?per_page=100';
+			break;
 		case 'repos/:username/:repo/readme':
 			url += 'repos/[username]/[repo]/readme';
 			break;
@@ -55,8 +78,28 @@ export const GitHub = <T extends keyof GithubResponse>(
 		Accept: 'application/vnd.github.v3+json'
 	};
 
+	let queryParams: Record<string, string> = {};
+
+	const query = (queries: Record<string, string>) => {
+		queryParams = queries;
+
+		return {
+			get,
+			headers: headersFn,
+			stream
+		};
+	};
+
 	const get = async <R = GithubResponse[T][1]>(...params: GithubResponse[T][0]): Promise<R> => {
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
+
+		const search = new URLSearchParams(url);
+
+		for (const [key, value] of Object.entries(queryParams)) {
+			search.set(key, value);
+		}
+
+		url = decodeURIComponent(search.toString());
 
 		const res = await fetch(url, {
 			headers: {
@@ -90,6 +133,10 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		while (!done && i < limit) {
 			const search = new URLSearchParams(url);
+
+			for (const [key, value] of Object.entries(queryParams)) {
+				search.set(key, value);
+			}
 
 			search.set('page', i.toString());
 
@@ -132,6 +179,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		return {
 			get,
+			query,
 			stream
 		};
 	};
@@ -139,12 +187,17 @@ export const GitHub = <T extends keyof GithubResponse>(
 	return {
 		headers: headersFn,
 		get,
+		query,
 		stream
 	};
 };
 
 export const populateUser = async () => {
-	const user = await GitHub('user').get();
+	try {
+		const user = await GitHub('user').get();
 
-	localStorage.setItem('__x_github_user', JSON.stringify(user));
+		localStorage.setItem('__x_github_user', JSON.stringify(user));
+	} catch (e) {
+		logger.error(e);
+	}
 };

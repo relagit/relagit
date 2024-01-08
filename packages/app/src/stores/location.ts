@@ -5,7 +5,8 @@ import { PastCommit } from '@app/modules/git/show';
 
 import { GitFile } from './files';
 import type { Repository } from './repository';
-import SettingsStore from './settings';
+import RepositoryStore from './repository';
+import SettingsStore, { __SETTINGS_PATH__ } from './settings';
 
 const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedFile: GitFile | undefined;
@@ -37,6 +38,14 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		window.Native.listeners.BLAME((_, value) => {
 			this.#blameOpen = value ?? !this.#blameOpen;
 			this.emit();
+		});
+
+		window.Native.listeners.WATCHER.add(__SETTINGS_PATH__, () => {
+			if (SettingsStore.getSetting('activeRepository') !== this.selectedRepository?.path) {
+				this.setSelectedRepository(
+					RepositoryStore.getByPath(SettingsStore.getSetting('activeRepository') ?? '')
+				);
+			}
 		});
 	}
 

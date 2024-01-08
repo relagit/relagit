@@ -21,3 +21,6 @@ export const DISK_SIZE = 'native:disk-size';
 export const FOCUS = 'window:focus';
 export const GIT_EXEC = 'git:exec';
 export const ALERT = 'window:alert';
+
+export const POPOUT_CLOSE = 'popout:close';
+export const POPOUT_REPOSITION = 'popout:reposition';

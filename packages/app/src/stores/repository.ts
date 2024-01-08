@@ -2,8 +2,6 @@ import { GenericStore } from '.';
 
 import { debug } from '@app/modules/logger';
 
-import LocationStore from './location';
-
 export interface Repository {
 	draft?: boolean;
 	id: string;
@@ -79,7 +77,6 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 		});
 
 		this.emit();
-		LocationStore.emit();
 	}
 
 	clearRepositories() {

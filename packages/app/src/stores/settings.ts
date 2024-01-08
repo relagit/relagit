@@ -8,14 +8,19 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
-const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
-const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
+export const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
+export const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
 export type Settings = {
 	commit: {
 		styles: Record<string, CommitStyle>;
 		enforceStyle: boolean;
 		preferParens: boolean;
+	};
+	popout: {
+		position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+		x: number;
+		y: number;
 	};
 	onboarding: {
 		dismissed: boolean;
@@ -62,12 +67,26 @@ const validatePath = () => {
 	}
 
 	if (!fs.existsSync(__REPOSITORIES_PATH__)) {
+		console.log('writing', fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8'), performance.now());
 		fs.writeFileSync(__REPOSITORIES_PATH__, '[]');
 	}
 };
 
 const SettingsStore = new (class SettingsStore extends GenericStore {
 	#record: RecursivePartial<Settings> = {};
+	#emitDebounce: NodeJS.Timeout | null = null;
+
+	emit() {
+		if (this.#emitDebounce) return;
+
+		this.#emitDebounce = setTimeout(() => {
+			this.#emitDebounce = null;
+
+			super.emit();
+		}, 2000);
+
+		super.emit();
+	}
 
 	constructor() {
 		super();
@@ -75,6 +94,12 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		validatePath();
 
 		this.load();
+
+		window.Native.listeners.WATCHER.add(__SETTINGS_PATH__, () => {
+			this.load();
+
+			this.emit();
+		});
 	}
 
 	get settings() {
@@ -124,6 +149,8 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 
 		const repositories = this.getSetting('repositories');
 
+		console.log('writing', repositories, performance.now());
+
 		fs.writeFileSync(__REPOSITORIES_PATH__, JSON.stringify(repositories, null, 4));
 	}
 
@@ -133,31 +160,31 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 
 			try {
 				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8')) as Settings;
+
+				for (const [key, value] of Object.entries(settings)) {
+					(this.#record as Record<string, unknown>)[key] = value;
+				}
+
+				if (!(this.#record as Record<string, unknown>)['theme']) {
+					(this.#record as Record<string, unknown>)['theme'] = 'system';
+				}
 			} catch (error) {
 				window._showErrorModal(error, 'error.corruptSettings');
-			}
-
-			for (const [key, value] of Object.entries(settings)) {
-				(this.#record as Record<string, unknown>)[key] = value;
-			}
-
-			if (!(this.#record as Record<string, unknown>)['theme']) {
-				(this.#record as Record<string, unknown>)['theme'] = 'system';
 			}
 		}
 
 		if (fs.existsSync(__REPOSITORIES_PATH__)) {
-			let repositories: string[] = [];
-
 			try {
+				let repositories: string[] = [];
+
 				repositories = JSON.parse(
 					fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8')
 				) as string[];
+
+				this.#record['repositories'] = repositories;
 			} catch (error) {
 				window._showErrorModal(error, 'error.corruptSettings');
 			}
-
-			this.#record['repositories'] = repositories;
 		}
 	}
 })();
