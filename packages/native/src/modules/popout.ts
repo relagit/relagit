@@ -20,6 +20,8 @@ export default () => {
 		titleBarStyle: 'hidden',
 		title: 'RelaGit Popout',
 		vibrancy: 'hud',
+		backgroundMaterial: 'mica',
+		transparent: true,
 		visualEffectState: 'active',
 		resizable: false,
 		backgroundColor: '#00000000',
