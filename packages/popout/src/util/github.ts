@@ -9,10 +9,10 @@ export const sortRuns = (
 		const sha = run.head_sha;
 
 		if (!sorted[sha.substring(0, 7)]) {
-			sorted[sha.substring(0, 7)] ??= [];
-
-			sorted[sha.substring(0, 7)].push(run);
+			sorted[sha.substring(0, 7)] = [];
 		}
+
+		sorted[sha.substring(0, 7)].push(run);
 	}
 
 	return sorted;
@@ -22,6 +22,8 @@ export const runsToStatus = (
 	runs: GitHubActionRuns['workflow_runs']
 ): 'success' | 'pending' | 'failed' | 'skipped' => {
 	if (!runs?.length) return 'skipped';
+
+	if (runs?.[0].head_sha.startsWith('117c66c')) console.log(runs);
 
 	const hasFail = runs.some((run) => run.conclusion === 'failure');
 
