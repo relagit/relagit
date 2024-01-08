@@ -1,0 +1,41 @@
+@mixin darwin {
+	#app-container.platform-darwin & {
+		@content;
+	}
+}
+
+@mixin win32 {
+	#app-container.platform-win32 & {
+		@content;
+	}
+}
+
+@mixin linux {
+	#app-container.platform-linux & {
+		@content;
+	}
+}
+
+@mixin light {
+	#app-container.theme-light & {
+		@content;
+	}
+
+	@media (prefers-color-scheme: light) {
+		#app-container.theme-system & {
+			@content;
+		}
+	}
+}
+
+@mixin dark {
+	#app-container.theme-dark & {
+		@content;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		#app-container.theme-system & {
+			@content;
+		}
+	}
+}

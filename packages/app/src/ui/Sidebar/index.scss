@@ -24,6 +24,28 @@
 	transition: transform 0.2s ease-in-out;
 	z-index: 9;
 
+	@include darwin {
+		height: calc(100% - 28px);
+	}
+
+	@include win32 {
+		height: calc(100% - 28px);
+	}
+
+	@include light {
+		background-color: #f6f8fad4;
+
+		--separator-primary: rgb(0 0 0 / 10%);
+		--separator-secondary: rgb(0 0 0 / 3%);
+	}
+
+	@include dark {
+		background-color: #1a1b1c4a;
+
+		--separator-primary: rgb(208 215 222 / 10%);
+		--separator-secondary: rgb(208 215 222 / 3%);
+	}
+
 	&:not(.sidebar-active) {
 		animation: visibilityout 0.2s linear forwards;
 	}
@@ -92,49 +114,5 @@
 			background-color: var(--bg-secondary);
 			border-radius: 4px;
 		}
-	}
-}
-
-.platform-darwin .sidebar,
-.platform-win32 .sidebar {
-	height: calc(100% - 28px);
-}
-
-.theme-dark.vibrancy .sidebar {
-	background-color: #1a1b1c4a;
-
-	--separator-primary: rgb(208 215 222 / 10%);
-	--separator-secondary: rgb(208 215 222 / 3%);
-}
-
-.theme-light.vibrancy .sidebar {
-	background-color: #f6f8fad4;
-
-	--separator-primary: rgb(0 0 0 / 10%);
-	--separator-secondary: rgb(0 0 0 / 3%);
-}
-
-@media (prefers-color-scheme: dark) {
-	.theme-system.vibrancy .sidebar {
-		background-color: #1a1b1c4a;
-
-		--separator-primary: rgb(208 215 222 / 10%);
-		--separator-secondary: rgb(208 215 222 / 3%);
-	}
-}
-
-@media (prefers-color-scheme: light) {
-	.theme-system.vibrancy .sidebar {
-		background-color: transparent;
-
-		--separator-primary: rgb(0 0 0 / 10%);
-		--separator-secondary: rgb(0 0 0 / 3%);
-	}
-
-	.theme-light.vibrancy .sidebar {
-		background-color: transparent;
-
-		--separator-primary: rgb(0 0 0 / 10%);
-		--separator-secondary: rgb(0 0 0 / 3%);
 	}
 }
