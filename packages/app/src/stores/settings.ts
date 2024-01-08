@@ -19,6 +19,8 @@ export type Settings = {
 	};
 	popout: {
 		position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+		height: number;
+		width: number;
 		x: number;
 		y: number;
 	};
@@ -155,8 +157,12 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		if (fs.existsSync(__SETTINGS_PATH__)) {
 			let settings: RecursivePartial<Settings> = {};
 
+			const json = fs.readFileSync(__SETTINGS_PATH__, 'utf-8');
+
+			if (!json || !json.length) return;
+
 			try {
-				settings = JSON.parse(fs.readFileSync(__SETTINGS_PATH__, 'utf-8')) as Settings;
+				settings = JSON.parse(json) as Settings;
 
 				for (const [key, value] of Object.entries(settings)) {
 					(this.#record as Record<string, unknown>)[key] = value;
@@ -171,12 +177,14 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		}
 
 		if (fs.existsSync(__REPOSITORIES_PATH__)) {
+			const json = fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8');
+
+			if (!json || !json.length) return;
+
 			try {
 				let repositories: string[] = [];
 
-				repositories = JSON.parse(
-					fs.readFileSync(__REPOSITORIES_PATH__, 'utf-8')
-				) as string[];
+				repositories = JSON.parse(json) as string[];
 
 				this.#record['repositories'] = repositories;
 			} catch (error) {
