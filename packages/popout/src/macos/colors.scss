@@ -1,9 +1,7 @@
 $dark-mode-colors: (
-	'text-vibrant-primary': #ffffff,
+	'text-vibrant-primary': #fff,
 	'text-vibrant-secondary': color-mix(in lch, rgb(150 150 150) 33%, rgb(255 255 255 / 57.5%)),
 	'text-vibrant-tertiary': rgb(178 178 178 / 78.5%),
-	'fill-vibrant-primary': #000000,
-	'fill-vibrant-secondary': #000000,
 	'fill-vibrant-tertiary': color-mix(in lch, rgb(255 255 255) 15%, rgb(178 178 178 / 30.5%)),
 	'fill-vibrant-quaternary': rgb(255 255 255 / 10%),
 	'fill-vibrant-quinary': rgb(255 255 255 / 5%),
@@ -14,7 +12,6 @@ $dark-mode-colors: (
 	'text-magenta': #bf5af2,
 	'text-cyan': #5ac8f5
 );
-
 $light-mode-colors: ();
 
 @each $color, $value in $light-mode-colors {

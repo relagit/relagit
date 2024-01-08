@@ -1,8 +1,10 @@
+/* stylelint-disable property-no-vendor-prefix */
+
 .panel {
 	width: 100%;
 	position: relative;
 	display: flex;
-	padding: 11px 8px 0 8px;
+	padding: 11px 8px 0;
 	flex-direction: column;
 	gap: 8px;
 	overflow: hidden;
@@ -21,7 +23,6 @@
 		padding-inline,
 		mask-position,
 		-webkit-mask-position;
-
 	-webkit-mask-image: radial-gradient(circle at 100% 100%, transparent 10%, white 65%);
 	mask-image: radial-gradient(circle at 100% 100%, transparent 10%, white 65%);
 	-webkit-mask-repeat: no-repeat;
