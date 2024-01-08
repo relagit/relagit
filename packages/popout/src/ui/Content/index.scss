@@ -32,7 +32,7 @@
 		}
 
 		&:focus {
-			border: 2px solid var(--text-blue);
+			border: 2px solid var(--accent, --text-blue);
 			padding: 4px 6px;
 			outline: none;
 		}
@@ -127,4 +127,12 @@
 			}
 		}
 	}
+}
+
+#popout-container.platform-darwin .scroller-item:focus {
+	padding: 6px 8px;
+	outline: none;
+	border: unset;
+	// os accent color
+	background: color-mix(in lab, var(--accent) 38%, transparent);
 }

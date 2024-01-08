@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, screen } from 'electron';
+import { BrowserWindow, ipcMain, screen, systemPreferences } from 'electron';
 
 import path from 'path';
 
@@ -13,7 +13,7 @@ export default () => {
 			return;
 		}
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 
 	popout = new BrowserWindow({
@@ -21,7 +21,7 @@ export default () => {
 		title: 'RelaGit Popout',
 		vibrancy: 'hud',
 		backgroundMaterial: 'mica',
-		transparent: true,
+		transparent: process.platform !== 'darwin',
 		visualEffectState: 'active',
 		resizable: false,
 		backgroundColor: '#00000000',
@@ -40,6 +40,23 @@ export default () => {
 			nodeIntegration: true,
 			contextIsolation: true
 		}
+	});
+
+	popout.webContents.on('did-start-loading', () => {
+		popout?.webContents.executeJavaScript(
+			`document.documentElement.style.setProperty('--accent', ${JSON.stringify(
+				'#' + systemPreferences.getAccentColor()
+			)});`
+		);
+	});
+
+	// why is this windows only
+	systemPreferences.on('accent-color-changed', (_, color) => {
+		popout?.webContents.executeJavaScript(
+			`document.documentElement.style.setProperty('--accent', ${JSON.stringify(
+				'#' + color
+			)});`
+		);
 	});
 
 	popout.setAlwaysOnTop(true, 'torn-off-menu');

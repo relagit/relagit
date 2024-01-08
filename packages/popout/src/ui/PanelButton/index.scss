@@ -28,7 +28,7 @@
 	}
 
 	&:focus {
-		outline: 2px solid var(--text-blue);
+		outline: 2px solid var(--accent, --text-blue);
 	}
 
 	.panelbutton-items {
@@ -65,7 +65,7 @@
 			}
 
 			&:focus {
-				outline: 2px solid var(--text-blue);
+				outline: 2px solid var(--accent, --text-blue);
 			}
 		}
 	}
