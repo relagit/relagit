@@ -1,10 +1,10 @@
 .sidebar__footer {
-	padding: 20px;
+	padding: 16px;
 	height: 265px;
 	border-top: 1px solid var(--separator-primary);
 	flex-direction: column;
 	display: flex;
-	gap: 10px;
+	gap: 8px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -24,6 +24,10 @@
 		opacity: 1;
 		pointer-events: auto;
 		user-select: auto;
+	}
+
+	.textarea__wrapper {
+		height: 32px;
 	}
 
 	&__textarea-button {
