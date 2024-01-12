@@ -4,7 +4,7 @@ import { PassthroughRef } from '@app/shared';
 
 import './index.scss';
 
-interface ButtonProps {
+export interface ButtonProps {
 	children: JSX.Element | JSX.Element[];
 	type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
 	onClick?: () => void;

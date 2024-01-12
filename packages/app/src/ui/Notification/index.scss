@@ -1,0 +1,71 @@
+.layer[data-key='notification'] {
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: flex-end;
+	gap: 16px;
+	padding: 16px;
+}
+
+.notification {
+	border-radius: 4px;
+	background-color: var(--bg-floating);
+	border: 1px solid var(--separator-primary);
+	box-shadow: -2px 4px 11px rgba(0, 0, 0, 0.25);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	pointer-events: all;
+	max-width: 400px;
+
+	@include mixins.focusable;
+
+	&__icon {
+		width: 24px;
+		height: 24px;
+
+		&.error {
+			color: var(--color-red-500);
+		}
+
+		&.success {
+			color: var(--color-green-500);
+		}
+
+		&.warning {
+			color: var(--color-yellow-500);
+		}
+	}
+
+	&__text__desc {
+		color: var(--color-secondary);
+		font-size: 0.95rem;
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	&__content {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	&__buttons {
+		display: flex;
+		gap: 8px;
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	.button {
+		width: 100%;
+	}
+}

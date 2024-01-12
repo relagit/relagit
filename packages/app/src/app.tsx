@@ -5,6 +5,7 @@ import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
 import Modal from '@ui/Modal';
+import Notification from '@ui/Notification';
 import Onboarding from '@ui/Onboarding';
 import Sidebar from '@ui/Sidebar';
 import Workspace from '@ui/Workspace';
@@ -139,6 +140,7 @@ export default () => {
 						<div class="window-control-bar"></div>
 					</Show>
 					<Modal.Layer />
+					<Notification.Layer />
 					<Sidebar sidebar={sidebar()} />
 					<Workspace sidebar={sidebar()} />
 				</Show>

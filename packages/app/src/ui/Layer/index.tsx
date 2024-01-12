@@ -30,6 +30,7 @@ const Layer = (props: LayerProps) => {
 
 	return (
 		<div
+			aria-live={props.key === 'notification' ? 'assertive' : 'off'}
 			classList={{
 				layer: true,
 				[`layer-${props.type || 'bare'}`]: true,
