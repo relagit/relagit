@@ -82,7 +82,7 @@ export const RepoList = (props: {
 								}}
 							>
 								<h3 class="clone-modal__list__item__name">
-									<Show when={repo.owner.login !== getUser().login}>
+									<Show when={repo.owner.login !== getUser()?.login}>
 										<img
 											src={`https://avatars.githubusercontent.com/u/${repo.owner.id}?v=4`}
 											alt="owner icon"

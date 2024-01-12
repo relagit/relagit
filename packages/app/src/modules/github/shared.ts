@@ -13,6 +13,6 @@ export const getToken = async () => {
 	return decrypted;
 };
 
-export const getUser = (): GithubUser => {
+export const getUser = (): GithubUser | undefined => {
 	return JSON.parse(localStorage.getItem('__x_github_user') || 'null') as GithubUser;
 };

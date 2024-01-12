@@ -187,10 +187,10 @@ const CloneModal = () => {
 										}
 									>
 										<img
-											src={getUser().avatar_url || ''}
+											src={getUser()?.avatar_url || ''}
 											class="clone-modal__oauth__avatar"
 										/>
-										{getUser().login}
+										{getUser()?.login}
 									</Show>
 								</button>
 							</>

@@ -256,16 +256,16 @@ const SettingsModal = () => {
 						}
 					>
 						<img
-							src={getUser().avatar_url}
-							alt={getUser().login}
+							src={getUser()?.avatar_url}
+							alt={getUser()?.login}
 							class="settings-layer__setting__account__image"
 						/>
 						<div class="settings-layer__setting__account__text">
 							<p class="settings-layer__setting__account__text__name">
-								{getUser().name}
+								{getUser()?.name}
 							</p>
 							<p class="settings-layer__setting__account__text__login">
-								@{getUser().login}
+								@{getUser()?.login}
 							</p>
 						</div>
 						<Button
