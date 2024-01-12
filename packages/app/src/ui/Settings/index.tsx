@@ -9,16 +9,18 @@ import { showItemInFolder } from '@app/modules/shell';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
+import NotificationStore from '@stores/notification';
 import SettingsStore, { type Settings } from '@stores/settings';
 import * as ipc from '~/common/ipc';
 
 import Icon from '@ui/Common/Icon';
 import TextArea from '@ui/Common/TextArea';
+import Notification from '@ui/Notification';
 
 import Button from '../Common/Button';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
-import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader } from '../Modal';
+import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '../Modal';
 import { showOAuthModal } from '../Modal/OAuthModal';
 
 import './index.scss';
@@ -36,46 +38,30 @@ export interface RadioGroupProps {
 	disabled?: boolean;
 }
 
-const showReloadModal = () => {
-	ModalStore.pushState(
-		'reload',
-		createRoot(() => (
-			<Modal size="small" dismissable id="reload">
-				{(props) => {
-					return (
-						<>
-							<ModalHeader title={t('modal.reload.title')}>
-								<ModalCloseButton close={props.close} />
-							</ModalHeader>
-							<ModalBody>
-								<p class="reload-modal__message">{t('modal.reload.message')}</p>
-							</ModalBody>
-							<ModalFooter>
-								<div class="modal__footer__buttons">
-									<Button
-										type="default"
-										label={t('modal.closeModal')}
-										onClick={props.close}
-									>
-										{t('modal.close')}
-									</Button>
-									<Button
-										type="danger"
-										label={t('modal.error.reloadClient')}
-										onClick={() => {
-											ipcRenderer.invoke(ipc.RELOAD_CLIENT);
-										}}
-									>
-										{t('modal.error.reload')}
-									</Button>
-								</div>
-							</ModalFooter>
-						</>
-					);
-				}}
-			</Modal>
-		))
-	);
+const showReloadNotif = () => {
+	if (!NotificationStore.has('reload'))
+		NotificationStore.add(
+			'reload',
+			createRoot(() => (
+				<Notification
+					id="reload"
+					title={t('modal.reload.title')}
+					level="warning"
+					icon="alert"
+					description={t('modal.reload.message')}
+					actions={[
+						{
+							label: t('modal.error.reload'),
+							children: t('modal.error.reload'),
+							type: 'danger',
+							onClick: () => {
+								ipcRenderer.invoke(ipc.RELOAD_CLIENT);
+							}
+						}
+					]}
+				/>
+			))
+		);
 };
 
 export const RadioGroup = (props: RadioGroupProps) => {
@@ -328,7 +314,7 @@ const SettingsModal = () => {
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
 
-						showReloadModal();
+						showReloadNotif();
 					}}
 				/>
 			</div>
@@ -363,7 +349,7 @@ const SettingsModal = () => {
 							value as Settings['externalEditor']
 						);
 
-						showReloadModal();
+						showReloadNotif();
 					}}
 				/>
 			</div>
@@ -431,7 +417,7 @@ const SettingsModal = () => {
 						SettingsStore.setSetting('ui.vibrancy', value);
 
 						if (value) {
-							showReloadModal();
+							showReloadNotif();
 						}
 					}}
 				/>
