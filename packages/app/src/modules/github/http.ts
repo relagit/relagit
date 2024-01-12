@@ -58,19 +58,19 @@ export const GitHub = <T extends keyof GithubResponse>(
 			url += 'repos/[username]/[repo]/actions/runs?per_page=100';
 			break;
 		case 'repos/:username/:repo/readme':
-			url += 'repos/[username]/[repo]/readme';
+			url += 'repos/[username]/[repo]/readme?';
 			break;
 		case 'users/:username/repos':
 			url += 'users/[username]/repos?per_page=32&sort=updated&type=all';
 			break;
 		case 'users/:username':
-			url += 'users/[username]';
+			url += 'users/[username]?';
 			break;
 		case 'user/repos':
 			url += 'user/repos?per_page=32&sort=updated&type=all';
 			break;
 		case 'user':
-			url += 'user';
+			url += 'user?';
 			break;
 	}
 
