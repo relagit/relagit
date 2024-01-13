@@ -5,7 +5,7 @@ import { error } from '@app/modules/logger';
 import { createStoreListener } from '@app/stores';
 import LocationStore from '@app/stores/location';
 import RepositoryStore from '@app/stores/repository';
-import EmptyState, { EMPTY_STATE_IMAGES } from '@app/ui/Common/EmptyState';
+import EmptyState from '@app/ui/Common/EmptyState';
 import * as Git from '@modules/git';
 import { GitStatus } from '@modules/git/diff';
 import * as ipc from '~/common/ipc';
@@ -138,14 +138,7 @@ export default (props: ImageViewProps) => {
 					when={URIs()[0] || URIs()[1]}
 					fallback={
 						<EmptyState
-							image={
-								threw()
-									? {
-											light: EMPTY_STATE_IMAGES.L_ERROR,
-											dark: EMPTY_STATE_IMAGES.D_ERROR
-										}
-									: undefined
-							}
+							image={threw() ? EmptyState.Images.Error : undefined}
 							detail={t('codeview.imageview.error')}
 							hint={t('codeview.imageview.errorHint')}
 						/>

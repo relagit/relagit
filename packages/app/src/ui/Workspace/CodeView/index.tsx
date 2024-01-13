@@ -11,7 +11,7 @@ import FileStore from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 
-import EmptyState, { EMPTY_STATE_IMAGES } from '@ui/Common/EmptyState';
+import EmptyState from '@ui/Common/EmptyState';
 import Icon from '@ui/Common/Icon';
 
 import ImageView from './ImageView';
@@ -176,10 +176,7 @@ export default (props: CodeViewProps) => {
 				<EmptyState
 					detail={t('codeview.noCommit')}
 					hint={t('codeview.noCommitHint')}
-					image={{
-						light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
-						dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
-					}}
+					image={EmptyState.Images.NothingHere}
 				/>
 			}
 		>
@@ -189,10 +186,7 @@ export default (props: CodeViewProps) => {
 					<EmptyState
 						detail={t('codeview.loading')}
 						hint={t('codeview.loadingHint')}
-						image={{
-							light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
-							dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
-						}}
+						image={EmptyState.Images.NothingHere}
 					/>
 				}
 			>
@@ -202,10 +196,7 @@ export default (props: CodeViewProps) => {
 						<EmptyState
 							detail={t('codeview.errorHint')}
 							hint={threw()?.message}
-							image={{
-								light: EMPTY_STATE_IMAGES.L_ERROR,
-								dark: EMPTY_STATE_IMAGES.D_ERROR
-							}}
+							image={EmptyState.Images.Error}
 						/>
 					}
 				>
@@ -221,10 +212,7 @@ export default (props: CodeViewProps) => {
 											hint={
 												'See over there where it says "No Repository Selected"? Yeah, click that.'
 											}
-											image={{
-												light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
-												dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
-											}}
+											image={EmptyState.Images.NothingHere}
 										/>
 									}
 								>
@@ -234,20 +222,14 @@ export default (props: CodeViewProps) => {
 											<EmptyState
 												detail={t('codeview.noChanges')}
 												hint={t('codeview.noChangesHint')}
-												image={{
-													light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
-													dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
-												}}
+												image={EmptyState.Images.NothingHere}
 											/>
 										}
 									>
 										<EmptyState
 											detail={t('codeview.noFile')}
 											hint={t('codeview.noFileHint')}
-											image={{
-												light: EMPTY_STATE_IMAGES.L_NOTHING_HERE,
-												dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE
-											}}
+											image={EmptyState.Images.NothingHere}
 										/>
 									</Show>
 								</Show>
@@ -292,10 +274,7 @@ export default (props: CodeViewProps) => {
 										<EmptyState
 											detail={t('codeview.binary')}
 											hint={t('codeview.binaryHint')}
-											image={{
-												light: EMPTY_STATE_IMAGES.L_ERROR,
-												dark: EMPTY_STATE_IMAGES.D_ERROR
-											}}
+											image={EmptyState.Images.Error}
 										/>
 									</Show>
 								</>
@@ -317,10 +296,7 @@ export default (props: CodeViewProps) => {
 													}
 												}
 											]}
-											image={{
-												light: EMPTY_STATE_IMAGES.L_POWER,
-												dark: EMPTY_STATE_IMAGES.D_POWER
-											}}
+											image={EmptyState.Images.Power}
 										/>
 									</>
 								}
