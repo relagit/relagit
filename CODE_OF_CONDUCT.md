@@ -1,8 +1,8 @@
 <div align="center">
 	<picture>
-	  <source media="(prefers-color-scheme: dark)" width="200px" srcset="https://rela.dev/assets/relagit-light.png">
-	  <source media="(prefers-color-scheme: light)" width="200px" srcset="https://rela.dev/assets/relagit-dark.png">
-	  <img alt="Rela" width="200px" src="https://rela.dev/assets/relagit-dark.png">
+	  <source media="(prefers-color-scheme: dark)" width="200px" srcset="https://git.rela.dev/_assets/logo/rela-light.png">
+	  <source media="(prefers-color-scheme: light)" width="200px" srcset="https://git.rela.dev/_assets/logo/rela-dark.png">
+	  <img alt="Rela" width="200px" src="https://git.rela.dev/_assets/logo/rela-dark.png">
 	</picture>
 </div>
 
