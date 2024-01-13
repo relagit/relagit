@@ -1,13 +1,18 @@
 import { Router } from '@solidjs/router';
-import { render } from 'solid-js/web';
+import { ErrorBoundary, render } from 'solid-js/web';
 
 import { loadWorkflows } from '@modules/actions';
 import { loadThemes } from '@modules/actions/themes';
+import * as ipc from '~/common/ipc';
+
+import EmptyState from '@ui/Common/EmptyState';
 
 import Main from './app';
 
 loadWorkflows();
 loadThemes();
+
+const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
 function App() {
 	console.log(
@@ -24,9 +29,27 @@ DO NOT paste any code into this console that you have not written yourself or th
 	);
 
 	return (
-		<Router>
-			<Main />
-		</Router>
+		<ErrorBoundary
+			fallback={
+				<EmptyState
+					// NOT using t() here as it may also throw
+					detail="Something went wrong while loading the app."
+					image={EmptyState.Images.Error}
+					hint="Try again or report the issue on GitHub."
+					actions={[
+						{
+							label: 'Reload',
+							type: 'brand',
+							onClick: () => ipcRenderer.invoke(ipc.RELOAD_CLIENT)
+						}
+					]}
+				/>
+			}
+		>
+			<Router>
+				<Main />
+			</Router>
+		</ErrorBoundary>
 	);
 }
 

@@ -105,6 +105,9 @@ html {
 	/* stylelint-disable-next-line */
 	font-size: 13px; // 14px is the default font size for macOS
 	overflow: hidden;
+	font-family: var(--font-primary);
+
+	@include dark-theme;
 }
 
 .theme-dark,

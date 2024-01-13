@@ -34,7 +34,7 @@ export interface EmptyStateProps {
 	spinner?: boolean;
 }
 
-export default (props: EmptyStateProps) => {
+const EmptyState = (props: EmptyStateProps) => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
 	const [imageSrc, setImageSrc] = createSignal<EMPTY_STATE_IMAGES>();
@@ -125,3 +125,20 @@ export default (props: EmptyStateProps) => {
 		</div>
 	);
 };
+
+EmptyState.Images = {
+	Error: {
+		dark: EMPTY_STATE_IMAGES.D_ERROR,
+		light: EMPTY_STATE_IMAGES.L_ERROR
+	},
+	NothingHere: {
+		dark: EMPTY_STATE_IMAGES.D_NOTHING_HERE,
+		light: EMPTY_STATE_IMAGES.L_NOTHING_HERE
+	},
+	Power: {
+		dark: EMPTY_STATE_IMAGES.D_POWER,
+		light: EMPTY_STATE_IMAGES.L_POWER
+	}
+};
+
+export default EmptyState;

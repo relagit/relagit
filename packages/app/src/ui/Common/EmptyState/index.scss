@@ -56,3 +56,10 @@
 		margin-top: 20px;
 	}
 }
+
+#root > .empty-state {
+	background-color: var(--bg-primary);
+	height: 100vh;
+	align-items: center;
+	justify-content: center;
+}
