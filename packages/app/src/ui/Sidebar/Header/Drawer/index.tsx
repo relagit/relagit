@@ -19,7 +19,7 @@ import Icon from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import Menu from '@ui/Menu';
 import CloneModal from '@ui/Modal/CloneModal';
-import RepositoryModal from '@ui/Modal/RepositoryModal';
+import { showRepoModal } from '@ui/Modal/RepositoryModal';
 
 import './index.scss';
 
@@ -68,10 +68,7 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.addRepository'),
 										onClick: () => {
-											ModalStore.pushState(
-												'add',
-												createRoot(() => <RepositoryModal tab="add" />)
-											);
+											showRepoModal('add');
 										}
 									},
 									{
@@ -82,10 +79,7 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.createRepository'),
 										onClick: () => {
-											ModalStore.pushState(
-												'create',
-												createRoot(() => <RepositoryModal tab="create" />)
-											);
+											showRepoModal('create');
 										}
 									},
 									{
