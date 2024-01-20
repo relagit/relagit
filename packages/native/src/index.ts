@@ -96,6 +96,10 @@ const constructWindow = async () => {
 		}
 	});
 
+	win.once('ready-to-show', () => {
+		win.show();
+	});
+
 	win.on('move', () => {
 		settings.window ??= {};
 
@@ -127,10 +131,6 @@ const constructWindow = async () => {
 	log('Running on: ' + process.platform + ' ' + process.arch);
 
 	win.loadFile(path.join(__dirname, '..', 'public', 'index.html'));
-
-	win.once('ready-to-show', () => {
-		win.show();
-	});
 
 	const menu = Menu.buildFromTemplate([
 		{
