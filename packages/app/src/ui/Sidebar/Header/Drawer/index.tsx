@@ -188,7 +188,8 @@ export default (props: HeaderDrawerProps) => {
 										<div class="sidebar__drawer__body__content__item__text">
 											{repository.name}
 											<div class="sidebar__drawer__body__content__item__text__details">
-												{repository.branch} -{' '}
+												{repository.branch}
+												{' • '}
 												{renderDate(repository.lastFetched || 0)()}
 											</div>
 										</div>
