@@ -168,8 +168,15 @@ export const InformationModal = () => {
 		</>
 	);
 
-	// TODO: do soemthing here
-	const Graph = <>hi</>;
+	// TODO: do soemthing here and i18n
+	const Graph = (
+		<>
+			<EmptyState
+				detail="Graph View is under construction"
+				hint="Pay attention to updates for this feature"
+			/>
+		</>
+	);
 
 	return (
 		<Modal size="x-large" dismissable id={'information'}>
