@@ -191,6 +191,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : ''}>
 				{(props) => (
 					<Button
+						dedupe
 						rest={props}
 						label={t('sidebar.footer.commit', {
 							branch: selected()?.branch || 'Remote'
