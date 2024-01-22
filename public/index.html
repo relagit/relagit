@@ -14,7 +14,16 @@
 	<body>
 		<div id="root"></div>
 		<!-- will get overwritten when the renderer loads -->
-		<div id="app-container" class="theme-system"></div>
+		<div id="app-container" class="theme-system vibrancy" aria-hidden="true">
+			<div class="window-control-bar"></div>
+			<div class="sidebar sidebar-active" style="margin-top: 28px">
+				<div class="sidebar__header"></div>
+			</div>
+			<div class="workspace sidebar-active" style="margin-top: 28px">
+				<div class="workspace__header"></div>
+				<div class="workspace__container"></div>
+			</div>
+		</div>
 		<script module type="module">
 			// lazily import the renderer
 			import('../dist/renderer.js');
