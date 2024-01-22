@@ -9,12 +9,10 @@ import { debug } from '@modules/logger';
 import { openExternal, showItemInFolder } from '@modules/shell';
 import { renderDate } from '@modules/time';
 import { createStoreListener } from '@stores/index';
-import LayerStore from '@stores/layer';
 import LocationStore from '@stores/location';
 import ModalStore from '@stores/modal';
 import RepositoryStore, { Repository } from '@stores/repository';
 
-import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import Menu from '@ui/Menu';
@@ -208,18 +206,6 @@ export default (props: HeaderDrawerProps) => {
 						)}
 					</For>
 				</div>
-			</div>
-			<div class="sidebar__drawer__footer">
-				<Button
-					label={t('sidebar.drawer.openSettings')}
-					type="default"
-					onClick={() => {
-						props.open[1](false);
-						LayerStore.setVisible('settings', true);
-					}}
-				>
-					{t('sidebar.drawer.settings')}
-				</Button>
 			</div>
 		</div>
 	);
