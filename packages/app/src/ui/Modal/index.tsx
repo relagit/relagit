@@ -121,6 +121,10 @@ const Modal = (props: ModalProps) => {
 		setOpen(true);
 
 		window.addEventListener('keydown', focusTrap);
+
+		requestAnimationFrame(() => {
+			(ref()?.children[0] as HTMLElement)?.focus();
+		});
 	});
 
 	const close = () => {
