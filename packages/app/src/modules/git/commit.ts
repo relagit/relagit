@@ -3,8 +3,6 @@ import { Repository } from '@stores/repository';
 
 import { Git } from './core';
 
-const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
-
 export const Commit = async (
 	repository: Repository,
 	message: string | undefined,
@@ -23,13 +21,13 @@ export const Commit = async (
 	await Git({
 		directory: repository.path,
 		command: 'add',
-		args: filePaths
+		args: ['--', ...filePaths]
 	});
 
 	const res = await Git({
 		directory: repository.path,
 		command: 'commit',
-		args: ['-m', `"${escape(message)}"`, '-m', `"${escape(body || '')}"`]
+		args: ['-m', message, '-m', body || '']
 	});
 
 	return res;

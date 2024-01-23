@@ -47,7 +47,7 @@ export const Diff = async (file: string, repoPath: string) => {
 	const result = await Git({
 		directory: repoPath,
 		command: 'diff',
-		args: ['--no-color', `"${file.replaceAll('"', '\\"')}"`, `"${file.replaceAll('"', '\\"')}"`]
+		args: ['--no-color', file, file]
 	});
 
 	if (!result) {

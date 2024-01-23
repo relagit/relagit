@@ -18,13 +18,7 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 		return await Git({
 			directory: repoPath,
 			command: 'show',
-			args: [
-				`${source || 'HEAD'}:` +
-					`"${file
-						.replace(repoPath, '')
-						.replace(/^[\/\\]/, '')
-						.replaceAll('"', '\\"')}"`
-			]
+			args: [`${source || 'HEAD'}:` + file.replace(repoPath, '').replace(/^[\/\\]/, '')]
 		});
 	}
 

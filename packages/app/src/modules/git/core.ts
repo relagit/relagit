@@ -14,6 +14,8 @@ export interface GitParams {
 	} & import('child_process').ExecOptions;
 }
 
+const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
+
 export const Git = async (params: GitParams): Promise<string> => {
 	const { directory, command, args } = params;
 
@@ -25,7 +27,9 @@ export const Git = async (params: GitParams): Promise<string> => {
 
 	const opts = params.opts || {};
 
-	const cmd = `git ${command} ${args.join(' ')}`;
+	const cmd = `git ${command} ${args
+		.map((a) => (a.startsWith('"') && a.endsWith('"') ? a : `"${escape(a)}"`))
+		.join(' ')}`;
 
 	const result: string = await new Promise(async (resolve, reject) => {
 		const { error, stdout, stderr } = await ipcRenderer.invoke(ipc.GIT_EXEC, cmd, {
