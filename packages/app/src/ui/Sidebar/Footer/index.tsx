@@ -51,7 +51,9 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	});
 
 	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
-		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
+		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path)?.map(
+			(f) => f.replaceAll('\\', '"').replace(/(^")|("$)/g, '')
+		);
 
 		if (!files?.length) return { message: '', style: CommitStyle.none };
 

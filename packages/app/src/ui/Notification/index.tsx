@@ -29,8 +29,6 @@ export const Notification = (props: NotificationProps) => {
 			'button,input,a,select,textarea,[tabindex]'
 		);
 
-		console.log(element, element?.focus());
-
 		if (element) element.focus();
 	});
 
@@ -67,8 +65,6 @@ export default Notification;
 
 Notification.Layer = () => {
 	const notifications = createStoreListener([NotificationStore], () => {
-		console.log(NotificationStore.state);
-
 		return NotificationStore.state;
 	});
 

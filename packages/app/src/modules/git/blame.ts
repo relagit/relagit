@@ -49,7 +49,7 @@ export const Blame = async (repo: string, file: string) => {
 	const result = await Git({
 		directory: repo,
 		command: 'blame',
-		args: ['-w', '--line-porcelain', file]
+		args: ['-w', '--line-porcelain', `"${file.replaceAll('"', '\\"')}"`]
 	});
 
 	return parseBlame(result);
