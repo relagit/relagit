@@ -35,7 +35,7 @@ export default (props: Tooltip) => {
 
 		setTimeout(() => {
 			hasRecentlyHidden = false;
-		}, 300);
+		}, 500);
 	};
 
 	const show = (e: MouseEvent | FocusEvent, show?: boolean) => {
