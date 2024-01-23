@@ -25,7 +25,7 @@ const StageStore = new (class StageStore extends GenericStore {
 	getStagedFilePaths(path: string | undefined) {
 		return FileStore.getByRepositoryPath(path)
 			?.filter((f) => this.isStaged(nodepath.join(f.path, f.name)))
-			.map((f) => `"${nodepath.join(f.path, f.name).replaceAll('"', '\\"')}"`);
+			.map((f) => nodepath.join(f.path, f.name));
 	}
 
 	invert(repository: Repository | undefined) {

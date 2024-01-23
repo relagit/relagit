@@ -87,10 +87,16 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			return;
 		}
 
+		let usingFilename = file;
+
+		if (file.startsWith('"') && file.endsWith('"')) {
+			usingFilename = file.slice(1, -1);
+		}
+
 		return FileStore.addFile(directory, {
 			id: Math.random().toString(16).split('.')[1],
-			name: path.basename(file),
-			path: file.replace(path.basename(file), '').replace(/[\/\\]$/, ''),
+			name: path.basename(usingFilename),
+			path: usingFilename.replace(path.basename(usingFilename), '').replace(/[\/\\]$/, ''),
 			status: Git.statusFrom(stat)
 		});
 	}
@@ -130,10 +136,16 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			continue;
 		}
 
+		let usingFilename = p;
+
+		if (p.startsWith('"') && p.endsWith('"')) {
+			usingFilename = p.slice(1, -1);
+		}
+
 		FileStore.addFile(directory, {
 			id: Math.random().toString(16).split('.')[1],
-			name: path.basename(p),
-			path: p.replace(path.basename(p), '').replace(/[\/\\]$/, ''),
+			name: path.basename(usingFilename),
+			path: usingFilename.replace(path.basename(usingFilename), '').replace(/[\/\\]$/, ''),
 			status: Git.statusFrom(status)
 		});
 	}

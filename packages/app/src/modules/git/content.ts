@@ -32,7 +32,7 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 		result = await Git({
 			directory: repoPath,
 			command: 'show',
-			args: [`${source || ':0'}:` + `"${file.replaceAll('"', '\\"')}"`]
+			args: [`${source || ':0'}:` + file]
 		});
 	} catch (error) {
 		if (typeof error !== 'string')
