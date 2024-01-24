@@ -28,7 +28,12 @@ export default {
 		close: 'Close Settings',
 		restart: 'Requires Restart.',
 		workflows: {
-			title: 'Workflows'
+			title: 'Workflows',
+			empty: {
+				title: 'No Workflows',
+				description: 'You do not have any workflows installed.',
+				hint: 'Documentation'
+			}
 		},
 		commits: {
 			title: 'Commits'

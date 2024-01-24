@@ -5,7 +5,7 @@ import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
 import { getUser, initialiseOAuthFlow } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
-import { showItemInFolder } from '@app/modules/shell';
+import { openExternal, showItemInFolder } from '@app/modules/shell';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
@@ -15,6 +15,7 @@ import Icon from '@ui/Common/Icon';
 import TextArea from '@ui/Common/TextArea';
 
 import Button from '../Common/Button';
+import EmptyState from '../Common/EmptyState';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '../Modal';
@@ -330,44 +331,78 @@ const SettingsModal = () => {
 	const Workflows = (
 		<>
 			<div class="settings-layer__workflows">
-				<For each={Array.from(workflows)}>
-					{(workflow) => {
-						return (
-							<div
-								class="settings-layer__workflows__workflow"
-								aria-label={workflow.name}
-								aria-role="button"
-								onClick={() => {
-									showItemInFolder(
-										nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
-									);
-								}}
-								onKeyDown={(e) => {
-									if (e.key === 'Enter') {
+				<Show
+					when={workflows.size}
+					fallback={
+						<EmptyState
+							detail={t('settings.workflows.empty.title')}
+							hint={t('settings.workflows.empty.description')}
+							icon="workflow"
+							actions={[
+								{
+									label: t('sidebar.contextMenu.viewIn', {
+										name:
+											window.Native.platform === 'darwin'
+												? 'Finder'
+												: 'Explorer'
+									}),
+									type: 'brand',
+									onClick: () => {
+										showItemInFolder(__WORKFLOWS_PATH__);
+									}
+								},
+								{
+									label: t('settings.workflows.empty.hint'),
+									type: 'default',
+									onClick: () => {
+										openExternal(
+											'https://git.rela.dev/docs/workflows/what-is-a-workflow'
+										);
+									}
+								}
+							]}
+						/>
+					}
+				>
+					<For each={Array.from(workflows)}>
+						{(workflow) => {
+							return (
+								<div
+									class="settings-layer__workflows__workflow"
+									aria-label={workflow.name}
+									aria-role="button"
+									onClick={() => {
 										showItemInFolder(
 											nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
 										);
-									}
-								}}
-								tabIndex={0}
-							>
-								<div class="settings-layer__workflows__workflow__content">
-									<div class="settings-layer__workflows__workflow__content__text">
-										<h2 class="settings-layer__workflows__workflow__content__text__header">
-											{workflow.name}
-											<div class="settings-layer__workflows__workflow__content__text__header__filename">
-												{workflow.filename}
-											</div>
-										</h2>
-										<p class="settings-layer__workflows__workflow__content__text__description">
-											{workflow.description}
-										</p>
+									}}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											showItemInFolder(
+												nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
+											);
+										}
+									}}
+									tabIndex={0}
+								>
+									<div class="settings-layer__workflows__workflow__content">
+										<div class="settings-layer__workflows__workflow__content__text">
+											<h2 class="settings-layer__workflows__workflow__content__text__header">
+												{workflow.name}
+												<div class="settings-layer__workflows__workflow__content__text__header__filename">
+													{workflow.filename}
+												</div>
+											</h2>
+											<p class="settings-layer__workflows__workflow__content__text__description">
+												{workflow.description}
+											</p>
+										</div>
 									</div>
 								</div>
-							</div>
-						);
-					}}
-				</For>
+							);
+						}}
+					</For>
+				</Show>
 			</div>
 		</>
 	);
