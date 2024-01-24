@@ -13,15 +13,13 @@ import pkj from '../../../../../package.json' assert { type: 'json' };
 
 import './index.scss';
 
-export const finishTour = () => {
-	OnboardingStore.setDismissed(true);
-
-	const modalRoot = createRoot(() => (
+const OnboardingModal = () => {
+	return (
 		<Modal size="small" dismissable confetti id="onboarding">
 			{(props) => {
 				return (
 					<>
-						<ModalHeader title={t('onboarding.modal.title')}>{}</ModalHeader>
+						<ModalHeader title={t('onboarding.modal.title')}>{''}</ModalHeader>
 						<ModalBody>
 							<div class="onboarding-modal__buttons">
 								<Tooltip text={t('onboarding.modal.themes')}>
@@ -95,10 +93,16 @@ export const finishTour = () => {
 				);
 			}}
 		</Modal>
-	));
-
-	ModalStore.pushState('tour', modalRoot);
+	);
 };
+
+export const finishTour = () => {
+	OnboardingStore.setDismissed(true);
+
+	ModalStore.pushState('onboarding', createRoot(OnboardingModal));
+};
+
+window.ft = finishTour;
 
 export default () => {
 	return (
