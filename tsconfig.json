@@ -9,6 +9,7 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"resolveJsonModule": true,
+		"baseUrl": ".",
 		"paths": {
 			"~/*": ["./packages/*"],
 			"@app/*": ["./packages/app/src/*"],

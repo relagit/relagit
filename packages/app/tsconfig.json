@@ -1,16 +1,16 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"baseUrl": "src",
 		"target": "ESNext",
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
+		"baseUrl": ".",
 		"paths": {
-			"@app/*": ["../../app/src/*"],
-			"@ui/*": ["../../app/src/ui/*"],
-			"@stores/*": ["../../app/src/stores/*"],
-			"@modules/*": ["../../app/src/modules/*"],
-			"~/*": ["../../*"]
+			"@app/*": ["./src/*"],
+			"@ui/*": ["./src/ui/*"],
+			"@stores/*": ["./src/stores/*"],
+			"@modules/*": ["./src/modules/*"],
+			"~/*": ["../*"]
 		}
 	}
 }
