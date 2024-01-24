@@ -7,6 +7,7 @@ import RepositoryStore, { type Repository } from '@stores/repository';
 
 import pkj from '../../../../../package.json' assert { type: 'json' };
 import { error } from '../logger';
+import { getExternalWorkflows } from './external';
 
 const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
@@ -161,42 +162,58 @@ export const loadWorkflows = async () => {
 	if (!fs.existsSync(__WORKFLOWS_PATH__)) {
 		fs.mkdirSync(__WORKFLOWS_PATH__);
 	}
+	const externalWorkflows = getExternalWorkflows();
 
-	let _workflows = fs.readdirSync(__WORKFLOWS_PATH__);
-	let _nativeScripts = fs.readdirSync(__WORKFLOWS_PATH__);
+	const _workflows: {
+		native?: string;
+		plugin: string;
+	}[] = externalWorkflows;
 
-	_workflows = _workflows.filter(
-		(workflow) =>
-			['ts', 'js'].includes(extnames(workflow)) &&
-			!workflow.endsWith('.d.ts') &&
-			!workflow.includes('.native.')
-	);
-	_nativeScripts = _nativeScripts.filter(
-		(workflow) =>
-			['ts', 'js'].some((e) => workflow.includes(e)) && workflow.includes('.native.')
-	);
+	const files = await fs.promises.readdir(__WORKFLOWS_PATH__);
 
-	for (const workflowPath of _workflows) {
+	for (const file of files) {
+		if (file.endsWith('.d.ts')) continue;
+		if (!file.endsWith('.js') && !file.endsWith('.ts')) continue;
+
+		if (_workflows.find((workflow) => workflow.plugin === file || workflow.native === file))
+			continue;
+
+		if (file.includes('.native.')) {
+			if (files.includes(file.replace('.native.', '.'))) {
+				_workflows.push({
+					native: file,
+					plugin: file.replace('.native.', '.')
+				});
+			}
+		} else {
+			if (files.includes(file.replace('.', '.native.'))) {
+				_workflows.push({
+					native: file.replace('.', '.native.'),
+					plugin: file
+				});
+			}
+
+			_workflows.push({
+				plugin: file
+			});
+		}
+	}
+
+	for (const workflow of _workflows) {
 		try {
 			const data = await fs.promises.readFile(
-				path.join(__WORKFLOWS_PATH__, workflowPath),
+				path.resolve(__WORKFLOWS_PATH__, workflow.plugin),
 				'utf8'
-			);
-
-			const name = workflowPath.split('.')[0];
-
-			const native = _nativeScripts.find(
-				(script) => script === `${name}.native.${extnames(workflowPath)}`
 			);
 
 			let nativeValue = '';
 
-			if (native) {
+			if (workflow.native) {
 				nativeValue = await window.Native.listeners.LOAD_NATIVE_SCRIPT(
 					sucrase
 						.transform(
 							await fs.promises.readFile(
-								path.join(__WORKFLOWS_PATH__, native),
+								path.resolve(__WORKFLOWS_PATH__, workflow.native),
 								'utf8'
 							),
 							{
@@ -205,7 +222,7 @@ export const loadWorkflows = async () => {
 						)
 						.code.replaceAll(');, ', '); ') + // wtf sucrase
 						'\n\nreturn exports.default || Object.keys(exports).length ? exports : module.exports || null;',
-					native
+					workflow.native
 				);
 			}
 
@@ -223,15 +240,15 @@ export const loadWorkflows = async () => {
 					'\n\nreturn exports.default || Object.keys(exports).length ? exports : module.exports || null;'
 			);
 
-			const workflow = fn(
+			const res = fn(
 				require,
 				{},
 				{},
-				makeConsole(path.basename(workflowPath)),
+				makeConsole(path.basename(workflow.plugin)),
 				window[nativeValue as keyof typeof window] // only way to pass functions around
 			);
 
-			workflows.add({ ...(workflow.default || workflow), filename: workflowPath });
+			workflows.add({ ...(res.default || res), filename: workflow.plugin });
 		} catch (e) {
 			error('Failed to load workflow', e);
 		}

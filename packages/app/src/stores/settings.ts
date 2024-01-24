@@ -8,6 +8,7 @@ const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
+export const __EXTERNAL_PATH__ = path.join(os.homedir(), '.relagit', 'external.json');
 export const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
 export const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
 
@@ -70,6 +71,10 @@ const validatePath = () => {
 
 	if (!fs.existsSync(__REPOSITORIES_PATH__)) {
 		fs.writeFileSync(__REPOSITORIES_PATH__, '[]');
+	}
+
+	if (!fs.existsSync(__EXTERNAL_PATH__)) {
+		fs.writeFileSync(__EXTERNAL_PATH__, '[]');
 	}
 };
 
