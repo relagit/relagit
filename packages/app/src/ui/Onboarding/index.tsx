@@ -102,8 +102,6 @@ export const finishTour = () => {
 	ModalStore.pushState('onboarding', createRoot(OnboardingModal));
 };
 
-window.ft = finishTour;
-
 export default () => {
 	return (
 		<div class="onboarding">
