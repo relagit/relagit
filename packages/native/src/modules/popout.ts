@@ -25,7 +25,7 @@ export default async () => {
 		title: 'RelaGit Popout',
 		vibrancy: 'hud',
 		backgroundMaterial: 'mica',
-		transparent: process.platform !== 'darwin',
+		transparent: process.platform === 'win32',
 		visualEffectState: 'active',
 		backgroundColor: '#00000000',
 		height: settings?.popout?.height || 150,
