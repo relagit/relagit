@@ -14,6 +14,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
 type action =
+	| 'navigate'
 	| 'all'
 	| 'commit'
 	| 'pull'
@@ -31,6 +32,8 @@ export const iconFromAction = (act: action | action[]): IconName => {
 	switch (Array.isArray(act) ? act[0] : act) {
 		case 'all':
 			return 'key-asterisk';
+		case 'navigate':
+			return 'arrow-right';
 		case 'commit':
 			return 'git-commit';
 		case 'push':
@@ -228,7 +231,7 @@ export const loadWorkflows = async () => {
 				window[nativeValue as keyof typeof window] // only way to pass functions around
 			);
 
-			workflows.add({ ...workflow, filename: workflowPath });
+			workflows.add({ ...(workflow.default || workflow), filename: workflowPath });
 		} catch (e) {
 			error('Failed to load workflow', e);
 		}
@@ -243,21 +246,23 @@ type ParamsFromEventType<E extends action> = E extends 'commit'
 		? [Repository]
 		: E extends 'pull'
 			? [Repository]
-			: E extends 'remote_fetch'
-				? [Repository, { name: string; url: string; type: string }[]]
-				: E extends 'repository_add'
-					? [string]
-					: E extends 'repository_remove'
+			: E extends 'navigate'
+				? [Repository | undefined, GitFile | undefined]
+				: E extends 'remote_fetch'
+					? [Repository, { name: string; url: string; type: string }[]]
+					: E extends 'repository_add'
 						? [string]
-						: E extends 'settings_update'
-							? []
-							: E extends 'stash'
-								? [Repository]
-								: E extends 'stash_pop'
+						: E extends 'repository_remove'
+							? [string]
+							: E extends 'settings_update'
+								? []
+								: E extends 'stash'
 									? [Repository]
-									: E extends 'all'
-										? unknown[]
-										: [Repository];
+									: E extends 'stash_pop'
+										? [Repository]
+										: E extends 'all'
+											? unknown[]
+											: [Repository];
 
 export const triggerWorkflow = async <E extends action>(
 	event: E,

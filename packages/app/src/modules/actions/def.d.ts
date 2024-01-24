@@ -5,6 +5,7 @@
  */
 
 type action =
+	| 'navigate'
 	| 'all'
 	| 'commit'
 	| 'pull'
@@ -16,17 +17,30 @@ type action =
 	| 'stash'
 	| 'stash_pop';
 
+
 type ParamsFromEventType<E extends action> = E extends 'commit'
 	? [Repository, { message: string; description: string }]
-	: E extends 'remote_fetch'
-	  ? [Repository, { name: string; url: string; type: string }[]]
-	  : E extends 'repository_add'
-	    ? [string]
-	    : E extends 'repository_remove'
-	      ? [string]
-	      : E extends 'settings_update'
-	        ? []
-	        : [Repository];
+	: E extends 'push'
+		? [Repository]
+		: E extends 'pull'
+			? [Repository]
+			: E extends 'navigate'
+    			? [Repository | undefined, GitFile | undefined]
+				: E extends 'remote_fetch'
+					? [Repository, { name: string; url: string; type: string }[]]
+					: E extends 'repository_add'
+						? [string]
+						: E extends 'repository_remove'
+							? [string]
+							: E extends 'settings_update'
+								? []
+								: E extends 'stash'
+									? [Repository]
+									: E extends 'stash_pop'
+										? [Repository]
+										: E extends 'all'
+											? unknown[]
+											: [Repository];
 
 interface WorkflowOptions {
 	name: string;
@@ -185,9 +199,8 @@ type Branch = {
 };
 
 interface GitFile {
-	id: number;
+	id: string;
 	name: string;
-	staged: boolean;
 	path: string;
 	status:
 		| 'added'

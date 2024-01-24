@@ -84,6 +84,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	setSelectedFile(file: GitFile | undefined) {
 		this.#selectedFile = file;
 		this.emit();
+
+		window._triggerWorkflow('navigate', this.selectedRepository, file);
 	}
 
 	setHistoryOpen(open: boolean) {
@@ -123,12 +125,16 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		this.#selectedRepository = repository;
 		this.emit();
 
+		window._triggerWorkflow('navigate', repository, this.selectedFile);
+
 		if (set) SettingsStore.setSetting('activeRepository', repository?.path);
 	}
 
 	clearSelectedRepository() {
 		this.#selectedRepository = undefined;
 		this.emit();
+
+		window._triggerWorkflow('navigate', undefined, undefined);
 	}
 
 	setIsRefetchingSelectedRepository(value: boolean) {
