@@ -17,7 +17,6 @@ type action =
 	| 'stash'
 	| 'stash_pop';
 
-
 type ParamsFromEventType<E extends action> = E extends 'commit'
 	? [Repository, { message: string; description: string }]
 	: E extends 'push'
@@ -25,7 +24,7 @@ type ParamsFromEventType<E extends action> = E extends 'commit'
 		: E extends 'pull'
 			? [Repository]
 			: E extends 'navigate'
-    			? [Repository | undefined, GitFile | undefined]
+				? [Repository | undefined, GitFile | undefined]
 				: E extends 'remote_fetch'
 					? [Repository, { name: string; url: string; type: string }[]]
 					: E extends 'repository_add'
