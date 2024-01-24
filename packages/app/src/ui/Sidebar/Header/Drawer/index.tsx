@@ -5,6 +5,7 @@ import { t } from '@app/modules/i18n';
 import FileStore, { GitFile } from '@app/stores/files';
 import SettingsStore from '@app/stores/settings';
 import { removeRepository } from '@modules/actions';
+import { canUseRepositoryAsWorkflow, useRepositoryAsWorkflow } from '@modules/actions/external';
 import { debug } from '@modules/logger';
 import { openExternal, showItemInFolder } from '@modules/shell';
 import { renderDate } from '@modules/time';
@@ -148,6 +149,17 @@ export default (props: HeaderDrawerProps) => {
 											}),
 											onClick: () => {
 												openInEditor(repository.path);
+											}
+										},
+										{
+											type: 'separator'
+										},
+										{
+											type: 'item',
+											label: t('sidebar.drawer.contextMenu.useWorkflow'),
+											disabled: !canUseRepositoryAsWorkflow(repository),
+											onClick: () => {
+												useRepositoryAsWorkflow(repository);
 											}
 										},
 										{

@@ -140,7 +140,8 @@ export default {
 				createRepository: 'Create Repository',
 				cloneRepository: 'Clone Repository',
 				viewIn: 'View in {{name}}',
-				remove: 'Remove'
+				remove: 'Remove',
+				useWorkflow: 'Use as Workflow'
 			},
 			switchTo: 'Switch to {{name}}',
 			openSettings: 'Open Settings',

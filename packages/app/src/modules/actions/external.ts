@@ -1,3 +1,6 @@
+import { showReloadNotification } from '@app/ui/Settings/shared';
+import { error } from '@modules/logger';
+import { Repository } from '@stores/repository';
 import { __EXTERNAL_PATH__ } from '@stores/settings';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
@@ -96,4 +99,32 @@ export const getExternalWorkflows = (): {
 	}
 
 	return out;
+};
+
+export const canUseRepositoryAsWorkflow = (repo: Repository): boolean | undefined => {
+	if (!repo) return;
+
+	return fs.existsSync(path.join(repo.path, 'relagit.json')); // we can assume the paths are correct
+};
+
+export const useRepositoryAsWorkflow = (repo: Repository): boolean => {
+	try {
+		if (!repo) return false;
+
+		const external = JSON.parse(fs.readFileSync(__EXTERNAL_PATH__, 'utf-8')) as unknown[];
+
+		if (!external || !Array.isArray(external)) return false;
+
+		external.push(repo.path);
+
+		fs.writeFileSync(__EXTERNAL_PATH__, JSON.stringify(external));
+
+		showReloadNotification();
+
+		return true;
+	} catch (e) {
+		error(e);
+	}
+
+	return false;
 };
