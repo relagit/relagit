@@ -50,7 +50,7 @@ export default async () => {
 	popout.webContents.on('did-start-loading', () => {
 		popout?.webContents.executeJavaScript(
 			`document.documentElement.style.setProperty('--accent', ${JSON.stringify(
-				'#' + systemPreferences.getAccentColor()
+				'#' + systemPreferences.getAccentColor?.()
 			)});`
 		);
 	});
