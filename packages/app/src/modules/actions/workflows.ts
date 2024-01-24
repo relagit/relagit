@@ -150,6 +150,8 @@ export const require = (id: string) => {
 
 		return null;
 	}
+
+	return window.Native.DANGEROUS__NODE__REQUIRE(id);
 };
 
 export const loadWorkflows = async () => {
@@ -158,9 +160,17 @@ export const loadWorkflows = async () => {
 	}
 
 	let _workflows = fs.readdirSync(__WORKFLOWS_PATH__);
+	let _nativeScripts = fs.readdirSync(__WORKFLOWS_PATH__);
 
 	_workflows = _workflows.filter(
-		(workflow) => ['ts', 'js'].includes(extnames(workflow)) && !workflow.endsWith('.d.ts')
+		(workflow) =>
+			['ts', 'js'].includes(extnames(workflow)) &&
+			!workflow.endsWith('.d.ts') &&
+			!workflow.includes('.native.')
+	);
+	_nativeScripts = _nativeScripts.filter(
+		(workflow) =>
+			['ts', 'js'].some((e) => workflow.includes(e)) && workflow.includes('.native.')
 	);
 
 	for (const workflowPath of _workflows) {
@@ -170,17 +180,53 @@ export const loadWorkflows = async () => {
 				'utf8'
 			);
 
+			const name = workflowPath.split('.')[0];
+
+			const native = _nativeScripts.find(
+				(script) => script === `${name}.native.${extnames(workflowPath)}`
+			);
+
+			let nativeValue = '';
+
+			if (native) {
+				nativeValue = await window.Native.listeners.LOAD_NATIVE_SCRIPT(
+					sucrase
+						.transform(
+							await fs.promises.readFile(
+								path.join(__WORKFLOWS_PATH__, native),
+								'utf8'
+							),
+							{
+								transforms: ['typescript', 'imports']
+							}
+						)
+						.code.replaceAll(');, ', '); ') + // wtf sucrase
+						'\n\nreturn exports.default || Object.keys(exports).length ? exports : module.exports || null;',
+					native
+				);
+			}
+
 			const fn = new Function(
 				'require',
 				'exports',
 				'module',
 				'console',
-				sucrase.transform(data, {
-					transforms: ['typescript', 'imports']
-				}).code + '\n\nreturn module.exports || exports.default || exports || null;'
+				'native',
+				sucrase
+					.transform(data, {
+						transforms: ['typescript', 'imports']
+					})
+					.code.replaceAll(');, ', '); ') + // wtf sucrase
+					'\n\nreturn exports.default || Object.keys(exports).length ? exports : module.exports || null;'
 			);
 
-			const workflow = fn(require, {}, {}, makeConsole(path.basename(workflowPath)));
+			const workflow = fn(
+				require,
+				{},
+				{},
+				makeConsole(path.basename(workflowPath)),
+				window[nativeValue as keyof typeof window] // only way to pass functions around
+			);
 
 			workflows.add({ ...workflow, filename: workflowPath });
 		} catch (e) {

@@ -6,6 +6,7 @@ import fs, { WatchListener } from 'node:fs';
 import type { Workflow } from '~/app/src/modules/actions';
 import * as ipc from '~/common/ipc';
 
+import _eval from './modules/eval';
 import { updateEnvironmentForProcess } from './modules/shell';
 
 if (process.platform === 'darwin') updateEnvironmentForProcess();
@@ -90,6 +91,15 @@ export const Native = {
 		},
 		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
+		},
+		LOAD_NATIVE_SCRIPT: async (code: string, filename: string) => {
+			const res = await _eval(code, filename);
+
+			const random = Math.random().toString(36).substring(7);
+
+			contextBridge.exposeInMainWorld(random, res);
+
+			return random;
 		},
 		WATCHER: {
 			add: (path: string, fn: WatchListener<string>, tryRecursive = true) => {
