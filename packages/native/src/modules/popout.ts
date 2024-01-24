@@ -65,9 +65,9 @@ export default async () => {
 	});
 
 	popout.setAlwaysOnTop(true, 'torn-off-menu');
-	popout.setHiddenInMissionControl(true);
-	popout.setVisibleOnAllWorkspaces(true);
-	popout.setWindowButtonVisibility(false);
+	popout.setHiddenInMissionControl?.(true);
+	popout.setVisibleOnAllWorkspaces?.(true);
+	popout.setWindowButtonVisibility?.(false);
 
 	popout.loadFile(path.join(__dirname, '..', 'public', 'popout.html'));
 
