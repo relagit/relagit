@@ -89,7 +89,7 @@ const constructWindow = async () => {
 		y: settings.window?.y || undefined,
 		show: false,
 		webPreferences: {
-			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
+			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
 			preload: path.resolve(__dirname, 'preload.js'),
 			nodeIntegration: true,
 			contextIsolation: true
