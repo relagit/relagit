@@ -201,13 +201,13 @@ export default (props: AddRepositoryModalProps) => {
 										p.hide();
 
 										OnboardingStore.setStep(4);
-
-										setTimeout(() => {
-											LocationStore.setSelectedRepository(
-												RepositoryStore.getByPath(props.pathSignal[0]())
-											);
-										}, 500);
 									}
+
+									setTimeout(() => {
+										LocationStore.setSelectedRepository(
+											RepositoryStore.getByPath(props.pathSignal[0]())
+										);
+									}, 500);
 								}}
 								disabled={!allowClose()}
 							>
