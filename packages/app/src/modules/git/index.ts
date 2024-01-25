@@ -1,13 +1,13 @@
 export { ListBranches, Checkout, CreateBranch, DeleteBranch, PushWithOrigin } from './branches';
 export { Stash, ListStash, PopStash, RemoveStash } from './stash';
 export { PreviousCommit } from './previous-commit';
+export { Remote, AddRemote } from './remote';
 export { Show, ShowOrigin } from './show';
 export { Discard } from './discard';
 export { Content } from './content';
 export { Analyse } from './analyse';
 export { Status } from './status';
 export { Commit } from './commit';
-export { Remote } from './remote';
 export { Branch } from './branch';
 export { Revert } from './revert';
 export { Clone } from './clone';
