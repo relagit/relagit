@@ -180,6 +180,7 @@ export default () => {
 					class="onboarding__actions__anchor"
 					onClick={() => {
 						OnboardingStore.setDismissed(true);
+						OnboardingStore.setStep(5);
 					}}
 				>
 					{t('onboarding.dismiss')}
