@@ -143,6 +143,39 @@ export interface GithubUser {
 	updated_at: string;
 }
 
+export interface GithubOrg {
+	login: string;
+	id: number;
+	node_id: string;
+	url: string;
+	repos_url: string;
+	events_url: string;
+	hooks_url: string;
+	issues_url: string;
+	members_url: string;
+	public_members_url: string;
+	avatar_url: string;
+	description: string;
+	name: string;
+	company: string | null;
+	blog: string;
+	location: string | null;
+	email: string;
+	twitter_username: string | null;
+	is_verified: boolean;
+	has_organization_projects: boolean;
+	has_repository_projects: boolean;
+	public_repos: number;
+	public_gists: number;
+	followers: number;
+	following: number;
+	html_url: string;
+	created_at: string;
+	updated_at: string;
+	archived_at: string | null;
+	type: string;
+}
+
 export interface GitHubActionRuns {
 	total_count: number;
 	workflow_runs: {
@@ -184,5 +217,6 @@ export interface GithubResponse {
 	'users/:username': [[string], GithubUser];
 	'repos/:username/:repo/readme': [[string, string], GitHubReadme];
 	'user/repos': [[], GitHubRepository[]];
+	'orgs/:org/repos': [[string], GitHubRepository[]];
 	user: [[], GithubUser];
 }

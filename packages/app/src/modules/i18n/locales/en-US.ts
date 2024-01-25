@@ -242,6 +242,20 @@ export default {
 		confirm: 'Confirm',
 		cancel: 'Cancel',
 		close: 'Close',
+		publish: {
+			title: 'Publish Repository',
+			name: 'Name',
+			description: 'Description',
+			descriptionPlaceholder: 'This is my cool new repository, it...',
+			publish: 'Publish {{name}}',
+			private: 'Keep this private',
+			push: 'Push changes',
+			owner: 'Owner',
+			message: 'This repository will be published at {{url}}.',
+			auth: 'You need to authenticate with GitHub to publish your repository.',
+			authHint: 'Click the button below to begin the OAuth process.',
+			authButton: 'Authenticate'
+		},
 		information: {
 			metadata: 'Metadata',
 			graph: 'Commit Graph',

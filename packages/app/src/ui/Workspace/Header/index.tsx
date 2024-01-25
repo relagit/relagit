@@ -4,6 +4,7 @@ import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
 import OnboardingStore from '@app/stores/onboarding';
+import RemoteStore from '@app/stores/remote';
 import RepositoryStore from '@app/stores/repository';
 import SettingsStore from '@app/stores/settings';
 import Popout from '@app/ui/Common/Popout';
@@ -19,6 +20,7 @@ import LocationStore from '@stores/location';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
+import { showPublishModal } from '@ui/Modal/Publish';
 
 import './index.scss';
 
@@ -141,6 +143,10 @@ export default () => {
 
 	createEffect(() => {
 		if (!repository()) return;
+
+		if (!repository()?.remote && !RemoteStore.getByRepoPath(repository()?.path || '').length) {
+			return setStatus('publish');
+		}
 
 		const ahead = repository()?.ahead || 0;
 		const behind = repository()?.behind || 0;
@@ -358,6 +364,17 @@ export default () => {
 							}
 							case 'publish': {
 								debug('Publishing');
+
+								if (
+									!repository()?.remote &&
+									!RemoteStore.getByRepoPath(repository()?.path || '').length
+								) {
+									showPublishModal(repository());
+
+									setActioning(false);
+
+									return;
+								}
 
 								try {
 									await Git.PushWithOrigin(
