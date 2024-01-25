@@ -1,3 +1,5 @@
+import { Repository } from '@app/stores/repository';
+
 import { Git } from './core';
 
 export const Remote = async (directory: string) => {
@@ -25,4 +27,14 @@ export const Remote = async (directory: string) => {
 		});
 
 	return remotes;
+};
+
+export const AddRemote = async (repository: Repository | undefined, name: string, url: string) => {
+	if (!repository) return;
+
+	await Git({
+		directory: repository.path,
+		command: 'remote',
+		args: ['add', name, url]
+	});
 };
