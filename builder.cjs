@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const cp = require('child_process');
 const fs = require('fs');
+const util = require('util');
+
+const exec = util.promisify(cp.exec);
 
 /**
  * @type {{
@@ -27,6 +31,16 @@ const config = {
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
 	asar: false, // we cannot build as asar because vscode-oniguruma needs to be required from starry-night
+	afterAllArtifactBuild: async () => {
+		if (process.platform !== 'darwin') return;
+
+		console.log('Signing app...');
+
+		// we are forced to do this becuase apple locks unsigned apps on macOS 11+ on ARM machines
+		const cmd = 'codesign --force --deep -s - ./out/mac-arm64/RelaGit.app';
+
+		await exec(cmd);
+	},
 	dmg: {
 		background: './build/background.png',
 		icon: './build/dmg.icns',
