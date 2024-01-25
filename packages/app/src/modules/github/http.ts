@@ -20,6 +20,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 		headers: _HeadersInit
 	) => {
 		get: (...params: GithubResponse[T][0]) => Promise<R>;
+		post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<R>;
 		stream: (
 			limit: number,
 			cb?: (response: R) => void,
@@ -27,12 +28,15 @@ export const GitHub = <T extends keyof GithubResponse>(
 		) => Promise<R>;
 	};
 	get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
+	post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
 	query: (query: Record<string, string>) => {
 		get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
+		post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
 		headers: <R = GithubResponse[T][1]>(
 			headers: _HeadersInit
 		) => {
 			get: (...params: GithubResponse[T][0]) => Promise<R>;
+			post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<R>;
 			stream: (
 				limit: number,
 				cb?: (response: R) => void,
@@ -85,6 +89,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		return {
 			get,
+			post,
 			headers: headersFn,
 			stream
 		};
@@ -113,6 +118,40 @@ export const GitHub = <T extends keyof GithubResponse>(
 		if (res.status === 401) {
 			throw 'Unauthorized';
 		} else if (res.status !== 200) throw res.statusText;
+
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
+			? res.json()
+			: res.text())) as R;
+	};
+
+	const post = async <R = GithubResponse[T][1]>(
+		body: unknown,
+		...params: GithubResponse[T][0]
+	) => {
+		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
+
+		const search = new URLSearchParams(url);
+
+		for (const [key, value] of Object.entries(queryParams)) {
+			search.set(key, value);
+		}
+
+		url = decodeURIComponent(search.toString());
+
+		const res = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Authorization: localStorage.getItem('__x_github_token')
+					? `Bearer ${await getToken()}`
+					: '',
+				...headers
+			},
+			body: JSON.stringify(body)
+		});
+
+		if (res.status === 401) {
+			throw 'Unauthorized';
+		} else if (!res.status.toString().startsWith('2')) throw res.statusText;
 
 		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
 			? res.json()
@@ -179,6 +218,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		return {
 			get,
+			post,
 			query,
 			stream
 		};
@@ -187,6 +227,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 	return {
 		headers: headersFn,
 		get,
+		post,
 		query,
 		stream
 	};
