@@ -31,7 +31,7 @@ const config = {
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
 	asar: false, // we cannot build as asar because vscode-oniguruma needs to be required from starry-night
-	afterAllArtifactBuild: async () => {
+	afterPack: async () => {
 		if (process.platform !== 'darwin') return;
 
 		console.log('Signing app...');
