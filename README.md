@@ -27,6 +27,13 @@ Builds are generated automatically upon [release](https://github.com/relagit/rel
 -   [Linux (tar.gz)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-linux.tar.gz)
 -   [Linux (deb)](https://github.com/relagit/relagit/releases/latest/download/RelaGit-linux.deb)
 
+## Roadmap
+
+Before we hit the first stable release, the following features should be implemented:
+- Optimisation of git processes and operations, currently there is noticable CPU strain on startup.
+- Support for git submodules.
+- Commit graph in information modal.
+
 ## Building
 
 ### Prerequisites
