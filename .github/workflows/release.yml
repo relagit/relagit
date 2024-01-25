@@ -40,6 +40,11 @@ jobs:
               env:
                   GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
 
+            # we are forced to do this becuase apple locks unsigned apps on macOS 11+ on ARM machines
+            - run: codesign --force --deep -s - ./out/mac-arm64/RelaGit.app
+              if: ${{ matrix.os == 'macos-latest' }}
+              name: Sign App
+
             - run: pnpm make:${{ matrix.os }} --publish always
               name: Make
               env:
