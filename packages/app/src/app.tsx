@@ -57,7 +57,7 @@ export default () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
 	const [sidebar, setSidebar] = createSignal(true);
-	const [focused, setFocused] = createSignal(false);
+	const [focused, setFocused] = createSignal(document.hasFocus());
 
 	window.Native.listeners.SIDEBAR((_, value) => {
 		setSidebar((o) => value ?? !o);
