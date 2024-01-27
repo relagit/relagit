@@ -183,6 +183,10 @@
 						color: var(--status-modified);
 					}
 
+					&.renamed {
+						color: var(--status-renamed);
+					}
+
 					&.deleted {
 						color: var(--status-deleted);
 					}

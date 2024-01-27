@@ -93,6 +93,21 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 			usingFilename = file.slice(1, -1);
 		}
 
+		if (stat === 'R') {
+			const [from, to] = usingFilename.split(' -> ');
+
+			FileStore.addFile(directory, {
+				id: Math.random().toString(16).split('.')[1],
+				name: path.basename(to),
+				path: to.replace(path.basename(to), '').replace(/[\/\\]$/, ''),
+				status: Git.statusFrom(stat),
+				from: path.basename(from),
+				fromPath: from.replace(path.basename(from), '').replace(/[\/\\]$/, '')
+			});
+
+			return;
+		}
+
 		return FileStore.addFile(directory, {
 			id: Math.random().toString(16).split('.')[1],
 			name: path.basename(usingFilename),
@@ -140,6 +155,21 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 		if (p.startsWith('"') && p.endsWith('"')) {
 			usingFilename = p.slice(1, -1);
+		}
+
+		if (status === 'R') {
+			const [from, to] = usingFilename.split(' -> ');
+
+			FileStore.addFile(directory, {
+				id: Math.random().toString(16).split('.')[1],
+				name: path.basename(to),
+				path: to.replace(path.basename(to), '').replace(/[\/\\]$/, ''),
+				status: Git.statusFrom(status),
+				from: path.basename(from),
+				fromPath: from.replace(path.basename(from), '').replace(/[\/\\]$/, '')
+			});
+
+			continue;
 		}
 
 		FileStore.addFile(directory, {

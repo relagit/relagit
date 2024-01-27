@@ -1,3 +1,5 @@
+import { Show } from 'solid-js';
+
 import { triggerWorkflow } from '@app/modules/actions';
 import { openInEditor } from '@app/modules/code';
 import * as Git from '@app/modules/git';
@@ -7,6 +9,7 @@ import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
 import SettingsStore from '@app/stores/settings';
 import StageStore from '@app/stores/stage';
+import Icon from '@app/ui/Common/Icon';
 import { showErrorModal } from '@app/ui/Modal';
 import { debug, error } from '@modules/logger';
 import { showItemInFolder } from '@modules/shell';
@@ -143,6 +146,20 @@ export default (props: GitFile) => {
 				tabIndex={0}
 			>
 				<div class="sidebar__item__filename">
+					<Show when={props.from}>
+						<span class="sidebar__item__filename__path" title={props.fromPath}>
+							{props.fromPath}
+						</span>
+						<span class="sidebar__item__filename__name">
+							<span class="sidebar__item__filename__name__separator">
+								{props.fromPath?.length ? '/' : ''}
+							</span>
+							{props.from}
+						</span>
+						<span class="sidebar__item__filename__arrow">
+							<Icon name="arrow-right" />
+						</span>
+					</Show>
 					<span class="sidebar__item__filename__path" title={props.path}>
 						{props.path}
 					</span>

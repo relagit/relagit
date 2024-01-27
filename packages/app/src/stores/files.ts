@@ -9,6 +9,8 @@ export interface GitFile {
 	name: string;
 	path: string;
 	status: GitStatus;
+	from?: string;
+	fromPath?: string;
 }
 
 const FileStore = new (class FileStore extends GenericStore {
