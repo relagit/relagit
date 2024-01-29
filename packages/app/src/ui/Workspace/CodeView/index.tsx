@@ -67,6 +67,7 @@ const status = (e: 'UnchangedLine' | 'AddedLine' | 'DeletedLine') => {
 export interface CodeViewProps {
 	file: string;
 	repository: string;
+	fromFile?: string;
 }
 
 const dealWithTabs = (line: string) => {
@@ -266,12 +267,20 @@ export default (props: CodeViewProps) => {
 									>
 										<ImageView
 											repository={props.repository}
+											fromPath={
+												historyOpen()
+													? path.join(
+															commit()?.fromPath || '',
+															commit()?.from || ''
+														)
+													: props.fromFile
+											}
 											path={
 												historyOpen()
 													? path.join(
 															props.repository,
-															commit()!.path,
-															commit()!.filename
+															commit()?.path || '',
+															commit()?.filename || ''
 														)
 													: props.file
 											}

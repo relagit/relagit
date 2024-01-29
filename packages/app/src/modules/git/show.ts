@@ -13,6 +13,8 @@ export interface PastCommit {
 		path: string;
 		diff: GitDiff;
 		status: GitStatus;
+		from?: string;
+		fromPath?: string;
 	}[];
 }
 
@@ -50,7 +52,7 @@ export const Show = async (
 	const res = await Git({
 		directory: repository,
 		command: 'show',
-		args: hash ? [hash, '"--pretty=format:"'] : ['--pretty=format:']
+		args: hash ? [hash, '--pretty=format:'] : ['--pretty=format:']
 	});
 
 	const commit: PastCommit = {
@@ -63,33 +65,53 @@ export const Show = async (
 	for (let i = 0; i < files.length; i++) {
 		const file = files[i];
 
+		const isRename = file.includes('rename from') && file.includes('rename to');
+
 		if (file.length === 0) continue;
 
-		const [name, ...diff] = file.split('\n');
+		if (!isRename) {
+			const [name, ...diff] = file.split('\n');
 
-		const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
+			const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
 
-		const p = path.dirname(name.replace('a/', '').split(' b/').pop()!);
+			const p = path.dirname(name.replace('a/', '').split(' b/').pop()!);
 
-		let status: GitStatus | undefined = undefined;
+			let status: GitStatus | undefined = undefined;
 
-		if (file.includes('files /dev/null')) {
-			status = 'added';
-		} else if (file.includes('files a/') && file.includes('and b/')) {
-			status = 'modified';
+			if (file.includes('files /dev/null')) {
+				status = 'added';
+			} else if (file.includes('files a/') && file.includes('and b/')) {
+				status = 'modified';
+			}
+
+			if (_diff.files[0]?.type === 'AddedFile') status = 'added';
+			if (_diff.files[0]?.type === 'ChangedFile') status = 'modified';
+			if (_diff.files[0]?.type === 'DeletedFile') status = 'deleted';
+			if (_diff.files[0]?.type === 'RenamedFile') status = 'renamed';
+
+			commit.files.push({
+				filename: path.basename(name.replace('a/', '').split(' b/').pop()!),
+				path: p === '.' ? '' : p,
+				diff: _diff,
+				status: status ?? 'deleted'
+			});
+		} else {
+			const [name, similarity, from, to, ...diff] = file.split('\n');
+
+			const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
+
+			const toFile = to.match(/rename to (.*)/)?.[1];
+			const fromFile = from.match(/rename from (.*)/)?.[1];
+
+			commit.files.push({
+				filename: path.basename(toFile!),
+				path: path.dirname(toFile!),
+				diff: _diff,
+				status: 'renamed',
+				from: path.basename(fromFile!),
+				fromPath: path.dirname(fromFile!)
+			});
 		}
-
-		if (_diff.files[0]?.type === 'AddedFile') status = 'added';
-		if (_diff.files[0]?.type === 'ChangedFile') status = 'modified';
-		if (_diff.files[0]?.type === 'DeletedFile') status = 'deleted';
-		if (_diff.files[0]?.type === 'RenamedFile') status = 'renamed';
-
-		commit.files.push({
-			filename: path.basename(name.replace('a/', '').split(' b/').pop()!),
-			path: p === '.' ? '' : p,
-			diff: _diff,
-			status: status ?? 'deleted'
-		});
 	}
 
 	return commit;

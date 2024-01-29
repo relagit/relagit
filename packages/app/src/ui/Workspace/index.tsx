@@ -201,6 +201,23 @@ export default (props: WorkspaceProps) => {
 										}}
 									>
 										<div class="workspace__container__files__file__filename">
+											<Show when={commitFile.from}>
+												<span
+													class="sidebar__item__filename__path"
+													title={commitFile.fromPath}
+												>
+													{commitFile.fromPath}
+												</span>
+												<span class="sidebar__item__filename__name">
+													<span class="sidebar__item__filename__name__separator">
+														{commitFile.fromPath?.length ? '/' : ''}
+													</span>
+													{commitFile.from}
+												</span>
+												<span class="sidebar__item__filename__arrow">
+													<Icon name="arrow-right" />
+												</span>
+											</Show>
 											<span
 												class="workspace__container__files__file__filename__path"
 												title={commitFile.path}
@@ -260,7 +277,14 @@ export default (props: WorkspaceProps) => {
 							{historyOpen() ? selectedCommitFile()?.filename : file()?.file?.name}
 						</div>
 					</div>
-					<CodeView file={file()?.path || ''} repository={repo()!} />
+					<CodeView
+						file={file()?.path || ''}
+						repository={repo()!}
+						fromFile={path.join(
+							selectedCommitFile()?.fromPath || '',
+							selectedCommitFile()?.from || ''
+						)}
+					/>
 				</div>
 			</div>
 		</div>

@@ -156,6 +156,19 @@
 						white-space: nowrap;
 					}
 
+					&__arrow {
+						margin-inline: 4px;
+						opacity: 0.6;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						svg {
+							width: 12px;
+							height: 12px;
+						}
+					}
+
 					&__name {
 						white-space: nowrap;
 						overflow: hidden;

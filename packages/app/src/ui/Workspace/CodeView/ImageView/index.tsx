@@ -36,6 +36,7 @@ const mimeFromPath = (path: string) => {
 export interface ImageViewProps {
 	repository: string;
 	path: string;
+	fromPath?: string;
 	status: GitStatus;
 }
 
@@ -67,6 +68,7 @@ export default (props: ImageViewProps) => {
 	const repository = createStoreListener([RepositoryStore], () =>
 		RepositoryStore.getByPath(props.repository)
 	);
+
 	createEffect(async () => {
 		const out: [string | null, string | null] = [null, null];
 		const threwOut: [string | null, string | null] = [null, null];
@@ -76,7 +78,9 @@ export default (props: ImageViewProps) => {
 			try {
 				const remote = await Git.ShowOrigin(
 					repository(),
-					props.path.replace(props.repository, ''),
+					props.fromPath === '.'
+						? props.path.replace(props.repository, '')
+						: props.fromPath!.replace(props.repository, ''),
 					await Git.PreviousCommit(repository(), commit()?.hash), // this will return undefined if there is no commit passed, so we can use it here
 					'binary'
 				);
@@ -84,7 +88,7 @@ export default (props: ImageViewProps) => {
 				if (remote !== null) {
 					const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
 
-					out[0] = `data:${mimeFromPath(props.path)};base64,${base64}`;
+					out[0] = `data:${mimeFromPath(props.fromPath || props.path)};base64,${base64}`;
 
 					sizeOut[0] = remote.length;
 				}
