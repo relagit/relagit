@@ -34,7 +34,7 @@ export const ShowOrigin = async (
 		directory: repository.path,
 		command: 'show',
 		// make sure it only shows the raw file contents, no diff or anything
-		args: [`${treeish}:"${file}"`, '--', '--no-patch', '--format=format:', '--'],
+		args: ['--no-patch', '--format=format:', `${treeish}:${file}`],
 		opts: options
 	});
 
