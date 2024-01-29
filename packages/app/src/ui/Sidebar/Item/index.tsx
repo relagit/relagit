@@ -1,7 +1,7 @@
 import { Show } from 'solid-js';
 
 import { triggerWorkflow } from '@app/modules/actions';
-import { openInEditor } from '@app/modules/code';
+import { openInEditor } from '@app/modules/editor';
 import * as Git from '@app/modules/git';
 import { statusToAlpha } from '@app/modules/git/diff';
 import { addToGitignore } from '@app/modules/git/gitignore';

@@ -1,6 +1,6 @@
 import { Accessor, For, Setter, Show, createRoot } from 'solid-js';
 
-import { openInEditor } from '@app/modules/code';
+import { openInEditor } from '@app/modules/editor';
 import { t } from '@app/modules/i18n';
 import FileStore, { GitFile } from '@app/stores/files';
 import SettingsStore from '@app/stores/settings';

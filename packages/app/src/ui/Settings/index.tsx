@@ -34,6 +34,7 @@ export interface RadioGroupProps {
 	value: string;
 	onChange: (value: string) => void;
 	disabled?: boolean;
+	hints?: boolean;
 }
 
 export const RadioGroup = (props: RadioGroupProps) => {
@@ -72,6 +73,9 @@ export const RadioGroup = (props: RadioGroupProps) => {
 						>
 							<div class="check"></div>
 							{option.element}
+							<Show when={props.hints}>
+								<div class="hint">{option.value}</div>
+							</Show>
 						</div>
 					);
 				}}
@@ -300,6 +304,7 @@ const SettingsModal = () => {
 					{t('settings.restart')}
 				</p>
 				<RadioGroup
+					hints
 					options={[
 						{
 							element: t('settings.general.editor.code'),
@@ -312,6 +317,14 @@ const SettingsModal = () => {
 						{
 							element: t('settings.general.editor.subl'),
 							value: 'subl'
+						},
+						{
+							element: t('settings.general.editor.zed'),
+							value: 'zed'
+						},
+						{
+							element: t('settings.general.editor.fleet'),
+							value: 'fleet'
 						}
 					]}
 					value={settings()?.externalEditor || 'code'}

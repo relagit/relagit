@@ -45,7 +45,7 @@ export type Settings = {
 		height: number;
 	};
 	locale: ValidLocale;
-	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl';
+	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl' | 'fleet' | 'zed';
 	activeRepository: string | null;
 	repositories: string[];
 };

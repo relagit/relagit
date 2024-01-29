@@ -293,6 +293,13 @@
 			border: 1px solid var(--separator-primary);
 			border-radius: 50%;
 		}
+
+		.hint {
+			margin-left: auto;
+			color: var(--color-secondary);
+			font-size: 1rem;
+			font-weight: 400;
+		}
 	}
 }
 

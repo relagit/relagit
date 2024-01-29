@@ -1,6 +1,6 @@
 import { For, Show, createSignal, onMount } from 'solid-js';
 
-import { openInEditor } from '@app/modules/code';
+import { openInEditor } from '@app/modules/editor';
 import { t } from '@app/modules/i18n';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
 import OnboardingStore from '@app/stores/onboarding';

@@ -1,6 +1,6 @@
 import { For, Show } from 'solid-js';
 
-import { openInEditor } from '@app/modules/code';
+import { openInEditor } from '@app/modules/editor';
 import { statusToAlpha } from '@app/modules/git/diff';
 import { t } from '@app/modules/i18n';
 import { openExternal, showItemInFolder } from '@app/modules/shell';

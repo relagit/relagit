@@ -59,7 +59,9 @@ export default {
 				code: 'Visual Studio Code',
 				subl: 'Sublime Text',
 				'code-insiders': 'Visual Studio Code Insiders',
-				atom: 'Atom'
+				atom: 'Atom',
+				zed: 'Zed',
+				fleet: 'Fleet'
 			},
 			commitStyle: {
 				label: 'Commit Message Style',
@@ -114,7 +116,8 @@ export default {
 		corruptSettings: 'One or more of your configuration files are corrupt. Please reset them.',
 		fetching: 'Unexpected error while fetching repository status',
 		remote: 'Unexpected error while fetching remote status',
-		git: 'Unexpected error while executing git command'
+		git: 'Unexpected error while executing git command',
+		missingExternalEditor: 'RelaGit could not find your external editor in your PATH.'
 	},
 	ui: {
 		filepicker: {

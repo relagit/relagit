@@ -4,7 +4,7 @@ import type { RecursivePartial } from '@app/shared';
 import { createStoreListener } from '@app/stores';
 import FileStore from '@app/stores/files';
 import SettingsStore, { type Settings } from '@app/stores/settings';
-import { openInEditor } from '~/app/src/modules/code';
+import { openInEditor } from '~/app/src/modules/editor';
 import { Git } from '~/app/src/modules/git/core';
 import { statusToAlpha } from '~/app/src/modules/git/diff';
 import { GitHub, repoParams } from '~/app/src/modules/github';
