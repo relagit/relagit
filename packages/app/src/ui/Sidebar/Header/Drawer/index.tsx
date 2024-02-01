@@ -188,6 +188,8 @@ export default (props: HeaderDrawerProps) => {
 										onClick={() => {
 											props.open[1](false);
 
+											RepositoryStore.makePermanent(repository);
+
 											debug(
 												'Transitioning to repository: ' + repository.name
 											);
@@ -198,8 +200,10 @@ export default (props: HeaderDrawerProps) => {
 										<div class="sidebar__drawer__body__content__item__text">
 											{repository.name}
 											<div class="sidebar__drawer__body__content__item__text__details">
-												{repository.branch}
-												{' • '}
+												<Show when={repository.branch}>
+													{repository.branch}
+													{' • '}
+												</Show>
 												{renderDate(repository.lastFetched || 0)()}
 											</div>
 										</div>

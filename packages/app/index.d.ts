@@ -1,4 +1,4 @@
-import { refetchRepository, triggerWorkflow } from '@app/modules/actions';
+import { getRepositoryStatus, refetchRepository, triggerWorkflow } from '@app/modules/actions';
 import { showErrorModal } from '@app/ui/Modal';
 
 import { Native as _Native } from '../native/src/preload';
@@ -14,6 +14,7 @@ declare global {
 		Native: typeof _Native;
 
 		_refetchRepository: typeof refetchRepository;
+		_getRepositoryStatus: typeof getRepositoryStatus;
 		_showErrorModal: typeof showErrorModal;
 		_triggerWorkflow: typeof triggerWorkflow;
 	}

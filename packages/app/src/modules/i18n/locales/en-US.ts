@@ -79,6 +79,11 @@ export default {
 			preferParens: {
 				label: 'Prefer Parentheses',
 				description: 'Prefer parentheses over angle brackets for commit message styles.'
+			},
+			autoFetch: {
+				label: 'Auto Fetch Repositories',
+				description:
+					'Automatically fetch repositories on startup. Heavily impacts startup performance.'
 			}
 		},
 		appearance: {

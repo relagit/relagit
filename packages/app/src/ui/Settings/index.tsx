@@ -338,6 +338,16 @@ const SettingsModal = () => {
 					}}
 				/>
 			</div>
+			<div class="settings-layer__setting">
+				<Switch
+					label={t('settings.general.autoFetch.label')}
+					note={t('settings.general.autoFetch.description')}
+					value={() => settings()?.autoFetch || false}
+					onChange={(value) => {
+						SettingsStore.setSetting('autoFetch', value);
+					}}
+				/>
+			</div>
 		</>
 	);
 

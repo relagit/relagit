@@ -44,6 +44,7 @@ export type Settings = {
 		width: number;
 		height: number;
 	};
+	autoFetch: boolean;
 	locale: ValidLocale;
 	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl' | 'fleet' | 'zed';
 	activeRepository: string | null;

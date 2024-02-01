@@ -22,18 +22,12 @@ import './app.scss';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
-const loaded: string[] = [];
-
 export const queueRepositoryLoad = () => {
 	debug('Queueing repository load');
 
 	createStoreListener([SettingsStore], () => {
 		for (const repo of SettingsStore.getSetting('repositories')) {
 			if (SettingsStore.getSetting('activeRepository') === repo) continue;
-
-			if (loaded.includes(repo)) continue;
-
-			debug('Loading', repo);
 
 			if (!fs.existsSync(repo)) {
 				SettingsStore.setSetting(
@@ -44,12 +38,13 @@ export const queueRepositoryLoad = () => {
 				continue;
 			}
 
-			loaded.push(repo);
+			debug('Loading', repo);
 
-			Fetch(repo);
-
-			getRepositoryStatus(repo, true, true);
+			RepositoryStore.createDraft(repo);
 		}
+
+		debug('Emitting');
+		RepositoryStore._emit();
 	});
 };
 
@@ -83,10 +78,7 @@ export default () => {
 		}
 
 		// we want to load the active repository first to decrease the time to load the app
-		if (
-			SettingsStore.getSetting('activeRepository') &&
-			!loaded.includes(SettingsStore.getSetting('activeRepository')!)
-		)
+		if (SettingsStore.getSetting('activeRepository'))
 			if (!fs.existsSync(SettingsStore.getSetting('activeRepository') || '')) {
 				SettingsStore.setSetting(
 					'repositories',

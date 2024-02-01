@@ -1,6 +1,9 @@
 import { GenericStore } from '.';
 
+import { Fetch } from '@app/modules/git/fetch';
 import { debug } from '@app/modules/logger';
+
+import SettingsStore from './settings';
 
 export interface Repository {
 	draft?: boolean;
@@ -24,6 +27,11 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 
 	get repositories() {
 		return this.#record;
+	}
+
+	// we must have this in order to not emit many times on startup
+	public _emit() {
+		this.emit();
 	}
 
 	getById(id: string | undefined) {
@@ -82,6 +90,41 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 	clearRepositories() {
 		this.#record.clear();
 		this.emit();
+	}
+
+	createDraft(path: string) {
+		if (Array.from(this.#record.values()).some((r) => r.path === path)) return;
+
+		const name = path.split('/').pop()!;
+
+		const repository: Repository = {
+			id: Math.random().toString(16).split('.')[1],
+			path,
+			name,
+			remote: '',
+			branch: '',
+			commit: '',
+			ahead: 0,
+			behind: 0,
+			draft: true,
+			lastFetched: Date.now()
+		};
+
+		this.repositories.set(repository.id, repository);
+
+		if (SettingsStore.settings.autoFetch) {
+			this.makePermanent(repository);
+		}
+	}
+
+	makePermanent(repository: Repository) {
+		if (!repository.draft) return;
+
+		Fetch(repository.path);
+
+		this.#record.delete(repository.id); // we are explicitly NOT emitting here, as this will cause the repository to disappear from the UI
+
+		window._getRepositoryStatus(repository.path, true, true, repository.id);
 	}
 })();
 

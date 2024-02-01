@@ -184,7 +184,8 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 export const getRepositoryStatus = async (
 	directory: string | undefined,
 	refetchFiles?: boolean,
-	refetchRemotes?: boolean
+	refetchRemotes?: boolean,
+	useId?: string
 ) => {
 	try {
 		if (!directory) return;
@@ -205,7 +206,7 @@ export const getRepositoryStatus = async (
 				});
 			} else {
 				RepositoryStore.addRepository({
-					id: Math.random().toString(16).split('.')[1],
+					id: useId || Math.random().toString(16).split('.')[1],
 					path: directory,
 					name: path.basename(directory),
 					remote: info.remote,
@@ -224,7 +225,7 @@ export const getRepositoryStatus = async (
 			} else {
 				RepositoryStore.addRepository({
 					draft: true,
-					id: Math.random().toString(16).split('.')[1],
+					id: useId || Math.random().toString(16).split('.')[1],
 					path: directory,
 					name: path.basename(directory),
 					remote: '',
@@ -277,3 +278,4 @@ export const refetchRepository = async (repository: Repository | undefined) => {
 };
 
 window._refetchRepository = refetchRepository;
+window._getRepositoryStatus = getRepositoryStatus;
