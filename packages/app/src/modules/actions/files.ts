@@ -241,6 +241,10 @@ export const getRepositoryStatus = async (
 		if (refetchFiles) await getFileStatus(directory);
 		if (refetchRemotes) await remoteStatus(directory);
 
+		if (LocationStore.selectedRepository?.id === useId) {
+			LocationStore.setSelectedRepository(RepositoryStore.getByPath(directory));
+		}
+
 		return RepositoryStore.getByPath(directory)!;
 	} catch (error) {
 		showErrorModal(error, 'error.fetching');
