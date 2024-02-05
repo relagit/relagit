@@ -28,8 +28,9 @@
 		font-family: var(--font-mono);
 
 		&[tabindex] {
-			@include mixins.focusable;
 			cursor: pointer;
+
+			@include mixins.focusable;
 		}
 	}
 
