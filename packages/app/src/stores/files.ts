@@ -1,5 +1,6 @@
 import { GenericStore } from '.';
 
+import { Submodule } from '@app/modules/git/submodule';
 import { GitStatus } from '@modules/git/diff';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
@@ -11,6 +12,7 @@ export interface GitFile {
 	status: GitStatus;
 	from?: string;
 	fromPath?: string;
+	submodule?: Submodule;
 }
 
 const FileStore = new (class FileStore extends GenericStore {

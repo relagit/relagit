@@ -67,7 +67,12 @@ const fileValidator = (path: string) => {
 	return true;
 };
 
-const CloneModal = () => {
+export interface CloneModalProps {
+	url?: string;
+	tab?: string | number;
+}
+
+const CloneModal = (props: CloneModalProps) => {
 	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
 		null
 	);
@@ -77,8 +82,8 @@ const CloneModal = () => {
 	const [error, setError] = createSignal(false);
 	const [dirError, setDirError] = createSignal<string>('');
 	const [path, setPath] = createSignal('');
-	const [url, setURL] = createSignal('');
-	const [tab, setTab] = createSignal<string | number>('github');
+	const [url, setURL] = createSignal(props.url || '');
+	const [tab, setTab] = createSignal<string | number>(props.tab || 'github');
 
 	onMount(() => {
 		try {
@@ -276,6 +281,9 @@ const CloneModal = () => {
 
 export default CloneModal;
 
-export const showCloneModal = () => {
-	ModalStore.pushState('clone', createRoot(CloneModal));
+export const showCloneModal = (tab?: string, url?: string) => {
+	ModalStore.pushState(
+		'clone',
+		createRoot(() => <CloneModal url={url} tab={tab} />)
+	);
 };

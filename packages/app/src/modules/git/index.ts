@@ -1,6 +1,7 @@
 export { ListBranches, Checkout, CreateBranch, DeleteBranch, PushWithOrigin } from './branches';
 export { Stash, ListStash, PopStash, RemoveStash } from './stash';
 export { PreviousCommit } from './previous-commit';
+export { SubmoduleStatus } from './submodule';
 export { Remote, AddRemote } from './remote';
 export { Show, ShowOrigin } from './show';
 export { Discard } from './discard';

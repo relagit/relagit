@@ -203,6 +203,14 @@ export default {
 		now: 'Just now'
 	},
 	codeview: {
+		submodule: {
+			title: 'Submodule Changes',
+			cloned: 'Cloned to',
+			from: 'Fetching changes from',
+			revision: 'Submodule is on revision',
+			clone: 'Clone Submodule',
+			cloneHint: 'Clone this submodule from remote to commit changes to it directly.'
+		},
 		imageview: {
 			error: 'Could not find an image to display',
 			errorHint: 'This is probably because the image is too big to display.'

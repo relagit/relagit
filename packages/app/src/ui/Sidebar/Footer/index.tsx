@@ -11,7 +11,7 @@ import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
 import * as Git from '@modules/git';
 import * as logger from '@modules/logger';
-import FilesStore from '@stores/files';
+import FileStore from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import SettingsStore from '@stores/settings';
@@ -29,10 +29,10 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
 		DraftStore.getDraft(LocationStore.selectedRepository?.path)
 	);
-	const changes = createStoreListener([FilesStore, LocationStore], () =>
-		FilesStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
+	const changes = createStoreListener([FileStore, LocationStore], () =>
+		FileStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
 	);
-	const staged = createStoreListener([FilesStore, LocationStore], () =>
+	const staged = createStoreListener([FileStore, LocationStore], () =>
 		StageStore.hasStagedFiles(LocationStore.selectedRepository?.path)
 	);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
@@ -40,7 +40,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	);
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
-	const dangerous = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
+	const dangerous = createStoreListener([SettingsStore, LocationStore, FileStore], () => {
 		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path);
 
 		if (!files?.length) return false;
@@ -50,7 +50,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 		return files?.some((file) => DANGEROUS.some((regex) => regex.test(file)));
 	});
 
-	const commitMessage = createStoreListener([SettingsStore, LocationStore, FilesStore], () => {
+	const commitMessage = createStoreListener([SettingsStore, LocationStore, FileStore], () => {
 		const files = StageStore.getStagedFilePaths(LocationStore.selectedRepository?.path)?.map(
 			(f) => f.replaceAll('\\', '"').replace(/(^")|("$)/g, '')
 		);

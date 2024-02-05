@@ -11,6 +11,7 @@ import './index.scss';
 
 export interface RepositoryModalProps {
 	tab: 'add' | 'create';
+	path?: string;
 }
 
 let latestSetTab: (tab: number) => void;
@@ -25,7 +26,7 @@ const RepositoryModal = (props: RepositoryModalProps) => {
 	}
 
 	const [tab, setTab] = createSignal(initialTab);
-	const draftPath = createSignal('');
+	const draftPath = createSignal(props.path || '');
 
 	latestSetTab = setTab;
 
@@ -60,12 +61,12 @@ const RepositoryModal = (props: RepositoryModalProps) => {
 
 export default RepositoryModal;
 
-export const showRepoModal = (tab: RepositoryModalProps['tab'] = 'add') => {
+export const showRepoModal = (tab: RepositoryModalProps['tab'] = 'add', path?: string) => {
 	if (ModalStore.state.active?.type.startsWith('repository'))
 		return latestSetTab(tab === 'add' ? 0 : 1);
 
 	ModalStore.pushState(
 		`repository-${tab}`,
-		createRoot(() => <RepositoryModal tab={tab} />)
+		createRoot(() => <RepositoryModal tab={tab} path={path} />)
 	);
 };

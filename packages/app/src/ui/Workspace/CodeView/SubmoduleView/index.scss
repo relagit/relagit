@@ -1,0 +1,49 @@
+.submodule-view {
+	padding: 32px 20%;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	user-select: none;
+
+	&__header {
+		font-size: 2rem;
+	}
+
+	&__info {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+
+		&__item {
+			font-size: 1rem;
+		}
+	}
+
+	code {
+		font-size: 0.9rem;
+		color: var(--color-secondary);
+		background: var(--bg-tertiary);
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-family: var(--font-mono);
+
+		&[tabindex] {
+			@include mixins.focusable;
+			cursor: pointer;
+		}
+	}
+
+	&__clone {
+		margin-top: 16px;
+		padding: 16px;
+		background: var(--bg-tertiary);
+		border-radius: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+
+		&__header {
+			color: var(--color-primary);
+		}
+	}
+}

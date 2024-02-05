@@ -1,4 +1,5 @@
 import * as Git from '@modules/git';
+import type { Submodule } from '@modules/git/submodule';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import LocationStore from '@stores/location';
@@ -59,7 +60,12 @@ const isDirectory = async (file: string) => {
 	}
 };
 
-export const getFileStatus = async (directory: string, file?: string, stat?: string) => {
+export const getFileStatus = async (
+	directory: string,
+	file?: string,
+	stat?: string,
+	submodules?: Submodule[]
+) => {
 	if (file) {
 		if (FileStore.getByPath(directory, file)) return;
 	} else {
@@ -73,6 +79,18 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 		if (FileStore.getByPath(directory, file)) {
 			warn('File already exists, not adding again');
+
+			return;
+		}
+
+		if (submodules?.find((s) => s.relativePath === file)) {
+			FileStore.addFile(directory, {
+				id: Math.random().toString(16).split('.')[1],
+				name: path.basename(file),
+				path: file.replace(path.basename(file), '').replace(/[\/\\]$/, ''),
+				status: Git.statusFrom(stat),
+				submodule: submodules.find((s) => s.relativePath === file)
+			});
 
 			return;
 		}
@@ -134,6 +152,18 @@ export const getFileStatus = async (directory: string, file?: string, stat?: str
 
 	for (const file of files.sort(fileSort)) {
 		const { status, path: p } = file;
+
+		if (submodules?.find((s) => s.relativePath === p)) {
+			FileStore.addFile(directory, {
+				id: Math.random().toString(16).split('.')[1],
+				name: path.basename(p),
+				path: p.replace(path.basename(p), '').replace(/[\/\\]$/, ''),
+				status: Git.statusFrom(status),
+				submodule: submodules.find((s) => s.relativePath === p)
+			});
+
+			continue;
+		}
 
 		if (await isDirectory(path.join(directory, p))) {
 			const subFiles = await promises.readdir(path.join(directory, p));
@@ -238,7 +268,11 @@ export const getRepositoryStatus = async (
 			}
 		}
 
-		if (refetchFiles) await getFileStatus(directory);
+		const submodules = await Git.SubmoduleStatus(directory);
+
+		console.log(submodules);
+
+		if (refetchFiles) await getFileStatus(directory, undefined, undefined, submodules);
 		if (refetchRemotes) await remoteStatus(directory);
 
 		if (LocationStore.selectedRepository?.id === useId) {
