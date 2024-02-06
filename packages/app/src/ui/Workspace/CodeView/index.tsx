@@ -175,7 +175,7 @@ export default (props: CodeViewProps) => {
 					setDiff(parsed);
 				}
 
-				setShouldShow(totalLines(content() || (diff() as GitDiff)?.files?.[0]) < 250);
+				setShouldShow(totalLines((diff() as GitDiff)?.files?.[0]) < 250);
 			} else {
 				setShouldShow(true);
 			}
