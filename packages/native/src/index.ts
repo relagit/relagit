@@ -4,7 +4,8 @@ import {
 	MenuItemConstructorOptions,
 	app,
 	nativeImage,
-	nativeTheme
+	nativeTheme,
+	webContents
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
@@ -28,12 +29,38 @@ app.setAboutPanelOptions({
 	website: 'https://rela.dev'
 });
 
-setInterval(() => {
-	if (process.env.NODE_ENV === 'development') return;
+const updateCheck = () => {
+	if (__NODE_ENV__ === 'development') return;
+
 	autoUpdater.checkForUpdatesAndNotify();
 
-	autoUpdater.logger = console;
-}, 60000);
+	autoUpdater.logger = {
+		info: (message: string) =>
+			webContents
+				.getAllWebContents()
+				.forEach((w) =>
+					w.executeJavaScript(`console.info(\`${message.replace('`', '\\`')}\`)`)
+				),
+		error: (message: string) =>
+			webContents
+				.getAllWebContents()
+				.forEach((w) =>
+					w.executeJavaScript(`console.error(\`${message.replace('`', '\\`')}\`)`)
+				),
+		warn: (message: string) =>
+			webContents
+				.getAllWebContents()
+				.forEach((w) =>
+					w.executeJavaScript(`console.warn(\`${message.replace('`', '\\`')}\`)`)
+				)
+	};
+};
+
+app.on('ready', () => {
+	updateCheck();
+});
+
+setInterval(updateCheck, 60000);
 
 const constructWindow = async () => {
 	const settings = await getSettings();
