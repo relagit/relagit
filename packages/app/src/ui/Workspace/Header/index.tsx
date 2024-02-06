@@ -520,6 +520,10 @@ export default () => {
 											}}
 											onClick={async () => {
 												try {
+													if (branch.gitName === repository()?.branch) {
+														return;
+													}
+
 													await Git.Checkout(
 														LocationStore.selectedRepository,
 														branch.gitName
@@ -581,6 +585,22 @@ export default () => {
 											if (e.key === 'Enter') {
 												if (!newBranch()) return;
 
+												if (newBranch() === repository()?.branch) {
+													setNewBranch('');
+
+													return;
+												}
+
+												if (
+													branches()?.find(
+														(b) => b.gitName === newBranch()
+													)
+												) {
+													setNewBranch('');
+
+													return;
+												}
+
 												try {
 													await Git.CreateBranch(
 														LocationStore.selectedRepository,
@@ -609,6 +629,20 @@ export default () => {
 											const input = inputRef()?.querySelector('input');
 
 											if (!input?.value) return;
+
+											if (input.value === repository()?.branch) {
+												setNewBranch('');
+
+												return;
+											}
+
+											if (
+												branches()?.find((b) => b.gitName === input.value)
+											) {
+												setNewBranch('');
+
+												return;
+											}
 
 											try {
 												await Git.CreateBranch(
