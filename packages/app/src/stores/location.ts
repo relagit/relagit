@@ -82,6 +82,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	}
 
 	setSelectedFile(file: GitFile | undefined) {
+		if (file?.id === this.#selectedFile?.id) return;
+
 		this.#selectedFile = file;
 		this.emit();
 
@@ -109,6 +111,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	}
 
 	setSelectedCommitFile(file: PastCommit['files'][number] | undefined) {
+		if (file === this.#selectedCommitFile) return;
+
 		this.#selectedCommitFile = file;
 		this.emit();
 	}

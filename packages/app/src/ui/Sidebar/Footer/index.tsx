@@ -75,6 +75,8 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 		clearTimeout(timeout);
 
 		timeout = setTimeout(() => {
+			if (LocationStore.isRefetchingSelectedRepository) return;
+
 			setDebouncedShowing((selected() && changes() && staged()) || false);
 		}, 500);
 	});
