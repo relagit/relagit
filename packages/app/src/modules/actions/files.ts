@@ -296,7 +296,8 @@ export const refetchRepository = async (repository: Repository | undefined) => {
 
 	const currentFile = LocationStore.selectedFile;
 
-	LocationStore.setSelectedFile(undefined);
+	if (FileStore.getByRepositoryPath(repository.path)?.includes(currentFile!))
+		LocationStore.setSelectedFile(undefined);
 
 	FileStore.removeFiles(repository.path);
 	RemoteStore.removeByRepoPath(repository.path);
