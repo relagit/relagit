@@ -53,7 +53,7 @@ export default defineConfig({
 		format: 'cjs',
 		dir: path.resolve(__dirname, '../../dist')
 	},
-	external: Module.builtinModules.concat(['electron']),
+	external: Module.builtinModules.concat(['electron', 'electron-updater']),
 	plugins: [
 		IS_DEV && sourcemaps(),
 		replace({

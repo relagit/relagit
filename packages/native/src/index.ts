@@ -6,6 +6,7 @@ import {
 	nativeImage,
 	nativeTheme
 } from 'electron';
+import { autoUpdater } from 'electron-updater';
 
 import * as path from 'path';
 
@@ -26,6 +27,13 @@ app.setAboutPanelOptions({
 	copyright: 'Copyright © 2023-2024 TheCommieAxolotl & RelaGit contributors',
 	website: 'https://rela.dev'
 });
+
+setInterval(() => {
+	if (process.env.NODE_ENV === 'development') return;
+	autoUpdater.checkForUpdatesAndNotify();
+
+	autoUpdater.logger = console;
+}, 60000);
 
 const constructWindow = async () => {
 	const settings = await getSettings();
