@@ -26,7 +26,7 @@ app.setAboutPanelOptions({
 	applicationVersion: pkj.version,
 	version: __COMMIT_HASH__,
 	copyright: 'Copyright © 2023-2024 TheCommieAxolotl & RelaGit contributors',
-	website: 'https://rela.dev'
+	website: 'https://git.rela.dev'
 });
 
 const updateCheck = () => {
