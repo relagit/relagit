@@ -45,6 +45,10 @@ const extname = (file: string | undefined) => {
 };
 
 const totalLines = (file: string | GitDiff['files'][number]) => {
+	if (!file) {
+		return 0;
+	}
+
 	if (typeof file === 'string') {
 		return file.split('\n').length;
 	}
