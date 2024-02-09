@@ -1,6 +1,9 @@
 import def from '@content/modules/actions/def.d.ts';
+import { createRoot } from 'solid-js';
 
+import NotificationStore from '@app/stores/notification';
 import { type IconName } from '@app/ui/Common/Icon';
+import Notification, { NotificationProps } from '@app/ui/Notification';
 import * as Git from '@modules/git';
 import LocationStore from '@stores/location';
 import RepositoryStore, { type Repository } from '@stores/repository';
@@ -146,7 +149,18 @@ export const require = (id: string) => {
 							this.hooks = options.hooks;
 						}
 					},
-					context: getContext
+					context: getContext,
+					notifications: {
+						show: (id: string, props: NotificationProps) => {
+							NotificationStore.add(
+								id,
+								createRoot(() => <Notification {...props} id={id} />)
+							);
+						},
+						hide: (id: string) => {
+							NotificationStore.remove(id);
+						}
+					}
 				};
 			case 'client':
 				return {};

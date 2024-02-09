@@ -245,17 +245,43 @@ interface Actions {
 	 * @returns {Context}
 	 */
 	context: () => Context;
+	notifications: {
+		show: (
+			id: string,
+			props: {
+				id: string;
+				icon: keyof typeof import('@primer/octicons');
+				title: string;
+				description: string;
+				level: 'info' | 'warning' | 'error' | 'success';
+				timeout?: number,
+				actions?: ({
+					children: unknown;
+					type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
+					onClick?: () => void | Promise<void>;
+					className?: string;
+					disabled?: boolean;
+					dedupe?: boolean;
+					label: string;
+				} & {
+					dismiss?: boolean;
+				})[];
+			}
+		) => void;
+		hide: (id: string) => void;
+	};
 }
 
 // NOTE: uncomment these to use prettier, it throws an error when it sees the exported types below
-// const Workflow = () => {};
-// const context = () => {};
-// const Theme = () => {};
+// const Workflow = null,
+// 	context = null,
+// 	Theme = null,
+// 	notifications = null;
 
 declare module 'relagit:actions' {
-	const { Workflow, context }: Actions;
+	const { Workflow, context, notifications }: Actions;
 
-	export { Workflow, context };
+	export { Workflow, context, notifications };
 }
 
 declare module 'relagit:themes' {
