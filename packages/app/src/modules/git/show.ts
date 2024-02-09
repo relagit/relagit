@@ -96,7 +96,7 @@ export const Show = async (
 				status: status ?? 'deleted'
 			});
 		} else {
-			const [name, similarity, from, to, ...diff] = file.split('\n');
+			const [name, , from, to, ...diff] = file.split('\n');
 
 			const _diff = parseDiff('diff --git ' + name + '\n' + diff.join('\n') + '');
 
