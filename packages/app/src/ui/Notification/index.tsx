@@ -1,4 +1,4 @@
-import { For, createSignal, onMount } from 'solid-js';
+import { For, Show, createSignal, onMount } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
@@ -10,7 +10,7 @@ import Layer from '@ui/Layer';
 
 import './index.scss';
 
-interface NotificationProps {
+export interface NotificationProps {
 	id: string;
 	icon: IconName;
 	title: string;
@@ -19,10 +19,13 @@ interface NotificationProps {
 	actions?: (ButtonProps & {
 		dismiss?: boolean;
 	})[];
+	timeout?: number;
 }
 
 export const Notification = (props: NotificationProps) => {
 	const [ref, setRef] = createSignal<HTMLDivElement>();
+
+	let timeout: number | NodeJS.Timeout;
 
 	onMount(() => {
 		const element: HTMLElement | null | undefined = ref()?.querySelector(
@@ -30,6 +33,16 @@ export const Notification = (props: NotificationProps) => {
 		);
 
 		if (element) element.focus();
+
+		if (props.timeout) {
+			timeout = setTimeout(() => {
+				NotificationStore.remove(props.id);
+			}, props.timeout);
+		}
+	});
+
+	NotificationStore.onRemoved(props.id, () => {
+		clearTimeout(timeout);
 	});
 
 	return (
@@ -57,6 +70,17 @@ export const Notification = (props: NotificationProps) => {
 					)}
 				</For>
 			</div>
+			<Show when={props.timeout}>
+				<div class="notification__timeout">
+					<div
+						classList={{
+							notification__timeout__bar: true,
+							[props.level]: true
+						}}
+						style={`animation-duration: ${props.timeout}ms`}
+					/>
+				</div>
+			</Show>
 		</div>
 	);
 };

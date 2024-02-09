@@ -3,6 +3,7 @@ import { JSX } from 'solid-js';
 
 const NotificationStore = new (class NotificationStore extends GenericStore {
 	#state: Record<string, JSX.Element> = {};
+	#removeListeners: Record<string, () => void> = {};
 
 	constructor() {
 		super();
@@ -10,6 +11,10 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 
 	get state() {
 		return Object.values(this.#state);
+	}
+
+	onRemoved(type: string, callback: () => void) {
+		this.#removeListeners[type] = callback;
 	}
 
 	add(type: string, component: JSX.Element) {
@@ -25,11 +30,20 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 	remove(type: string) {
 		delete this.#state[type];
 
+		if (this.#removeListeners[type]) {
+			this.#removeListeners[type]();
+			delete this.#removeListeners[type];
+		}
+
 		this.emit();
 	}
 
 	clear() {
 		this.#state = {};
+
+		for (const type in this.#removeListeners) {
+			this.#removeListeners[type]();
+		}
 
 		this.emit();
 	}

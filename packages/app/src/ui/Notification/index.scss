@@ -1,3 +1,12 @@
+@keyframes slidein {
+	0% {
+		scale: 1 1;
+	}
+	100% {
+		scale: 0 1;
+	}
+}
+
 .layer[data-key='notification'] {
 	pointer-events: none !important;
 	display: flex;
@@ -19,6 +28,8 @@
 	gap: 16px;
 	pointer-events: all;
 	max-width: 400px;
+	position: relative;
+	overflow: hidden;
 
 	@include mixins.focusable;
 
@@ -62,6 +73,24 @@
 
 		&:empty {
 			display: none;
+		}
+	}
+
+	&__timeout {
+		height: 2px;
+		width: 100%;
+		overflow: hidden;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		&__bar {
+			height: 100%;
+			width: 100%;
+			background-color: var(--base-lighter-grey);
+			animation: slidein 5s linear forwards;
+			transform-origin: left;
 		}
 	}
 
