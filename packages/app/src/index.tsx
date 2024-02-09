@@ -55,12 +55,4 @@ DO NOT paste any code into this console that you have not written yourself or th
 
 const root = document.getElementById('root')!;
 
-if (__NODE_ENV__ === 'development') {
-	import('@solid-devtools/overlay').then((devtools) => {
-		devtools.attachDevtoolsOverlay();
-
-		render(() => <App />, root);
-	});
-} else {
-	render(() => <App />, root);
-}
+render(() => <App />, root);
