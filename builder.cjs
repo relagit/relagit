@@ -37,9 +37,22 @@ const config = {
 		console.log('Signing app...');
 
 		// we are forced to do this becuase apple locks unsigned apps on macOS 11+ on ARM machines
-		const cmd = 'codesign --force --deep -s - ./out/mac-arm64/RelaGit.app';
 
-		await exec(cmd);
+		try {
+			const cmd = 'codesign --force --deep -s - ./out/mac-arm64/RelaGit.app';
+
+			await exec(cmd);
+		} catch (err) {
+			console.warn('Failed to sign arm64');
+		}
+
+		try {
+			const cmd = 'codesign --force --deep -s - ./out/mac/RelaGit.app';
+
+			await exec(cmd);
+		} catch (err) {
+			console.warn('Failed to sign x64');
+		}
 	},
 	dmg: {
 		background: './build/background.png',
