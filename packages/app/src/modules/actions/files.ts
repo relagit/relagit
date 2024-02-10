@@ -270,8 +270,6 @@ export const getRepositoryStatus = async (
 
 		const submodules = await Git.SubmoduleStatus(directory);
 
-		console.log(submodules);
-
 		if (refetchFiles) await getFileStatus(directory, undefined, undefined, submodules);
 		if (refetchRemotes) await remoteStatus(directory);
 
