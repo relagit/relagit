@@ -14,7 +14,7 @@
 
 # relagit
 
-A next-generation git client. Enables you to take back control over your git workflow.
+The elegant solution to graphical version control. Enables you to take back control over your git workflow.
 
 ## Download
 
