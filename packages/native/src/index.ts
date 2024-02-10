@@ -18,7 +18,7 @@ import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
 import openPopout, { popout, reposition } from './modules/popout';
 import initProtocol from './modules/protocol';
-import { backgroundFromTheme, getSettings, setSettings } from './modules/settings';
+import { backgroundFromTheme, getSettings, updateSettings } from './modules/settings';
 import { updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
@@ -96,12 +96,16 @@ const constructWindow = async () => {
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';
+		backgroundMaterial = 'mica';
+		transparent = process.platform === 'win32';
+		backgroundColor = '#00000000';
 
-		if (process.platform === 'win32') {
-			backgroundMaterial = 'mica';
-			transparent = true;
-			backgroundColor = '#00000000';
-		}
+		updateSettings({
+			ui: {
+				...settings.ui,
+				vibrancy: true
+			}
+		});
 	}
 
 	const win = new BrowserWindow({
@@ -136,21 +140,23 @@ const constructWindow = async () => {
 	});
 
 	win.on('move', () => {
-		settings.window ??= {};
-
-		settings.window.x = win.getPosition()[0];
-		settings.window.y = win.getPosition()[1];
-
-		setSettings(settings);
+		updateSettings({
+			window: {
+				...settings.window,
+				x: win.getPosition()[0],
+				y: win.getPosition()[1]
+			}
+		});
 	});
 
 	win.on('resize', () => {
-		settings.window ??= {};
-
-		settings.window.width = win.getSize()[0];
-		settings.window.height = win.getSize()[1];
-
-		setSettings(settings);
+		updateSettings({
+			window: {
+				...settings.window,
+				x: win.getPosition()[0],
+				y: win.getPosition()[1]
+			}
+		});
 	});
 
 	win.on('focus', () => {

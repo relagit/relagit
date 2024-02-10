@@ -34,6 +34,10 @@ export const getSettings = async (): Promise<RecursivePartial<Settings>> => {
 	}
 };
 
-export const setSettings = async (settings: RecursivePartial<Settings>) => {
-	await promises.writeFile(__SETTINGS_PATH__, JSON.stringify(settings, null, 2));
+export const updateSettings = async (settings: RecursivePartial<Settings>) => {
+	const current = await getSettings();
+
+	const newSettings = { ...current, ...settings };
+
+	await promises.writeFile(__SETTINGS_PATH__, JSON.stringify(newSettings, null, 2));
 };

@@ -4,7 +4,7 @@ import path from 'path';
 
 import * as ipc from '~/common/ipc';
 
-import { getSettings, setSettings } from './settings';
+import { getSettings, updateSettings } from './settings';
 
 export let popout: BrowserWindow | null = null;
 
@@ -86,7 +86,7 @@ export default async () => {
 		settings.popout.x = x;
 		settings.popout.y = y;
 
-		setSettings(settings);
+		updateSettings(settings);
 	});
 
 	popout.on('move', () => {
@@ -100,7 +100,7 @@ export default async () => {
 		settings.popout.x = x;
 		settings.popout.y = y;
 
-		setSettings(settings);
+		updateSettings(settings);
 	});
 
 	ipcMain.once(ipc.POPOUT_CLOSE, () => {
