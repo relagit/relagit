@@ -31,6 +31,7 @@ Builds are generated automatically upon [release](https://github.com/relagit/rel
 
 Before we hit the first stable release, the following features should be implemented:
 - [x] Support for git submodules.
+- [ ] Use libgit2 for git operations instead of the git CLI.
 - [ ] Optimisation of git processes and operations, currently there is noticable CPU strain on startup.
 - [ ] Commit graph in information modal.
 
