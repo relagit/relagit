@@ -57,3 +57,7 @@ pnpm make:{platform}
 Replace `platform` with one of the [supported platforms](https://github.com/relagit/relagit/blob/main/package.json#L19-L21) (e.g. `make:mac`).
 
 You will find an executable in the `out` folder.
+
+## Creating Workflows
+
+Please refer to the [Creating Workflows](https://git.rela.dev/docs/workflows/creating-workflows) tutorial.
