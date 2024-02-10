@@ -2,7 +2,7 @@
 [![Release](https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg)](https://github.com/relagit/relagit/actions/workflows/release.yml)
 
 > [!NOTE]
-> RelaGit is far from stable, take caution when using it for production projects.
+> RelaGit is in an early beta stage. Please report any issues you encounter [on our issue tracker](https://github.com/relagit/relagit/issues/new)
 
 <div align="center">
 	<picture>
