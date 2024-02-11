@@ -78,13 +78,21 @@ const Modal = (props: ModalProps) => {
 		if (e.key === 'Tab') {
 			e.preventDefault();
 
-			const focusableElements = ref()?.querySelectorAll(
-				':is(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):not([disabled])'
+			const focusableElements = Array.from(
+				ref()?.querySelectorAll(
+					':is(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):not([disabled])'
+				) || []
+			).concat(
+				Array.from(
+					document.querySelectorAll(
+						'.dropdown__options > :is(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):not([disabled])'
+					)
+				)
 			);
 
 			if (!focusableElements) return;
 
-			const activeElementIndex = Array.from(focusableElements).indexOf(
+			const activeElementIndex = focusableElements.indexOf(
 				document.activeElement as HTMLElement
 			);
 

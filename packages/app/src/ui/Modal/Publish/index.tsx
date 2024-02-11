@@ -16,6 +16,7 @@ import { error } from '@app/modules/logger';
 import ModalStore from '@app/stores/modal';
 import { Repository } from '@app/stores/repository';
 import Button from '@app/ui/Common/Button';
+import Dropdown from '@app/ui/Common/Dropdown';
 import EmptyState from '@app/ui/Common/EmptyState';
 import TextArea from '@app/ui/Common/TextArea';
 import { Switch } from '@app/ui/Settings';
@@ -29,8 +30,14 @@ const PublishModal = (props: { repo: Repository }) => {
 	const [description, setDescription] = createSignal('');
 	const [isPrivate, setIsPrivate] = createSignal(true);
 	const [willPush, setWillPush] = createSignal(false);
-	// TODO: support changing owner
 	const [owner, setOwner] = createSignal<GithubUser | GithubOrg | undefined>(getUser());
+	const [orgs, setOrgs] = createSignal<GithubOrg[]>([]);
+
+	GitHub('user/orgs')
+		.stream(10)
+		.then((orgs) => {
+			setOrgs(orgs);
+		});
 
 	return (
 		<Modal size="medium" dismissable id="publish">
@@ -84,6 +91,28 @@ const PublishModal = (props: { repo: Repository }) => {
 										setDescription(val);
 									}}
 								/>
+								<label class="publish-modal__content__label">
+									{t('modal.publish.owner')}
+								</label>
+								<Dropdown
+									label={t('modal.publish.owner')}
+									value={owner()}
+									onChange={(val) => {
+										setOwner(val);
+									}}
+									options={[
+										{
+											value: getUser(),
+											label: getUser()?.login || '',
+											icon: getUser()?.avatar_url
+										},
+										...orgs().map((org) => ({
+											value: org,
+											label: org.login,
+											icon: org.avatar_url
+										}))
+									]}
+								/>
 								<Switch
 									label={t('modal.publish.private')}
 									value={isPrivate}
@@ -133,7 +162,7 @@ const PublishModal = (props: { repo: Repository }) => {
 
 											let repo: GitHubRepository | undefined;
 
-											if (owner()!.type === 'Organization') {
+											if (owner()!.type !== 'User') {
 												const res = await GitHub('orgs/:org/repos')
 													.headers({
 														Accept: 'application/vnd.github.v3+json'

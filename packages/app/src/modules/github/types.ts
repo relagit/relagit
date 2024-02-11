@@ -216,6 +216,7 @@ export interface GithubResponse {
 	'users/:username/repos': [[string], GitHubRepository[]];
 	'users/:username': [[string], GithubUser];
 	'repos/:username/:repo/readme': [[string, string], GitHubReadme];
+	'user/orgs': [[], GithubOrg[]];
 	'user/repos': [[], GitHubRepository[]];
 	'orgs/:org/repos': [[string], GitHubRepository[]];
 	user: [[], GithubUser];

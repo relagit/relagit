@@ -70,8 +70,14 @@ export const GitHub = <T extends keyof GithubResponse>(
 		case 'users/:username':
 			url += 'users/[username]?';
 			break;
+		case 'orgs/:org/repos':
+			url += 'orgs/[org]/repos?per_page=32&sort=updated&type=all';
+			break;
 		case 'user/repos':
 			url += 'user/repos?per_page=32&sort=updated&type=all';
+			break;
+		case 'user/orgs':
+			url += 'user/orgs?per_page=32';
 			break;
 		case 'user':
 			url += 'user?';
