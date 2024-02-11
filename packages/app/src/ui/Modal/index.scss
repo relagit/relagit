@@ -136,6 +136,7 @@
 			flex: 1;
 			overflow-y: auto;
 			user-select: none;
+			scrollbar-gutter: stable;
 		}
 
 		&__footer {
