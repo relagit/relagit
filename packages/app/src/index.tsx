@@ -1,4 +1,3 @@
-import { Router } from '@solidjs/router';
 import { ErrorBoundary, render } from 'solid-js/web';
 
 import { loadWorkflows } from '@modules/actions';
@@ -46,9 +45,7 @@ DO NOT paste any code into this console that you have not written yourself or th
 				/>
 			}
 		>
-			<Router>
-				<Main />
-			</Router>
+			<Main />
 		</ErrorBoundary>
 	);
 }

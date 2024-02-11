@@ -61,9 +61,6 @@ devDependencies:
   '@solidjs/meta':
     specifier: ^0.28.7
     version: 0.28.7(solid-js@1.8.8)
-  '@solidjs/router':
-    specifier: ^0.7.1
-    version: 0.7.1(solid-js@1.8.8)
   '@types/babel__core':
     specifier: ^7.20.5
     version: 7.20.5
@@ -2402,14 +2399,6 @@ packages:
     resolution: {integrity: sha512-4desKFvITOV9sc0KE47NxDhMikAVZTU9i5WH4wNvmN6ta50+KKDUr2pPBCvvxSuH+Z4x8TmN+iYW81I3ZTyXGw==}
     peerDependencies:
       solid-js: '>=1.4.0'
-    dependencies:
-      solid-js: 1.8.8
-    dev: true
-
-  /@solidjs/router@0.7.1(solid-js@1.8.8):
-    resolution: {integrity: sha512-wLE1GjZB/h9HmHMe+S4QBeS7FsjwlpkuNAJ0vOC5WFoyRECKS7sTrzPhGGJB9rxC4OMsXPwXDOXYQ599MMe0Dg==}
-    peerDependencies:
-      solid-js: ^1.5.3
     dependencies:
       solid-js: 1.8.8
     dev: true

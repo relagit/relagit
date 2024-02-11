@@ -47,7 +47,6 @@
 		"@solid-devtools/overlay": "^0.4.3",
 		"@solidjs-use/integrations": "^2.3.0",
 		"@solidjs/meta": "^0.28.7",
-		"@solidjs/router": "^0.7.1",
 		"@types/babel__core": "^7.20.5",
 		"@types/babel__preset-env": "^7.9.6",
 		"@types/dompurify": "^3.0.5",

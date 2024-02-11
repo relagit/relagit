@@ -1,4 +1,3 @@
-import { Router } from '@solidjs/router';
 import { render } from 'solid-js/web';
 
 import SettingsStore from '~/app/src/stores/settings';
@@ -22,11 +21,7 @@ DO NOT paste any code into this console that you have not written yourself or th
 		'font-weight: 400;'
 	);
 
-	return (
-		<Router>
-			<Main />
-		</Router>
-	);
+	return <Main />;
 }
 
 const indicies = (
