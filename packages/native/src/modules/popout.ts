@@ -79,28 +79,30 @@ export default async () => {
 		const [width, height] = popout?.getSize() || [0, 0];
 		const [x, y] = popout?.getPosition() || [0, 0];
 
-		settings.popout ??= {};
-
-		settings.popout.width = width;
-		settings.popout.height = height;
-		settings.popout.x = x;
-		settings.popout.y = y;
-
-		updateSettings(settings);
+		updateSettings({
+			popout: {
+				...settings.popout,
+				width,
+				height,
+				x,
+				y
+			}
+		});
 	});
 
 	popout.on('move', () => {
 		const [width, height] = popout?.getSize() || [0, 0];
 		const [x, y] = popout?.getPosition() || [0, 0];
 
-		settings.popout ??= {};
-
-		settings.popout.width = width;
-		settings.popout.height = height;
-		settings.popout.x = x;
-		settings.popout.y = y;
-
-		updateSettings(settings);
+		updateSettings({
+			popout: {
+				...settings.popout,
+				width,
+				height,
+				x,
+				y
+			}
+		});
 	});
 
 	ipcMain.once(ipc.POPOUT_CLOSE, () => {
