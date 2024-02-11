@@ -39,19 +39,31 @@ const updateCheck = () => {
 			webContents
 				.getAllWebContents()
 				.forEach((w) =>
-					w.executeJavaScript(`console.info(\`${message.replace('`', '\\`')}\`)`)
+					w.executeJavaScript(
+						`console.info(\`${
+							typeof message === 'string' ? message.replace('`', '\\`') : message
+						}\`)`
+					)
 				),
 		error: (message: string) =>
 			webContents
 				.getAllWebContents()
 				.forEach((w) =>
-					w.executeJavaScript(`console.error(\`${message.replace('`', '\\`')}\`)`)
+					w.executeJavaScript(
+						`console.error(\`${
+							typeof message === 'string' ? message.replace('`', '\\`') : message
+						}\`)`
+					)
 				),
 		warn: (message: string) =>
 			webContents
 				.getAllWebContents()
 				.forEach((w) =>
-					w.executeJavaScript(`console.warn(\`${message.replace('`', '\\`')}\`)`)
+					w.executeJavaScript(
+						`console.warn(\`${
+							typeof message === 'string' ? message.replace('`', '\\`') : message
+						}\`)`
+					)
 				)
 	};
 };
