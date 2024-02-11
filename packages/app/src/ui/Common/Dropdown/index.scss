@@ -1,0 +1,67 @@
+.dropdown {
+	position: relative;
+
+	&__button {
+		&__icon {
+			width: 16px;
+			height: 16px;
+			border-radius: 2px;
+		}
+
+		&__icon__arrow {
+			margin-left: 8px;
+
+			svg {
+				color: var(--color-secondary);
+				width: 12px;
+				height: 12px;
+			}
+		}
+	}
+
+	&__options {
+		position: absolute;
+		padding: 4px;
+		top: var(--y);
+		left: var(--x);
+		border-radius: 4px;
+		background-color: var(--bg-floating);
+		border: 1px solid var(--separator-primary);
+		box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
+		overflow: hidden;
+		z-index: 100;
+		min-width: 200px;
+
+		&__option {
+			background: none;
+			border: none;
+			padding: 6px 8px;
+			display: flex;
+			color: var(--color-primary);
+			align-items: center;
+			gap: 8px;
+			border-radius: 4px;
+			width: 100%;
+
+			&:focus {
+				outline: none;
+				border: 2px solid var(--color-blue-500);
+				padding: 4px 6px;
+			}
+
+			&:hover {
+				background-color: var(--bg-hover);
+			}
+
+			&.active {
+				background-color: var(--bg-active);
+			}
+
+			&__icon {
+				width: 16px;
+				height: 16px;
+				border-radius: 2px;
+			}
+		}
+	}
+}
