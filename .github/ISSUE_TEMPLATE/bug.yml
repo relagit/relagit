@@ -44,7 +44,7 @@ body:
       attributes:
           label: Confirmations
           options:
-              - I have searched open and closed issues for duplicates
-              - I have read the relevant documentation
-              - I have read the CONTRIBUTING document
-              - I have read the CODE_OF_CONDUCT document
+              - label: I have searched open and closed issues for duplicates
+              - label: I have read the relevant documentation
+              - label: I have read the CONTRIBUTING document
+              - label: I have read the CODE_OF_CONDUCT document
