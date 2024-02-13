@@ -120,6 +120,16 @@ const constructWindow = async () => {
 		});
 	}
 
+	if (process.platform === 'linux') {
+		vibrancy = undefined;
+		backgroundMaterial = undefined;
+		transparent = undefined;
+		backgroundColor = backgroundFromTheme(
+			settings.ui?.theme || '',
+			nativeTheme.shouldUseDarkColors
+		);
+	}
+
 	const win = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
