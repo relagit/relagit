@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="../dist/style.css" />
 		<meta
 			http-equiv="Content-Security-Policy"
-			content="default-src 'self'; script-src 'sha256-Y9LbO1ZvtVhua4PV57H905iiZWd9l/pZANsikDcuzBE=' 'unsafe-eval' 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' https://*.githubusercontent.com/ data:; font-src 'self' https://fonts.gstatic.com/ data:; connect-src https://git.rela.dev https://esm.sh/vscode-oniguruma@2/release/onig.wasm https://github.com/ https://api.github.com/ https://raw.githubusercontent.com/ https://objects.githubusercontent.com/ 'self'"
+			content="default-src 'self'; script-src 'sha256-oilByp9GhftvJnzdOLEHQYCpnI391GXGXrj6Cqi2cto=' 'unsafe-eval' 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' https://*.githubusercontent.com/ data:; font-src 'self' https://fonts.gstatic.com/ data:; connect-src https://git.rela.dev https://esm.sh/vscode-oniguruma@2/release/onig.wasm https://github.com/ https://api.github.com/ https://raw.githubusercontent.com/ https://objects.githubusercontent.com/ 'self'"
 		/>
 		<title>RelaGit</title>
 	</head>
@@ -25,6 +25,10 @@
 			</div>
 		</div>
 		<script module type="module">
+			if (window.Native.platform !== 'darwin' && window.Native.platform !== 'win32') {
+				document.querySelector('.window-control-bar').remove();
+			}
+
 			// lazily import the renderer
 			import('../dist/renderer.js');
 		</script>
