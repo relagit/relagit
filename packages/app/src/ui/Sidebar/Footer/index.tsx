@@ -166,7 +166,9 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 									{...p}
 									class="sidebar__footer__textarea-button"
 									aria-label={t('sidebar.footer.autogenerate')}
-									disabled={!(selected() && changes() && staged())}
+									disabled={
+										!(selected() && changes() && staged()) || generating()
+									}
 									onClick={async () => {
 										setGenerating(true);
 
