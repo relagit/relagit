@@ -28,13 +28,17 @@
 		border-left: 1px solid var(--separator-primary);
 
 		&-track {
-			background: #1e1e1e;
+			background-color: var(--bg-secondary);
 		}
 
 		&-thumb {
-			background: #2e2e2e;
+			background-color: var(--color-secondary);
 			border-radius: 10px;
-			border: 3px solid #1e1e1e;
+			border: 3px solid var(--bg-secondary);
+
+			&:hover {
+				background-color: var(--color-primary);
+			}
 		}
 
 		&-thumb:hover {
