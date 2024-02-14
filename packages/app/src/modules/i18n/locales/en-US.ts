@@ -164,6 +164,7 @@ export default {
 			description: 'Description',
 			summary: 'Summary',
 			commit: 'Commit to {{branch}}',
+			autogenerate: 'Generate Commit Details',
 			add: 'Add',
 			dangerous:
 				'You have staged files that may contain sensitive information. Please review your changes before committing.'

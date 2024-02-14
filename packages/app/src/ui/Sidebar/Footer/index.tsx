@@ -1,5 +1,6 @@
-import { Signal, createEffect, createSignal } from 'solid-js';
+import { Show, Signal, createEffect, createSignal } from 'solid-js';
 
+import { generatePrompt, sendAIRequest } from '@app/modules/ai';
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
@@ -25,6 +26,7 @@ import './index.scss';
 export default (props: { showingSignal: Signal<boolean> }) => {
 	const [debouncedShowing, setDebouncedShowing] = props.showingSignal;
 	const [error, setError] = createSignal(false);
+	const [generating, setGenerating] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
 		DraftStore.getDraft(LocationStore.selectedRepository?.path)
@@ -90,7 +92,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 		>
 			<TextArea
 				label={t('sidebar.footer.summary')}
-				disabled={!(selected() && changes() && staged())}
+				disabled={!(selected() && changes() && staged()) || generating()}
 				value={draft()?.message || ''}
 				placeholder={commitMessage()?.message || t('sidebar.footer.summary')}
 				onChange={(value) => {
@@ -147,7 +149,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 			/>
 			<TextArea
 				label={t('sidebar.footer.description')}
-				disabled={!(selected() && changes() && staged())}
+				disabled={!(selected() && changes() && staged()) || generating()}
 				value={draft()?.description || ''}
 				placeholder={t('sidebar.footer.description')}
 				onChange={(value) => {
@@ -158,6 +160,75 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 				}}
 				footer={
 					<>
+						<Tooltip text={t('sidebar.footer.autogenerate')}>
+							{(p) => (
+								<button
+									{...p}
+									class="sidebar__footer__textarea-button"
+									aria-label={t('sidebar.footer.autogenerate')}
+									disabled={!(selected() && changes() && staged())}
+									onClick={async () => {
+										setGenerating(true);
+
+										const res = await sendAIRequest(
+											await generatePrompt(selected()!)
+										);
+
+										if (!res) return setGenerating(false);
+
+										DraftStore.setDraft(
+											LocationStore.selectedRepository?.path,
+											{
+												message: res.message,
+												description:
+													res.body ||
+													DraftStore.getDraft(
+														LocationStore.selectedRepository?.path
+													).description
+											}
+										);
+
+										setGenerating(false);
+									}}
+								>
+									<Show
+										when={generating()}
+										fallback={<Icon name="sparkle-fill" />}
+									>
+										<svg
+											viewBox="0 0 38 38"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="currentColor"
+											role="img"
+											stroke="currentColor"
+											width={14}
+											height={14}
+										>
+											<g fill="none" fill-rule="evenodd">
+												<g transform="translate(1 1)" stroke-width="2">
+													<circle
+														stroke-opacity=".5"
+														cx="18"
+														cy="18"
+														r="18"
+													/>
+													<path d="M36 18c0-9.94-8.06-18-18-18">
+														<animateTransform
+															attributeName="transform"
+															type="rotate"
+															from="0 18 18"
+															to="360 18 18"
+															dur="1s"
+															repeatCount="indefinite"
+														/>
+													</path>
+												</g>
+											</g>
+										</svg>
+									</Show>
+								</button>
+							)}
+						</Tooltip>
 						<Menu
 							items={[
 								{
@@ -183,7 +254,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 							<button
 								class="sidebar__footer__textarea-button"
 								aria-label={t('sidebar.footer.add')}
-								disabled={!(selected() && changes() && staged())}
+								disabled={!(selected() && changes() && staged()) || generating()}
 							>
 								<Icon name="plus" />
 							</button>

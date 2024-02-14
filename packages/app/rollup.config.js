@@ -42,6 +42,10 @@ export default defineConfig({
 				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production'),
 				__GITHUB_CLIENT_ID__: JSON.stringify(
 					process.env.GITHUB_CLIENT_ID || ENV.GITHUB_CLIENT_ID
+				),
+				__AI_API_URL__: JSON.stringify(process.env.AI_API_URL || ENV.AI_API_URL),
+				__AI_API_PASSWORD__: JSON.stringify(
+					process.env.AI_API_PASSWORD || ENV.AI_API_PASSWORD
 				)
 			}
 		}),

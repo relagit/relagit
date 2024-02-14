@@ -34,6 +34,9 @@
 		position: absolute;
 		right: 10px;
 		bottom: 10px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
 	}
 
 	&.expanded {

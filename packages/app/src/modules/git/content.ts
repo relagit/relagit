@@ -29,12 +29,13 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 			args: [`${source || ':0'}:` + file]
 		});
 	} catch (error) {
-		if (typeof error !== 'string')
+		if (typeof error !== 'string') {
 			if ((error as Error).message.includes(ERROR_IDENTIFIERS.DISK_NO_INDEX)) {
 				if (source) return '';
 
 				return fs.readFileSync(file, 'utf8');
 			}
+		}
 
 		throw error;
 	}

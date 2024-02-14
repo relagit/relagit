@@ -41,10 +41,13 @@
 		color: var(--color-secondary);
 		border-radius: 2px;
 
-		@include mixins.focusable;
-
 		&:hover {
 			color: var(--color-primary);
+		}
+
+		&:focus {
+			outline: none;
+			color: var(--color-blue-500);
 		}
 	}
 }
