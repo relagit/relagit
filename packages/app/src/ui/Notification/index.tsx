@@ -49,7 +49,7 @@ export const Notification = (props: NotificationProps) => {
 		<div class="notification" aria-label={props.description} ref={setRef}>
 			<div class="notification__content">
 				<div classList={{ notification__icon: true, [props.level]: true }}>
-					<Icon name={props.icon} variant={24} />
+					<Icon name={props.icon} size={24} />
 				</div>
 				<div class="notification__text">
 					<div class="notification__text__header">{props.title}</div>

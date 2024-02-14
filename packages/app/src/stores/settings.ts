@@ -18,6 +18,9 @@ export type Settings = {
 		enforceStyle: boolean;
 		preferParens: boolean;
 	};
+	ai: {
+		termsAccepted: boolean;
+	};
 	popout: {
 		position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 		height: number;

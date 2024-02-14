@@ -1,4 +1,13 @@
 export default {
+	ai: {
+		terms: {
+			title: 'Generative AI Terms of Service',
+			message:
+				'Before you can use Generative features, you must accept the terms of service.',
+			accept: 'Accept',
+			decline: 'Decline'
+		}
+	},
 	onboarding: {
 		takeTour: 'Take the Tour',
 		next: 'Next',
