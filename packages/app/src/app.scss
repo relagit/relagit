@@ -38,8 +38,8 @@
 	--bg-tooltip: var(--base-darker-grey);
 	--bg-brand: var(--color-blue-500);
 	--bg-hover: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.9))};
-	--bg-active: #{(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
-	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.7))};
+	--bg-active: #{(color.adjust(illyrica.$color-blue-500, $alpha: -0.85))};
+	--bg-active-unfocused: #{greyscale(color.adjust(illyrica.$color-blue-500, $alpha: -0.85))};
 	--bg-error: rgb(227 83 83 / 5%);
 	--bg-error-solid: rgb(227 83 83 / 20%);
 	--bg-success: rgb(82 228 82 / 5%);
