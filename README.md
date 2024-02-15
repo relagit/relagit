@@ -5,11 +5,11 @@
 	<div><a href="https://git.rela.dev">git.rela.dev</a></div>
 	<br>
  	<div style="margin-bottom: 16px">
-		<a href="https://github.com/relagit/relagit/actions/workflows/release.yml">
-			<img src="https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg" alt="CI" />
+		<a href="https://github.com/relagit/relagit/actions/workflows/ci.yml">
+			<img src="https://github.com/relagit/relagit/actions/workflows/ci.yml/badge.svg" alt="CI" />
 		</a>
 		<a href="https://github.com/relagit/relagit/actions/workflows/release.yml">
-			<img src="https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg" alt="CI" />
+			<img src="https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg" alt="Release" />
 		</a>
  	</div>
 	<br>
