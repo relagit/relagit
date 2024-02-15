@@ -1,10 +1,18 @@
-[![CI](https://github.com/relagit/relagit/actions/workflows/ci.yml/badge.svg)](https://github.com/relagit/relagit/actions/workflows/ci.yml)
-[![Release](https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg)](https://github.com/relagit/relagit/actions/workflows/release.yml)
-
-> [!NOTE]
-> RelaGit is in an early beta stage. Please report any issues you encounter [on our issue tracker](https://github.com/relagit/relagit/issues/new)
-
 <div align="center">
+	<img src="./build/icon.png" alt="RelaGit logo" width="128">
+	<h1>RelaGit</h1>
+	<p>The elegant solution to graphical version control.</p>
+	<div><a href="https://git.rela.dev">git.rela.dev</a></div>
+	<br>
+ 	<div style="margin-bottom: 16px">
+		<a href="https://github.com/relagit/relagit/actions/workflows/release.yml">
+			<img src="https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg" alt="CI" />
+		</a>
+		<a href="https://github.com/relagit/relagit/actions/workflows/release.yml">
+			<img src="https://github.com/relagit/relagit/actions/workflows/release.yml/badge.svg" alt="CI" />
+		</a>
+ 	</div>
+	<br>
 	<picture>
 	  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/preview-dark.png">
 	  <source media="(prefers-color-scheme: light)" srcset="./public/assets/preview-light.png">
@@ -12,9 +20,10 @@
 	</picture>
 </div>
 
-# relagit
+---
 
-The elegant solution to graphical version control. Enables you to take back control over your git workflow.
+> [!NOTE]
+> RelaGit is in an early beta stage. Please report any issues you encounter [on our issue tracker](https://github.com/relagit/relagit/issues/new)
 
 ## Download
 
