@@ -19,6 +19,13 @@
 	pointer-events: none;
 	user-select: none;
 
+	@media (prefers-reduced-motion: reduce) {
+		bottom: 0;
+		opacity: 1;
+		pointer-events: auto;
+		user-select: auto;
+	}
+
 	&.showing {
 		bottom: 0;
 		opacity: 1;
