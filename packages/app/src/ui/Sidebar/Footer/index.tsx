@@ -27,6 +27,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	const [debouncedShowing, setDebouncedShowing] = props.showingSignal;
 	const [error, setError] = createSignal(false);
 	const [generating, setGenerating] = createSignal(false);
+	const [genError, setGenError] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
 		DraftStore.getDraft(LocationStore.selectedRepository?.path)
@@ -171,12 +172,17 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 									}
 									onClick={async () => {
 										setGenerating(true);
+										setGenError(false);
 
 										const res = await sendAIRequest(
 											await generatePrompt(selected()!)
 										);
 
-										if (!res) return setGenerating(false);
+										if (!res) {
+											setGenError(true);
+
+											return setGenerating(false);
+										}
 
 										DraftStore.setDraft(
 											LocationStore.selectedRepository?.path,
@@ -195,7 +201,14 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 								>
 									<Show
 										when={generating()}
-										fallback={<Icon name="sparkle-fill" />}
+										fallback={
+											<Show
+												when={!genError()}
+												fallback={<Icon name="alert" />}
+											>
+												<Icon name="sparkle-fill" />
+											</Show>
+										}
 									>
 										<svg
 											viewBox="0 0 38 38"
