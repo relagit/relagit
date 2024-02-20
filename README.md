@@ -14,9 +14,9 @@
  	</div>
 	<br>
 	<picture>
-	  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/preview-dark.png">
-	  <source media="(prefers-color-scheme: light)" srcset="./public/assets/preview-light.png">
-	  <img alt="RelaGit client" src="./public/assets/preview-dark.png#">
+	  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/relagit/relagit/main/public/assets/preview-dark.png">
+	  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/relagit/relagit/main/public/assets/preview-light.png">
+	  <img alt="RelaGit client" src="https://raw.githubusercontent.com/relagit/relagit/main/public/assets/preview-dark.png#">
 	</picture>
 </div>
 
