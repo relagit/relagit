@@ -21,7 +21,9 @@ const buildInfo = JSON.parse(fs.readFileSync('./dist/build_info.json', 'utf-8'))
 const config = {
 	extends: null,
 	extraMetadata: {
-		main: 'dist/main.js'
+		main: 'dist/main.js',
+		homepage: 'https://git.rela.dev',
+		source: 'github:relagit/relagit'
 	},
 	appId: 'com.relagit.app',
 	productName: 'RelaGit',
