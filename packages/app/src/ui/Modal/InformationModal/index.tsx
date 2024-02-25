@@ -168,7 +168,7 @@ export const InformationModal = () => {
 		</>
 	);
 
-	// TODO: do soemthing here and i18n
+	// TODO: do something here and i18n
 	const Graph = (
 		<>
 			<EmptyState
