@@ -82,8 +82,7 @@ export default {
 			font: {
 				label: 'Custom Font',
 				description:
-					'Hoc defalta deprimet in codice font. aliquo fonte uti potes qui in systemate tuo inauguratus est.',
-				placeholder: '"SF Mono", "IBM Plex Mono", "Fira Code", monospace'
+					'Hoc defalta deprimet in codice font. aliquo fonte uti potes qui in systemate tuo inauguratus est.'
 			},
 			clientThemes: {
 				label: 'Clientis Themata',
