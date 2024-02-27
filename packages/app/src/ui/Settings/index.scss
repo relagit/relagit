@@ -250,10 +250,11 @@
 		}
 
 		&.active {
-			background-color: var(--bg-senary);
+			background-color: #1c84ec33; // hardcoded 15% alpha
 
 			.check {
-				background-color: var(--color-secondary);
+				border: 1px solid var(--color-blue-500);
+				background-color: #1c84ec85; // hardcoded 50% alpha
 			}
 		}
 
