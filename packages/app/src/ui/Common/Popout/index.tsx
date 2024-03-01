@@ -151,9 +151,11 @@ export default (props: Popout) => {
 								[props.align || 'center']: true
 							}}
 							ref={setPopout}
-							style={`--h: ${popout()?.offsetHeight}px; --w: ${popout()
-								?.offsetWidth}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${wrapper()
-								?.offsetHeight}px; --w-w: ${wrapper()?.offsetWidth}px;`}
+							style={`--h: ${popout()?.offsetHeight}px; --w: ${
+								popout()?.offsetWidth
+							}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${
+								wrapper()?.offsetHeight
+							}px; --w-w: ${wrapper()?.offsetWidth}px;`}
 						>
 							<props.body open={open} hide={hide} toggle={toggle} show={show} />
 							<div class="popout__arrow"></div>
