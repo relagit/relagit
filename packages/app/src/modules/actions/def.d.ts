@@ -263,27 +263,25 @@ interface Actions {
 	 */
 	context: () => Context;
 	notifications: {
-		show: (
-			props: {
-				icon?: keyof typeof import('@primer/octicons');
-				iconUrl?: string;
-				title: string;
-				description: string;
-				level: 'info' | 'warning' | 'error' | 'success';
-				timeout?: number;
-				actions?: ({
-					children: unknown;
-					type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
-					onClick?: () => void | Promise<void>;
-					className?: string;
-					disabled?: boolean;
-					dedupe?: boolean;
-					label: string;
-				} & {
-					dismiss?: boolean;
-				})[];
-			}
-		) => void;
+		show: (props: {
+			icon?: keyof typeof import('@primer/octicons');
+			iconUrl?: string;
+			title: string;
+			description: string;
+			level: 'info' | 'warning' | 'error' | 'success';
+			timeout?: number;
+			actions?: ({
+				children: unknown;
+				type: 'default' | 'brand' | 'danger' | 'outline' | 'positive';
+				onClick?: () => void | Promise<void>;
+				className?: string;
+				disabled?: boolean;
+				dedupe?: boolean;
+				label: string;
+			} & {
+				dismiss?: boolean;
+			})[];
+		}) => void;
 		hide: (id: string | number) => void;
 	};
 	app: {
