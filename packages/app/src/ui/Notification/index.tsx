@@ -128,7 +128,26 @@ Notification.Layer = () => {
 
 						return (
 							<Transition
-								onEnter={Layer.Transitions.Fade.enter}
+								onEnter={(el, done) => {
+									const a = el.animate(
+										[
+											{
+												opacity: 0,
+												transform: 'translateY(10px) scale(0.9)'
+											},
+											{
+												opacity: (notifications()?.length || 0) > 3 ? 0 : 1,
+												transform: 'translateY(0px) scale(1)'
+											}
+										],
+										{
+											duration: 200,
+											easing: 'ease-out'
+										}
+									);
+
+									a.finished.then(done);
+								}}
 								onExit={Layer.Transitions.Fade.exit}
 							>
 								<Show when={open()}>
