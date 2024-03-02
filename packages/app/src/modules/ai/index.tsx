@@ -1,6 +1,5 @@
 import NotificationStore from '@app/stores/notification';
 import SettingsStore from '@app/stores/settings';
-import Notification from '@app/ui/Notification';
 
 import { t } from '../i18n';
 
@@ -15,38 +14,34 @@ export const sendAIRequest = async (
 	message: string;
 } | null> => {
 	if (!SettingsStore.settings.ai?.termsAccepted) {
-		NotificationStore.add(
-			'ai-terms',
-			<Notification
-				id="ai-terms"
-				title={t('ai.terms.title')}
-				description={t('ai.terms.message') + ' https://ai.google.dev/terms'}
-				level="info"
-				icon="sparkle-fill"
-				actions={[
-					{
-						label: t('ai.terms.accept'),
-						children: t('ai.terms.accept'),
-						type: 'positive',
-						onClick: () => {
-							SettingsStore.setSetting('ai.termsAccepted', true);
+		NotificationStore.add({
+			title: t('ai.terms.title'),
+			description: t('ai.terms.message') + ' https://ai.google.dev/terms',
+			level: 'info',
+			icon: 'sparkle-fill',
+			actions: [
+				{
+					label: t('ai.terms.accept'),
+					children: t('ai.terms.accept'),
+					type: 'positive',
+					onClick: () => {
+						SettingsStore.setSetting('ai.termsAccepted', true);
 
-							NotificationStore.remove('ai-terms');
-						}
-					},
-					{
-						label: t('ai.terms.decline'),
-						children: t('ai.terms.decline'),
-						type: 'danger',
-						onClick: () => {
-							SettingsStore.setSetting('ai.termsAccepted', false);
-
-							NotificationStore.remove('ai-terms');
-						}
+						NotificationStore.remove('ai-terms');
 					}
-				]}
-			/>
-		);
+				},
+				{
+					label: t('ai.terms.decline'),
+					children: t('ai.terms.decline'),
+					type: 'danger',
+					onClick: () => {
+						SettingsStore.setSetting('ai.termsAccepted', false);
+
+						NotificationStore.remove('ai-terms');
+					}
+				}
+			]
+		});
 
 		return null;
 	}

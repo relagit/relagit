@@ -11,8 +11,8 @@ import Layer from '@ui/Layer';
 import './index.scss';
 
 export interface NotificationProps {
-	id: string;
-	icon: IconName;
+	icon?: IconName;
+	iconUrl?: string;
 	title: string;
 	description: string;
 	level: 'info' | 'warning' | 'error' | 'success';
@@ -22,10 +22,14 @@ export interface NotificationProps {
 	timeout?: number;
 }
 
-export const Notification = (props: NotificationProps) => {
+export const Notification = (
+	props: NotificationProps & {
+		id: string | number;
+	}
+) => {
 	const [ref, setRef] = createSignal<HTMLDivElement>();
 
-	let timeout: number | NodeJS.Timeout;
+	let timeout: ReturnType<typeof setTimeout>;
 
 	onMount(() => {
 		const element: HTMLElement | null | undefined = ref()?.querySelector(
@@ -49,7 +53,16 @@ export const Notification = (props: NotificationProps) => {
 		<div class="notification" aria-label={props.description} ref={setRef}>
 			<div class="notification__content">
 				<div classList={{ notification__icon: true, [props.level]: true }}>
-					<Icon name={props.icon} size={24} />
+					<Show
+						when={props.iconUrl}
+						fallback={
+							<Show when={props.icon} fallback={<Icon name={'alert'} size={24} />}>
+								<Icon name={props.icon!} size={24} />
+							</Show>
+						}
+					>
+						<img src={props.iconUrl} />
+					</Show>
 				</div>
 				<div class="notification__text">
 					<div class="notification__text__header">{props.title}</div>
@@ -94,9 +107,38 @@ Notification.Layer = () => {
 
 	return (
 		<Layer key="notification" transitions={Layer.Transitions.None} type="bare" initialVisible>
-			<Transition onEnter={Layer.Transitions.Fade.enter} onExit={Layer.Transitions.Fade.exit}>
-				<For each={notifications()}>{(n) => n}</For>
-			</Transition>
+			<div class="notification__list">
+				<For each={notifications()}>
+					{(n) => {
+						const [open, setOpen] = createSignal(false);
+
+						// i hate it here
+						setTimeout(() => {
+							setOpen(true);
+						}, 10);
+
+						if (n.props.timeout)
+							setTimeout(() => {
+								setOpen(false);
+							}, n.props.timeout! - 500);
+
+						NotificationStore.onRemoved(n.id, () => {
+							setOpen(false);
+						});
+
+						return (
+							<Transition
+								onEnter={Layer.Transitions.Fade.enter}
+								onExit={Layer.Transitions.Fade.exit}
+							>
+								<Show when={open()}>
+									<Notification {...n.props} id={n.id} />
+								</Show>
+							</Transition>
+						);
+					}}
+				</For>
+			</div>
 		</Layer>
 	);
 };

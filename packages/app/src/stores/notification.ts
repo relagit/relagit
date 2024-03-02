@@ -1,45 +1,62 @@
 import { GenericStore } from '.';
-import { JSX } from 'solid-js';
+
+import { type NotificationProps } from '@app/ui/Notification';
+
+let i = 0;
 
 const NotificationStore = new (class NotificationStore extends GenericStore {
-	#state: Record<string, JSX.Element> = {};
-	#removeListeners: Record<string, () => void> = {};
+	#state: {
+		id: number;
+		props: NotificationProps;
+		timestamp: number;
+	}[] = [];
+	#removeListeners: Record<string | number, () => void> = {};
 
 	constructor() {
 		super();
 	}
 
 	get state() {
-		return Object.values(this.#state);
+		return this.#state;
 	}
 
-	onRemoved(type: string, callback: () => void) {
+	onRemoved(type: string | number, callback: () => void) {
 		this.#removeListeners[type] = callback;
 	}
 
-	add(type: string, component: JSX.Element) {
-		this.#state[type] = component;
+	add(props: NotificationProps): number {
+		const id = i++;
+
+		this.#state.unshift({
+			id,
+			props,
+			timestamp: Date.now()
+		});
 
 		this.emit();
+
+		return id;
 	}
 
-	has(type: string) {
-		return !!this.#state[type];
+	has(id: number | string | NotificationProps) {
+		if (typeof id === 'number' || typeof id === 'string') {
+			return this.#state.find((notification) => notification.id === id);
+		}
+
+		return this.#state.find((notification) => notification.props === id);
 	}
 
-	remove(type: string) {
-		delete this.#state[type];
-
-		if (this.#removeListeners[type]) {
-			this.#removeListeners[type]();
-			delete this.#removeListeners[type];
+	remove(id: string | number) {
+		if (typeof id === 'string' || typeof id === 'number') {
+			const index = this.#state.findIndex((notification) => notification.id === id);
+			this.#state.splice(index, 1);
 		}
 
 		this.emit();
 	}
 
 	clear() {
-		this.#state = {};
+		this.#state = [];
 
 		for (const type in this.#removeListeners) {
 			this.#removeListeners[type]();
