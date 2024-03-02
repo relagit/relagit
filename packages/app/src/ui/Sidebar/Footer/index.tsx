@@ -64,8 +64,11 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 
 		if (!style) return { message: '', style: CommitStyle.none };
 
-		const message = getCommitStyledMessage({ files }, style, settings()?.commit?.preferParens)
-			?.message;
+		const message = getCommitStyledMessage(
+			{ files },
+			style,
+			settings()?.commit?.preferParens
+		)?.message;
 
 		return { message, style } as const;
 	});

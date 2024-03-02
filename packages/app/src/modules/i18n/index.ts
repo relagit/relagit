@@ -48,9 +48,10 @@ const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 
 export type ValidLocale = keyof typeof ALL_LOCALES;
 
-type TResult<Trans extends LocaleKey> = ResolvePropDeep<Locale, Trans> extends string
-	? ResolvePropDeep<Locale, Trans>
-	: ResolvePropDeep<Locale, Trans>[0];
+type TResult<Trans extends LocaleKey> =
+	ResolvePropDeep<Locale, Trans> extends string
+		? ResolvePropDeep<Locale, Trans>
+		: ResolvePropDeep<Locale, Trans>[0];
 
 type Stringifyable = string | number | boolean | null | undefined;
 
