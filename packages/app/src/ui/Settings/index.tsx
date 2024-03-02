@@ -1,6 +1,8 @@
-import { Accessor, For, Show, createRoot, createSignal } from 'solid-js';
+import { Accessor, For, JSX, Show, createRoot, createSignal } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import { __WORKFLOWS_PATH__, workflows } from '@app/modules/actions';
+import { Element, USER_PANES } from '@app/modules/actions/app';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
 import { getUser, initialiseOAuthFlow } from '@app/modules/github';
@@ -25,6 +27,52 @@ import { showReloadNotification } from './shared';
 import './index.scss';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
+
+const buildElements = (
+	children?:
+		| ((DElement | string)[] | string | DElement)
+		| (() => (DElement | string)[] | string | DElement)
+): JSX.Element => {
+	if (!children) return null;
+
+	if (typeof children === 'function') {
+		return buildElements(children());
+	}
+
+	if (typeof children === 'string') {
+		return children;
+	}
+
+	if (!Array.isArray(children)) {
+		return (
+			<Dynamic component={children.tagName} {...children.attributes}>
+				{buildElements(children.children)}
+			</Dynamic>
+		);
+	}
+
+	const childrenArray = children as Element[];
+
+	if (!childrenArray?.length) return null;
+
+	if (childrenArray.length === 1 && childrenArray[0].tagName === 'text') {
+		return childrenArray[0].children as string;
+	}
+
+	return (
+		<>
+			<For each={childrenArray}>
+				{(child) => {
+					return (
+						<Dynamic component={child.tagName} {...child.attributes}>
+							{buildElements(child.children)}
+						</Dynamic>
+					);
+				}}
+			</For>
+		</>
+	);
+};
 
 export interface RadioGroupProps {
 	options: {
@@ -625,7 +673,13 @@ const SettingsModal = () => {
 									value: 'workflows',
 									element: Workflows,
 									icon: 'workflow'
-								}
+								},
+								...Object.entries(USER_PANES).map(([id, pane]) => ({
+									label: pane.name,
+									value: id,
+									element: buildElements(pane.children),
+									icon: pane.icon
+								}))
 							]}
 						/>
 					</ModalBody>

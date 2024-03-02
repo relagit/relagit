@@ -1,16 +1,17 @@
 import def from '@content/modules/actions/def.d.ts';
-import { createRoot } from 'solid-js';
 
 import NotificationStore from '@app/stores/notification';
 import { type IconName } from '@app/ui/Common/Icon';
-import Notification, { NotificationProps } from '@app/ui/Notification';
+import { NotificationProps } from '@app/ui/Notification';
 import * as Git from '@modules/git';
+import { error } from '@modules/logger';
 import LocationStore from '@stores/location';
 import RepositoryStore, { type Repository } from '@stores/repository';
 
 import pkj from '../../../../../package.json' assert { type: 'json' };
-import { error } from '../logger';
+import { registerSettingsPane } from './app';
 import { getExternalWorkflows } from './external';
+import { getOptionsProxy } from './settings';
 
 const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
@@ -151,15 +152,15 @@ export const require = (id: string) => {
 					},
 					context: getContext,
 					notifications: {
-						show: (id: string, props: NotificationProps) => {
-							NotificationStore.add(
-								id,
-								createRoot(() => <Notification {...props} id={id} />)
-							);
+						show: (props: NotificationProps): number => {
+							return NotificationStore.add(props);
 						},
-						hide: (id: string) => {
+						hide: (id: string | number) => {
 							NotificationStore.remove(id);
 						}
+					},
+					app: {
+						registerSettingsPane
 					}
 				};
 			case 'client':
@@ -246,6 +247,7 @@ export const loadWorkflows = async () => {
 				'module',
 				'console',
 				'native',
+				'options',
 				sucrase
 					.transform(data, {
 						transforms: ['typescript', 'imports']
@@ -259,7 +261,8 @@ export const loadWorkflows = async () => {
 				{},
 				{},
 				makeConsole(path.basename(workflow.plugin)),
-				window[nativeValue as keyof typeof window] // only way to pass functions around
+				window[nativeValue as keyof typeof window], // only way to pass functions around
+				getOptionsProxy(workflow.plugin)
 			);
 
 			workflows.add({ ...(res.default || res), filename: workflow.plugin });
