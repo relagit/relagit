@@ -6,6 +6,7 @@ import { createStoreListener } from '@app/stores';
 import LocationStore from '@app/stores/location';
 import RepositoryStore from '@app/stores/repository';
 import EmptyState from '@app/ui/Common/EmptyState';
+import SegmentedControl from '@app/ui/Common/SegmentedControl';
 import * as Git from '@modules/git';
 import { GitStatus } from '@modules/git/diff';
 import * as ipc from '~/common/ipc';
@@ -60,6 +61,7 @@ export default (props: ImageViewProps) => {
 	const [size, setSize] = createSignal<[number, number]>([0, 0]);
 	const [removedRef, setRemovedRef] = createSignal<HTMLImageElement>();
 	const [addedRef, setAddedRef] = createSignal<HTMLImageElement>();
+	const [display, setDisplay] = createSignal<'sidebyside' | 'difference'>('sidebyside');
 
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const commitFile = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
@@ -136,7 +138,7 @@ export default (props: ImageViewProps) => {
 	});
 
 	return (
-		<div class="image-view">
+		<div classList={{ 'image-view': true, [display()]: true }}>
 			<div class="image-view__images">
 				<Show
 					when={URIs()[0] || URIs()[1]}
@@ -151,7 +153,11 @@ export default (props: ImageViewProps) => {
 					<Show when={!threw()[0]} fallback={<EmptyState hint={threw()[0] || ''} />}>
 						<Show when={URIs()[0]}>
 							<div class="image-view__images__image">
-								<div class="image-view__images__image__type removed">Removed</div>
+								<Show when={display() === 'sidebyside'}>
+									<div class="image-view__images__image__type removed">
+										Removed
+									</div>
+								</Show>
 								<img
 									onLoad={(e) => {
 										setRemovedRef(e.currentTarget);
@@ -159,18 +165,22 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image removed"
 									src={URIs()[0] || ''}
 								/>
-								<div class="image-view__images__image__details">
-									{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight}
-									<div class="image-view__images__image__details__separator" />
-									{nearestByteFigure(size()[0])}
-								</div>
+								<Show when={display() === 'sidebyside'}>
+									<div class="image-view__images__image__details">
+										{removedRef()?.naturalWidth} x {removedRef()?.naturalHeight}
+										<div class="image-view__images__image__details__separator" />
+										{nearestByteFigure(size()[0])}
+									</div>
+								</Show>
 							</div>
 						</Show>
 					</Show>
 					<Show when={!threw()[1]} fallback={<EmptyState hint={threw()[1] || ''} />}>
 						<Show when={URIs()[1]}>
 							<div class="image-view__images__image">
-								<div class="image-view__images__image__type added">Added</div>
+								<Show when={display() === 'sidebyside'}>
+									<div class="image-view__images__image__type added">Added</div>
+								</Show>
 								<img
 									onLoad={(e) => {
 										setAddedRef(e.currentTarget);
@@ -178,17 +188,19 @@ export default (props: ImageViewProps) => {
 									class="image-view__images__image__image added"
 									src={URIs()[1] || ''}
 								/>
-								<div class="image-view__images__image__details">
-									{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight}
-									<div class="image-view__images__image__details__separator" />
-									{nearestByteFigure(size()[1])}
-								</div>
+								<Show when={display() === 'sidebyside'}>
+									<div class="image-view__images__image__details">
+										{addedRef()?.naturalWidth} x {addedRef()?.naturalHeight}
+										<div class="image-view__images__image__details__separator" />
+										{nearestByteFigure(size()[1])}
+									</div>
+								</Show>
 							</div>
 						</Show>
 					</Show>
 				</Show>
 			</div>
-			<Show when={sizeDifference(size()[0], size()[1])}>
+			<Show when={sizeDifference(size()[0], size()[1]) && display() === 'sidebyside'}>
 				<div
 					classList={{
 						'image-view__diff': true,
@@ -199,6 +211,24 @@ export default (props: ImageViewProps) => {
 					{sizeDifference(size()[0], size()[1]) < 0
 						? `+ ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`
 						: `- ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`}
+				</div>
+			</Show>
+			<Show when={URIs()[0] && URIs()[1]}>
+				<div class="image-view__views">
+					<SegmentedControl
+						items={[
+							{
+								label: 'Side by Side',
+								value: 'sidebyside'
+							},
+							{
+								label: 'Difference',
+								value: 'difference'
+							}
+						]}
+						value={display()}
+						onChange={setDisplay}
+					/>
 				</div>
 			</Show>
 		</div>

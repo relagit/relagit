@@ -4,12 +4,23 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	position: relative;
 	display: flex;
-	gap: 2rem;
-	padding: 1rem;
+	gap: 32px;
+	padding: 16px;
+	padding-bottom: 68px;
 
 	@media screen and (width <= 768px) {
 		flex-direction: column;
+	}
+
+	&__views {
+		position: absolute;
+		padding: 16px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
 	}
 
 	&__diff {
@@ -76,6 +87,22 @@
 					background: var(--color-secondary);
 					border-radius: 50%;
 					opacity: 0.8;
+				}
+			}
+		}
+	}
+
+	&.difference {
+		.image-view__images__image {
+			&:nth-child(2) {
+				position: absolute;
+			}
+
+			&__image {
+				border-width: 0;
+
+				&.added {
+					mix-blend-mode: difference;
 				}
 			}
 		}
