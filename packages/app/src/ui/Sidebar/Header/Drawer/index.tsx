@@ -90,7 +90,10 @@ export default (props: HeaderDrawerProps) => {
 										},
 										label: t('sidebar.drawer.contextMenu.cloneRepository'),
 										onClick: () => {
-											ModalStore.pushState('clone', createRoot(CloneModal));
+											ModalStore.pushState(
+												'clone',
+												createRoot(() => <CloneModal />)
+											);
 										}
 									}
 								]}
