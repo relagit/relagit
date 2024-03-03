@@ -43,7 +43,6 @@ const set = (
 };
 
 export const getOptionsProxy = (file: string) => {
-	console.log('file', file);
 	const key = file.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 
 	const settings = getAll(key);
