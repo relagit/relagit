@@ -223,7 +223,9 @@ export default {
 		},
 		imageview: {
 			error: 'Could not find an image to display',
-			errorHint: 'This is probably because the image is too big to display.'
+			errorHint: 'This is probably because the image is too big to display.',
+			sidebyside: 'Side by Side',
+			difference: 'Difference'
 		},
 		noCommit: 'Nothing to see here',
 		noCommitHint: "You've got to select a file to see its changes. (´・｀)",

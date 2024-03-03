@@ -218,11 +218,11 @@ export default (props: ImageViewProps) => {
 					<SegmentedControl
 						items={[
 							{
-								label: 'Side by Side',
+								label: t('codeview.imageview.sidebyside'),
 								value: 'sidebyside'
 							},
 							{
-								label: 'Difference',
+								label: t('codeview.imageview.difference'),
 								value: 'difference'
 							}
 						]}
