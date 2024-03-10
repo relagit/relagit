@@ -25,6 +25,7 @@ export default (props: PassthroughRef<ButtonProps>) => {
 			aria-role="button"
 			aria-label={props.label}
 			aria-disabled={tempDisabled() || props.disabled}
+			aria-busy={tempDisabled()}
 			classList={{
 				button: true,
 				[props.type]: true,
