@@ -3,7 +3,7 @@ import { GenericStore } from '.';
 import { LogCommit } from '@app/modules/git/log';
 import { PastCommit } from '@app/modules/git/show';
 
-import { GitFile } from './files';
+import FileStore, { GitFile } from './files';
 import type { Repository } from './repository';
 import RepositoryStore from './repository';
 import SettingsStore, { __SETTINGS_PATH__ } from './settings';
@@ -132,6 +132,10 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		window._triggerWorkflow('navigate', repository, this.selectedFile);
 
 		if (set) SettingsStore.setSetting('activeRepository', repository?.path);
+
+		if (FileStore.getByRepositoryPath(repository?.path)?.length) {
+			this.setSelectedFile(FileStore.getByRepositoryPath(repository?.path)?.[0]);
+		}
 	}
 
 	clearSelectedRepository() {
