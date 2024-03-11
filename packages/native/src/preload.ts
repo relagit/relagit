@@ -86,6 +86,9 @@ export const Native = {
 		INFORMATION: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_INFORMATION, fn);
 		},
+		LOG: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_LOG, fn);
+		},
 		BLAME: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_BLAME, fn);
 		},

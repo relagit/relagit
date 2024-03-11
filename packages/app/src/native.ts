@@ -1,5 +1,6 @@
 import { showCloneModal } from './ui/Modal/CloneModal';
 import { showInformationModal } from './ui/Modal/InformationModal';
+import { showLogModal } from './ui/Modal/LogModal';
 import { showRepoModal } from './ui/Modal/RepositoryModal';
 import { showSettingsModal } from './ui/Settings';
 
@@ -12,6 +13,10 @@ export const registerAccelerators = () => {
 
 	window.Native.listeners.INFORMATION(() => {
 		showInformationModal();
+	});
+
+	window.Native.listeners.LOG(() => {
+		showLogModal();
 	});
 
 	window.Native.listeners.SETTINGS(() => {

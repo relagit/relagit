@@ -270,6 +270,9 @@ export default {
 		confirm: 'Confirm',
 		cancel: 'Cancel',
 		close: 'Close',
+		log: {
+			title: 'Command Log'
+		},
 		publish: {
 			title: 'Publish Repository',
 			name: 'Name',

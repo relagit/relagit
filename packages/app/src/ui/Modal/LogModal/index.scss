@@ -1,0 +1,43 @@
+.log-modal {
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		height: 100%;
+
+		&__item {
+			display: flex;
+			padding: 0 8px;
+			justify-content: space-between;
+			width: 100%;
+			white-space: nowrap;
+
+			&__command {
+				display: flex;
+				gap: 16px;
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+
+				&__args {
+					display: flex;
+					gap: 8px;
+					color: var(--color-secondary);
+					font-family: var(--font-mono);
+					font-size: 0.85rem;
+					font-weight: 400;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+
+					span {
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+	}
+}

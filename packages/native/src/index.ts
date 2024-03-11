@@ -294,6 +294,13 @@ const constructWindow = async () => {
 					click: () => {
 						dispatch(ipc.OPEN_INFORMATION);
 					}
+				},
+				{
+					label: 'Command Log',
+					accelerator: 'CmdOrCtrl+U',
+					click: () => {
+						dispatch(ipc.OPEN_LOG);
+					}
 				}
 			]
 		},

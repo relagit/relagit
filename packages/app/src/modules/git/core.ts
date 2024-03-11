@@ -1,3 +1,5 @@
+import { createSignal } from 'solid-js';
+
 import { ExecException } from 'child_process';
 
 import * as ipc from '~/common/ipc';
@@ -14,6 +16,14 @@ export interface GitParams {
 	} & import('child_process').ExecOptions;
 }
 
+export const [commands, setCommands] = createSignal<
+	{
+		command: string;
+		args: string[];
+		path: string;
+	}[]
+>([]);
+
 const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
 
 export const Git = async (params: GitParams): Promise<string> => {
@@ -24,6 +34,8 @@ export const Git = async (params: GitParams): Promise<string> => {
 	if (!fs.existsSync(directory)) {
 		throw new Error(`Directory does not exist: ${directory}`);
 	}
+
+	setCommands((prev) => prev.concat({ command, args, path: directory }));
 
 	const opts = params.opts || {};
 
