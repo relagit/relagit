@@ -11,6 +11,7 @@ export { Status } from './status';
 export { Commit } from './commit';
 export { Branch } from './branch';
 export { Revert } from './revert';
+export { Graph } from './graph';
 export { Clone } from './clone';
 export { Blame } from './blame';
 export { Reset } from './reset';
