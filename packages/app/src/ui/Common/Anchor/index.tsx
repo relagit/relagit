@@ -1,5 +1,7 @@
 import { JSX } from 'solid-js';
 
+import { openExternal } from '@app/modules/shell';
+
 import './index.scss';
 
 export interface AnchorProps {
@@ -16,7 +18,7 @@ export default (props: AnchorProps) => {
 			onClick={() => {
 				if (props.onClick) props.onClick();
 				if (props.href) {
-					window.open(props.href, '_blank');
+					openExternal(props.href);
 				}
 			}}
 		>
