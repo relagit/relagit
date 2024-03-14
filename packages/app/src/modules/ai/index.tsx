@@ -72,6 +72,7 @@ export const sendAIRequest = async (
 
 		return json;
 	} catch (e) {
+		console.error(e);
 		return null;
 	}
 };

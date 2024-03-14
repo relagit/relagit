@@ -7,7 +7,7 @@ import SettingsStore, { type Settings } from '@app/stores/settings';
 import { openInEditor } from '~/app/src/modules/editor';
 import { Git } from '~/app/src/modules/git/core';
 import { statusToAlpha } from '~/app/src/modules/git/diff';
-import { GitHub, repoParams } from '~/app/src/modules/github';
+import { GitHub, commitFormatsForProvider, repoParams } from '~/app/src/modules/github';
 import { openExternal } from '~/app/src/modules/shell';
 import { renderDate } from '~/app/src/modules/time';
 import RepositoryStore, { Repository } from '~/app/src/stores/repository';
@@ -192,17 +192,10 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 								class="scroller-item"
 								title={commit.message}
 								onClick={() => {
-									const commitFormatsForProvider = (url: string) => {
-										if (url.includes('github')) return `/commit/${commit.sha}`;
-										if (url.includes('gitlab')) return `/commit/${commit.sha}`;
-										if (url.includes('bitbucket'))
-											return `/commits/${commit.sha}`;
-									};
-
 									const remote = props.repo?.remote.replace(/\.git$/, '');
 
 									if (remote) {
-										const url = `${remote}${commitFormatsForProvider(remote)}`;
+										const url = `${remote}${commitFormatsForProvider(remote, commit.sha)}`;
 
 										openExternal(url);
 									}

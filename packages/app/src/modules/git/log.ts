@@ -107,36 +107,53 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 	return commits;
 };
 
-export const getMonthCounts = (commits: LogCommit[]): number[] => {
-	const monthsYears: [keyof typeof monthCounts, number][] = commits.map((commit) => [
-		new Date(commit.date).getMonth() as keyof typeof monthCounts,
+export const getMonthCounts = (
+	commits: LogCommit[]
+): {
+	index: number;
+	sortindex: number;
+	value: number;
+}[] => {
+	const currentDate = new Date();
+	const currentMonth = currentDate.getMonth();
+	const currentYear = currentDate.getFullYear();
+
+	const startMonth = (currentMonth + 1) % 12;
+	const startYear = currentMonth !== 11 ? currentYear - 1 : currentYear;
+
+	const monthCounts: {
+		index: number;
+		sortindex: number;
+		value: number;
+	}[] = [];
+
+	const monthsYears: [number, number][] = commits.map((commit) => [
+		new Date(commit.date).getMonth(),
 		new Date(commit.date).getFullYear()
 	]);
 
-	const monthCounts = {
-		0: 0,
-		1: 0,
-		2: 0,
-		3: 0,
-		4: 0,
-		5: 0,
-		6: 0,
-		7: 0,
-		8: 0,
-		9: 0,
-		10: 0,
-		11: 0
-	};
-
 	for (const [month, year] of monthsYears) {
-		if (year !== new Date().getFullYear()) continue;
+		if (year < startYear || (year === startYear && month < startMonth)) {
+			continue;
+		}
 
-		if (!monthCounts[month]) {
-			monthCounts[month] = 1;
-		} else {
-			monthCounts[month] += 1;
+		const actualMonth = month;
+
+		if (!monthCounts.find((m) => m.index === actualMonth)) {
+			monthCounts.push({ index: actualMonth, value: 0, sortindex: 0 });
+		}
+
+		const index = monthCounts.findIndex((m) => m.index === actualMonth);
+
+		monthCounts[index].sortindex = year + month;
+		monthCounts[index].value++;
+	}
+
+	for (let i = 0; i < 12; i++) {
+		if (!monthCounts.find((m) => m.index === i)) {
+			monthCounts.push({ index: i, value: 0, sortindex: startYear + i });
 		}
 	}
 
-	return Object.values(monthCounts);
+	return monthCounts.sort((a, b) => a.sortindex - b.sortindex);
 };

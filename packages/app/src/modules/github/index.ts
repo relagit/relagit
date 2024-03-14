@@ -11,3 +11,9 @@ export const repoParams = (repoUrl: string): [string, string] => {
 
 	return [owner, repo];
 };
+
+export const commitFormatsForProvider = (url: string, sha: string) => {
+	if (url.includes('github')) return `/commit/${sha}`;
+	if (url.includes('gitlab')) return `/commit/${sha}`;
+	if (url.includes('bitbucket')) return `/commits/${sha}`;
+};

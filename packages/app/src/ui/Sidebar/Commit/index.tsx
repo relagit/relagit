@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 
 import { refetchRepository } from '@app/modules/actions';
 import { LogCommit } from '@app/modules/git/log';
+import { commitFormatsForProvider } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import { openExternal } from '@app/modules/shell';
 import { renderDate } from '@app/modules/time';
@@ -58,19 +59,13 @@ export default (props: LogCommit) => {
 					label: t('sidebar.contextMenu.openRemote'),
 					type: 'item',
 					onClick: () => {
-						const commitFormatsForProvider = (url: string) => {
-							if (url.includes('github')) return `/commit/${props.hash}`;
-							if (url.includes('gitlab')) return `/commit/${props.hash}`;
-							if (url.includes('bitbucket')) return `/commits/${props.hash}`;
-						};
-
 						const remote = LocationStore.selectedRepository?.remote.replace(
 							/\.git$/,
 							''
 						);
 
 						if (remote) {
-							const url = `${remote}${commitFormatsForProvider(remote)}`;
+							const url = `${remote}${commitFormatsForProvider(remote, props.hash)}`;
 
 							openExternal(url);
 						}

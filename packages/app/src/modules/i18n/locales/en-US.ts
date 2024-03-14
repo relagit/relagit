@@ -290,7 +290,7 @@ export default {
 		information: {
 			metadata: 'Metadata',
 			graph: 'Commit Graph',
-			commitsMonth: 'Commits per Month',
+			commitsMonth: 'Commits per Month (Since {{month}}, {{year}})',
 			commitsInMonth: '{{count}} commits in {{month}}',
 			gatheringInformation: 'Gathering Information to display...',
 			items: {

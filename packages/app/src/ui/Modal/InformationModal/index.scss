@@ -1,4 +1,59 @@
 .information-modal {
+	&__graph {
+		flex-direction: column;
+		display: flex;
+		gap: 16px;
+		height: 100%;
+
+		&__item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			width: 100%;
+			height: 24px;
+
+			&__indicator {
+				margin-right: 8px;
+				height: 24px;
+
+				&__line {
+					width: 2px;
+					height: 100%;
+					background: var(--color, var(--color-blue-500));
+					opacity: var(--alpha-factor, 1);
+					margin-left: calc(8px * var(--indent));
+					margin-right: calc((8px * var(--max-indent)) - 2px - (8px * var(--indent)));
+				}
+			}
+
+			&__badge {
+				color: var(--color, var(--color-secondary));
+				background: var(--bg, var(--bg-secondary));
+				border-radius: 4px;
+				padding: 4px 8px;
+				font-size: 0.8rem;
+			}
+
+			&__message {
+				color: var(--color-primary);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			&__right {
+				gap: 16px;
+				margin-left: auto;
+				display: flex;
+				font-size: 0.8rem;
+				color: var(--color-secondary);
+
+				.anchor {
+					font-family: var(--font-mono);
+				}
+			}
+		}
+	}
 	&__metadata {
 		display: flex;
 		flex-direction: column;

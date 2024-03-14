@@ -2,18 +2,21 @@ import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import { For, Show, createRoot, createSignal } from 'solid-js';
 
 import * as Git from '@app/modules/git';
-import { getMonthCounts } from '@app/modules/git/log';
+import { commitFormatsForProvider } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
-import { renderDate } from '@app/modules/time';
+import { relative, renderDate } from '@app/modules/time';
 import { createStoreListener } from '@app/stores';
 import LocationStore from '@app/stores/location';
 import ModalStore from '@app/stores/modal';
 import RepositoryStore from '@app/stores/repository';
+import Anchor from '@app/ui/Common/Anchor';
 import EmptyState from '@app/ui/Common/EmptyState';
 import Icon from '@app/ui/Common/Icon';
 import TabView from '@app/ui/Common/TabView';
 import Tooltip from '@app/ui/Common/Tooltip';
+import { GraphPoint } from '@modules/git/graph';
+import { LogCommit, getMonthCounts } from '@modules/git/log';
 import * as ipc from '~/common/ipc';
 
 import './index.scss';
@@ -56,26 +59,47 @@ export const InformationModal = () => {
 		() => LocationStore.selectedRepository
 	);
 
+	const [history, setHistory] = createSignal<LogCommit[]>([]);
+	const [graph, setGraph] = createSignal<GraphPoint[]>([]);
+	const [maxIndent, setMaxIndent] = createSignal<number>();
 	const [size, setSize] = createSignal<string>();
-	const [months, setMonths] = createSignal<number[]>();
+	const [months, setMonths] = createSignal<
+		{
+			index: number;
+			value: number;
+		}[]
+	>();
 	const [largestMonth, setLargestMonth] = createSignal<number>();
 
-	createStoreListener([RepositoryStore, LocationStore], async () => {
-		if (!repository()) return;
+	let last = '';
 
-		const res = await ipcRenderer.invoke(ipc.DISK_SIZE, repository()?.path);
+	createStoreListener([RepositoryStore, LocationStore], () => {
+		if (!repository() || repository()?.id === last) return;
 
-		const size = res.split('\t')[0] + 'B';
+		last = repository()?.id || '';
 
-		setSize(size);
+		Git.Log(repository()!).then((history) => {
+			setHistory(history);
 
-		const months = getMonthCounts(await Git.Log(repository()!));
+			const months = getMonthCounts(history);
 
-		setMonths(months);
+			setMonths(months);
 
-		const largestMonth = Math.max(...months);
+			const largestMonth = Math.max(...months.map((m) => m.value));
 
-		setLargestMonth(largestMonth);
+			setLargestMonth(largestMonth);
+		});
+
+		Git.Graph(repository()!).then((graph) => {
+			setGraph(graph);
+			const maxIndent = Math.max(...graph.map((p) => p.indent));
+
+			setMaxIndent(maxIndent);
+		});
+
+		ipcRenderer.invoke(ipc.DISK_SIZE, repository()?.path).then((res) => {
+			setSize(res.split('\t')[0] + 'B');
+		});
 	});
 
 	const Metadata = (
@@ -107,10 +131,15 @@ export const InformationModal = () => {
 				</div>
 				<div class="information-modal__metadata__panel">
 					<div class="information-modal__metadata__panel__label">
-						{t('modal.information.commitsMonth')}
+						{t('modal.information.commitsMonth', {
+							month: t(
+								`modal.information.month.${(new Date().getMonth() + (1 % 12)) as 0}`
+							),
+							year: new Date().getFullYear() - 1
+						})}
 					</div>
 					<Show
-						when={largestMonth()}
+						when={largestMonth() !== undefined && months() !== undefined}
 						fallback={
 							<EmptyState
 								hint={t('modal.information.gatheringInformation')}
@@ -120,45 +149,51 @@ export const InformationModal = () => {
 					>
 						<div class="information-modal__metadata__panel__graph">
 							<div class="information-modal__metadata__panel__graph__values">
-								<For each={new Array(12)}>
-									{(_, i) => (
-										<Tooltip
-											text={t('modal.information.commitsInMonth', {
-												count: months()?.[i() as 0] || 0,
-												month: t(`modal.information.month.${i() as 0}`)
-											})}
-										>
-											{(p) => (
-												<div
-													{...p}
-													tabIndex={months()![i() as 0] > 0 ? 0 : -1}
-													class="information-modal__metadata__panel__graph__values__item"
-													style={{
-														'--alpha-factor': `${
-															((months()?.[i() as 0] || 0) /
-																largestMonth()!) *
-																0.5 +
-															0.3
-														}`,
-														height: `${
-															((months()?.[i() as 0] || 0) /
-																largestMonth()!) *
-															100
-														}%`
-													}}
-												/>
-											)}
-										</Tooltip>
-									)}
+								<For each={months() || []}>
+									{({ index }, i) => {
+										return (
+											<Tooltip
+												text={t('modal.information.commitsInMonth', {
+													count: months()?.[i()].value || 0,
+													month: t(
+														`modal.information.month.${index as 0}`
+													)
+												})}
+											>
+												{(p) => (
+													<div
+														{...p}
+														tabIndex={months()![i()].value > 0 ? 0 : -1}
+														class="information-modal__metadata__panel__graph__values__item"
+														style={{
+															'--alpha-factor': `${
+																((months()?.[i()].value || 0) /
+																	largestMonth()!) *
+																	0.5 +
+																0.3
+															}`,
+															height: `${
+																((months()?.[i()].value || 0) /
+																	largestMonth()!) *
+																100
+															}%`
+														}}
+													/>
+												)}
+											</Tooltip>
+										);
+									}}
 								</For>
 							</div>
 							<div class="information-modal__metadata__panel__graph__labels">
-								<For each={new Array(12)}>
-									{(_, i) => (
-										<div class="information-modal__metadata__panel__graph__labels__item">
-											{t(`modal.information.month.${i() as 0}`)}
-										</div>
-									)}
+								<For each={months() || []}>
+									{({ index }) => {
+										return (
+											<div class="information-modal__metadata__panel__graph__labels__item">
+												{t(`modal.information.month.${index as 0}`)}
+											</div>
+										);
+									}}
 								</For>
 							</div>
 						</div>
@@ -168,14 +203,53 @@ export const InformationModal = () => {
 		</>
 	);
 
-	// TODO: do something here and i18n
+	const colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple', 'pink', 'cyan'];
+
 	const Graph = (
-		<>
-			<EmptyState
-				detail="Graph View is under construction"
-				hint="Pay attention to updates for this feature"
-			/>
-		</>
+		<For each={history()}>
+			{(commit) => {
+				const point = graph().find((p) => p?.hash === commit.hash);
+
+				return (
+					<div class="information-modal__graph__item">
+						<div class="information-modal__graph__item__indicator">
+							<div
+								class="information-modal__graph__item__indicator__line"
+								style={{
+									'--max-indent': maxIndent(),
+									'--indent': point?.indent || 0,
+									'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`
+								}}
+							></div>
+						</div>
+						<div class="information-modal__graph__item__message">
+							{commit.message.split('\n')[0]}
+						</div>
+						<Show when={point?.refs}>
+							<div
+								style={{
+									'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`,
+									'--bg': `color-mix(in srgb, var(--color-${colors[point?.indent || 0 % colors.length]}-500) 10%, transparent 90%)`
+								}}
+								class="information-modal__graph__item__badge"
+							>
+								{point?.refs}
+							</div>
+						</Show>
+						<div class="information-modal__graph__item__right">
+							<Anchor
+								href={`${repository()?.remote.replace(/\.git$/, '')}${commitFormatsForProvider(repository()?.remote || '', commit.hash)}`}
+							>
+								{commit.hash.substring(0, 7)}
+							</Anchor>
+							<div class="information-modal__graph__item__right__date">
+								{relative(new Date(commit.date).getTime())}
+							</div>
+						</div>
+					</div>
+				);
+			}}
+		</For>
 	);
 
 	return (
