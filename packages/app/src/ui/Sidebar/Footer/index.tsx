@@ -30,7 +30,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	const [genError, setGenError] = createSignal(false);
 
 	const draft = createStoreListener([DraftStore, LocationStore], () =>
-		DraftStore.getDraft(LocationStore.selectedRepository?.path)
+		DraftStore.getDraft(LocationStore.selectedRepository)
 	);
 	const changes = createStoreListener([FileStore, LocationStore], () =>
 		FileStore.getByRepositoryPath(LocationStore.selectedRepository?.path)
@@ -76,7 +76,8 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 	let timeout: ReturnType<typeof setTimeout>;
 
 	createEffect(() => {
-		logger.debug('footer_effect', !(selected() && changes() && staged()));
+		// do not remove, compiler needs this
+		(() => !(selected() && changes() && staged()))();
 
 		clearTimeout(timeout);
 
@@ -109,14 +110,14 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 						if (allowed) {
 							setError(false);
 
-							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+							DraftStore.setDraft(LocationStore.selectedRepository, {
 								message: value,
 								description: draft()?.description || ''
 							});
 						} else {
 							setError(true);
 
-							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+							DraftStore.setDraft(LocationStore.selectedRepository, {
 								message: value,
 								description: draft()?.description || ''
 							});
@@ -124,7 +125,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 					} else {
 						setError(false);
 
-						DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+						DraftStore.setDraft(LocationStore.selectedRepository, {
 							message: value,
 							description: draft()?.description || ''
 						});
@@ -133,7 +134,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 				onContextMenu={() => {
 					if (draft()?.message.length) return;
 
-					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+					DraftStore.setDraft(LocationStore.selectedRepository, {
 						message: commitMessage()?.message || '',
 						description: draft()?.description || ''
 					});
@@ -144,7 +145,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 
 						if (draft()?.message.length) return;
 
-						DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+						DraftStore.setDraft(LocationStore.selectedRepository, {
 							message: commitMessage()?.message || '',
 							description: draft()?.description || ''
 						});
@@ -157,7 +158,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 				value={draft()?.description || ''}
 				placeholder={t('sidebar.footer.description')}
 				onChange={(value) => {
-					DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+					DraftStore.setDraft(LocationStore.selectedRepository, {
 						message: draft()?.message || '',
 						description: value
 					});
@@ -187,17 +188,14 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 											return setGenerating(false);
 										}
 
-										DraftStore.setDraft(
-											LocationStore.selectedRepository?.path,
-											{
-												message: res.message,
-												description:
-													res.body ||
-													DraftStore.getDraft(
-														LocationStore.selectedRepository?.path
-													).description
-											}
-										);
+										DraftStore.setDraft(LocationStore.selectedRepository, {
+											message: res.message,
+											description:
+												res.body ||
+												DraftStore.getDraft(
+													LocationStore.selectedRepository
+												).description
+										});
 
 										setGenerating(false);
 									}}
@@ -253,17 +251,14 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 									type: 'item',
 									label: 'Add Co-Author',
 									onClick: () => {
-										DraftStore.setDraft(
-											LocationStore.selectedRepository?.path,
-											{
-												message: draft()?.message || '',
-												description: `${draft()?.description || ''}${
-													draft()?.description?.includes('Co-authored-by')
-														? '\n'
-														: '\n\n\n'
-												}Co-authored-by: Name <name@git.com>`
-											}
-										);
+										DraftStore.setDraft(LocationStore.selectedRepository, {
+											message: draft()?.message || '',
+											description: `${draft()?.description || ''}${
+												draft()?.description?.includes('Co-authored-by')
+													? '\n'
+													: '\n\n\n'
+											}Co-authored-by: Name <name@git.com>`
+										});
 									}
 								}
 							]}
@@ -309,7 +304,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 								return;
 							}
 
-							DraftStore.setDraft(LocationStore.selectedRepository?.path, {
+							DraftStore.setDraft(LocationStore.selectedRepository, {
 								message: '',
 								description: ''
 							});
