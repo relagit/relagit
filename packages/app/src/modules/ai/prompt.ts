@@ -102,7 +102,5 @@ The COMMIT MESSAGE must also be lowercase, and not end with a period.
 The BODY should not just be a repetition or summary of the description, but provide additional context. Note that the BODY is optional, and can be omitted if the description is sufficient.
 `;
 
-	console.log(prompt);
-
 	return prompt;
 };
