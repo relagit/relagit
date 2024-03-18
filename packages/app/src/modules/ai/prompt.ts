@@ -9,6 +9,7 @@ import { CommitStyle } from '../commits';
 import * as Git from '../git';
 import { DIFF_CODES } from '../git/constants';
 import { parseDiff } from '../git/parse-diff';
+import { ignoredPaths } from './shared';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
@@ -18,9 +19,15 @@ export const generatePrompt = async (repo: Repository) => {
 	const files: { diff: GitDiff; file: GitFile }[] = [];
 
 	let prompt =
-		'You are an AI embedded inside of a git client called relagit. Create a "COMMIT MESSAGE" from the following modified files. You will be presented with a list of files and their changed content and must only respond with a short and concise message summarizing the changes. Remember to take each chunk into account, chunks are separated by "--CHUNK--: ---"';
+		'You are an AI embedded inside of a git client called relagit. Create a "COMMIT MESSAGE" from the following modified files. You will be presented with a list of files and their changed content and must only respond with a short and concise message summarizing the changes. Do not improvse or guess anything outside of what has been changed. Remember to take each chunk into account, chunks are separated by "--CHUNK--: ---"';
 
 	for (const path of paths) {
+		if (path.endsWith('.lock') || ignoredPaths.some((p) => path.includes(p))) {
+			prompt += `\n\n--FILE--: ${path} WAS CHANGED\n--ENDFILE--`;
+
+			continue;
+		}
+
 		const file = FileStore.getByPath(repo.path, path)!;
 		const diff = await Git.Diff(nodepath.join(repo.path, path), repo.path);
 
@@ -94,6 +101,8 @@ The COMMIT MESSAGE and BODY should be in the imperative tense, and describe what
 The COMMIT MESSAGE must also be lowercase, and not end with a period.
 The BODY should not just be a repetition or summary of the description, but provide additional context. Note that the BODY is optional, and can be omitted if the description is sufficient.
 `;
+
+	console.log(prompt);
 
 	return prompt;
 };
