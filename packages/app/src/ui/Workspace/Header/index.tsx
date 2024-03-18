@@ -3,6 +3,7 @@ import { Accessor, For, JSX, Show, createEffect, createSignal } from 'solid-js';
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
+import DraftStore from '@app/stores/draft';
 import OnboardingStore from '@app/stores/onboarding';
 import RemoteStore from '@app/stores/remote';
 import RepositoryStore from '@app/stores/repository';
@@ -221,7 +222,31 @@ export default () => {
 								sha: previous()?.substring(0, 7)
 							}),
 							onClick: async () => {
+								if (!repository()) return;
+
 								try {
+									const previousDetails = await Git.Details(
+										repository()?.path,
+										previous() || 'HEAD^1'
+									);
+
+									// restore draft if it was removed
+									if (
+										!DraftStore.getDraft(repository()).message &&
+										previousDetails?.message
+									) {
+										const message = previousDetails.message.split('\n')[0];
+										const description = previousDetails.message
+											.split('\n')
+											.slice(1)
+											.join('\n');
+
+										DraftStore.setDraft(repository(), {
+											message,
+											description
+										});
+									}
+
 									await Git.Reset(
 										LocationStore.selectedRepository,
 										await Git.PreviousCommit(repository(), previous())

@@ -116,3 +116,28 @@ export const Show = async (
 
 	return commit;
 };
+
+export const Details = async (
+	repository: string | undefined,
+	hash: string
+): Promise<{
+	author: string;
+	date: string;
+	message: string;
+}> => {
+	if (!repository) return { author: '', date: '', message: '' };
+
+	const res = await Git({
+		directory: repository,
+		command: 'show',
+		args: [hash, '--pretty=format:%an%n%at%n%s']
+	});
+
+	const [author, date, message] = res.split('\n');
+
+	return {
+		author,
+		date: new Date(parseInt(date) * 1000).toLocaleString(),
+		message
+	};
+};
