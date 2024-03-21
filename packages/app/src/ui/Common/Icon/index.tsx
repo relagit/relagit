@@ -42,6 +42,8 @@ export default (props: IconProps) => {
 						icon: true,
 						[props.className!]: true
 					}}
+					aria-label={props.name}
+					role="img"
 					innerHTML={
 						props.variant
 							? `<svg width=${props.size || props.variant} height=${
@@ -64,6 +66,8 @@ export default (props: IconProps) => {
 					icon: true,
 					[props.className!]: true
 				}}
+				aria-label={props.name}
+				role="img"
 				innerHTML={`<svg width=${props.size} height=${props.size} viewBox="${
 					customIcons[props.name as keyof typeof customIcons].variants[
 						props.variant || 16
