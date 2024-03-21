@@ -62,6 +62,12 @@ export default () => {
 						label: t('sidebar.contextMenu.viewIn', {
 							name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
 						}),
+						accelerator: {
+							meta: true,
+							shift: true,
+							execute: true,
+							key: 'f'
+						},
 						onClick: () => {
 							showItemInFolder(selected()?.path || '');
 						},
@@ -70,6 +76,12 @@ export default () => {
 					{
 						label: t('sidebar.contextMenu.openRemote'),
 						disabled: !selected(),
+						accelerator: {
+							meta: true,
+							shift: true,
+							execute: true,
+							key: 'g'
+						},
 						type: 'item',
 						onClick: () => {
 							const remotes = RemoteStore.getByRepoPath(selected()?.path || '');

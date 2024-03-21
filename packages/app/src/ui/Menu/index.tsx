@@ -8,6 +8,7 @@ export type Accelerator = {
 	shift?: boolean;
 	meta?: boolean;
 	alt?: boolean;
+	execute?: boolean;
 	key: string;
 };
 
@@ -56,10 +57,9 @@ export default (props: Menu) => {
 			if (item.accelerator.shift && !e.shiftKey) continue;
 			if (item.accelerator.meta && !e.metaKey) continue;
 			if (item.accelerator.alt && !e.altKey) continue;
+			if (item.accelerator.key !== e.key) continue;
 
-			if (item.accelerator.key === e.key) {
-				return hide();
-			}
+			hide();
 		}
 	};
 

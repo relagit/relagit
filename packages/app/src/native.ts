@@ -5,8 +5,22 @@ import { showRepoModal } from './ui/Modal/RepositoryModal';
 import { showSettingsModal } from './ui/Settings';
 
 import { workflows } from './modules/actions/workflows';
+import { openExternal, showItemInFolder } from './modules/shell';
+import LocationStore from './stores/location';
 
 export const registerAccelerators = () => {
+	window.Native.listeners.OPEN_REMOTE(() => {
+		const url = LocationStore.selectedRepository?.remote;
+
+		if (url) openExternal(url);
+	});
+
+	window.Native.listeners.SHOW_IN_FOLDER(() => {
+		const path = LocationStore.selectedRepository?.path;
+
+		if (path) showItemInFolder(path);
+	});
+
 	window.Native.listeners.LOAD_WORKFLOW((_, wf) => {
 		workflows.add(wf);
 	});

@@ -56,6 +56,12 @@ export const Native = {
 		starryNight
 	},
 	listeners: {
+		OPEN_REMOTE: (fn: () => void) => {
+			ipcRenderer.on(ipc.OPEN_REMOTE, fn);
+		},
+		SHOW_IN_FOLDER: (fn: () => void) => {
+			ipcRenderer.on(ipc.SHOW_IN_FOLDER, fn);
+		},
 		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.FOCUS, fn);
 		},

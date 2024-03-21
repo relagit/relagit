@@ -330,6 +330,23 @@ const constructWindow = async () => {
 					click: () => {
 						dispatch(ipc.OPEN_CLONE);
 					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Open Remote',
+					accelerator: 'CmdOrCtrl+Shift+G',
+					click: () => {
+						dispatch(ipc.OPEN_REMOTE);
+					}
+				},
+				{
+					label: `View in ${process.platform === 'darwin' ? 'Finder' : 'Explorer'}`,
+					accelerator: 'CmdOrCtrl+Shift+F',
+					click: () => {
+						dispatch(ipc.SHOW_IN_FOLDER);
+					}
 				}
 			]
 		},
