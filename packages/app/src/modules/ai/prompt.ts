@@ -19,7 +19,7 @@ export const generatePrompt = async (repo: Repository) => {
 	const files: { diff: GitDiff; file: GitFile }[] = [];
 
 	let prompt =
-		'You are an AI embedded inside of a git client called relagit. Create a "COMMIT MESSAGE" from the following modified files. You will be presented with a list of files and their changed content and must only respond with a short and concise message summarizing the changes. Do not improvse or guess anything outside of what has been changed. Remember to take each chunk into account, chunks are separated by "--CHUNK--: ---"';
+		'You are an AI embedded inside of a git client called relagit. Create a "COMMIT MESSAGE" from the following modified files. You will be presented with a list of files and their changed content and must only respond with a short and concise message summarizing the changes. Do not improvse or guess anything outside of what has been changed. A "+" before the line content indicates an added line, while a "-" indicates a removed line. Remember to take each chunk into account, chunks are separated by "--CHUNK--: ---"';
 
 	for (const path of paths) {
 		if (path.endsWith('.lock') || ignoredPaths.some((p) => path.includes(p))) {
@@ -57,15 +57,17 @@ export const generatePrompt = async (repo: Repository) => {
 		prompt += `\n\n--FILE--: ${path}\n--CHANGES--: \n`;
 
 		for (const chunk of parsed.files[0]?.chunks || []) {
-			prompt += `--CHUNK--: ---\n${chunk.changes.map((c) => {
-				if (c.type === 'AddedLine') {
-					return `+ ${c.content}`;
-				} else if (c.type === 'DeletedLine') {
-					return `- ${c.content}`;
-				} else if (c.type !== 'MessageLine') {
-					return `  ${c.content}`;
-				}
-			})}\n---\n`;
+			prompt += `--CHUNK--: ---\n${chunk.changes
+				.map((c) => {
+					if (c.type === 'AddedLine') {
+						return `+ ${c.content}`;
+					} else if (c.type === 'DeletedLine') {
+						return `- ${c.content}`;
+					} else if (c.type !== 'MessageLine') {
+						return `  ${c.content}`;
+					}
+				})
+				.join('\n')}\n---\n`;
 		}
 
 		prompt += '\n--ENDFILE--';
