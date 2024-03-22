@@ -178,26 +178,31 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 										setGenerating(true);
 										setGenError(false);
 
-										const res = await sendAIRequest(
-											await generatePrompt(selected()!)
-										);
+										try {
+											for await (const val of sendAIRequest(
+												await generatePrompt(selected()!)
+											)) {
+												if (!val) continue;
 
-										if (!res) {
+												DraftStore.setDraft(
+													LocationStore.selectedRepository,
+													{
+														message: val.message,
+														description:
+															val.body ||
+															DraftStore.getDraft(
+																LocationStore.selectedRepository
+															).description
+													}
+												);
+											}
+
+											setGenerating(false);
+										} catch (e) {
 											setGenError(true);
 
 											return setGenerating(false);
 										}
-
-										DraftStore.setDraft(LocationStore.selectedRepository, {
-											message: res.message,
-											description:
-												res.body ||
-												DraftStore.getDraft(
-													LocationStore.selectedRepository
-												).description
-										});
-
-										setGenerating(false);
 									}}
 								>
 									<Show
