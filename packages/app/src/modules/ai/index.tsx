@@ -7,12 +7,17 @@ export * from './prompt';
 
 const API_BASEURL = __AI_API_URL__;
 
-export const sendAIRequest = async (
-	prompt: string
-): Promise<{
+const makeRes = (result: string): { body: string; message: string } => {
+	const message = result.split('\n')[0].trim();
+	const body = result.split('\n').slice(1).join('\n').trim();
+
+	return { body, message };
+};
+
+export async function* sendAIRequest(prompt: string): AsyncGenerator<{
 	body: string;
 	message: string;
-} | null> => {
+} | null> {
 	if (!SettingsStore.settings.ai?.termsAccepted) {
 		NotificationStore.add({
 			title: t('ai.terms.title'),
@@ -56,23 +61,37 @@ export const sendAIRequest = async (
 			body: JSON.stringify({ prompt })
 		});
 
-		const json = (await res.json()) as {
-			message: string;
-			body: string;
-			error?: string;
-		};
+		const reader = res.body?.getReader();
 
-		if (res.status !== 200 || json.error) {
+		if (!reader) {
 			return null;
 		}
 
-		if (!json['message']) {
-			return null;
+		let result = '';
+
+		while (true) {
+			const { done, value } = await reader.read();
+
+			if (done) {
+				break;
+			}
+
+			result += new TextDecoder().decode(value);
+
+			yield makeRes(result);
 		}
 
-		return json;
+		try {
+			if ((JSON.parse(result) as Record<string, string>)['error']) {
+				return null;
+			}
+		} catch {
+			// ignore as most likely not an error
+		}
+
+		return makeRes(result);
 	} catch (e) {
 		console.error(e);
 		return null;
 	}
-};
+}
