@@ -16,6 +16,25 @@ export const backgroundFromTheme = (theme: string, isDark: boolean) => {
 	return theme === 'dark' ? '#141515' : '#ffffff';
 };
 
+export const editorName = (name?: Settings['externalEditor']) => {
+	switch (name) {
+		case 'code':
+			return 'Visual Studio Code';
+		case 'subl':
+			return 'Sublime Text';
+		case 'atom':
+			return 'Atom';
+		case 'fleet':
+			return 'Fleet';
+		case 'zed':
+			return 'Zed';
+		case 'code-insiders':
+			return 'Visual Studio Code Insiders';
+		default:
+			return 'Code Editor';
+	}
+};
+
 export const getSettings = async (): Promise<RecursivePartial<Settings>> => {
 	try {
 		const dir = path.join(os.homedir(), '.relagit');

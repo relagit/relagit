@@ -5,6 +5,7 @@ import { showRepoModal } from './ui/Modal/RepositoryModal';
 import { showSettingsModal } from './ui/Settings';
 
 import { workflows } from './modules/actions/workflows';
+import { openInEditor } from './modules/editor';
 import { openExternal, showItemInFolder } from './modules/shell';
 import LocationStore from './stores/location';
 
@@ -19,6 +20,12 @@ export const registerAccelerators = () => {
 		const path = LocationStore.selectedRepository?.path;
 
 		if (path) showItemInFolder(path);
+	});
+
+	window.Native.listeners.OPEN_EDITOR(() => {
+		const path = LocationStore.selectedRepository?.path;
+
+		if (path) openInEditor(path);
 	});
 
 	window.Native.listeners.LOAD_WORKFLOW((_, wf) => {

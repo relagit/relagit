@@ -8,7 +8,6 @@ export type Accelerator = {
 	shift?: boolean;
 	meta?: boolean;
 	alt?: boolean;
-	execute?: boolean;
 	key: string;
 };
 

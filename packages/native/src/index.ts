@@ -18,7 +18,7 @@ import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
 import openPopout, { popout, reposition } from './modules/popout';
 import initProtocol from './modules/protocol';
-import { backgroundFromTheme, getSettings, updateSettings } from './modules/settings';
+import { backgroundFromTheme, editorName, getSettings, updateSettings } from './modules/settings';
 import { updateEnvironmentForProcess } from './modules/shell';
 
 app.setAboutPanelOptions({
@@ -346,6 +346,13 @@ const constructWindow = async () => {
 					accelerator: 'CmdOrCtrl+Shift+F',
 					click: () => {
 						dispatch(ipc.SHOW_IN_FOLDER);
+					}
+				},
+				{
+					label: `Open in ${editorName(settings.externalEditor)}`,
+					accelerator: 'CmdOrCtrl+Shift+C',
+					click: () => {
+						dispatch(ipc.OPEN_EDITOR);
 					}
 				}
 			]

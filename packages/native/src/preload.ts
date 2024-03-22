@@ -62,6 +62,9 @@ export const Native = {
 		SHOW_IN_FOLDER: (fn: () => void) => {
 			ipcRenderer.on(ipc.SHOW_IN_FOLDER, fn);
 		},
+		OPEN_EDITOR: (fn: () => void) => {
+			ipcRenderer.on(ipc.OPEN_EDITOR, fn);
+		},
 		FOCUS: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.FOCUS, fn);
 		},

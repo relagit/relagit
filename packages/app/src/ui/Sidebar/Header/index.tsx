@@ -65,7 +65,6 @@ export default () => {
 						accelerator: {
 							meta: true,
 							shift: true,
-							execute: true,
 							key: 'f'
 						},
 						onClick: () => {
@@ -79,7 +78,6 @@ export default () => {
 						accelerator: {
 							meta: true,
 							shift: true,
-							execute: true,
 							key: 'g'
 						},
 						type: 'item',
@@ -97,6 +95,11 @@ export default () => {
 								}`
 							)
 						}),
+						accelerator: {
+							meta: true,
+							shift: true,
+							key: 'c'
+						},
 						onClick: () => {
 							openInEditor(selected()?.path || '');
 						},

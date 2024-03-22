@@ -5,6 +5,7 @@ export const OPEN_FILE_DIALOG = 'native:open-file-dialog';
 export const OPEN_INFORMATION = 'window:open-information';
 export const OPEN_LOG = 'window:open-log';
 export const OPEN_REMOTE = 'window:open-remote';
+export const OPEN_EDITOR = 'window:open-editor';
 export const SHOW_IN_FOLDER = 'window:show-in-folder';
 export const OPEN_SWITCHER = 'window:open-switcher';
 export const OPEN_BRANCHES = 'window:open-branches';
