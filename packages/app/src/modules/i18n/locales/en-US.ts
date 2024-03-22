@@ -176,7 +176,8 @@ export default {
 			autogenerate: 'Generate Commit Details',
 			add: 'Add',
 			dangerous:
-				'You have staged files that may contain sensitive information. Please review your changes before committing.'
+				'You have staged files that may contain sensitive information. Please review your changes before committing.',
+			committedBy: 'Will be authored by {{user}}'
 		},
 		openDrawer: 'Open Repository Drawer',
 		upToDate: "You're all up to date.",

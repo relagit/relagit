@@ -1,13 +1,13 @@
 import { Show, Signal, createEffect, createSignal } from 'solid-js';
 
 import { generatePrompt, sendAIRequest } from '@app/modules/ai';
+import { getUser } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
 import StageStore from '@app/stores/stage';
 import Icon from '@app/ui/Common/Icon';
 import Tooltip from '@app/ui/Common/Tooltip';
-import Menu from '@app/ui/Menu';
 import { refetchRepository, triggerWorkflow } from '@modules/actions';
 import { CommitStyle, getCommitStyledMessage, validateCommitMessage } from '@modules/commits';
 import * as Git from '@modules/git';
@@ -169,7 +169,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 							{(p) => (
 								<button
 									{...p}
-									class="sidebar__footer__textarea-button"
+									class="sidebar__footer__textarea__button"
 									aria-label={t('sidebar.footer.autogenerate')}
 									disabled={
 										!(selected() && changes() && staged()) || generating()
@@ -250,38 +250,19 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 								</button>
 							)}
 						</Tooltip>
-						<Menu
-							items={[
-								{
-									type: 'item',
-									label: 'Add Co-Author',
-									onClick: () => {
-										DraftStore.setDraft(LocationStore.selectedRepository, {
-											message: draft()?.message || '',
-											description: `${draft()?.description || ''}${
-												draft()?.description?.includes('Co-authored-by')
-													? '\n'
-													: '\n\n\n'
-											}Co-authored-by: Name <name@git.com>`
-										});
-									}
-								}
-							]}
-							event="click"
-						>
-							<button
-								class="sidebar__footer__textarea-button"
-								aria-label={t('sidebar.footer.add')}
-								disabled={!(selected() && changes() && staged()) || generating()}
-							>
-								<Icon name="plus" />
-							</button>
-						</Menu>
 					</>
 				}
 				expanded={true}
 			/>
-			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : ''}>
+			<Tooltip
+				text={
+					dangerous()
+						? t('sidebar.footer.dangerous')
+						: t('sidebar.footer.committedBy', {
+								user: getUser()?.login || 'Unknown'
+							})
+				}
+			>
 				{(props) => (
 					<Button
 						dedupe
