@@ -1,9 +1,10 @@
 import type { GitDiff } from 'parse-git-diff';
 
-import FileStore, { GitFile } from '@app/stores/files';
-import { Repository } from '@app/stores/repository';
-import SettingsStore from '@app/stores/settings';
-import StageStore from '@app/stores/stage';
+import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from '@ui/Workspace/CodeView';
+import FileStore, { GitFile } from '@stores/files';
+import { Repository } from '@stores/repository';
+import SettingsStore from '@stores/settings';
+import StageStore from '@stores/stage';
 
 import { CommitStyle } from '../commits';
 import * as Git from '../git';
@@ -30,6 +31,18 @@ export const generatePrompt = async (repo: Repository) => {
 
 		const file = FileStore.getByPath(repo.path, path)!;
 		const diff = await Git.Diff(nodepath.join(repo.path, path), repo.path);
+
+		if (BINARY_EXTENSIONS.some((ext) => path.endsWith(ext))) {
+			prompt += `\n\n--FILE--: ${path} IS A BINARY FILE\n--ENDFILE--`;
+
+			continue;
+		}
+
+		if (IMAGE_EXTENSIONS.some((ext) => path.endsWith(ext))) {
+			prompt += `\n\n--FILE--: ${path} IS AN IMAGE FILE\n--ENDFILE--`;
+
+			continue;
+		}
 
 		const parsed = parseDiff(diff);
 
