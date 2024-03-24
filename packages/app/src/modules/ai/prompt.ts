@@ -1,10 +1,11 @@
 import type { GitDiff } from 'parse-git-diff';
 
-import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from '@ui/Workspace/CodeView';
 import FileStore, { GitFile } from '@stores/files';
 import { Repository } from '@stores/repository';
 import SettingsStore from '@stores/settings';
 import StageStore from '@stores/stage';
+
+import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from '@ui/Workspace/CodeView';
 
 import { CommitStyle } from '../commits';
 import * as Git from '../git';
