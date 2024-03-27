@@ -322,7 +322,8 @@ export default {
 			create: 'Create',
 			addRepo: 'Add Repository',
 			createRepo: 'Create Repository',
-			notGit: 'Directory is not a Git Repository. Would you like to create one?'
+			notGit: 'Directory is not a Git Repository. Would you like to create one?',
+			alreadyAdded: 'You already have {{name}} in your workspace.'
 		},
 		reload: {
 			title: 'Reload Client',

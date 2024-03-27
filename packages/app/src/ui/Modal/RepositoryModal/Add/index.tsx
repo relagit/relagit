@@ -83,6 +83,19 @@ export default (props: AddRepositoryModalProps) => {
 
 		if (!isGit) return <>{t('modal.repository.notGit')}</>;
 
+		console.log(SettingsStore.getSetting('repositories'));
+
+		const isAlreadyAdded = SettingsStore.getSetting('repositories').includes(p);
+
+		if (isAlreadyAdded)
+			return (
+				<>
+					{t('modal.repository.alreadyAdded', {
+						name: RepositoryStore.getByPath(p)?.name || path.basename(p)
+					})}
+				</>
+			);
+
 		return true;
 	};
 
