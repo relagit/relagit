@@ -97,6 +97,8 @@ const findTranslation = <Trans extends LocaleKey>(
 
 	for (const arg in args) {
 		out = out.replace(`{{${arg}}}`, String(args[arg]));
+		out = out.replace(`{{lc:${arg}}}`, String(args[arg]).toLowerCase());
+		out = out.replace(`{{uc:${arg}}}`, String(args[arg]).toUpperCase());
 	}
 
 	return out as TResult<Trans>;
