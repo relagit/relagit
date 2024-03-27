@@ -57,6 +57,7 @@ const config = {
 		}
 	},
 	dmg: {
+		sign: false,
 		background: './build/background.png',
 		icon: './build/dmg.icns',
 		iconSize: 72,
@@ -78,6 +79,9 @@ const config = {
 		identity: null,
 		category: 'public.app-category.developer-tools',
 		darkModeSupport: true,
+		hardenedRuntime: true,
+		entitlements: './build/entitlements.mac.plist',
+		entitlementsInherit: './build/entitlements.mac.plist',
 		artifactName: '${productName}-${os}-${arch}.${ext}',
 		target: [
 			{
