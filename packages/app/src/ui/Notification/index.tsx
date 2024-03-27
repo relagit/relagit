@@ -141,8 +141,8 @@ Notification.Layer = () => {
 											}
 										],
 										{
-											duration: 200,
-											easing: 'ease-out'
+											duration: 400,
+											easing: 'cubic-bezier(0.6, 0.6, 0, 1)'
 										}
 									);
 
