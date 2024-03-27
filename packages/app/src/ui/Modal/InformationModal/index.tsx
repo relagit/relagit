@@ -4,6 +4,7 @@ import { For, Show, createRoot, createSignal } from 'solid-js';
 import * as Git from '@app/modules/git';
 import { commitFormatsForProvider } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
+import { warn } from '@app/modules/logger';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
 import { relative, renderDate } from '@app/modules/time';
 import { createStoreListener } from '@app/stores';
@@ -92,9 +93,16 @@ export const InformationModal = () => {
 
 		Git.Graph(repository()!).then((graph) => {
 			setGraph(graph);
-			const maxIndent = Math.max(...graph.map((p) => p.indent));
 
-			setMaxIndent(maxIndent);
+			try {
+				const maxIndent = Math.max(...graph.map((p) => p.indent));
+
+				setMaxIndent(maxIndent || 0);
+			} catch (e) {
+				warn('Failed to calculate maximum commit graph indent', e);
+
+				setMaxIndent(0);
+			}
 		});
 
 		ipcRenderer.invoke(ipc.DISK_SIZE, repository()?.path).then((res) => {
@@ -206,50 +214,55 @@ export const InformationModal = () => {
 	const colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple', 'pink', 'cyan'];
 
 	const Graph = (
-		<For each={history()}>
-			{(commit) => {
-				const point = graph().find((p) => p?.hash === commit.hash);
+		<Show
+			when={history().length}
+			fallback={<EmptyState hint={t('modal.information.gatheringInformation')} spinner />}
+		>
+			<For each={history()}>
+				{(commit) => {
+					const point = graph().find((p) => p?.hash === commit.hash);
 
-				return (
-					<div class="information-modal__graph__item">
-						<div class="information-modal__graph__item__indicator">
-							<div
-								class="information-modal__graph__item__indicator__line"
-								style={{
-									'--max-indent': maxIndent(),
-									'--indent': point?.indent || 0,
-									'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`
-								}}
-							></div>
-						</div>
-						<div class="information-modal__graph__item__message">
-							{commit.message.split('\n')[0]}
-						</div>
-						<Show when={point?.refs}>
-							<div
-								style={{
-									'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`,
-									'--bg': `color-mix(in srgb, var(--color-${colors[point?.indent || 0 % colors.length]}-500) 10%, transparent 90%)`
-								}}
-								class="information-modal__graph__item__badge"
-							>
-								{point?.refs}
+					return (
+						<div class="information-modal__graph__item">
+							<div class="information-modal__graph__item__indicator">
+								<div
+									class="information-modal__graph__item__indicator__line"
+									style={{
+										'--max-indent': maxIndent(),
+										'--indent': point?.indent || 0,
+										'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`
+									}}
+								></div>
 							</div>
-						</Show>
-						<div class="information-modal__graph__item__right">
-							<Anchor
-								href={`${repository()?.remote.replace(/\.git$/, '')}${commitFormatsForProvider(repository()?.remote || '', commit.hash)}`}
-							>
-								{commit.hash.substring(0, 7)}
-							</Anchor>
-							<div class="information-modal__graph__item__right__date">
-								{relative(new Date(commit.date).getTime())}
+							<div class="information-modal__graph__item__message">
+								{commit.message.split('\n')[0]}
+							</div>
+							<Show when={point?.refs}>
+								<div
+									style={{
+										'--color': `var(--color-${colors[point?.indent || 0 % colors.length]}-500)`,
+										'--bg': `color-mix(in srgb, var(--color-${colors[point?.indent || 0 % colors.length]}-500) 10%, transparent 90%)`
+									}}
+									class="information-modal__graph__item__badge"
+								>
+									{point?.refs}
+								</div>
+							</Show>
+							<div class="information-modal__graph__item__right">
+								<Anchor
+									href={`${repository()?.remote.replace(/\.git$/, '')}${commitFormatsForProvider(repository()?.remote || '', commit.hash)}`}
+								>
+									{commit.hash.substring(0, 7)}
+								</Anchor>
+								<div class="information-modal__graph__item__right__date">
+									{relative(new Date(commit.date).getTime())}
+								</div>
 							</div>
 						</div>
-					</div>
-				);
-			}}
-		</For>
+					);
+				}}
+			</For>
+		</Show>
 	);
 
 	return (
