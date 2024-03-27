@@ -9,26 +9,20 @@ import RepositoryStore from './repository';
 import SettingsStore, { __SETTINGS_PATH__ } from './settings';
 
 const LocationStore = new (class LocationStore extends GenericStore {
-	#selectedFile: GitFile | undefined;
-	#selectedRepository: Repository | undefined;
+	#selectedFile: GitFile | undefined = undefined;
+	#selectedRepository: Repository | undefined = undefined;
 	#historyOpen = false;
 	#blameOpen = false;
-	#selectedCommit: LogCommit | undefined;
-	#selectedCommitFiles: PastCommit | undefined;
-	#selectedCommitFile: PastCommit['files'][number] | undefined;
+	#selectedCommit: LogCommit | undefined = undefined;
+	#selectedCommitFiles: PastCommit | undefined = undefined;
+	#selectedCommitFile: PastCommit['files'][number] | undefined = undefined;
 
 	#isRefetchingSelectedRepository = false;
 
+	#dragState: DragEvent | null = null;
+
 	constructor() {
 		super();
-
-		this.#blameOpen = false;
-		this.#historyOpen = false;
-		this.#selectedFile = undefined;
-		this.#selectedCommit = undefined;
-		this.#selectedRepository = undefined;
-		this.#selectedCommitFiles = undefined;
-		this.#selectedCommitFile = undefined;
 
 		window.Native.listeners.HISTORY((_, value) => {
 			this.#historyOpen = value ?? !this.#historyOpen;
@@ -79,6 +73,10 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	get isRefetchingSelectedRepository() {
 		return this.#isRefetchingSelectedRepository;
+	}
+
+	get dragState() {
+		return this.#dragState;
 	}
 
 	setSelectedFile(file: GitFile | undefined) {
@@ -147,6 +145,11 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	setIsRefetchingSelectedRepository(value: boolean) {
 		this.#isRefetchingSelectedRepository = value;
+		this.emit();
+	}
+
+	setDragState(e: DragEvent | null) {
+		this.#dragState = e;
 		this.emit();
 	}
 })();

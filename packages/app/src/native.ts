@@ -5,6 +5,7 @@ import { showRepoModal } from './ui/Modal/RepositoryModal';
 import { showSettingsModal } from './ui/Settings';
 
 import { workflows } from './modules/actions/workflows';
+import { endDrag, startDrag } from './modules/drag';
 import { openInEditor } from './modules/editor';
 import { openExternal, showItemInFolder } from './modules/shell';
 import LocationStore from './stores/location';
@@ -56,3 +57,37 @@ export const registerAccelerators = () => {
 		showCloneModal();
 	});
 };
+
+document.addEventListener('dragover', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+});
+
+document.addEventListener('drop', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+
+	endDrag(e);
+});
+
+let debounce: NodeJS.Timeout | null = null;
+
+document.addEventListener('dragenter', (e) => {
+	if (debounce) return;
+
+	debounce = setTimeout(() => {
+		debounce = null;
+	}, 100);
+
+	startDrag(e);
+});
+
+document.addEventListener('dragleave', (e) => {
+	if (debounce) return;
+
+	debounce = setTimeout(() => {
+		debounce = null;
+	}, 100);
+
+	endDrag(e);
+});

@@ -1,0 +1,30 @@
+.drag-layer {
+	background: rgb(0 0 0 / 50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	inset: 0;
+	pointer-events: all;
+
+	* {
+		// prevents multiple dragover/leave events
+		pointer-events: none;
+	}
+
+	&__content {
+		width: 100%;
+		max-width: 400px;
+		max-height: 200px;
+		height: fit-content;
+		border-radius: 4px;
+		padding: 48px;
+		border: 1px solid var(--separator-secondary);
+		display: flex;
+		position: relative;
+		background-color: var(--bg-primary);
+		color: var(--color-primary);
+		align-items: center;
+		justify-content: center;
+	}
+}

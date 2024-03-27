@@ -4,6 +4,7 @@ import { getRepositoryStatus } from '@modules/actions';
 import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
+import DragLayer from './ui/Layer/Drag';
 import Modal from '@ui/Modal';
 import Notification from '@ui/Notification';
 import Onboarding from '@ui/Onboarding';
@@ -132,6 +133,7 @@ export default () => {
 						<div class="window-control-bar"></div>
 					</Show>
 					<Modal.Layer />
+					<DragLayer />
 					<Notification.Layer />
 					<Sidebar sidebar={sidebar()} />
 					<Workspace sidebar={sidebar()} />
