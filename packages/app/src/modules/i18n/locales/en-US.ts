@@ -344,15 +344,9 @@ export default {
 			openInBrowser: 'Open in Browser'
 		},
 		clone: {
-			title: 'Clone Repository ',
-			back: 'Back',
+			title: 'Clone Repository',
 			clone: 'Clone',
-			backToSearch: 'Back to Search',
 			search: 'Search',
-			viewOnGithub: 'View on GitHub',
-			searchPlaceholder: 'Enter a GitHub User or Organisation',
-			searchPlaceholderVerified:
-				'Enter a GitHub User or @me to search repositories you have access to',
 			loading: 'Loading...',
 			loadingHint: 'Please wait while we fetch your repositories.',
 			error: 'Oops! Something went wrong.',
