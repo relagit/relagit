@@ -12,5 +12,6 @@
 			"@modules/*": ["./src/modules/*"],
 			"~/*": ["../*"]
 		}
-	}
+	},
+	"exclude": ["**/rollup.config.js"]
 }
