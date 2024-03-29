@@ -17,5 +17,6 @@
 			"@stores/*": ["./packages/app/src/stores/*"],
 			"@modules/*": ["./packages/app/src/modules/*"]
 		}
-	}
+	},
+	"exclude": ["**/*.js"]
 }
