@@ -34,8 +34,10 @@ export const regenerateCodebergToken = async () => {
 		return;
 	}
 
-	AccountStore.setKey('codeberg_access', res.access_token);
-	AccountStore.setKey('codeberg_refresh', res.refresh_token);
+	await Promise.allSettled([
+		AccountStore.setKey('codeberg_access', res.access_token),
+		AccountStore.setKey('codeberg_refresh', res.refresh_token)
+	]);
 };
 
 type _HeadersInit = HeadersInit & {

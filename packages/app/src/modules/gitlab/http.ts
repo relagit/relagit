@@ -25,8 +25,10 @@ export const regenerateGitLabToken = async () => {
 		return;
 	}
 
-	AccountStore.setKey('gitlab_access', res.access_token);
-	AccountStore.setKey('gitlab_refresh', res.refresh_token);
+	await Promise.allSettled([
+		AccountStore.setKey('gitlab_access', res.access_token),
+		AccountStore.setKey('gitlab_refresh', res.refresh_token)
+	]);
 };
 
 type _HeadersInit = HeadersInit & {
