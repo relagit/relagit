@@ -4,10 +4,7 @@ export interface GitHubRepository {
 	name: string;
 	full_name: string;
 	private: boolean;
-	owner: {
-		login: string;
-		id: number;
-	};
+	owner: GithubUser;
 	html_url: string;
 	description: string;
 	fork: boolean;

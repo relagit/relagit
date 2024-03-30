@@ -1,7 +1,6 @@
 import { Show, Signal, createEffect, createSignal } from 'solid-js';
 
 import { generatePrompt, sendAIRequest } from '@app/modules/ai';
-import { getUser } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
@@ -254,15 +253,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 				}
 				expanded={true}
 			/>
-			<Tooltip
-				text={
-					dangerous()
-						? t('sidebar.footer.dangerous')
-						: t('sidebar.footer.committedBy', {
-								user: getUser()?.login || 'Unknown'
-							})
-				}
-			>
+			<Tooltip text={dangerous() ? t('sidebar.footer.dangerous') : ''}>
 				{(props) => (
 					<Button
 						dedupe

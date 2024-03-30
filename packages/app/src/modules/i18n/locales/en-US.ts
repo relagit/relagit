@@ -49,11 +49,17 @@ export default {
 		},
 		accounts: {
 			title: 'Accounts',
-			github: {
-				label: 'GitHub',
-				note: 'Allow RelaGit to access private repositories and issues/pull requests.',
-				signIn: 'Sign In',
-				signOut: 'Sign Out'
+			signIn: 'Sign In',
+			signOut: 'Sign Out',
+			github: 'GitHub',
+			gitlab: 'GitLab',
+			codeberg: 'Codeberg',
+			url: '',
+			keys: {
+				access: 'View Repositories',
+				refresh: 'Regenerate tokens',
+				account: 'Access Account Details',
+				none: 'No permissions granted'
 			}
 		},
 		general: {
@@ -274,6 +280,10 @@ export default {
 		log: {
 			title: 'Command Log'
 		},
+		providers: {
+			title: 'Authentication Providers',
+			hint: "Please select the provider you'd like to authenticate with."
+		},
 		publish: {
 			title: 'Publish Repository',
 			name: 'Name',
@@ -349,18 +359,25 @@ export default {
 			search: 'Search',
 			loading: 'Loading...',
 			loadingHint: 'Please wait while we fetch your repositories.',
+			noRepos: 'No repositories found.',
+			noReposHint: 'Try adding some repositories to your account.',
+			noReposButton: 'Open in Browser',
 			error: 'Oops! Something went wrong.',
 			errorHint: 'We dropped the ball while trying to gather your repositories.',
-			auth: 'You need to authenticate with GitHub to view your repositories.',
+			auth: 'You need to authenticate with a provider to view your repositories.',
 			authHint: 'Click the button below to begin the OAuth process.',
 			authButton: 'Authenticate',
 			authenticated: 'Authenticated',
 			authenticate: 'Authenticate via OAuth',
-			github: 'GitHub.com',
-			url: 'URL',
 			urlLabel: 'Repository URL',
-			urlPlaceholder: 'https://github.com/relagit/relagit',
-			localLabel: 'Local Path'
+			urlPlaceholder: 'https://{{lc:provider}}.com/relagit/relagit',
+			localLabel: 'Local Path',
+			providers: {
+				github: 'GitHub',
+				gitlab: 'GitLab',
+				codeberg: 'Codeberg',
+				url: 'URL'
+			}
 		}
 	}
 } as const;

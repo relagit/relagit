@@ -5,11 +5,11 @@ import SegmentedControl from '../SegmentedControl';
 
 import './index.scss';
 
-export interface TabViewProps {
-	signal?: Signal<string | number>;
+export interface TabViewProps<T extends string> {
+	signal?: Signal<T>;
 	views: {
 		element: JSX.Element;
-		value: string | number;
+		value: T;
 		label: string;
 		scroller?: boolean;
 		disabled?: boolean;
@@ -17,16 +17,15 @@ export interface TabViewProps {
 	}[];
 }
 
-export default (props: TabViewProps) => {
-	const [selectedView, setSelectedView] =
-		props.signal || createSignal<string | number>(props.views[0].value);
+export default <T extends string>(props: TabViewProps<T>) => {
+	const [selectedView, setSelectedView] = props.signal || createSignal<T>(props.views[0].value);
 
 	return (
 		<div class="segmented-view">
 			<SegmentedControl
 				value={selectedView()}
-				onChange={(v) => {
-					setSelectedView(v);
+				onChange={(v): void => {
+					setSelectedView(() => v);
 				}}
 				items={Object.values(props.views).map((v) => ({
 					value: v.value,

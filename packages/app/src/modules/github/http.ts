@@ -1,6 +1,5 @@
-import * as logger from '@app/modules/logger';
+import AccountStore from '@app/stores/account';
 
-import { getToken } from './shared';
 import { GithubResponse } from './types';
 
 type _HeadersInit = HeadersInit & {
@@ -114,8 +113,8 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		const res = await fetch(url, {
 			headers: {
-				Authorization: localStorage.getItem('__x_github_token')
-					? `Bearer ${await getToken()}`
+				Authorization: AccountStore.hasKey('github_access')
+					? `Bearer ${await AccountStore.getKey('github_access')}`
 					: '',
 				...headers
 			}
@@ -147,8 +146,8 @@ export const GitHub = <T extends keyof GithubResponse>(
 		const res = await fetch(url, {
 			method: 'POST',
 			headers: {
-				Authorization: localStorage.getItem('__x_github_token')
-					? `Bearer ${await getToken()}`
+				Authorization: AccountStore.hasKey('github_access')
+					? `Bearer ${await AccountStore.getKey('github_access')}`
 					: '',
 				...headers
 			},
@@ -187,8 +186,8 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 			const res = await fetch(decodeURIComponent(search.toString()), {
 				headers: {
-					Authorization: localStorage.getItem('__x_github_token')
-						? `Bearer ${await getToken()}`
+					Authorization: AccountStore.hasKey('github_access')
+						? `Bearer ${await AccountStore.getKey('github_access')}`
 						: '',
 					...headers
 				}
@@ -237,14 +236,4 @@ export const GitHub = <T extends keyof GithubResponse>(
 		query,
 		stream
 	};
-};
-
-export const populateUser = async () => {
-	try {
-		const user = await GitHub('user').get();
-
-		localStorage.setItem('__x_github_user', JSON.stringify(user));
-	} catch (e) {
-		logger.error(e);
-	}
 };

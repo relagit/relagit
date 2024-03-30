@@ -43,6 +43,12 @@ export default defineConfig({
 				__GITHUB_CLIENT_ID__: JSON.stringify(
 					process.env.GITHUB_CLIENT_ID || ENV.GITHUB_CLIENT_ID
 				),
+				__GITLAB_CLIENT_ID__: JSON.stringify(
+					process.env.GITLAB_CLIENT_ID || ENV.GITLAB_CLIENT_ID
+				),
+				__CODEBERG_CLIENT_ID__: JSON.stringify(
+					process.env.CODEBERG_CLIENT_ID || ENV.CODEBERG_CLIENT_ID
+				),
 				__AI_API_URL__: JSON.stringify(process.env.AI_API_URL || ENV.AI_API_URL),
 				__AI_API_PASSWORD__: JSON.stringify(
 					process.env.AI_API_PASSWORD || ENV.AI_API_PASSWORD

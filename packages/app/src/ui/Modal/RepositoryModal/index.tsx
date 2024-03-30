@@ -17,12 +17,12 @@ export interface RepositoryModalProps {
 let latestSetTab: (tab: number) => void;
 
 const RepositoryModal = (props: RepositoryModalProps) => {
-	let initialTab = 0;
+	let initialTab: 'add' | 'create' = 'add';
 
 	if (!props.tab || props.tab === 'add') {
-		initialTab = 0;
+		initialTab = 'add';
 	} else {
-		initialTab = 1;
+		initialTab = 'create';
 	}
 
 	const [tab, setTab] = createSignal(initialTab);
@@ -38,14 +38,14 @@ const RepositoryModal = (props: RepositoryModalProps) => {
 						<ModalHeader title={t('modal.repository.addRepo')}>
 							<ModalCloseButton {...props} />
 						</ModalHeader>
-						<Show when={tab() === 0}>
+						<Show when={tab() === 'add'}>
 							<Add
 								pathSignal={draftPath}
 								tabSignal={[tab, setTab]}
 								modalProps={props}
 							/>
 						</Show>
-						<Show when={tab() === 1}>
+						<Show when={tab() === 'create'}>
 							<Create
 								pathSignal={draftPath}
 								tabSignal={[tab, setTab]}
