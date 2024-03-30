@@ -1,0 +1,52 @@
+.provider-modal {
+	&__hint {
+		color: var(--color-secondary);
+	}
+
+	&__buttons {
+		display: flex;
+		padding-bottom: 20px;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+
+		&__button {
+			display: flex;
+			height: 10rem;
+			width: 10rem;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			gap: 1rem;
+			border-radius: 0.25rem;
+			border: 1px solid var(--separator-secondary);
+			background: var(--bg-secondary);
+			color: var(--color-primary);
+			transition: all 0.2s ease-in-out;
+
+			svg {
+				width: 2rem;
+				height: 2rem;
+			}
+
+			&__verified {
+				color: var(--color-success);
+				position: absolute;
+				bottom: 0.5rem;
+				right: 0.5rem;
+
+				svg {
+					width: 1rem;
+					height: 1rem;
+				}
+			}
+
+			&:hover {
+				background: var(--bg-hover);
+				color: var(--color-contrast);
+			}
+
+			@include mixins.focusable;
+		}
+	}
+}

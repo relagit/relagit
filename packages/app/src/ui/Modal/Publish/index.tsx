@@ -8,11 +8,11 @@ import {
 	GitHubRepository,
 	GithubOrg,
 	GithubUser,
-	getUser,
-	initialiseOAuthFlow
+	initialiseGitHubFlow
 } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
 import { error } from '@app/modules/logger';
+import AccountStore from '@app/stores/account';
 import ModalStore from '@app/stores/modal';
 import { Repository } from '@app/stores/repository';
 import Button from '@app/ui/Common/Button';
@@ -30,7 +30,9 @@ const PublishModal = (props: { repo: Repository }) => {
 	const [description, setDescription] = createSignal('');
 	const [isPrivate, setIsPrivate] = createSignal(true);
 	const [willPush, setWillPush] = createSignal(false);
-	const [owner, setOwner] = createSignal<GithubUser | GithubOrg | undefined>(getUser());
+	const [owner, setOwner] = createSignal<GithubUser | GithubOrg | undefined>(
+		AccountStore.getAccountFor('github')!
+	);
 	const [orgs, setOrgs] = createSignal<GithubOrg[]>([]);
 
 	GitHub('user/orgs')
@@ -47,7 +49,7 @@ const PublishModal = (props: { repo: Repository }) => {
 						<ModalCloseButton close={p.close} />
 					</ModalHeader>
 					<Show
-						when={localStorage.getItem('__x_github_token')}
+						when={AccountStore.getAccountFor('github')}
 						fallback={
 							<EmptyState
 								detail={t('modal.publish.auth')}
@@ -58,7 +60,7 @@ const PublishModal = (props: { repo: Repository }) => {
 										label: t('modal.publish.authButton'),
 										type: 'brand',
 										onClick: () => {
-											initialiseOAuthFlow().then((r) => {
+											initialiseGitHubFlow().then((r) => {
 												showOAuthModal(r);
 											});
 										}
@@ -102,9 +104,9 @@ const PublishModal = (props: { repo: Repository }) => {
 									}}
 									options={[
 										{
-											value: getUser(),
-											label: getUser()?.login || '',
-											icon: getUser()?.avatar_url
+											value: AccountStore.getAccountFor('github')!,
+											label: AccountStore.getAccountFor('github')!.login,
+											icon: AccountStore.getAccountFor('github')!.avatar_url
 										},
 										...orgs().map((org) => ({
 											value: org,

@@ -448,8 +448,12 @@ const constructWindow = async () => {
 	return win;
 };
 
+let mainWindow: BrowserWindow | null = null;
+
 app.once('ready', async () => {
 	const window = await constructWindow();
+
+	mainWindow = window;
 
 	initIPC(window);
 	initProtocol();
@@ -463,6 +467,8 @@ app.once('ready', async () => {
 		) {
 			const newWindow = await constructWindow();
 
+			mainWindow = newWindow;
+
 			initIPC(newWindow);
 		}
 	});
@@ -471,5 +477,17 @@ app.once('ready', async () => {
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		app.quit();
+	}
+});
+
+app.setAsDefaultProtocolClient('relagit');
+
+app.on('open-url', (_, url) => {
+	if (!mainWindow) return;
+
+	mainWindow.focus();
+
+	if (url.includes('oauth-captive')) {
+		mainWindow.webContents.send(ipc.OAUTH_CAPTIVE, url);
 	}
 });

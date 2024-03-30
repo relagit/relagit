@@ -34,7 +34,9 @@ export default defineConfig({
 			preventAssignment: true,
 			values: {
 				__NODE_ENV__: JSON.stringify(IS_DEV ? 'development' : 'production'),
-				__GITHUB_CLIENT_ID__: 'undefined'
+				__GITHUB_CLIENT_ID__: 'undefined',
+				__GITLAB_CLIENT_ID__: 'undefined',
+				__CODEBERG_CLIENT_ID__: 'undefined'
 			}
 		}),
 		json({

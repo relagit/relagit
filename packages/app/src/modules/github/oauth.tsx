@@ -1,8 +1,6 @@
-import * as ipc from '~/common/ipc';
+import AccountStore from '@app/stores/account';
 
-import { populateUser } from './http';
-
-const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+import { GitHub } from './http';
 
 const CLIENT_ID = __GITHUB_CLIENT_ID__;
 
@@ -31,10 +29,10 @@ export interface OAuthAccessTokenResponse {
 
 export const SECONDS = 1000;
 
-export const initialiseOAuthFlow = async (): Promise<OAuthInitResponse> => {
+export const initialiseGitHubFlow = async (): Promise<OAuthInitResponse> => {
 	const state = window.crypto.randomUUID();
 
-	const url = `https://github.com/login/device/code?client_id=${CLIENT_ID}&state=${state}&scope=repo`;
+	const url = `https://github.com/login/device/code?client_id=${CLIENT_ID}&state=${state}&scope=repo&redirect_uri=${encodeURIComponent('relagit://oauth-captive')}`;
 
 	const init = (await fetch(url, {
 		method: 'POST',
@@ -60,7 +58,7 @@ export const pollForToken = (init: OAuthInitResponse): Promise<OAuthAccessTokenR
 					}
 
 					const res = await fetch(
-						`https://github.com/login/oauth/access_token?client_id=${CLIENT_ID}&device_code=${init.device_code}&grant_type=urn:ietf:params:oauth:grant-type:device_code`,
+						`https://github.com/login/oauth/access_token?client_id=${CLIENT_ID}&device_code=${init.device_code}&grant_type=urn:ietf:params:oauth:grant-type:device_code&redirect_uri=${encodeURIComponent('relagit://oauth-captive')}`,
 						{
 							method: 'POST',
 							headers: {
@@ -96,7 +94,15 @@ export const pollForToken = (init: OAuthInitResponse): Promise<OAuthAccessTokenR
 
 					clearInterval(interval);
 
-					saveTokens(tokenResponse);
+					try {
+						await AccountStore.setKey('github_access', result.access_token || '');
+
+						const user = await GitHub('user').get();
+
+						AccountStore.setAccount('github', user);
+					} catch (e) {
+						console.error(e);
+					}
 
 					resolve(result);
 				} catch (e) {
@@ -106,12 +112,4 @@ export const pollForToken = (init: OAuthInitResponse): Promise<OAuthAccessTokenR
 			init.interval * 2 * SECONDS
 		);
 	});
-};
-
-export const saveTokens = async (tokens: OAuthAccessTokenResponse) => {
-	const encrypted = await ipcRenderer.invoke(ipc.GET_ENCRYPTED, tokens.access_token || '');
-
-	localStorage.setItem('__x_github_token', encrypted);
-
-	populateUser();
 };

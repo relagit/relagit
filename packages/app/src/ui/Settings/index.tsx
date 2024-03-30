@@ -5,9 +5,10 @@ import { __WORKFLOWS_PATH__, workflows } from '@app/modules/actions';
 import { Element, USER_PANES } from '@app/modules/actions/app';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
-import { getUser, initialiseOAuthFlow } from '@app/modules/github';
 import { t } from '@app/modules/i18n';
+import { beginProviderFlow } from '@app/modules/oauth';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
+import AccountStore, { Provider } from '@app/stores/account';
 import ModalStore from '@app/stores/modal';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
@@ -21,7 +22,6 @@ import EmptyState from '../Common/EmptyState';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '../Modal';
-import { showOAuthModal } from '../Modal/OAuthModal';
 import { showReloadNotification } from './shared';
 
 import './index.scss';
@@ -257,54 +257,71 @@ const SettingsModal = () => {
 
 	const Accounts = (
 		<>
-			<div class="settings-layer__setting account">
-				<label class="settings-layer__setting__label" id="settings-github">
-					{t('settings.accounts.github.label')}
-					<div class="settings-layer__setting__label__note">
-						{t('settings.accounts.github.note')}
-					</div>
-				</label>
-				<div class="settings-layer__setting__account">
-					<Show
-						when={getUser() && localStorage.getItem('__x_github_token')}
-						fallback={
-							<Button
-								type="brand"
-								label={t('settings.accounts.github.signIn')}
-								onClick={() => {
-									initialiseOAuthFlow().then((i) => showOAuthModal(i));
-								}}
+			<For each={['github', 'gitlab', 'codeberg'] as Provider[]}>
+				{(provider) => (
+					<div class="settings-layer__setting account">
+						<label class="settings-layer__setting__label" id={`settings-${provider}`}>
+							{t(`settings.accounts.${provider}`)}
+							<div class="settings-layer__setting__label__note">
+								<Show
+									when={AccountStore.keysFor(provider).length}
+									fallback={t('settings.accounts.keys.none')}
+								>
+									<For each={AccountStore.keysFor(provider)}>
+										{(key, i) => (
+											<span>
+												{t(`settings.accounts.keys.${key}`)}
+												{i() !== AccountStore.keysFor(provider).length - 1
+													? ', '
+													: ''}
+											</span>
+										)}
+									</For>
+								</Show>
+							</div>
+						</label>
+						<div class="settings-layer__setting__account">
+							<Show
+								when={AccountStore.hasKey(`${provider}_access`)}
+								fallback={
+									<Button
+										type="brand"
+										label={t('settings.accounts.signIn')}
+										onClick={() => {
+											beginProviderFlow(provider);
+										}}
+									>
+										{t('settings.accounts.signIn')}
+									</Button>
+								}
 							>
-								{t('settings.accounts.github.signIn')}
-							</Button>
-						}
-					>
-						<img
-							src={getUser()?.avatar_url}
-							alt={getUser()?.login}
-							class="settings-layer__setting__account__image"
-						/>
-						<div class="settings-layer__setting__account__text">
-							<p class="settings-layer__setting__account__text__name">
-								{getUser()?.name}
-							</p>
-							<p class="settings-layer__setting__account__text__login">
-								@{getUser()?.login}
-							</p>
+								<img
+									src={AccountStore.getNormalisedAccount(provider)?.avatar}
+									alt={AccountStore.getNormalisedAccount(provider)?.username}
+									class="settings-layer__setting__account__image"
+								/>
+								<div class="settings-layer__setting__account__text">
+									<p class="settings-layer__setting__account__text__name">
+										{AccountStore.getNormalisedAccount(provider)?.displayName}
+									</p>
+									<p class="settings-layer__setting__account__text__login">
+										@{AccountStore.getNormalisedAccount(provider)?.username}
+									</p>
+								</div>
+								<Button
+									type="default"
+									label={t('settings.accounts.signOut')}
+									onClick={() => {
+										AccountStore.removeAccount(provider);
+									}}
+								>
+									{t('settings.accounts.signOut')}
+								</Button>
+							</Show>
 						</div>
-						<Button
-							type="default"
-							label={t('settings.accounts.github.signOut')}
-							onClick={() => {
-								localStorage.removeItem('__x_github_token');
-								localStorage.removeItem('__x_github_user');
-							}}
-						>
-							{t('settings.accounts.github.signOut')}
-						</Button>
-					</Show>
-				</div>
-			</div>
+					</div>
+				)}
+			</For>
 		</>
 	);
 

@@ -19,7 +19,7 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
 export interface AddRepositoryModalProps {
 	pathSignal: Signal<string>;
-	tabSignal: Signal<number>;
+	tabSignal: Signal<'add' | 'create'>;
 	modalProps: {
 		close: () => void;
 	};
@@ -83,8 +83,6 @@ export default (props: AddRepositoryModalProps) => {
 
 		if (!isGit) return <>{t('modal.repository.notGit')}</>;
 
-		console.log(SettingsStore.getSetting('repositories'));
-
 		const isAlreadyAdded = SettingsStore.getSetting('repositories').includes(p);
 
 		if (isAlreadyAdded)
@@ -106,16 +104,16 @@ export default (props: AddRepositoryModalProps) => {
 					items={[
 						{
 							label: t('modal.repository.add'),
-							value: 0
+							value: 'add'
 						},
 						{
 							label: t('modal.repository.create'),
-							value: 1
+							value: 'create'
 						}
 					]}
 					value={props.tabSignal[0]()}
 					onChange={(v) => {
-						props.tabSignal[1](v as number);
+						props.tabSignal[1](v);
 					}}
 				/>
 				<div class="repo__modal__body">

@@ -1,15 +1,14 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader, showErrorModal } from '..';
-import { Accessor, Show, createRoot, createSignal, onMount } from 'solid-js';
+import { Accessor, Show, createEffect, createRoot, createSignal } from 'solid-js';
 
+import { Codeberg, CodebergRepository } from '@app/modules/codeberg';
 import * as Git from '@app/modules/git';
-import {
-	GitHub,
-	GitHubRepository,
-	GithubResponse,
-	getUser,
-	initialiseOAuthFlow
-} from '@app/modules/github';
+import { GitHub, GitHubRepository } from '@app/modules/github';
+import { GitLab, GitLabProject } from '@app/modules/gitlab';
 import { t } from '@app/modules/i18n';
+import { showProviderModal } from '@app/modules/oauth';
+import { createStoreListener } from '@app/stores';
+import AccountStore, { Provider } from '@app/stores/account';
 import ModalStore from '@app/stores/modal';
 import Button from '@app/ui/Common/Button';
 import EmptyState from '@app/ui/Common/EmptyState';
@@ -19,7 +18,6 @@ import TabView from '@app/ui/Common/TabView';
 import TextArea from '@app/ui/Common/TextArea';
 import * as logger from '@modules/logger';
 
-import { showOAuthModal } from '../OAuthModal';
 import { RepoList } from './components';
 
 import './index.scss';
@@ -69,29 +67,74 @@ const fileValidator = (path: string) => {
 
 export interface CloneModalProps {
 	url?: string;
-	tab?: string | number;
+	tab?: 'github' | 'url';
 }
 
 const CloneModal = (props: CloneModalProps) => {
-	const [response, setResponse] = createSignal<GithubResponse['users/:username/repos'][1] | null>(
-		null
-	);
+	const [response, setResponse] = createSignal<
+		GitHubRepository[] | GitLabProject[] | CodebergRepository[] | null
+	>(null);
 	const [selected, setSelected] = createSignal<
-		GithubResponse['users/:username/repos'][1][number] | null
+		(GitHubRepository | GitLabProject | CodebergRepository) | null
 	>();
+	const [done, setDone] = createSignal(false);
 	const [error, setError] = createSignal(false);
 	const [dirError, setDirError] = createSignal<string>('');
 	const [path, setPath] = createSignal('');
 	const [url, setURL] = createSignal(props.url || '');
-	const [tab, setTab] = createSignal<string | number>(props.tab || 'github');
+	const [tab, setTab] = createSignal<Provider>(props.tab || 'github');
+	const account = createStoreListener([AccountStore], () =>
+		AccountStore.getNormalisedAccount(tab() || 'github')
+	);
 
-	onMount(() => {
+	createEffect(() => {
+		tab();
+
+		setDone(false);
+		setError(false);
+		setResponse(null);
+
 		try {
-			GitHub('user/repos')
-				.stream(10)
-				.then((repos) => {
-					setResponse(repos);
-				});
+			switch (tab()) {
+				case 'github':
+					GitHub('user/repos')
+						.get()
+						.then((res) => {
+							setDone(true);
+							setResponse(res);
+						})
+						.catch((e) => {
+							logger.error(e);
+							setError(true);
+						});
+					break;
+				case 'gitlab':
+					GitLab('users/:userid/projects')
+						.get(String(AccountStore.getAccountFor('gitlab')?.id))
+						.then((res) => {
+							setDone(true);
+							setResponse(res);
+						})
+						.catch((e) => {
+							logger.error(e);
+							setError(true);
+						});
+					break;
+				case 'codeberg':
+					Codeberg('user/repos')
+						.get()
+						.then((res) => {
+							setDone(true);
+							setResponse(res);
+						})
+						.catch((e) => {
+							logger.error(e);
+							setError(true);
+						});
+					break;
+				default:
+					break;
+			}
 		} catch (e) {
 			setError(true);
 		}
@@ -103,7 +146,9 @@ const CloneModal = (props: CloneModalProps) => {
 			<TextArea
 				label={t('modal.clone.urlLabel')}
 				value={url()}
-				placeholder={t('modal.clone.urlPlaceholder')}
+				placeholder={t('modal.clone.urlPlaceholder', {
+					provider: t(`modal.clone.providers.${AccountStore.last || 'github'}`) // TODO: hardcoding for now
+				})}
 				onChange={(val) => {
 					setURL(val);
 				}}
@@ -120,12 +165,12 @@ const CloneModal = (props: CloneModalProps) => {
 		</div>
 	);
 
-	const Github = (props: {
+	const ProviderTab = (props: {
 		close: () => void;
-		response: Accessor<GitHubRepository[] | null>;
+		response: Accessor<GitHubRepository[] | GitLabProject[] | CodebergRepository[] | null>;
 	}) => (
 		<Show
-			when={localStorage.getItem('__x_github_token')}
+			when={account()}
 			fallback={
 				<EmptyState
 					detail={t('modal.clone.auth')}
@@ -136,9 +181,7 @@ const CloneModal = (props: CloneModalProps) => {
 							label: t('modal.clone.authButton'),
 							type: 'brand',
 							onClick: () => {
-								initialiseOAuthFlow().then((r) => {
-									showOAuthModal(r);
-								});
+								showProviderModal();
 							}
 						}
 					]}
@@ -151,53 +194,50 @@ const CloneModal = (props: CloneModalProps) => {
 					<EmptyState detail={t('modal.clone.error')} hint={t('modal.clone.errorHint')} />
 				}
 			>
-				<RepoList selected={selected} setSelected={setSelected} state={props.response()} />
+				<RepoList
+					done={done()}
+					provider={tab()}
+					account={account()!}
+					selected={selected}
+					setSelected={setSelected}
+					state={props.response()}
+				/>
 			</Show>
 		</Show>
 	);
 
 	return (
-		<Modal size={tab() === 'github' ? 'x-large' : 'medium'} dismissable id={'clone'}>
+		<Modal size={tab() === 'url' ? 'medium' : 'x-large'} dismissable id="clone">
 			{(props) => (
 				<>
 					<ModalHeader
 						title={
 							<>
 								{t('modal.clone.title')}
-								<button
-									classList={{
-										'clone-modal__oauth': true
-									}}
-									onClick={() => {
-										initialiseOAuthFlow().then((r) => {
-											showOAuthModal(r);
-										});
-									}}
-								>
-									<Show
-										when={getUser() && localStorage.getItem('__x_github_token')}
-										fallback={
-											<>
-												<Icon
-													name={
-														localStorage.getItem('__x_github_token')
-															? 'verified'
-															: 'shield'
-													}
-												/>
-												{localStorage.getItem('__x_github_token')
-													? t('modal.clone.authenticated')
-													: t('modal.clone.authenticate')}
-											</>
-										}
+								<Show when={tab() !== 'url'}>
+									<button
+										classList={{
+											'clone-modal__oauth': true
+										}}
+										onClick={showProviderModal}
 									>
-										<img
-											src={getUser()?.avatar_url || ''}
-											class="clone-modal__oauth__avatar"
-										/>
-										{getUser()?.login}
-									</Show>
-								</button>
+										<Show
+											when={account()}
+											fallback={
+												<>
+													<Icon name="shield" />
+													{t('modal.clone.authenticate')}
+												</>
+											}
+										>
+											<img
+												src={account()?.avatar}
+												class="clone-modal__oauth__avatar"
+											/>
+											{account()?.username}
+										</Show>
+									</button>
+								</Show>
 							</>
 						}
 					>
@@ -208,21 +248,31 @@ const CloneModal = (props: CloneModalProps) => {
 							signal={[tab, setTab]}
 							views={[
 								{
-									label: t('modal.clone.github'),
+									label: t('modal.clone.providers.github'),
 									value: 'github',
-									element: <Github close={props.close} response={response} />
+									element: <ProviderTab close={props.close} response={response} />
 								},
 								{
-									label: t('modal.clone.url'),
+									label: t('modal.clone.providers.gitlab'),
+									value: 'gitlab',
+									element: <ProviderTab close={props.close} response={response} />
+								},
+								{
+									label: t('modal.clone.providers.codeberg'),
+									value: 'codeberg',
+									element: <ProviderTab close={props.close} response={response} />
+								},
+								{
+									label: t('modal.clone.providers.url'),
 									value: 'url',
 									element: <Url />
 								}
 							]}
 						/>
 					</ModalBody>
-					<Show when={tab() === 'url' || (tab() === 'github' && selected())}>
+					<Show when={tab() === 'url' || selected()}>
 						<div class="modal__footer clone-modal__footer">
-							<Show when={tab() === 'github'} fallback={<div />}>
+							<Show when={tab() !== 'url'} fallback={<div />}>
 								<FileSelect
 									input
 									setError={setDirError}
@@ -250,13 +300,31 @@ const CloneModal = (props: CloneModalProps) => {
 										!(
 											path() &&
 											((tab() === 'url' && url()) ||
-												(tab() === 'github' && selected()))
+												(tab() !== 'url' && selected()))
 										)
 									}
 									onClick={async () => {
 										try {
-											const cloneLike =
-												tab() === 'url' ? url() : selected()!.clone_url!;
+											let cloneLike = url();
+
+											switch (tab()) {
+												case 'github':
+													cloneLike = (selected() as GitHubRepository)
+														.clone_url;
+													break;
+												case 'gitlab':
+													cloneLike = (selected() as GitLabProject)
+														.http_url_to_repo;
+													break;
+												case 'codeberg':
+													cloneLike = (selected() as CodebergRepository)
+														.clone_url;
+													break;
+												default:
+													break;
+											}
+
+											if (!cloneLike) throw new Error('No clone URL');
 
 											await Git.Clone(cloneLike, path());
 
@@ -281,7 +349,7 @@ const CloneModal = (props: CloneModalProps) => {
 
 export default CloneModal;
 
-export const showCloneModal = (tab?: string, url?: string) => {
+export const showCloneModal = (tab?: 'github' | 'url', url?: string) => {
 	ModalStore.pushState(
 		'clone',
 		createRoot(() => <CloneModal url={url} tab={tab} />)

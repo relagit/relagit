@@ -4,21 +4,21 @@ import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
-export interface SegmentedControlProps {
+export interface SegmentedControlProps<T extends string> {
 	items: {
 		label: string;
-		value: string | number;
+		value: T;
 		disabled?: boolean;
 		icon?: IconName;
 	}[];
-	value: string | number;
-	onChange: (value: string | number) => void;
+	value: T;
+	onChange: (value: T) => void;
 	disabled?: boolean;
 	className?: string;
 }
 
-export default (props: SegmentedControlProps) => {
-	const [value, setValue] = createSignal(props.value || props.items[0].value);
+export default <T extends string>(props: SegmentedControlProps<T>) => {
+	const [value, setValue] = createSignal<T>(props.value || props.items[0].value);
 
 	return (
 		<div
@@ -44,7 +44,7 @@ export default (props: SegmentedControlProps) => {
 						onClick={() => {
 							if (item.disabled || props.disabled) return;
 
-							setValue(item.value);
+							setValue(() => item.value);
 
 							props.onChange(item.value);
 						}}
@@ -52,7 +52,7 @@ export default (props: SegmentedControlProps) => {
 							if (e.key === 'Enter') {
 								if (item.disabled || props.disabled) return;
 
-								setValue(item.value);
+								setValue(() => item.value);
 
 								props.onChange(item.value);
 							}

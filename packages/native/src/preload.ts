@@ -8,35 +8,12 @@ import * as ipc from '~/common/ipc';
 
 import _eval from './modules/eval';
 import { updateEnvironmentForProcess } from './modules/shell';
+import type { RequireResult } from './types';
 
 if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 export const Native = {
-	DANGEROUS__NODE__REQUIRE: <I extends string>(
-		id: I
-	): I extends 'fs'
-		? typeof import('fs')
-		: I extends 'fs/promises'
-			? typeof import('fs/promises')
-			: I extends 'electron'
-				? typeof import('electron')
-				: I extends 'path'
-					? typeof import('path')
-					: I extends 'os'
-						? typeof import('os')
-						: I extends 'child_process'
-							? typeof import('child_process')
-							: I extends 'electron:ipcRenderer'
-								? (typeof import('electron'))['ipcRenderer']
-								: I extends 'electron:shell'
-									? (typeof import('electron'))['shell']
-									: I extends 'electron:clipboard'
-										? (typeof import('electron'))['clipboard']
-										: I extends 'sucrase'
-											? typeof import('sucrase')
-											: I extends '@wooorm/starry-night'
-												? typeof import('@wooorm/starry-night')
-												: unknown => {
+	DANGEROUS__NODE__REQUIRE: <I extends string>(id: I): RequireResult<I> => {
 		if (id.startsWith('electron:')) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			return require('electron')[
@@ -58,6 +35,9 @@ export const Native = {
 	listeners: {
 		OPEN_REMOTE: (fn: () => void) => {
 			ipcRenderer.on(ipc.OPEN_REMOTE, fn);
+		},
+		OAUTH: (fn: (e: IpcRendererEvent, url: string) => void) => {
+			ipcRenderer.on(ipc.OAUTH_CAPTIVE, fn);
 		},
 		SHOW_IN_FOLDER: (fn: () => void) => {
 			ipcRenderer.on(ipc.SHOW_IN_FOLDER, fn);

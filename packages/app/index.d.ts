@@ -21,6 +21,8 @@ declare global {
 
 	export const __NODE_ENV__: 'development' | 'production' | 'test';
 	export const __GITHUB_CLIENT_ID__: string | undefined;
+	export const __GITLAB_CLIENT_ID__: string | undefined;
+	export const __CODEBERG_CLIENT_ID__: string | undefined;
 	export const __AI_API_PASSWORD__: string;
 	export const __AI_API_URL__: string;
 	export const __COMMIT_HASH__: string;

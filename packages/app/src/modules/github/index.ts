@@ -1,7 +1,6 @@
 export * from './types';
 export * from './oauth';
 export * from './http';
-export * from './shared';
 
 export const repoParams = (repoUrl: string): [string, string] => {
 	const [owner, repo] = repoUrl
@@ -15,5 +14,5 @@ export const repoParams = (repoUrl: string): [string, string] => {
 export const commitFormatsForProvider = (url: string, sha: string) => {
 	if (url.includes('github')) return `/commit/${sha}`;
 	if (url.includes('gitlab')) return `/commit/${sha}`;
-	if (url.includes('bitbucket')) return `/commits/${sha}`;
+	if (url.includes('codeberg')) return `/commits/${sha}`;
 };
