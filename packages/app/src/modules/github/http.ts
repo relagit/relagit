@@ -113,9 +113,10 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 		const res = await fetch(url, {
 			headers: {
-				Authorization: AccountStore.hasKey('github_access')
-					? `Bearer ${await AccountStore.getKey('github_access')}`
-					: '',
+				Authorization:
+					AccountStore.hasKey('github_access') ?
+						`Bearer ${await AccountStore.getKey('github_access')}`
+					:	'',
 				...headers
 			}
 		});
@@ -124,9 +125,9 @@ export const GitHub = <T extends keyof GithubResponse>(
 			throw 'Unauthorized';
 		} else if (res.status !== 200) throw res.statusText;
 
-		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
-			? res.json()
-			: res.text())) as R;
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json' ?
+			res.json()
+		:	res.text())) as R;
 	};
 
 	const post = async <R = GithubResponse[T][1]>(
@@ -146,9 +147,10 @@ export const GitHub = <T extends keyof GithubResponse>(
 		const res = await fetch(url, {
 			method: 'POST',
 			headers: {
-				Authorization: AccountStore.hasKey('github_access')
-					? `Bearer ${await AccountStore.getKey('github_access')}`
-					: '',
+				Authorization:
+					AccountStore.hasKey('github_access') ?
+						`Bearer ${await AccountStore.getKey('github_access')}`
+					:	'',
 				...headers
 			},
 			body: JSON.stringify(body)
@@ -158,9 +160,9 @@ export const GitHub = <T extends keyof GithubResponse>(
 			throw 'Unauthorized';
 		} else if (!res.status.toString().startsWith('2')) throw res.statusText;
 
-		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
-			? res.json()
-			: res.text())) as R;
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json' ?
+			res.json()
+		:	res.text())) as R;
 	};
 
 	const stream = async <R = GithubResponse[T][1]>(
@@ -186,9 +188,10 @@ export const GitHub = <T extends keyof GithubResponse>(
 
 			const res = await fetch(decodeURIComponent(search.toString()), {
 				headers: {
-					Authorization: AccountStore.hasKey('github_access')
-						? `Bearer ${await AccountStore.getKey('github_access')}`
-						: '',
+					Authorization:
+						AccountStore.hasKey('github_access') ?
+							`Bearer ${await AccountStore.getKey('github_access')}`
+						:	'',
 					...headers
 				}
 			});
@@ -197,10 +200,11 @@ export const GitHub = <T extends keyof GithubResponse>(
 				throw 'Unauthorized';
 			} else if (res.status !== 200) throw res.statusText;
 
-			const items = (await ((headers as _HeadersInit)['Accept'] ===
-			'application/vnd.github.v3+json'
-				? res.json()
-				: res.text())) as R;
+			const items = (await ((
+				(headers as _HeadersInit)['Accept'] === 'application/vnd.github.v3+json'
+			) ?
+				res.json()
+			:	res.text())) as R;
 
 			if (!items || (items as []).length === 0) {
 				done = true;

@@ -279,21 +279,21 @@ export default (props: CodeViewProps) => {
 											<ImageView
 												repository={props.repository}
 												fromPath={
-													historyOpen()
-														? path.join(
-																commit()?.fromPath || '',
-																commit()?.from || ''
-															)
-														: props.fromFile
+													historyOpen() ?
+														path.join(
+															commit()?.fromPath || '',
+															commit()?.from || ''
+														)
+													:	props.fromFile
 												}
 												path={
-													historyOpen()
-														? path.join(
-																props.repository,
-																commit()?.path || '',
-																commit()?.filename || ''
-															)
-														: props.file
+													historyOpen() ?
+														path.join(
+															props.repository,
+															commit()?.path || '',
+															commit()?.filename || ''
+														)
+													:	props.file
 												}
 												status={fileStatus()!}
 											/>
@@ -377,9 +377,9 @@ export default (props: CodeViewProps) => {
 																		[status()]: true
 																	}}
 																>
-																	{status() === 'added'
-																		? '+'
-																		: '-'}
+																	{status() === 'added' ?
+																		'+'
+																	:	'-'}
 																</div>
 																<div
 																	class="codeview__line__content"
@@ -412,9 +412,9 @@ export default (props: CodeViewProps) => {
 													}
 
 													const from =
-														chunk.type == 'Chunk'
-															? chunk.fromFileRange
-															: { start: 0, lines: 0 };
+														chunk.type == 'Chunk' ?
+															chunk.fromFileRange
+														:	{ start: 0, lines: 0 };
 													const to = chunk.toFileRange;
 
 													const isLastChunk =
@@ -528,10 +528,12 @@ export default (props: CodeViewProps) => {
 																					}
 																					fallback={' '}
 																				>
-																					{lineStatus ===
-																					'added'
-																						? '+'
-																						: '-'}
+																					{(
+																						lineStatus ===
+																						'added'
+																					) ?
+																						'+'
+																					:	'-'}
 																				</Show>
 																			</div>
 																			<div

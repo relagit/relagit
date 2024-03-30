@@ -151,9 +151,9 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 							>
 								<div class="content">
 									<span class="path" title={file.path}>
-										{file.path.endsWith('/')
-											? file.path.slice(0, -1)
-											: file.path}
+										{file.path.endsWith('/') ?
+											file.path.slice(0, -1)
+										:	file.path}
 									</span>
 									<span class="name">
 										<Show when={file.path}>
@@ -220,17 +220,19 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 											<Icon
 												name={
 													// eslint-disable-next-line no-nested-ternary
-													runsToStatus(
-														commitRuns()[commit.sha.substring(0, 7)]
-													) === 'pending'
-														? 'clock'
-														: runsToStatus(
-																	commitRuns()[
-																		commit.sha.substring(0, 7)
-																	]
-															  ) === 'success'
-															? 'check'
-															: 'x'
+													(
+														runsToStatus(
+															commitRuns()[commit.sha.substring(0, 7)]
+														) === 'pending'
+													) ?
+														'clock'
+													: (
+														runsToStatus(
+															commitRuns()[commit.sha.substring(0, 7)]
+														) === 'success'
+													) ?
+														'check'
+													:	'x'
 												}
 											/>
 										</div>

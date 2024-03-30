@@ -77,9 +77,9 @@ const OAuthModal = (props: { init: OAuthInitResponse }) => {
 											fallback={
 												<>
 													{t(
-														hasExpired()
-															? 'modal.auth.expired'
-															: 'modal.auth.willExpire',
+														hasExpired() ? 'modal.auth.expired' : (
+															'modal.auth.willExpire'
+														),
 														{
 															time: renderDate(expiresMs, true)()
 														}

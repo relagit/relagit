@@ -34,9 +34,9 @@ export const LogModal = () => {
 													<For each={cmd.args}>
 														{(arg, i) => (
 															<span>
-																{20 < arg.length
-																	? arg.substring(0, 20) + '...'
-																	: arg}
+																{20 < arg.length ?
+																	arg.substring(0, 20) + '...'
+																:	arg}
 																<Show
 																	when={
 																		i() !== cmd.args.length - 1

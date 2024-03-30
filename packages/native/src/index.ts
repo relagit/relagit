@@ -97,14 +97,13 @@ const constructWindow = async () => {
 		| 'sheet'
 		| 'window'
 		| undefined = settings.ui?.vibrancy ? 'sidebar' : undefined;
-	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined = settings
-		.ui?.vibrancy
-		? 'mica'
-		: undefined;
+	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
+		settings.ui?.vibrancy ? 'mica' : undefined;
 	let transparent = settings.ui?.vibrancy && process.platform === 'win32' ? true : undefined;
-	let backgroundColor = settings.ui?.vibrancy
-		? '#00000000'
-		: backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors);
+	let backgroundColor =
+		settings.ui?.vibrancy ?
+			'#00000000'
+		:	backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors);
 
 	if (isOnboarding()) {
 		vibrancy = 'sidebar';

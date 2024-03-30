@@ -30,9 +30,9 @@ export const relative = (ms: number, useSeconds = false) => {
 		}
 	}
 
-	return useSeconds
-		? t('time.second', { count: Math.abs(seconds) }, Math.abs(seconds))
-		: t('time.now');
+	return useSeconds ?
+			t('time.second', { count: Math.abs(seconds) }, Math.abs(seconds))
+		:	t('time.now');
 };
 
 export const renderDate = (ms: number, seconds = false): Accessor<string | undefined> => {

@@ -124,9 +124,9 @@ export default (props: HeaderDrawerProps) => {
 											type: 'item',
 											label: t('sidebar.drawer.contextMenu.viewIn', {
 												name:
-													window.Native.platform === 'darwin'
-														? 'Finder'
-														: 'Explorer'
+													window.Native.platform === 'darwin' ?
+														'Finder'
+													:	'Explorer'
 											}),
 											onClick: () => {
 												showItemInFolder(repository.path);

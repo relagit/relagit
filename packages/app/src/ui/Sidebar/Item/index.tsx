@@ -41,9 +41,10 @@ export default (props: GitFile) => {
 		<Menu
 			items={[
 				{
-					label: staged()
-						? t('sidebar.contextMenu.unstage')
-						: t('sidebar.contextMenu.stage'),
+					label:
+						staged() ?
+							t('sidebar.contextMenu.unstage')
+						:	t('sidebar.contextMenu.stage'),
 					type: 'item',
 					onClick: () => {
 						StageStore.toggleStaged(path.join(props.path, props.name));

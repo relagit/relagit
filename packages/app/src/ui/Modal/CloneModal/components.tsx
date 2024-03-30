@@ -48,18 +48,14 @@ export const RepoList = <T extends Provider>(props: {
 	provider: T;
 	done: boolean;
 	account: NormalProviderAccount<T>;
-	state: T extends 'github'
-		? GitHubRepository[]
-		: T extends 'gitlab'
-			? GitLabProject[]
-			: CodebergRepository[] | null;
+	state: T extends 'github' ? GitHubRepository[]
+	: T extends 'gitlab' ? GitLabProject[]
+	: CodebergRepository[] | null;
 	setSelected: Setter<GitHubRepository | GitLabProject | CodebergRepository | null | undefined>;
 	selected: Accessor<
-		T extends 'github'
-			? GitHubRepository
-			: T extends 'gitlab'
-				? GitLabProject
-				: CodebergRepository | null | undefined
+		T extends 'github' ? GitHubRepository
+		: T extends 'gitlab' ? GitLabProject
+		: CodebergRepository | null | undefined
 	>;
 }) => {
 	return (

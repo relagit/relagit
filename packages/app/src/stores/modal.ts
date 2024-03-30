@@ -63,9 +63,9 @@ const ModalStore = new (class ModalStore extends GenericStore {
 
 		this.#visibilityListeners
 			.filter((listener) =>
-				Array.isArray(listener.type)
-					? listener.type.includes(this.#state.active?.type ?? '')
-					: listener.type === this.#state.active?.type
+				Array.isArray(listener.type) ?
+					listener.type.includes(this.#state.active?.type ?? '')
+				:	listener.type === this.#state.active?.type
 			)
 			.forEach((listener) => listener.cb());
 

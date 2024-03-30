@@ -80,9 +80,9 @@ export default (props: ImageViewProps) => {
 			try {
 				const remote = await Git.ShowOrigin(
 					repository(),
-					props.fromPath === '.'
-						? props.path.replace(props.repository, '')
-						: props.fromPath!.replace(props.repository, ''),
+					props.fromPath === '.' ?
+						props.path.replace(props.repository, '')
+					:	props.fromPath!.replace(props.repository, ''),
 					await Git.PreviousCommit(repository(), commit()?.hash), // this will return undefined if there is no commit passed, so we can use it here
 					'binary'
 				);
@@ -208,9 +208,9 @@ export default (props: ImageViewProps) => {
 						added: sizeDifference(size()[0], size()[1]) < 0
 					}}
 				>
-					{sizeDifference(size()[0], size()[1]) < 0
-						? `+ ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`
-						: `- ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`}
+					{sizeDifference(size()[0], size()[1]) < 0 ?
+						`+ ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`
+					:	`- ${nearestByteFigure(Math.abs(sizeDifference(size()[0], size()[1])))}`}
 				</div>
 			</Show>
 			<Show when={URIs()[0] && URIs()[1]}>

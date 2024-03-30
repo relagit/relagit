@@ -103,9 +103,9 @@ export default (props: WorkspaceProps) => {
 											type: 'item',
 											label: t('sidebar.contextMenu.viewIn', {
 												name:
-													window.Native.platform === 'darwin'
-														? 'Finder'
-														: 'Explorer'
+													window.Native.platform === 'darwin' ?
+														'Finder'
+													:	'Explorer'
 											}),
 											onClick: () => {
 												showItemInFolder(
@@ -260,14 +260,14 @@ export default (props: WorkspaceProps) => {
 										: file().file?.path) || '') + '/'} */}
 
 							<Show
-								when={(historyOpen()
-									? selectedCommitFile()?.path || ''
-									: file()?.file?.path || ''
+								when={(historyOpen() ?
+									selectedCommitFile()?.path || ''
+								:	file()?.file?.path || ''
 								).endsWith('/')}
 								fallback={
-									((historyOpen()
-										? selectedCommitFile()?.path
-										: file()?.file?.path) || '') + '/'
+									((historyOpen() ?
+										selectedCommitFile()?.path
+									:	file()?.file?.path) || '') + '/'
 								}
 							>
 								{historyOpen() ? selectedCommitFile()?.path : file()?.file?.path}

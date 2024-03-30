@@ -82,9 +82,9 @@ export default (props: PassthroughRef<FileSelectProps>) => {
 						label={t('ui.filepicker.label')}
 						value={inputValue()}
 						placeholder={
-							props.properties.includes('openFile')
-								? t('ui.filepicker.placeholder')
-								: t('ui.filepicker.folderPlaceholder')
+							props.properties.includes('openFile') ?
+								t('ui.filepicker.placeholder')
+							:	t('ui.filepicker.folderPlaceholder')
 						}
 						disabled={props.disabled}
 						onChange={(v) => {

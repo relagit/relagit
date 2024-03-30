@@ -134,9 +134,10 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 
 		const res = await fetch(url, {
 			headers: {
-				Authorization: AccountStore.hasKey('codeberg_access')
-					? `Bearer ${await AccountStore.getKey('codeberg_access')}`
-					: '',
+				Authorization:
+					AccountStore.hasKey('codeberg_access') ?
+						`Bearer ${await AccountStore.getKey('codeberg_access')}`
+					:	'',
 				...headers
 			}
 		});
@@ -148,9 +149,9 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 			return get(...params);
 		} else if (res.status !== 200) throw res.statusText;
 
-		return (await ((headers as _HeadersInit)['Accept'] === 'application/json'
-			? res.json()
-			: res.text())) as R;
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
+			res.json()
+		:	res.text())) as R;
 	};
 
 	const post = async <R = CodebergResponse[T][1]>(
@@ -170,9 +171,10 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 		const res = await fetch(url, {
 			method: 'POST',
 			headers: {
-				Authorization: AccountStore.hasKey('codeberg_access')
-					? `Bearer ${await AccountStore.getKey('codeberg_access')}`
-					: '',
+				Authorization:
+					AccountStore.hasKey('codeberg_access') ?
+						`Bearer ${await AccountStore.getKey('codeberg_access')}`
+					:	'',
 				...headers
 			},
 			body: JSON.stringify(body)
@@ -182,9 +184,9 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 			throw 'Unauthorized';
 		} else if (!res.status.toString().startsWith('2')) throw res.statusText;
 
-		return (await ((headers as _HeadersInit)['Accept'] === 'application/json'
-			? res.json()
-			: res.text())) as R;
+		return (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
+			res.json()
+		:	res.text())) as R;
 	};
 
 	const stream = async <R = CodebergResponse[T][1]>(
@@ -210,9 +212,10 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 
 			const res = await fetch(decodeURIComponent(search.toString()), {
 				headers: {
-					Authorization: AccountStore.hasKey('codeberg_access')
-						? `Bearer ${await AccountStore.getKey('codeberg_access')}`
-						: '',
+					Authorization:
+						AccountStore.hasKey('codeberg_access') ?
+							`Bearer ${await AccountStore.getKey('codeberg_access')}`
+						:	'',
 					...headers
 				}
 			});
@@ -221,9 +224,9 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 				throw 'Unauthorized';
 			} else if (res.status !== 200) throw res.statusText;
 
-			const items = (await ((headers as _HeadersInit)['Accept'] === 'application/json'
-				? res.json()
-				: res.text())) as R;
+			const items = (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
+				res.json()
+			:	res.text())) as R;
 
 			if (!items || (items as []).length === 0) {
 				done = true;

@@ -98,17 +98,17 @@ export const generatePrompt = async (repo: Repository) => {
 Your answer MUST be in the following format:
 
 ${
-	SettingsStore.settings.commit?.styles?.[repo.path] === CommitStyle.relational
-		? `${parens[0]}scope${parens[1]} <type> <description>`
-		: `<type>${parens[0]}optional scope${parens[1]}: <description>`
+	SettingsStore.settings.commit?.styles?.[repo.path] === CommitStyle.relational ?
+		`${parens[0]}scope${parens[1]} <type> <description>`
+	:	`<type>${parens[0]}optional scope${parens[1]}: <description>`
 }
 [optional body]
 
 Some types that can be used:fix:, feat:, chore:, ci:, docs:, style:, refactor:, perf:, test:, and others.
 The <type> and <description> fields are mandatory, the <scope> field is ${
-		SettingsStore.settings.commit?.styles?.[repo.path] === CommitStyle.relational
-			? 'required'
-			: 'optional'
+		SettingsStore.settings.commit?.styles?.[repo.path] === CommitStyle.relational ?
+			'required'
+		:	'optional'
 	}, and the (optional) <body> field is allowed.
 The <scope> should be the name(s) of files changed. e.g. if "/src/modules/ai/prompt.ts" was changed, the scope should be "modules/ai/prompt" or if "/src/modules/ai/prompt.ts" and "/src/modules/ai/index.ts" were changed, the scope should be "modules/ai".
 You may add a BODY ONLY if you feel the changes are complex and need more explanation. If you do, it must be separated from the description by a blank line.

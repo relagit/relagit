@@ -271,9 +271,9 @@ const SettingsModal = () => {
 										{(key, i) => (
 											<span>
 												{t(`settings.accounts.keys.${key}`)}
-												{i() !== AccountStore.keysFor(provider).length - 1
-													? ', '
-													: ''}
+												{i() !== AccountStore.keysFor(provider).length - 1 ?
+													', '
+												:	''}
 											</span>
 										)}
 									</For>
@@ -430,9 +430,9 @@ const SettingsModal = () => {
 								{
 									label: t('sidebar.contextMenu.viewIn', {
 										name:
-											window.Native.platform === 'darwin'
-												? 'Finder'
-												: 'Explorer'
+											window.Native.platform === 'darwin' ?
+												'Finder'
+											:	'Explorer'
 									}),
 									type: 'brand',
 									onClick: () => {

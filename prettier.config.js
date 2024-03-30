@@ -5,6 +5,7 @@ const config = {
 	singleQuote: true,
 	trailingComma: 'none',
 	printWidth: 100,
+	experimentalTernaries: true,
 	tabWidth: 4,
 	importOrderParserPlugins: ['importAssertions', 'typescript', 'jsx', 'json'],
 	bracketSpacing: true,

@@ -67,9 +67,9 @@ const Modal = (props: ModalProps) => {
 
 	const focusTrap = (e: KeyboardEvent) => {
 		if (
-			Array.isArray(props.id)
-				? !props.id.includes(ModalStore.state?.active?.type || '')
-				: props.id !== ModalStore.state?.active?.type
+			Array.isArray(props.id) ?
+				!props.id.includes(ModalStore.state?.active?.type || '')
+			:	props.id !== ModalStore.state?.active?.type
 		)
 			return;
 

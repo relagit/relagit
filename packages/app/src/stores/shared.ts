@@ -4,15 +4,12 @@ import { GitLabUser } from '@app/modules/gitlab';
 
 export type Provider = 'github' | 'gitlab' | 'codeberg' | 'url';
 
-export type ProviderAccount<T extends Provider> = T extends 'gitlab'
-	? GitLabUser
-	: T extends 'github'
-		? GithubUser
-		: T extends 'codeberg'
-			? CodebergUser
-			: T extends 'url'
-				? never
-				: never;
+export type ProviderAccount<T extends Provider> =
+	T extends 'gitlab' ? GitLabUser
+	: T extends 'github' ? GithubUser
+	: T extends 'codeberg' ? CodebergUser
+	: T extends 'url' ? never
+	: never;
 
 export type NormalProviderAccount<T extends Provider> = {
 	provider: T;
