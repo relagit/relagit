@@ -55,7 +55,7 @@
 		"@types/primer__octicons": "^17.11.0",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		"@wooorm/starry-night": "^3.2.0",
+		"@wooorm/starry-night": "^3.3.0",
 		"babel-preset-solid": "^1.8.8",
 		"dompurify": "^3.0.7",
 		"dotenv": "^16.3.1",
