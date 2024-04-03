@@ -5,6 +5,7 @@ import { createStoreListener } from '@stores/index';
 import SettingsStore from '@stores/settings';
 
 import DragLayer from './ui/Layer/Drag';
+import { CommandPalette } from './ui/Palette';
 import Modal from '@ui/Modal';
 import Notification from '@ui/Notification';
 import Onboarding from '@ui/Onboarding';
@@ -135,6 +136,7 @@ export default () => {
 					<Modal.Layer />
 					<DragLayer />
 					<Notification.Layer />
+					<CommandPalette />
 					<Sidebar sidebar={sidebar()} />
 					<Workspace sidebar={sidebar()} />
 				</Show>

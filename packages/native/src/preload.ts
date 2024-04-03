@@ -66,6 +66,9 @@ export const Native = {
 		SWITCHER: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_SWITCHER, fn);
 		},
+		PALETTE: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
+			ipcRenderer.on(ipc.OPEN_PALETTE, fn);
+		},
 		HISTORY: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_HISTORY, fn);
 		},

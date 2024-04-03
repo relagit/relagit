@@ -246,14 +246,14 @@ const constructWindow = async () => {
 			submenu: [
 				{
 					label: 'Sidebar',
-					accelerator: 'CmdOrCtrl+B',
+					accelerator: 'CmdOrCtrl+S',
 					click: () => {
 						dispatch(ipc.OPEN_SIDEBAR);
 					}
 				},
 				{
 					label: 'Repositories',
-					accelerator: 'CmdOrCtrl+K',
+					accelerator: 'CmdOrCtrl+D',
 					click: () => {
 						dispatch(ipc.OPEN_SWITCHER);
 						dispatch(ipc.OPEN_SIDEBAR, true);
@@ -262,7 +262,16 @@ const constructWindow = async () => {
 				{
 					type: 'separator'
 				},
-
+				{
+					label: 'Command Palette',
+					accelerator: 'CmdOrCtrl+K',
+					click: () => {
+						dispatch(ipc.OPEN_PALETTE);
+					}
+				},
+				{
+					type: 'separator'
+				},
 				{
 					label: 'Commit History',
 					accelerator: 'CmdOrCtrl+L',

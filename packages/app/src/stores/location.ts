@@ -16,6 +16,7 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedCommit: LogCommit | undefined = undefined;
 	#selectedCommitFiles: PastCommit | undefined = undefined;
 	#selectedCommitFile: PastCommit['files'][number] | undefined = undefined;
+	#showingPalette = false;
 
 	#isRefetchingSelectedRepository = false;
 
@@ -77,6 +78,16 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	get dragState() {
 		return this.#dragState;
+	}
+
+	get showingPalette() {
+		return this.#showingPalette;
+	}
+
+	setShowingPalette(showing: boolean | ((s: boolean) => boolean)) {
+		this.#showingPalette =
+			typeof showing === 'function' ? showing(this.#showingPalette) : showing;
+		this.emit();
 	}
 
 	setSelectedFile(file: GitFile | undefined) {

@@ -272,6 +272,13 @@ export default {
 		files: ['{{count}} file', '{{count}} files'],
 		undo: 'Undo {{sha}}'
 	},
+	palette: {
+		hint: [
+			'Showing {{count}} of {{total}} repositoriy',
+			'Showing {{count}} of {{total}} repositories'
+		],
+		empty: 'No repositories found.'
+	},
 	modal: {
 		closeModal: 'Close Modal',
 		confirm: 'Confirm',
