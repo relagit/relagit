@@ -127,7 +127,7 @@ export const InformationModal = () => {
 					/>
 					<MetadataItem
 						label={t('modal.information.items.updated')}
-						value={renderDate(repository()?.lastFetched || 0)()!}
+						value={renderDate(repository()?.lastFetched || new Date().getTime())()!}
 					/>
 					<MetadataItem
 						label={t('modal.information.items.remote')}

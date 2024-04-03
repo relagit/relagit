@@ -204,7 +204,7 @@ export default () => {
 		<div class="workspace__header">
 			<PanelButton
 				loading={fetching()}
-				detail={renderDate(repository()?.lastFetched || 0)()}
+				detail={renderDate(repository()?.lastFetched || new Date().getTime())()}
 				label={t('git.sync')}
 				icon="sync"
 				iconVariant={iconVariant()}
