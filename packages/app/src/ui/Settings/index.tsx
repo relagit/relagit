@@ -83,6 +83,7 @@ export interface RadioGroupProps {
 	onChange: (value: string) => void;
 	disabled?: boolean;
 	hints?: boolean;
+	monoHints?: boolean;
 }
 
 export const RadioGroup = (props: RadioGroupProps) => {
@@ -122,7 +123,9 @@ export const RadioGroup = (props: RadioGroupProps) => {
 							<div class="check"></div>
 							{option.element}
 							<Show when={props.hints}>
-								<div class="hint">{option.value}</div>
+								<div classList={{ hint: true, mono: props.monoHints }}>
+									{option.value}
+								</div>
 							</Show>
 						</div>
 					);
@@ -370,6 +373,7 @@ const SettingsModal = () => {
 				</p>
 				<RadioGroup
 					hints
+					monoHints
 					options={[
 						{
 							element: t('settings.general.editor.code'),

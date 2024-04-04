@@ -302,6 +302,11 @@
 			color: var(--color-secondary);
 			font-size: 1rem;
 			font-weight: 400;
+
+			&.mono {
+				font-family: var(--font-mono);
+				font-size: 0.8rem;
+			}
 		}
 	}
 }
