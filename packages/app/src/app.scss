@@ -177,8 +177,7 @@ textarea {
 	height: 28px;
 	inset: 0;
 	position: absolute;
-	background: var(--bg-primary);
-	opacity: 0.5;
+	background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
 	border-bottom: 1px solid var(--separator-primary);
 	-webkit-app-region: drag;
 }
