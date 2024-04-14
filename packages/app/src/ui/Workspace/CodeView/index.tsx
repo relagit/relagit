@@ -4,7 +4,7 @@ import { For, Show, createSignal } from 'solid-js';
 import { parseDiff } from '@app/modules/git/parse-diff';
 import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
-import { DIFF_CODES } from '@modules/git/constants';
+import { DIFF } from '@modules/git/constants';
 import highlighter, { langFrom } from '@modules/highlighter';
 import { error } from '@modules/logger';
 import FileStore from '@stores/files';
@@ -82,7 +82,7 @@ const dealWithTabs = (line: string) => {
 export default (props: CodeViewProps) => {
 	const [showOverridden, setShowOverridden] = createSignal<boolean>(false);
 	const [shouldShow, setShouldShow] = createSignal<boolean>(false);
-	const [diff, setDiff] = createSignal<GitDiff | null | true>();
+	const [diff, setDiff] = createSignal<GitDiff | boolean>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
 	const [blame, setBlame] = createSignal<GitBlame | null>();
@@ -133,7 +133,7 @@ export default (props: CodeViewProps) => {
 			setShouldShow(false);
 			setThrew(null);
 
-			let _diff: string | null = null;
+			let _diff: string | boolean = '';
 			let contents: string | null = null;
 
 			try {
@@ -165,14 +165,14 @@ export default (props: CodeViewProps) => {
 				!BINARY_EXTENSIONS.includes(extname(props.file || commit()?.filename)) &&
 				!IMAGE_EXTENSIONS.includes(extname(props.file || commit()?.filename))
 			) {
-				if (_diff === DIFF_CODES.REMOVE_ALL) {
+				if (_diff === DIFF.REMOVE_ALL) {
 					setContent(highlighter(contents!, langFrom(props.file || '')));
 
-					setDiff(null);
-				} else if (_diff === DIFF_CODES.ADD_ALL) {
+					setDiff(DIFF.REMOVE_ALL);
+				} else if (_diff === DIFF.ADD_ALL) {
 					setContent(highlighter(contents!, langFrom(props.file || '')));
 
-					setDiff(true);
+					setDiff(DIFF.ADD_ALL);
 				} else {
 					const parsed = parseDiff(_diff!);
 
@@ -340,7 +340,10 @@ export default (props: CodeViewProps) => {
 										}}
 									>
 										<Show
-											when={diff() !== true && diff() !== null}
+											when={
+												diff() !== DIFF.ADD_ALL &&
+												diff() !== DIFF.REMOVE_ALL
+											}
 											fallback={
 												<For each={content().split('\n')}>
 													{(line, index) => {
@@ -359,13 +362,13 @@ export default (props: CodeViewProps) => {
 																<div
 																	class="codeview__line__number"
 																	style={{
-																		'min-width': `calc(${
+																		'min-width': `calc((${
 																			String(
 																				content().split(
 																					'\n'
 																				).length
 																			).length
-																		} *  35px / 3px)`
+																		} *  35px) / 3)`
 																	}}
 																>
 																	{index()}
@@ -436,7 +439,7 @@ export default (props: CodeViewProps) => {
 																					'\n'
 																				).length
 																			).length
-																		} * 70px / 3px)`
+																		} * 70px / 3)`
 																	}}
 																>
 																	<Show
@@ -494,7 +497,7 @@ export default (props: CodeViewProps) => {
 																								'\n'
 																							).length
 																						).length
-																					} * 35px / 3px)`
+																					} * 35px / 3)`
 																				}}
 																			>
 																				{line_number_one}
@@ -508,7 +511,7 @@ export default (props: CodeViewProps) => {
 																								'\n'
 																							).length
 																						).length
-																					} * 35px / 3px)`
+																					} * 35px / 3)`
 																				}}
 																			>
 																				{line_number_two}
@@ -585,7 +588,7 @@ export default (props: CodeViewProps) => {
 																						'\n'
 																					).length
 																				).length
-																			} * 70px / 3px)`
+																			} * 70px / 3)`
 																		}}
 																	>
 																		<Icon name="fold-down" />

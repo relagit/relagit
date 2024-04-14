@@ -9,7 +9,7 @@ import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from '@ui/Workspace/CodeView';
 
 import { CommitStyle } from '../commits';
 import * as Git from '../git';
-import { DIFF_CODES } from '../git/constants';
+import { DIFF } from '../git/constants';
 import { parseDiff } from '../git/parse-diff';
 import { ignoredPaths } from './shared';
 
@@ -47,9 +47,9 @@ export const generatePrompt = async (repo: Repository) => {
 
 		const parsed = parseDiff(diff);
 
-		if (diff === DIFF_CODES.ADD_ALL || diff === DIFF_CODES.REMOVE_ALL) {
+		if (diff === DIFF.ADD_ALL || diff === DIFF.REMOVE_ALL) {
 			prompt += `\n\n--FILE--: ${path}\n--CHANGES--: {--ALL_${
-				diff === DIFF_CODES.ADD_ALL ? 'ADDED' : 'REMOVED'
+				diff === DIFF.ADD_ALL ? 'ADDED' : 'REMOVED'
 			}--}: ${(await Git.Content(nodepath.join(repo.path, path), repo.path)).substring(
 				0,
 				400
@@ -58,7 +58,7 @@ export const generatePrompt = async (repo: Repository) => {
 			continue;
 		}
 
-		if (diff === DIFF_CODES.ADD_ALL) {
+		if (diff === DIFF.ADD_ALL) {
 			prompt += `\n\n--FILE--: ${path}\n--CHANGES--: {--ALL_ADDED--}: ${(
 				await Git.Content(nodepath.join(repo.path, path), repo.path)
 			).substring(0, 400)}\n--ENDFILE--`;

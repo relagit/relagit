@@ -1,4 +1,4 @@
-import { DIFF_CODES } from './constants';
+import { DIFF } from './constants';
 import { Git } from './core';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
@@ -39,9 +39,9 @@ export const statusToAlpha = (status: GitStatus) => {
 	}
 };
 
-export const Diff = async (file: string, repoPath: string) => {
+export const Diff = async (file: string, repoPath: string): Promise<string | boolean> => {
 	if (!fs.existsSync(file)) {
-		return DIFF_CODES.REMOVE_ALL;
+		return DIFF.REMOVE_ALL;
 	}
 
 	const result = await Git({
@@ -51,7 +51,7 @@ export const Diff = async (file: string, repoPath: string) => {
 	});
 
 	if (!result) {
-		return DIFF_CODES.ADD_ALL;
+		return DIFF.ADD_ALL;
 	}
 
 	return result;

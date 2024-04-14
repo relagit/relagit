@@ -1,4 +1,4 @@
-import { ERROR_IDENTIFIERS } from './constants';
+import { ERROR } from './constants';
 import { Git } from './core';
 
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
@@ -30,7 +30,7 @@ export const Content = async (file: string, repoPath: string, source?: string) =
 		});
 	} catch (error) {
 		if (typeof error !== 'string') {
-			if ((error as Error).message.includes(ERROR_IDENTIFIERS.DISK_NO_INDEX)) {
+			if ((error as Error).message.includes(ERROR.DISK_NO_INDEX)) {
 				if (source) return '';
 
 				return fs.readFileSync(file, 'utf8');
