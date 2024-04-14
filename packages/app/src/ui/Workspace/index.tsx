@@ -49,6 +49,7 @@ export default (props: WorkspaceProps) => {
 		[LocationStore],
 		() => LocationStore.selectedCommitFile
 	);
+	const selectedFile = createStoreListener([LocationStore], () => LocationStore.selectedFile);
 
 	return (
 		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
@@ -279,6 +280,7 @@ export default (props: WorkspaceProps) => {
 						</div>
 					</div>
 					<CodeView
+						status={selectedCommitFile()?.status || selectedFile()?.status || 'unknown'}
 						file={file()?.path || ''}
 						repository={repo()!}
 						fromFile={path.join(

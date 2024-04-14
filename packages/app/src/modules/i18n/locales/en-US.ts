@@ -234,6 +234,8 @@ export default {
 			sidebyside: 'Side by Side',
 			difference: 'Difference'
 		},
+		renamed: 'File renamed without changes',
+		renamedHint: 'This file had its name changed without any changes to its contents.',
 		noCommit: 'Nothing to see here',
 		noCommitHint: "You've got to select a file to see its changes. (´・｀)",
 		binary: 'Binary file',

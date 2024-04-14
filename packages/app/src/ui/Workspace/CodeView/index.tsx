@@ -1,6 +1,7 @@
 import type { GitDiff } from 'parse-git-diff';
 import { For, Show, createSignal } from 'solid-js';
 
+import { GitStatus } from '@app/modules/git/diff';
 import { parseDiff } from '@app/modules/git/parse-diff';
 import { t } from '@app/modules/i18n';
 import * as Git from '@modules/git';
@@ -57,6 +58,7 @@ const status = (e: 'UnchangedLine' | 'AddedLine' | 'DeletedLine') => {
 
 export interface CodeViewProps {
 	file: string;
+	status: GitStatus;
 	repository: string;
 	fromFile?: string;
 }
@@ -190,382 +192,264 @@ export default (props: CodeViewProps) => {
 			}
 		>
 			<Show
-				when={!switching()}
+				when={
+					!(
+						props.status === 'renamed' &&
+						!(diff() as GitDiff)?.files?.[0]?.chunks?.length
+					)
+				}
 				fallback={
 					<EmptyState
-						detail={t('codeview.loading')}
-						hint={t('codeview.loadingHint')}
+						detail={t('codeview.renamed')}
+						hint={t('codeview.renamedHint')}
 						image={EmptyState.Images.NothingHere}
 					/>
 				}
 			>
 				<Show
-					when={!threw()}
+					when={!switching()}
 					fallback={
 						<EmptyState
-							detail={t('codeview.errorHint')}
-							hint={threw()?.message}
-							image={EmptyState.Images.Error}
+							detail={t('codeview.loading')}
+							hint={t('codeview.loadingHint')}
+							image={EmptyState.Images.NothingHere}
 						/>
 					}
 				>
 					<Show
-						when={(props.file && props.repository) || (historyOpen() && commit())}
+						when={!threw()}
 						fallback={
-							<>
-								<Show
-									when={props.repository}
-									fallback={
-										<EmptyState
-											detail="No repository selected."
-											hint={
-												'See over there where it says "No Repository Selected"? Yeah, click that.'
-											}
-											image={EmptyState.Images.NothingHere}
-										/>
-									}
-								>
+							<EmptyState
+								detail={t('codeview.errorHint')}
+								hint={threw()?.message}
+								image={EmptyState.Images.Error}
+							/>
+						}
+					>
+						<Show
+							when={(props.file && props.repository) || (historyOpen() && commit())}
+							fallback={
+								<>
 									<Show
-										when={changes()?.length}
+										when={props.repository}
 										fallback={
 											<EmptyState
-												detail={t('codeview.noChanges')}
-												hint={t('codeview.noChangesHint')}
+												detail="No repository selected."
+												hint={
+													'See over there where it says "No Repository Selected"? Yeah, click that.'
+												}
 												image={EmptyState.Images.NothingHere}
 											/>
 										}
 									>
-										<EmptyState
-											detail={t('codeview.noFile')}
-											hint={t('codeview.noFileHint')}
-											image={EmptyState.Images.NothingHere}
-										/>
-									</Show>
-								</Show>
-							</>
-						}
-					>
-						<Show when={!submodule()} fallback={<SubmoduleView />}>
-							<Show
-								when={
-									!IMAGE_EXTENSIONS.includes(
-										extname(props.file || commit()?.filename)
-									) &&
-									!BINARY_EXTENSIONS.includes(
-										extname(props.file || commit()?.filename)
-									)
-								}
-								fallback={
-									<>
 										<Show
-											when={IMAGE_EXTENSIONS.includes(
-												extname(props.file || commit()?.filename)
-											)}
-										>
-											<ImageView
-												repository={props.repository}
-												fromPath={
-													historyOpen() ?
-														path.join(
-															commit()?.fromPath || '',
-															commit()?.from || ''
-														)
-													:	props.fromFile
-												}
-												path={
-													historyOpen() ?
-														path.join(
-															props.repository,
-															commit()?.path || '',
-															commit()?.filename || ''
-														)
-													:	props.file
-												}
-												status={fileStatus()!}
-											/>
-										</Show>
-										<Show
-											when={BINARY_EXTENSIONS.includes(
-												extname(props.file || commit()?.filename)
-											)}
+											when={changes()?.length}
+											fallback={
+												<EmptyState
+													detail={t('codeview.noChanges')}
+													hint={t('codeview.noChangesHint')}
+													image={EmptyState.Images.NothingHere}
+												/>
+											}
 										>
 											<EmptyState
-												detail={t('codeview.binary')}
-												hint={t('codeview.binaryHint')}
-												image={EmptyState.Images.Error}
+												detail={t('codeview.noFile')}
+												hint={t('codeview.noFileHint')}
+												image={EmptyState.Images.NothingHere}
 											/>
 										</Show>
-									</>
-								}
-							>
+									</Show>
+								</>
+							}
+						>
+							<Show when={!submodule()} fallback={<SubmoduleView />}>
 								<Show
-									when={shouldShow() || showOverridden()}
+									when={
+										!IMAGE_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										) &&
+										!BINARY_EXTENSIONS.includes(
+											extname(props.file || commit()?.filename)
+										)
+									}
 									fallback={
 										<>
-											<EmptyState
-												detail={t('codeview.tooBig')}
-												hint={t('codeview.tooBigHint')}
-												actions={[
-													{
-														label: 'Show',
-														type: 'brand',
-														onClick: () => {
-															setShowOverridden(true);
-														}
+											<Show
+												when={IMAGE_EXTENSIONS.includes(
+													extname(props.file || commit()?.filename)
+												)}
+											>
+												<ImageView
+													repository={props.repository}
+													fromPath={
+														historyOpen() ?
+															path.join(
+																commit()?.fromPath || '',
+																commit()?.from || ''
+															)
+														:	props.fromFile
 													}
-												]}
-												image={EmptyState.Images.Power}
-											/>
+													path={
+														historyOpen() ?
+															path.join(
+																props.repository,
+																commit()?.path || '',
+																commit()?.filename || ''
+															)
+														:	props.file
+													}
+													status={fileStatus()!}
+												/>
+											</Show>
+											<Show
+												when={BINARY_EXTENSIONS.includes(
+													extname(props.file || commit()?.filename)
+												)}
+											>
+												<EmptyState
+													detail={t('codeview.binary')}
+													hint={t('codeview.binaryHint')}
+													image={EmptyState.Images.Error}
+												/>
+											</Show>
 										</>
 									}
 								>
-									<pre
-										classList={{
-											codeview: true,
-											[`lang-${extname(props.file || '').slice(1)}`]: true
-										}}
+									<Show
+										when={shouldShow() || showOverridden()}
+										fallback={
+											<>
+												<EmptyState
+													detail={t('codeview.tooBig')}
+													hint={t('codeview.tooBigHint')}
+													actions={[
+														{
+															label: 'Show',
+															type: 'brand',
+															onClick: () => {
+																setShowOverridden(true);
+															}
+														}
+													]}
+													image={EmptyState.Images.Power}
+												/>
+											</>
+										}
 									>
-										<Show
-											when={
-												diff() !== DIFF.ADD_ALL &&
-												diff() !== DIFF.REMOVE_ALL
-											}
-											fallback={
-												<For each={content().split('\n')}>
-													{(line, index) => {
-														const status = () =>
-															diff() ? 'added' : 'deleted';
+										<pre
+											classList={{
+												codeview: true,
+												[`lang-${extname(props.file || '').slice(1)}`]: true
+											}}
+										>
+											<Show
+												when={
+													diff() !== DIFF.ADD_ALL &&
+													diff() !== DIFF.REMOVE_ALL
+												}
+												fallback={
+													<For each={content().split('\n')}>
+														{(line, index) => {
+															const status = () =>
+																diff() ? 'added' : 'deleted';
 
-														const lineBlame = blame()?.[index()];
+															const lineBlame = blame()?.[index()];
+
+															const numberWidth = Math.max(
+																35,
+																(String(
+																	content().split('\n').length
+																).length *
+																	35) /
+																	3
+															);
+
+															return (
+																<div
+																	classList={{
+																		codeview__line: true,
+																		[status()]: true
+																	}}
+																>
+																	<div
+																		class="codeview__line__number"
+																		style={{
+																			'min-width': `${numberWidth}px`
+																		}}
+																	>
+																		{index()}
+																	</div>
+																	<div
+																		classList={{
+																			codeview__line__indicator:
+																				true,
+																			[status()]: true
+																		}}
+																	>
+																		{status() === 'added' ?
+																			'+'
+																		:	'-'}
+																	</div>
+																	<div
+																		class="codeview__line__content"
+																		innerHTML={dealWithTabs(
+																			line
+																		)}
+																	></div>
+
+																	<Show
+																		when={
+																			blameOpen() && lineBlame
+																		}
+																	>
+																		<div
+																			{...props}
+																			class="codeview__line__blame"
+																		>
+																			{lineBlame!.author},{' '}
+																			{lineBlame!.message}
+																		</div>
+																	</Show>
+																</div>
+															);
+														}}
+													</For>
+												}
+											>
+												<For each={(diff() as GitDiff)?.files?.[0]?.chunks}>
+													{(chunk) => {
+														const _diff = diff();
+
+														if (typeof _diff === 'boolean' || !_diff) {
+															return null;
+														}
+
+														const from =
+															chunk.type == 'Chunk' ?
+																chunk.fromFileRange
+															:	{ start: 0, lines: 0 };
+														const to = chunk.toFileRange;
+
+														const isLastChunk =
+															_diff.files?.[0]?.chunks?.indexOf(
+																chunk
+															) ===
+															_diff.files?.[0]?.chunks?.length - 1;
+														const isFirstChunk =
+															_diff.files?.[0]?.chunks?.indexOf(
+																chunk
+															) === 0;
 
 														const numberWidth = Math.max(
-															35,
+															70,
 															(String(content().split('\n').length)
 																.length *
-																35) /
+																70) /
 																3
 														);
 
 														return (
-															<div
-																classList={{
-																	codeview__line: true,
-																	[status()]: true
-																}}
-															>
-																<div
-																	class="codeview__line__number"
-																	style={{
-																		'min-width': `${numberWidth}px`
-																	}}
-																>
-																	{index()}
-																</div>
-																<div
-																	classList={{
-																		codeview__line__indicator:
-																			true,
-																		[status()]: true
-																	}}
-																>
-																	{status() === 'added' ?
-																		'+'
-																	:	'-'}
-																</div>
-																<div
-																	class="codeview__line__content"
-																	innerHTML={dealWithTabs(line)}
-																></div>
-
-																<Show
-																	when={blameOpen() && lineBlame}
-																>
-																	<div
-																		{...props}
-																		class="codeview__line__blame"
-																	>
-																		{lineBlame!.author},{' '}
-																		{lineBlame!.message}
-																	</div>
-																</Show>
-															</div>
-														);
-													}}
-												</For>
-											}
-										>
-											<For each={(diff() as GitDiff)?.files?.[0]?.chunks}>
-												{(chunk) => {
-													const _diff = diff();
-
-													if (typeof _diff === 'boolean' || !_diff) {
-														return null;
-													}
-
-													const from =
-														chunk.type == 'Chunk' ?
-															chunk.fromFileRange
-														:	{ start: 0, lines: 0 };
-													const to = chunk.toFileRange;
-
-													const isLastChunk =
-														_diff.files?.[0]?.chunks?.indexOf(chunk) ===
-														_diff.files?.[0]?.chunks?.length - 1;
-													const isFirstChunk =
-														_diff.files?.[0]?.chunks?.indexOf(chunk) ===
-														0;
-
-													const numberWidth = Math.max(
-														70,
-														(String(content().split('\n').length)
-															.length *
-															70) /
-															3
-													);
-
-													return (
-														<>
-															<div class="codeview__line message">
-																<div
-																	class="codeview__line__number"
-																	style={{
-																		'min-width': `${numberWidth}px`
-																	}}
-																>
-																	<Show
-																		when={isFirstChunk}
-																		fallback={
-																			<Icon name="fold" />
-																		}
-																	>
-																		<Icon name="fold-up" />
-																	</Show>
-																</div>
-																<div class="codeview__line__content">
-																	@@ -{from.start},{from.lines} +
-																	{to.start},{to.lines} @@{' '}
-																	{chunk.context}
-																</div>
-															</div>
-															<For each={chunk.changes}>
-																{(change) => {
-																	const line_number_one =
-																		// @ts-expect-error - bad types
-																		change.lineBefore || '';
-																	const line_number_two =
-																		// @ts-expect-error - bad types
-																		change.lineAfter || '';
-
-																	if (
-																		change.type ===
-																		'MessageLine'
-																	)
-																		return null;
-
-																	const lineBlame =
-																			blame()?.[
-																				line_number_one
-																			],
-																		lineStatus = status(
-																			change.type
-																		);
-
-																	const numberWidth = Math.max(
-																		35,
-																		(String(
-																			content().split('\n')
-																				.length
-																		).length *
-																			35) /
-																			3
-																	);
-
-																	return (
-																		<div
-																			classList={{
-																				codeview__line:
-																					true,
-																				[lineStatus]: true
-																			}}
-																		>
-																			<div
-																				class="codeview__line__number"
-																				style={{
-																					'min-width': `${numberWidth}px`
-																				}}
-																			>
-																				{line_number_one}
-																			</div>
-																			<div
-																				class="codeview__line__number"
-																				style={{
-																					'min-width': `${numberWidth}px`
-																				}}
-																			>
-																				{line_number_two}
-																			</div>
-																			<div
-																				classList={{
-																					codeview__line__indicator:
-																						true,
-																					[lineStatus]:
-																						true
-																				}}
-																			>
-																				<Show
-																					when={
-																						lineStatus !==
-																						'unchanged'
-																					}
-																					fallback={' '}
-																				>
-																					{(
-																						lineStatus ===
-																						'added'
-																					) ?
-																						'+'
-																					:	'-'}
-																				</Show>
-																			</div>
-																			<div
-																				class="codeview__line__content"
-																				innerHTML={dealWithTabs(
-																					highlighter(
-																						change.content,
-																						langFrom(
-																							props.file ||
-																								commit()
-																									?.filename
-																						)
-																					)
-																				)}
-																			></div>
-																			<Show
-																				when={
-																					blameOpen() &&
-																					lineBlame
-																				}
-																			>
-																				<div
-																					{...props}
-																					class="codeview__line__blame"
-																				>
-																					{
-																						lineBlame!
-																							.author
-																					}
-																					,{' '}
-																					{
-																						lineBlame!
-																							.message
-																					}
-																				</div>
-																			</Show>
-																		</div>
-																	);
-																}}
-															</For>
-															<Show when={isLastChunk}>
+															<>
 																<div class="codeview__line message">
 																	<div
 																		class="codeview__line__number"
@@ -573,17 +457,169 @@ export default (props: CodeViewProps) => {
 																			'min-width': `${numberWidth}px`
 																		}}
 																	>
-																		<Icon name="fold-down" />
+																		<Show
+																			when={isFirstChunk}
+																			fallback={
+																				<Icon name="fold" />
+																			}
+																		>
+																			<Icon name="fold-up" />
+																		</Show>
 																	</div>
-																	<div class="codeview__line__content"></div>
+																	<div class="codeview__line__content">
+																		@@ -{from.start},
+																		{from.lines} +{to.start},
+																		{to.lines} @@{' '}
+																		{chunk.context}
+																	</div>
 																</div>
-															</Show>
-														</>
-													);
-												}}
-											</For>
-										</Show>
-									</pre>
+																<For each={chunk.changes}>
+																	{(change) => {
+																		const line_number_one =
+																			// @ts-expect-error - bad types
+																			change.lineBefore || '';
+																		const line_number_two =
+																			// @ts-expect-error - bad types
+																			change.lineAfter || '';
+
+																		if (
+																			change.type ===
+																			'MessageLine'
+																		)
+																			return null;
+
+																		const lineBlame =
+																				blame()?.[
+																					line_number_one
+																				],
+																			lineStatus = status(
+																				change.type
+																			);
+
+																		const numberWidth =
+																			Math.max(
+																				35,
+																				(String(
+																					content().split(
+																						'\n'
+																					).length
+																				).length *
+																					35) /
+																					3
+																			);
+
+																		return (
+																			<div
+																				classList={{
+																					codeview__line:
+																						true,
+																					[lineStatus]:
+																						true
+																				}}
+																			>
+																				<div
+																					class="codeview__line__number"
+																					style={{
+																						'min-width': `${numberWidth}px`
+																					}}
+																				>
+																					{
+																						line_number_one
+																					}
+																				</div>
+																				<div
+																					class="codeview__line__number"
+																					style={{
+																						'min-width': `${numberWidth}px`
+																					}}
+																				>
+																					{
+																						line_number_two
+																					}
+																				</div>
+																				<div
+																					classList={{
+																						codeview__line__indicator:
+																							true,
+																						[lineStatus]:
+																							true
+																					}}
+																				>
+																					<Show
+																						when={
+																							lineStatus !==
+																							'unchanged'
+																						}
+																						fallback={
+																							' '
+																						}
+																					>
+																						{(
+																							lineStatus ===
+																							'added'
+																						) ?
+																							'+'
+																						:	'-'}
+																					</Show>
+																				</div>
+																				<div
+																					class="codeview__line__content"
+																					innerHTML={dealWithTabs(
+																						highlighter(
+																							change.content,
+																							langFrom(
+																								props.file ||
+																									commit()
+																										?.filename
+																							)
+																						)
+																					)}
+																				></div>
+																				<Show
+																					when={
+																						blameOpen() &&
+																						lineBlame
+																					}
+																				>
+																					<div
+																						{...props}
+																						class="codeview__line__blame"
+																					>
+																						{
+																							lineBlame!
+																								.author
+																						}
+																						,{' '}
+																						{
+																							lineBlame!
+																								.message
+																						}
+																					</div>
+																				</Show>
+																			</div>
+																		);
+																	}}
+																</For>
+																<Show when={isLastChunk}>
+																	<div class="codeview__line message">
+																		<div
+																			class="codeview__line__number"
+																			style={{
+																				'min-width': `${numberWidth}px`
+																			}}
+																		>
+																			<Icon name="fold-down" />
+																		</div>
+																		<div class="codeview__line__content"></div>
+																	</div>
+																</Show>
+															</>
+														);
+													}}
+												</For>
+											</Show>
+										</pre>
+									</Show>
 								</Show>
 							</Show>
 						</Show>
