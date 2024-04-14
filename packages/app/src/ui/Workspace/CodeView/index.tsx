@@ -1,4 +1,4 @@
-import type { GitDiff } from 'parse-git-diff';
+import type { AddedLine, DeletedLine, GitDiff } from 'parse-git-diff';
 import { For, Show, createSignal } from 'solid-js';
 
 import { GitStatus } from '@app/modules/git/diff';
@@ -73,6 +73,7 @@ export default (props: CodeViewProps) => {
 	const [diff, setDiff] = createSignal<GitDiff | boolean>();
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
+	const [contentLength, setContentLength] = createSignal<number>(0);
 	const [blame, setBlame] = createSignal<GitBlame | null>();
 	const [submodule, setSubmodule] = createSignal<boolean>(false);
 
@@ -104,6 +105,14 @@ export default (props: CodeViewProps) => {
 				setShowCommit(false);
 				setThrew(null);
 
+				const lastChunk =
+					LocationStore.selectedCommitFile?.diff?.files?.[0]?.chunks?.slice(-1)[0];
+				const lastChange = lastChunk?.changes?.slice(-1)[0];
+				const lastLine =
+					(lastChange as AddedLine)?.lineAfter || (lastChange as DeletedLine)?.lineBefore;
+
+				setContentLength(lastLine || 0);
+
 				return;
 			}
 
@@ -126,6 +135,9 @@ export default (props: CodeViewProps) => {
 
 			try {
 				contents = await Git.Content(props.file, props.repository);
+
+				setContentLength(contents!.split('\n').length);
+
 				_diff = await Git.Diff(props.file, props.repository);
 			} catch (e) {
 				setThrew(e as Error);
@@ -357,9 +369,7 @@ export default (props: CodeViewProps) => {
 
 															const numberWidth = Math.max(
 																35,
-																(String(
-																	content().split('\n').length
-																).length *
+																(String(contentLength()).length *
 																	35) /
 																	3
 															);
@@ -442,9 +452,7 @@ export default (props: CodeViewProps) => {
 
 														const numberWidth = Math.max(
 															70,
-															(String(content().split('\n').length)
-																.length *
-																70) /
+															(String(contentLength()).length * 70) /
 																3
 														);
 
@@ -500,9 +508,7 @@ export default (props: CodeViewProps) => {
 																			Math.max(
 																				35,
 																				(String(
-																					content().split(
-																						'\n'
-																					).length
+																					contentLength()
 																				).length *
 																					35) /
 																					3
