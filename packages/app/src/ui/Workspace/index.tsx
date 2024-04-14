@@ -260,17 +260,6 @@ export default (props: WorkspaceProps) => {
 				<div class="workspace__container__main">
 					<div class="workspace__container__main__file">
 						<div class="workspace__container__main__file__path">
-							{/* {(historyOpen()
-								? selectedCommitFile()?.path
-								: file().file?.path
-							)?.endsWith('/')
-								? historyOpen()
-									? selectedCommitFile()?.path
-									: file().file?.path
-								: ((historyOpen()
-										? selectedCommitFile()?.path
-										: file().file?.path) || '') + '/'} */}
-
 							<Show
 								when={(historyOpen() ?
 									selectedCommitFile()?.path || ''
