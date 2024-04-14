@@ -1,4 +1,5 @@
 import { For, Show } from 'solid-js';
+import { getIconForFilePath, getIconUrlForFilePath } from 'vscode-material-icons';
 
 import { openInEditor } from '@app/modules/editor';
 import { statusToAlpha } from '@app/modules/git/diff';
@@ -200,6 +201,17 @@ export default (props: WorkspaceProps) => {
 											}
 										}}
 									>
+										<Show when={getIconForFilePath(commitFile.filename)}>
+											<div class="workspace__container__files__file__fileicon">
+												<img
+													src={getIconUrlForFilePath(
+														commitFile.filename,
+														'../node_modules/vscode-material-icons/generated/icons'
+													)}
+													alt={getIconForFilePath(commitFile.filename)}
+												/>
+											</div>
+										</Show>
 										<div class="workspace__container__files__file__filename">
 											<Show when={commitFile.from}>
 												<span

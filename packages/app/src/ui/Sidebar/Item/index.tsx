@@ -1,4 +1,5 @@
 import { Show } from 'solid-js';
+import { getIconForFilePath, getIconUrlForFilePath } from 'vscode-material-icons';
 
 import { triggerWorkflow } from '@app/modules/actions';
 import { openInEditor } from '@app/modules/editor';
@@ -146,6 +147,17 @@ export default (props: GitFile) => {
 				}}
 				tabIndex={0}
 			>
+				<Show when={getIconForFilePath(props.name)}>
+					<div class="sidebar__item__fileicon">
+						<img
+							src={getIconUrlForFilePath(
+								props.name,
+								'../node_modules/vscode-material-icons/generated/icons'
+							)}
+							alt={getIconForFilePath(props.name)}
+						/>
+					</div>
+				</Show>
 				<div class="sidebar__item__filename">
 					<Show when={props.from}>
 						<span class="sidebar__item__filename__path" title={props.fromPath}>
