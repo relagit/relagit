@@ -306,11 +306,7 @@ export const refetchRepository = async (repository: Repository | undefined) => {
 		(f) => f.path === currentFile?.path && f.name === currentFile?.name
 	);
 
-	if (equivalent) {
-		LocationStore.setSelectedFile(equivalent);
-	} else {
-		LocationStore.setSelectedFile(undefined);
-	}
+	LocationStore.setSelectedFile(equivalent || undefined);
 
 	if (repository.path === LocationStore.selectedRepository?.path)
 		LocationStore.setIsRefetchingSelectedRepository(false);
