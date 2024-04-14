@@ -16,27 +16,13 @@ import Icon from '@ui/Common/Icon';
 
 import ImageView from './ImageView';
 import SubmoduleView from './SubmoduleView';
+import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from './constants';
 
 import './index.scss';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
-
-export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
-export const BINARY_EXTENSIONS = [
-	'.DS_Store',
-	'.exe',
-	'.dll',
-	'.so',
-	'.dylib',
-	'.o',
-	'.a',
-	'.ttf',
-	'.otf',
-	'.woff',
-	'.woff2'
-];
 
 const extname = (file: string | undefined) => {
 	if (!file) return '';
