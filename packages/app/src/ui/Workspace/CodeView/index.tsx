@@ -338,6 +338,14 @@ export default (props: CodeViewProps) => {
 
 														const lineBlame = blame()?.[index()];
 
+														const numberWidth = Math.max(
+															35,
+															(String(content().split('\n').length)
+																.length *
+																35) /
+																3
+														);
+
 														return (
 															<div
 																classList={{
@@ -348,13 +356,7 @@ export default (props: CodeViewProps) => {
 																<div
 																	class="codeview__line__number"
 																	style={{
-																		'min-width': `calc((${
-																			String(
-																				content().split(
-																					'\n'
-																				).length
-																			).length
-																		} *  35px) / 3)`
+																		'min-width': `${numberWidth}px`
 																	}}
 																>
 																	{index()}
@@ -413,19 +415,21 @@ export default (props: CodeViewProps) => {
 														_diff.files?.[0]?.chunks?.indexOf(chunk) ===
 														0;
 
+													const numberWidth = Math.max(
+														70,
+														(String(content().split('\n').length)
+															.length *
+															70) /
+															3
+													);
+
 													return (
 														<>
 															<div class="codeview__line message">
 																<div
 																	class="codeview__line__number"
 																	style={{
-																		'min-width': `calc(${
-																			String(
-																				content().split(
-																					'\n'
-																				).length
-																			).length
-																		} * 70px / 3)`
+																		'min-width': `${numberWidth}px`
 																	}}
 																>
 																	<Show
@@ -466,6 +470,16 @@ export default (props: CodeViewProps) => {
 																			change.type
 																		);
 
+																	const numberWidth = Math.max(
+																		35,
+																		(String(
+																			content().split('\n')
+																				.length
+																		).length *
+																			35) /
+																			3
+																	);
+
 																	return (
 																		<div
 																			classList={{
@@ -477,13 +491,7 @@ export default (props: CodeViewProps) => {
 																			<div
 																				class="codeview__line__number"
 																				style={{
-																					'min-width': `calc(${
-																						String(
-																							content().split(
-																								'\n'
-																							).length
-																						).length
-																					} * 35px / 3)`
+																					'min-width': `${numberWidth}px`
 																				}}
 																			>
 																				{line_number_one}
@@ -491,13 +499,7 @@ export default (props: CodeViewProps) => {
 																			<div
 																				class="codeview__line__number"
 																				style={{
-																					'min-width': `calc(${
-																						String(
-																							content().split(
-																								'\n'
-																							).length
-																						).length
-																					} * 35px / 3)`
+																					'min-width': `${numberWidth}px`
 																				}}
 																			>
 																				{line_number_two}
@@ -568,13 +570,7 @@ export default (props: CodeViewProps) => {
 																	<div
 																		class="codeview__line__number"
 																		style={{
-																			'min-width': `calc(${
-																				String(
-																					content().split(
-																						'\n'
-																					).length
-																				).length
-																			} * 70px / 3)`
+																			'min-width': `${numberWidth}px`
 																		}}
 																	>
 																		<Icon name="fold-down" />
