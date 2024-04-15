@@ -15,6 +15,15 @@ if (process.platform === 'darwin') updateEnvironmentForProcess();
 export const Native = {
 	DANGEROUS__NODE__REQUIRE: <I extends string>(id: I): RequireResult<I> => {
 		if (id.startsWith('electron:')) {
+			// https://www.electronjs.org/blog/electron-29-0#behavior-changed-ipcrenderer-can-no-longer-be-sent-over-the-contextbridge
+			if (id === 'electron:ipcRenderer') {
+				return {
+					invoke: ipcRenderer.invoke,
+					on: ipcRenderer.on,
+					send: ipcRenderer.send
+				} as ReturnType<typeof require>;
+			}
+
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			return require('electron')[
 				id.replace('electron:', '') as keyof typeof import('electron')

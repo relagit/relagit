@@ -8,6 +8,7 @@ export type RequireResult<I> =
 	: I extends 'electron:ipcRenderer' ? (typeof import('electron'))['ipcRenderer']
 	: I extends 'electron:shell' ? (typeof import('electron'))['shell']
 	: I extends 'electron:clipboard' ? (typeof import('electron'))['clipboard']
+	: I extends 'electron:webUtils' ? (typeof import('electron'))['webUtils']
 	: I extends 'sucrase' ? typeof import('sucrase')
 	: I extends '@wooorm/starry-night' ? typeof import('@wooorm/starry-night')
 	: unknown;
