@@ -13,8 +13,7 @@
 		padding: 6px 8px;
 		display: flex;
 		align-items: center;
-		gap: 16px;
-		justify-content: space-between;
+		gap: 8px;
 		border-radius: 4px;
 		-webkit-app-region: no-drag;
 		overflow: hidden;
@@ -37,6 +36,20 @@
 			outline: none;
 		}
 
+		.icon {
+			min-width: 16px;
+			max-width: 16px;
+			height: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
 		.content {
 			font-size: 0.9rem;
 			white-space: nowrap;
@@ -46,6 +59,7 @@
 			overflow: hidden;
 			align-items: center;
 			width: 100%;
+			margin-right: auto;
 
 			.success {
 				color: var(--text-green);
@@ -100,7 +114,7 @@
 			color: var(--text-vibrant-secondary);
 			font-variant-numeric: tabular-nums;
 			white-space: nowrap;
-
+			margin-left: 8px;
 			&.added {
 				color: var(--text-green);
 			}

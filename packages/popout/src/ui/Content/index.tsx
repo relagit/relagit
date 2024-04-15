@@ -1,4 +1,5 @@
 import { For, Show, createEffect, createSignal } from 'solid-js';
+import { getIconForFilePath, getIconUrlForFilePath } from 'vscode-material-icons';
 
 import type { RecursivePartial } from '@app/shared';
 import { createStoreListener } from '@app/stores';
@@ -149,6 +150,17 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 									openInEditor(path);
 								}}
 							>
+								<Show when={getIconForFilePath(file.name)}>
+									<div class="icon">
+										<img
+											src={getIconUrlForFilePath(
+												file.name,
+												'../node_modules/vscode-material-icons/generated/icons'
+											)}
+											alt={getIconForFilePath(file.name)}
+										/>
+									</div>
+								</Show>
 								<div class="content">
 									<span class="path" title={file.path}>
 										{file.path.endsWith('/') ?
