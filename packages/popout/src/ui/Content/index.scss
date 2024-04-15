@@ -75,10 +75,11 @@
 
 			.commit-status {
 				display: flex;
+				margin-right: 8px;
 			}
 
 			svg {
-				margin-right: 8px;
+				min-width: 12px;
 				width: 12px;
 				height: 12px;
 			}
