@@ -35,6 +35,8 @@ export const editorName = (name?: Settings['externalEditor']) => {
 	}
 };
 
+let lastSettings: Settings | null = null;
+
 export const getSettings = async (): Promise<RecursivePartial<Settings>> => {
 	try {
 		const dir = path.join(os.homedir(), '.relagit');
@@ -47,9 +49,13 @@ export const getSettings = async (): Promise<RecursivePartial<Settings>> => {
 			await promises.writeFile(__SETTINGS_PATH__, '{}');
 		}
 
-		return JSON.parse(await promises.readFile(__SETTINGS_PATH__, 'utf8'));
+		const res = JSON.parse(await promises.readFile(__SETTINGS_PATH__, 'utf8'));
+
+		lastSettings = res;
+
+		return res;
 	} catch (e) {
-		return {};
+		return lastSettings || {};
 	}
 };
 
@@ -59,4 +65,6 @@ export const updateSettings = async (settings: RecursivePartial<Settings>) => {
 	const newSettings = { ...current, ...settings };
 
 	await promises.writeFile(__SETTINGS_PATH__, JSON.stringify(newSettings, null, 2));
+
+	return true;
 };

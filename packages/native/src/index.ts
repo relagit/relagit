@@ -111,7 +111,7 @@ const constructWindow = async () => {
 		transparent = process.platform === 'win32';
 		backgroundColor = '#00000000';
 
-		updateSettings({
+		await updateSettings({
 			ui: {
 				...settings.ui,
 				vibrancy: true
@@ -174,6 +174,8 @@ const constructWindow = async () => {
 		updateSettings({
 			window: {
 				...settings.window,
+				width: win.getSize()[0],
+				height: win.getSize()[1],
 				x: win.getPosition()[0],
 				y: win.getPosition()[1]
 			}
