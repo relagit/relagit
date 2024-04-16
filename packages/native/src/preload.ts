@@ -8,12 +8,12 @@ import * as ipc from '~/common/ipc';
 
 import _eval from './modules/eval';
 import { updateEnvironmentForProcess } from './modules/shell';
-import type { RequireResult } from './types';
+import type { RequireIdentifier, RequireResult } from './types';
 
 if (process.platform === 'darwin') updateEnvironmentForProcess();
 
 export const Native = {
-	DANGEROUS__NODE__REQUIRE: <I extends string>(id: I): RequireResult<I> => {
+	DANGEROUS__NODE__REQUIRE: <I extends RequireIdentifier>(id: I): RequireResult<I> => {
 		if (id.startsWith('electron:')) {
 			// https://www.electronjs.org/blog/electron-29-0#behavior-changed-ipcrenderer-can-no-longer-be-sent-over-the-contextbridge
 			if (id === 'electron:ipcRenderer') {
