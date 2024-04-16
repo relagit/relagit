@@ -12,47 +12,28 @@ type _HeadersInit = HeadersInit & {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+type Get<P extends unknown[], R> = (...params: P) => Promise<R>;
+type Post<P extends unknown[], R> = (body: unknown, ...params: P) => Promise<R>;
+type Stream<P extends unknown[], R> = (...params: P) => AsyncIterable<R & { done: boolean }>;
+type Headers<P extends unknown[], R> = (headers: _HeadersInit) => {
+	get: Get<P, R>;
+	post: Post<P, R>;
+	stream: Stream<P, R>;
+};
+
 export const GitHub = <T extends keyof GithubResponse>(
 	path: T
 ): {
-	headers: <R = GithubResponse[T][1]>(
-		headers: _HeadersInit
-	) => {
-		get: (...params: GithubResponse[T][0]) => Promise<R>;
-		post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<R>;
-		stream: (
-			limit: number,
-			cb?: (response: R) => void,
-			...params: GithubResponse[T][0]
-		) => Promise<R>;
-	};
-	get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
-	post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
+	headers: Headers<GithubResponse[T][0], GithubResponse[T][1]>;
+	get: Get<GithubResponse[T][0], GithubResponse[T][1]>;
+	post: Post<GithubResponse[T][0], GithubResponse[T][1]>;
 	query: (query: Record<string, string>) => {
-		get: (...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
-		post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<GithubResponse[T][1]>;
-		headers: <R = GithubResponse[T][1]>(
-			headers: _HeadersInit
-		) => {
-			get: (...params: GithubResponse[T][0]) => Promise<R>;
-			post: (body: unknown, ...params: GithubResponse[T][0]) => Promise<R>;
-			stream: (
-				limit: number,
-				cb?: (response: R) => void,
-				...params: GithubResponse[T][0]
-			) => Promise<R>;
-		};
-		stream: (
-			limit: number,
-			cb?: (response: GithubResponse[T][1]) => void,
-			...params: GithubResponse[T][0]
-		) => Promise<GithubResponse[T][1]>;
+		get: Get<GithubResponse[T][0], GithubResponse[T][1]>;
+		post: Post<GithubResponse[T][0], GithubResponse[T][1]>;
+		headers: Headers<GithubResponse[T][0], GithubResponse[T][1]>;
+		stream: Stream<GithubResponse[T][0], GithubResponse[T][1]>;
 	};
-	stream: (
-		limit: number,
-		cb?: (response: GithubResponse[T][1]) => void,
-		...params: GithubResponse[T][0]
-	) => Promise<GithubResponse[T][1]>;
+	stream: Stream<GithubResponse[T][0], GithubResponse[T][1]>;
 } => {
 	let url = 'https://api.github.com/';
 
@@ -165,19 +146,23 @@ export const GitHub = <T extends keyof GithubResponse>(
 		:	res.text())) as R;
 	};
 
-	const stream = async <R = GithubResponse[T][1]>(
-		limit: number,
-		cb?: ((response: R) => void) | undefined,
+	async function* stream<R = GithubResponse[T][1]>(
 		...params: GithubResponse[T][0]
-	): Promise<R> => {
+	): AsyncIterable<R> {
 		let i = 1;
 		let done = false;
 
-		const out = [];
+		const out: unknown[] = [];
+
+		Object.defineProperty(out as R, 'done', {
+			get() {
+				return done;
+			}
+		});
 
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
-		while (!done && i < limit) {
+		while (!done && i < 100) {
 			const search = new URLSearchParams(url);
 
 			for (const [key, value] of Object.entries(queryParams)) {
@@ -210,9 +195,9 @@ export const GitHub = <T extends keyof GithubResponse>(
 				done = true;
 			}
 
-			out.push(...(Array.isArray(items) ? items : []));
+			out.push(...((Array.isArray(items) ? items : []) as R[]));
 
-			cb?.(out as R);
+			yield out as R;
 
 			i++;
 
@@ -220,7 +205,7 @@ export const GitHub = <T extends keyof GithubResponse>(
 		}
 
 		return out as R;
-	};
+	}
 
 	const headersFn = (newHeaders: HeadersInit) => {
 		headers = newHeaders;

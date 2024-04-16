@@ -207,7 +207,9 @@ export default (props: HeaderDrawerProps) => {
 													{repository.branch}
 													{' • '}
 												</Show>
-												{renderDate(repository.lastFetched || new Date().getTime())()}
+												{renderDate(
+													repository.lastFetched || new Date().getTime()
+												)()}
 											</div>
 										</div>
 										<Show

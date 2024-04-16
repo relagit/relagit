@@ -1,5 +1,5 @@
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader, showErrorModal } from '..';
-import { Show, createRoot, createSignal } from 'solid-js';
+import { Show, createRoot, createSignal, onMount } from 'solid-js';
 
 import { refetchRepository } from '@app/modules/actions';
 import * as Git from '@app/modules/git';
@@ -35,11 +35,11 @@ const PublishModal = (props: { repo: Repository }) => {
 	);
 	const [orgs, setOrgs] = createSignal<GithubOrg[]>([]);
 
-	GitHub('user/orgs')
-		.stream(10)
-		.then((orgs) => {
+	onMount(async () => {
+		for await (const orgs of GitHub('user/orgs').stream()) {
 			setOrgs(orgs);
-		});
+		}
+	});
 
 	return (
 		<Modal size="medium" dismissable id="publish">

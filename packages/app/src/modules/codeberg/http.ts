@@ -44,6 +44,15 @@ type _HeadersInit = HeadersInit & {
 	Accept: 'application/json' | 'application/html' | 'text/plain' | 'text/html';
 };
 
+type Get<P extends unknown[], R> = (...params: P) => Promise<R>;
+type Post<P extends unknown[], R> = (body: unknown, ...params: P) => Promise<R>;
+type Stream<P extends unknown[], R> = (...params: P) => AsyncIterable<R & { done: boolean }>;
+type Headers<P extends unknown[], R> = (headers: _HeadersInit) => {
+	get: Get<P, R>;
+	post: Post<P, R>;
+	stream: Stream<P, R>;
+};
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 let triedRegenerating = false;
@@ -51,44 +60,16 @@ let triedRegenerating = false;
 export const Codeberg = <T extends keyof CodebergResponse>(
 	path: T
 ): {
-	headers: <R = CodebergResponse[T][1]>(
-		headers: _HeadersInit
-	) => {
-		get: (...params: CodebergResponse[T][0]) => Promise<R>;
-		post: (body: unknown, ...params: CodebergResponse[T][0]) => Promise<R>;
-		stream: (
-			limit: number,
-			cb?: (response: R) => void,
-			...params: CodebergResponse[T][0]
-		) => Promise<R>;
-	};
-	get: (...params: CodebergResponse[T][0]) => Promise<CodebergResponse[T][1]>;
-	post: (body: unknown, ...params: CodebergResponse[T][0]) => Promise<CodebergResponse[T][1]>;
+	headers: Headers<CodebergResponse[T][0], CodebergResponse[T][1]>;
+	get: Get<CodebergResponse[T][0], CodebergResponse[T][1]>;
+	post: Post<CodebergResponse[T][0], CodebergResponse[T][1]>;
 	query: (query: Record<string, string>) => {
-		get: (...params: CodebergResponse[T][0]) => Promise<CodebergResponse[T][1]>;
-		post: (body: unknown, ...params: CodebergResponse[T][0]) => Promise<CodebergResponse[T][1]>;
-		headers: <R = CodebergResponse[T][1]>(
-			headers: _HeadersInit
-		) => {
-			get: (...params: CodebergResponse[T][0]) => Promise<R>;
-			post: (body: unknown, ...params: CodebergResponse[T][0]) => Promise<R>;
-			stream: (
-				limit: number,
-				cb?: (response: R) => void,
-				...params: CodebergResponse[T][0]
-			) => Promise<R>;
-		};
-		stream: (
-			limit: number,
-			cb?: (response: CodebergResponse[T][1]) => void,
-			...params: CodebergResponse[T][0]
-		) => Promise<CodebergResponse[T][1]>;
+		get: Get<CodebergResponse[T][0], CodebergResponse[T][1]>;
+		post: Post<CodebergResponse[T][0], CodebergResponse[T][1]>;
+		headers: Headers<CodebergResponse[T][0], CodebergResponse[T][1]>;
+		stream: Stream<CodebergResponse[T][0], CodebergResponse[T][1]>;
 	};
-	stream: (
-		limit: number,
-		cb?: (response: CodebergResponse[T][1]) => void,
-		...params: CodebergResponse[T][0]
-	) => Promise<CodebergResponse[T][1]>;
+	stream: Stream<CodebergResponse[T][0], CodebergResponse[T][1]>;
 } => {
 	let url = 'https://codeberg.org/api/v1/';
 	triedRegenerating = false;
@@ -189,19 +170,23 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 		:	res.text())) as R;
 	};
 
-	const stream = async <R = CodebergResponse[T][1]>(
-		limit: number,
-		cb?: ((response: R) => void) | undefined,
+	async function* stream<R = CodebergResponse[T][1]>(
 		...params: CodebergResponse[T][0]
-	): Promise<R> => {
+	): AsyncIterable<R> {
 		let i = 1;
 		let done = false;
 
-		const out = [];
+		const out: unknown[] = [];
+
+		Object.defineProperty(out as R, 'done', {
+			get() {
+				return done;
+			}
+		});
 
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
-		while (!done && i < limit) {
+		while (!done && i < 100) {
 			const search = new URLSearchParams(url);
 
 			for (const [key, value] of Object.entries(queryParams)) {
@@ -220,8 +205,12 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 				}
 			});
 
-			if (res.status === 401) {
-				throw 'Unauthorized';
+			if (res.status === 401 && !triedRegenerating) {
+				triedRegenerating = true;
+
+				await regenerateCodebergToken();
+
+				return stream(...params);
 			} else if (res.status !== 200) throw res.statusText;
 
 			const items = (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
@@ -234,7 +223,7 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 
 			out.push(...(Array.isArray(items) ? items : []));
 
-			cb?.(out as R);
+			yield out as R;
 
 			i++;
 
@@ -242,7 +231,7 @@ export const Codeberg = <T extends keyof CodebergResponse>(
 		}
 
 		return out as R;
-	};
+	}
 
 	const headersFn = (newHeaders: HeadersInit) => {
 		headers = newHeaders;

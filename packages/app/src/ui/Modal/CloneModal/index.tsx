@@ -1,5 +1,5 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader, showErrorModal } from '..';
-import { Accessor, Show, createEffect, createRoot, createSignal } from 'solid-js';
+import { Show, createEffect, createRoot, createSignal } from 'solid-js';
 
 import { Codeberg, CodebergRepository } from '@app/modules/codeberg';
 import * as Git from '@app/modules/git';
@@ -87,7 +87,7 @@ const CloneModal = (props: CloneModalProps) => {
 		AccountStore.getNormalisedAccount(tab() || 'github')
 	);
 
-	createEffect(() => {
+	createEffect(async (): Promise<void> => {
 		tab();
 
 		setDone(false);
@@ -97,45 +97,34 @@ const CloneModal = (props: CloneModalProps) => {
 		try {
 			switch (tab()) {
 				case 'github':
-					GitHub('user/repos')
-						.get()
-						.then((res) => {
-							setDone(true);
-							setResponse(res);
-						})
-						.catch((e) => {
-							logger.error(e);
-							setError(true);
-						});
+					for await (const res of GitHub('user/repos').stream()) {
+						setResponse(res);
+
+						if (res['done']) setDone(true);
+					}
+
 					break;
 				case 'gitlab':
-					GitLab('users/:userid/projects')
-						.get(String(AccountStore.getAccountFor('gitlab')?.id))
-						.then((res) => {
-							setDone(true);
-							setResponse(res);
-						})
-						.catch((e) => {
-							logger.error(e);
-							setError(true);
-						});
+					for await (const res of GitLab('users/:userid/projects').stream(
+						String(AccountStore.getAccountFor('gitlab')?.id)
+					)) {
+						setResponse(res);
+
+						if (res['done']) setDone(true);
+					}
 					break;
 				case 'codeberg':
-					Codeberg('user/repos')
-						.get()
-						.then((res) => {
-							setDone(true);
-							setResponse(res);
-						})
-						.catch((e) => {
-							logger.error(e);
-							setError(true);
-						});
+					for await (const res of Codeberg('user/repos').stream()) {
+						setResponse(res);
+
+						if (res['done']) setDone(true);
+					}
 					break;
 				default:
 					break;
 			}
 		} catch (e) {
+			logger.error(e);
 			setError(true);
 		}
 	});
@@ -167,44 +156,49 @@ const CloneModal = (props: CloneModalProps) => {
 
 	const ProviderTab = (props: {
 		close: () => void;
-		response: Accessor<GitHubRepository[] | GitLabProject[] | CodebergRepository[] | null>;
-	}) => (
-		<Show
-			when={account()}
-			fallback={
-				<EmptyState
-					detail={t('modal.clone.auth')}
-					hint={t('modal.clone.authHint')}
-					icon="shield"
-					actions={[
-						{
-							label: t('modal.clone.authButton'),
-							type: 'brand',
-							onClick: () => {
-								showProviderModal();
-							}
-						}
-					]}
-				/>
-			}
-		>
+		response: GitHubRepository[] | GitLabProject[] | CodebergRepository[] | null;
+	}) => {
+		return (
 			<Show
-				when={!error()}
+				when={account()}
 				fallback={
-					<EmptyState detail={t('modal.clone.error')} hint={t('modal.clone.errorHint')} />
+					<EmptyState
+						detail={t('modal.clone.auth')}
+						hint={t('modal.clone.authHint')}
+						icon="shield"
+						actions={[
+							{
+								label: t('modal.clone.authButton'),
+								type: 'brand',
+								onClick: () => {
+									showProviderModal();
+								}
+							}
+						]}
+					/>
 				}
 			>
-				<RepoList
-					done={done()}
-					provider={tab()}
-					account={account()!}
-					selected={selected}
-					setSelected={setSelected}
-					state={props.response()}
-				/>
+				<Show
+					when={!error()}
+					fallback={
+						<EmptyState
+							detail={t('modal.clone.error')}
+							hint={t('modal.clone.errorHint')}
+						/>
+					}
+				>
+					<RepoList
+						done={done()}
+						provider={tab()}
+						account={account()!}
+						selected={selected}
+						setSelected={setSelected}
+						state={props.response}
+					/>
+				</Show>
 			</Show>
-		</Show>
-	);
+		);
+	};
 
 	return (
 		<Modal size={tab() === 'url' ? 'medium' : 'x-large'} dismissable id="clone">
@@ -250,17 +244,23 @@ const CloneModal = (props: CloneModalProps) => {
 								{
 									label: t('modal.clone.providers.github'),
 									value: 'github',
-									element: <ProviderTab close={props.close} response={response} />
+									element: (
+										<ProviderTab close={props.close} response={response()} />
+									)
 								},
 								{
 									label: t('modal.clone.providers.gitlab'),
 									value: 'gitlab',
-									element: <ProviderTab close={props.close} response={response} />
+									element: (
+										<ProviderTab close={props.close} response={response()} />
+									)
 								},
 								{
 									label: t('modal.clone.providers.codeberg'),
 									value: 'codeberg',
-									element: <ProviderTab close={props.close} response={response} />
+									element: (
+										<ProviderTab close={props.close} response={response()} />
+									)
 								},
 								{
 									label: t('modal.clone.providers.url'),

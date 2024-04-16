@@ -35,6 +35,15 @@ type _HeadersInit = HeadersInit & {
 	Accept: 'application/json' | 'application/html' | 'text/plain' | 'text/html';
 };
 
+type Get<P extends unknown[], R> = (...params: P) => Promise<R>;
+type Post<P extends unknown[], R> = (body: unknown, ...params: P) => Promise<R>;
+type Stream<P extends unknown[], R> = (...params: P) => AsyncIterable<R & { done: boolean }>;
+type Headers<P extends unknown[], R> = (headers: _HeadersInit) => {
+	get: Get<P, R>;
+	post: Post<P, R>;
+	stream: Stream<P, R>;
+};
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 let triedRegenerating = false;
@@ -42,44 +51,16 @@ let triedRegenerating = false;
 export const GitLab = <T extends keyof GitLabResponse>(
 	path: T
 ): {
-	headers: <R = GitLabResponse[T][1]>(
-		headers: _HeadersInit
-	) => {
-		get: (...params: GitLabResponse[T][0]) => Promise<R>;
-		post: (body: unknown, ...params: GitLabResponse[T][0]) => Promise<R>;
-		stream: (
-			limit: number,
-			cb?: (response: R) => void,
-			...params: GitLabResponse[T][0]
-		) => Promise<R>;
-	};
-	get: (...params: GitLabResponse[T][0]) => Promise<GitLabResponse[T][1]>;
-	post: (body: unknown, ...params: GitLabResponse[T][0]) => Promise<GitLabResponse[T][1]>;
+	headers: Headers<GitLabResponse[T][0], GitLabResponse[T][1]>;
+	get: Get<GitLabResponse[T][0], GitLabResponse[T][1]>;
+	post: Post<GitLabResponse[T][0], GitLabResponse[T][1]>;
 	query: (query: Record<string, string>) => {
-		get: (...params: GitLabResponse[T][0]) => Promise<GitLabResponse[T][1]>;
-		post: (body: unknown, ...params: GitLabResponse[T][0]) => Promise<GitLabResponse[T][1]>;
-		headers: <R = GitLabResponse[T][1]>(
-			headers: _HeadersInit
-		) => {
-			get: (...params: GitLabResponse[T][0]) => Promise<R>;
-			post: (body: unknown, ...params: GitLabResponse[T][0]) => Promise<R>;
-			stream: (
-				limit: number,
-				cb?: (response: R) => void,
-				...params: GitLabResponse[T][0]
-			) => Promise<R>;
-		};
-		stream: (
-			limit: number,
-			cb?: (response: GitLabResponse[T][1]) => void,
-			...params: GitLabResponse[T][0]
-		) => Promise<GitLabResponse[T][1]>;
+		get: Get<GitLabResponse[T][0], GitLabResponse[T][1]>;
+		post: Post<GitLabResponse[T][0], GitLabResponse[T][1]>;
+		headers: Headers<GitLabResponse[T][0], GitLabResponse[T][1]>;
+		stream: Stream<GitLabResponse[T][0], GitLabResponse[T][1]>;
 	};
-	stream: (
-		limit: number,
-		cb?: (response: GitLabResponse[T][1]) => void,
-		...params: GitLabResponse[T][0]
-	) => Promise<GitLabResponse[T][1]>;
+	stream: Stream<GitLabResponse[T][0], GitLabResponse[T][1]>;
 } => {
 	let url = 'https://gitlab.com/api/v4/';
 	triedRegenerating = false;
@@ -147,7 +128,7 @@ export const GitLab = <T extends keyof GitLabResponse>(
 	const post = async <R = GitLabResponse[T][1]>(
 		body: unknown,
 		...params: GitLabResponse[T][0]
-	) => {
+	): Promise<R> => {
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
 		const search = new URLSearchParams(url);
@@ -170,8 +151,12 @@ export const GitLab = <T extends keyof GitLabResponse>(
 			body: JSON.stringify(body)
 		});
 
-		if (res.status === 401) {
-			throw 'Unauthorized';
+		if (res.status === 401 && !triedRegenerating) {
+			triedRegenerating = true;
+
+			await regenerateGitLabToken();
+
+			return post(body, ...params);
 		} else if (!res.status.toString().startsWith('2')) throw res.statusText;
 
 		return (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
@@ -179,19 +164,23 @@ export const GitLab = <T extends keyof GitLabResponse>(
 		:	res.text())) as R;
 	};
 
-	const stream = async <R = GitLabResponse[T][1]>(
-		limit: number,
-		cb?: ((response: R) => void) | undefined,
+	async function* stream<R = GitLabResponse[T][1]>(
 		...params: GitLabResponse[T][0]
-	): Promise<R> => {
+	): AsyncIterable<R> {
 		let i = 1;
 		let done = false;
 
-		const out = [];
+		const out: unknown[] = [];
+
+		Object.defineProperty(out as R, 'done', {
+			get() {
+				return done;
+			}
+		});
 
 		url = url.replace(/\[([^\]]+)\]/g, (_, key) => params.shift() || key);
 
-		while (!done && i < limit) {
+		while (!done && i < 100) {
 			const search = new URLSearchParams(url);
 
 			for (const [key, value] of Object.entries(queryParams)) {
@@ -210,8 +199,12 @@ export const GitLab = <T extends keyof GitLabResponse>(
 				}
 			});
 
-			if (res.status === 401) {
-				throw 'Unauthorized';
+			if (res.status === 401 && !triedRegenerating) {
+				triedRegenerating = true;
+
+				await regenerateGitLabToken();
+
+				return stream(...params);
 			} else if (res.status !== 200) throw res.statusText;
 
 			const items = (await ((headers as _HeadersInit)['Accept'] === 'application/json' ?
@@ -224,7 +217,7 @@ export const GitLab = <T extends keyof GitLabResponse>(
 
 			out.push(...(Array.isArray(items) ? items : []));
 
-			cb?.(out as R);
+			yield out as R;
 
 			i++;
 
@@ -232,7 +225,7 @@ export const GitLab = <T extends keyof GitLabResponse>(
 		}
 
 		return out as R;
-	};
+	}
 
 	const headersFn = (newHeaders: HeadersInit) => {
 		headers = newHeaders;
