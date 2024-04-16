@@ -2,7 +2,7 @@
 	<img src="./build/icon.png" alt="RelaGit logo" width="128">
 	<h1>RelaGit</h1>
 	<p>The elegant solution to graphical version control.</p>
-	<div><a href="https://git.rela.dev">git.rela.dev</a></div>
+	<div><a href="https://rela.dev">rela.dev</a></div>
 	<br>
  	<div style="margin-bottom: 16px">
 		<a href="https://github.com/relagit/relagit/actions/workflows/ci.yml">
@@ -71,4 +71,4 @@ You will find an executable in the `out` folder.
 
 ## Creating Workflows
 
-Please refer to the [Creating Workflows](https://git.rela.dev/docs/workflows/creating-workflows) tutorial.
+Please refer to the [Creating Workflows](https://rela.dev/docs/workflows/creating-workflows) tutorial.

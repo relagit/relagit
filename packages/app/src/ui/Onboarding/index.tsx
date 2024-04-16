@@ -28,7 +28,7 @@ const OnboardingModal = () => {
 											{...p}
 											tabIndex={0}
 											class="onboarding-modal__buttons__button"
-											href="https://git.rela.dev/styles"
+											href="https://rela.dev/styles"
 										>
 											<Icon name="paintbrush" />
 										</a>
@@ -40,7 +40,7 @@ const OnboardingModal = () => {
 											{...p}
 											tabIndex={0}
 											class="onboarding-modal__buttons__button"
-											href="https://git.rela.dev/workflows"
+											href="https://rela.dev/workflows"
 										>
 											<Icon name="project-roadmap" />
 										</a>
@@ -52,7 +52,7 @@ const OnboardingModal = () => {
 											{...p}
 											tabIndex={0}
 											class="onboarding-modal__buttons__button"
-											href="https://git.rela.dev/redirect/github"
+											href="https://rela.dev/redirect/github"
 										>
 											<Icon name="mark-github" />
 										</a>

@@ -5,7 +5,7 @@
 	"type": "module",
 	"version": "0.14.2",
 	"packageManager": "pnpm@8.8.0",
-	"homepage": "https://git.rela.dev",
+	"homepage": "https://rela.dev",
 	"repository": "https://github.com/relagit/relagit",
 	"license": "LGPL-3.0-or-later",
 	"scripts": {

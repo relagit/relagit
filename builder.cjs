@@ -26,7 +26,7 @@ const config = {
 	},
 	extraMetadata: {
 		main: 'dist/main.js',
-		homepage: 'https://git.rela.dev',
+		homepage: 'https://rela.dev',
 		source: 'github:relagit/relagit'
 	},
 	appId: 'com.relagit.app',

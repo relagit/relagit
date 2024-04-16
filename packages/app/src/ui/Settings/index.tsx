@@ -448,7 +448,7 @@ const SettingsModal = () => {
 									type: 'default',
 									onClick: () => {
 										openExternal(
-											'https://git.rela.dev/docs/workflows/what-is-a-workflow'
+											'https://rela.dev/docs/workflows/what-is-a-workflow'
 										);
 									}
 								}
