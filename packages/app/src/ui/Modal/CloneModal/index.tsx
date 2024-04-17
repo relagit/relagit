@@ -1,5 +1,5 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader, showErrorModal } from '..';
-import { Show, createEffect, createRoot, createSignal } from 'solid-js';
+import { Show, createEffect, createRoot, createSignal, onMount } from 'solid-js';
 
 import { Codeberg, CodebergRepository } from '@app/modules/codeberg';
 import * as Git from '@app/modules/git';
@@ -129,30 +129,47 @@ const CloneModal = (props: CloneModalProps) => {
 		}
 	});
 
-	const Url = () => (
-		<div class="clone-modal__url">
-			<label class="clone-modal__url__label">{t('modal.clone.urlLabel')}</label>
-			<TextArea
-				label={t('modal.clone.urlLabel')}
-				value={url()}
-				placeholder={t('modal.clone.urlPlaceholder', {
-					provider: t(`modal.clone.providers.${AccountStore.last || 'github'}`) // TODO: hardcoding for now
-				})}
-				onChange={(val) => {
-					setURL(val);
-				}}
-			/>
-			<label class="clone-modal__url__label">{t('modal.clone.localLabel')}</label>
-			<FileSelect
-				input
-				setError={setDirError}
-				validate={fileValidator}
-				initial={path()}
-				properties={['openDirectory', 'createDirectory']}
-				onSelect={setPath}
-			/>
-		</div>
-	);
+	const Url = () => {
+		onMount(async () => {
+			const urlRegex = /^(https?|git):\/\/[^\s]+$/;
+
+			try {
+				if (url()) return;
+
+				const text = await navigator.clipboard.readText();
+
+				if (text && urlRegex.test(text.split('\n')[0].trim()))
+					setURL(text.split('\n')[0].trim());
+			} catch (e) {
+				logger.error(e);
+			}
+		});
+
+		return (
+			<div class="clone-modal__url">
+				<label class="clone-modal__url__label">{t('modal.clone.urlLabel')}</label>
+				<TextArea
+					label={t('modal.clone.urlLabel')}
+					value={url()}
+					placeholder={t('modal.clone.urlPlaceholder', {
+						provider: t(`modal.clone.providers.${AccountStore.last || 'github'}`) // TODO: hardcoding for now
+					})}
+					onChange={(val) => {
+						setURL(val);
+					}}
+				/>
+				<label class="clone-modal__url__label">{t('modal.clone.localLabel')}</label>
+				<FileSelect
+					input
+					setError={setDirError}
+					validate={fileValidator}
+					initial={path()}
+					properties={['openDirectory', 'createDirectory']}
+					onSelect={setPath}
+				/>
+			</div>
+		);
+	};
 
 	const ProviderTab = (props: {
 		close: () => void;
@@ -284,7 +301,7 @@ const CloneModal = (props: CloneModalProps) => {
 							</Show>
 							<div class="modal__footer__buttons">
 								<Button
-									label={t('modal.clone.clone')}
+									label={t('modal.cancel')}
 									type="default"
 									onClick={() => {
 										props.close();
@@ -303,6 +320,7 @@ const CloneModal = (props: CloneModalProps) => {
 												(tab() !== 'url' && selected()))
 										)
 									}
+									dedupe
 									onClick={async () => {
 										try {
 											let cloneLike = url();
