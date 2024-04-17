@@ -137,6 +137,7 @@ export default (props: CreateRepositoryModalProps) => {
 							}, 500);
 						}}
 						disabled={!allowClose()}
+						dedupe
 					>
 						{t('modal.repository.create')}
 					</Button>
