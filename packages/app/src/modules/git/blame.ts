@@ -5,6 +5,7 @@ export const parseBlame = (
 ): {
 	hash?: string;
 	author?: string;
+	email?: string;
 	date: Date;
 	message?: string;
 	line?: string;
@@ -27,6 +28,13 @@ export const parseBlame = (
 				?.split(' ')
 				.slice(1)
 				.join(' '),
+			email: parts
+				.find((part) => part.startsWith('author-mail '))
+				?.split(' ')
+				.slice(1)
+				.join(' ')
+				.replace('<', '')
+				.replace('>', ''),
 			date: new Date(
 				Number(parts.find((part) => part.startsWith('author-time '))?.split(' ')[1]) * 1000
 			),

@@ -4,6 +4,7 @@ import { For, JSX, Show, createSignal } from 'solid-js';
 import { GitStatus } from '@app/modules/git/diff';
 import { parseDiff } from '@app/modules/git/parse-diff';
 import { t } from '@app/modules/i18n';
+import { emailToIconURL } from '@app/modules/oauth';
 import { relative } from '@app/modules/time';
 import Tooltip from '@app/ui/Common/Tooltip';
 import * as Git from '@modules/git';
@@ -79,44 +80,51 @@ const BlameIndicator = (props: {
 		tabIndex: number;
 		'aria-labeledby': string;
 	}) => JSX.Element;
-}) => {
-	return (
-		<Tooltip
-			delay={1000}
-			text={
-				<Show when={props.blame}>
-					<div class="blame-tooltip">
-						<div class="blame-tooltip__commit">
-							<div class="blame-tooltip__commit__info">
-								{props.blame!.message}
-								<span class="blame-tooltip__commit__info__hash">
-									{props.blame!.hash?.slice(0, 7)}
-								</span>
-							</div>
-							<div class="blame-tooltip__commit__changes">{props.blame!.changes}</div>
+}) => (
+	<Tooltip
+		delay={1000}
+		text={
+			<Show when={props.blame}>
+				<div class="blame-tooltip">
+					<div class="blame-tooltip__commit">
+						<div class="blame-tooltip__commit__info">
+							{props.blame!.message}
+							<span class="blame-tooltip__commit__info__hash">
+								{props.blame!.hash?.slice(0, 7)}
+							</span>
 						</div>
-						<div class="blame-tooltip__footer">
-							<div class="blame-tooltip__footer__author">{props.blame!.author}</div>
-							<div class="blame-tooltip__footer__date">
-								{relative(new Date(props.blame!.date).getTime())}
-								{` (${new Date(props.blame!.date).toLocaleString('en-US', {
-									month: 'long',
-									day: 'numeric',
-									year: 'numeric',
-									hour: 'numeric',
-									minute: 'numeric'
-								})})`}
-							</div>
+						<div class="blame-tooltip__commit__changes">{props.blame!.changes}</div>
+					</div>
+					<div class="blame-tooltip__footer">
+						<div class="blame-tooltip__footer__author">
+							<Show when={emailToIconURL(props.blame!.email)}>
+								<img
+									src={emailToIconURL(props.blame!.email)!}
+									alt={props.blame!.author}
+									class="blame-tooltip__footer__author__icon"
+								/>
+							</Show>
+							{props.blame!.author}
+						</div>
+						<div class="blame-tooltip__footer__date">
+							{relative(new Date(props.blame!.date).getTime())}
+							{` (${new Date(props.blame!.date).toLocaleString('en-US', {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric'
+							})})`}
 						</div>
 					</div>
-				</Show>
-			}
-			size="expanded"
-		>
-			{props.children}
-		</Tooltip>
-	);
-};
+				</div>
+			</Show>
+		}
+		size="expanded"
+	>
+		{props.children}
+	</Tooltip>
+);
 
 export default (props: CodeViewProps) => {
 	const [showOverridden, setShowOverridden] = createSignal<boolean>(false);

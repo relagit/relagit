@@ -107,3 +107,28 @@ export const beginProviderFlow = (provider: Provider) => {
 			break;
 	}
 };
+
+export const emailToIconURL = (email?: string): string | null => {
+	if (!email || !email.includes('@')) return null;
+
+	const provider = email.match(/(github)|(gitlab)|(codeberg)/)?.[0];
+
+	if (!provider) {
+		return null;
+	}
+
+	const id = email.match(/\d+/)?.[0];
+
+	if (!id) return null;
+
+	switch (provider) {
+		case 'github':
+			return `https://avatars.githubusercontent.com/u/${id}`;
+		case 'gitlab':
+			return `https://gitlab.com/uploads/-/system/user/avatar/${id}/avatar.png`;
+		case 'codeberg':
+			return `https://codeberg.org/avatars/${id}`;
+		default:
+			return null;
+	}
+};
