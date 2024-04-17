@@ -121,7 +121,6 @@ export const initializeCodebergFlow = async () => {
 				client_id: CLIENT_ID,
 				code: params.code,
 				grant_type: 'authorization_code',
-				redirect_uri: encodeURIComponent('relagit://oauth-captive'),
 				code_verifier: codeVerifier
 			}),
 			headers: {
