@@ -13,7 +13,6 @@ export const OAUTH_CAPTIVE = 'window:oauth-captive';
 export const OPEN_BRANCHES = 'window:open-branches';
 export const OPEN_SIDEBAR = 'window:open-sidebar';
 export const OPEN_HISTORY = 'window:open-history';
-export const OPEN_BLAME = 'window:open-blame';
 export const LOAD_WORKFLOW = 'window:load-workflow';
 export const OPEN_SETTINGS = 'window:open-settings';
 export const OPEN_CLONE = 'window:open-clone';

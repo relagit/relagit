@@ -13,6 +13,10 @@
 	color: rgb(190 194 199); // hardcoded
 	max-width: 330px;
 
+	&.expanded {
+		max-width: 600px;
+	}
+
 	&.right {
 		top: calc(var(--y) + var(--w-h) / 2);
 		left: calc(var(--x) + var(--w-w) + 2px);

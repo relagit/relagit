@@ -94,7 +94,6 @@ export default () => {
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
-	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const onboarding = createStoreListener([OnboardingStore], () => OnboardingStore.state);
 	const onboardingStepState = createSignal(false);
 	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
@@ -726,16 +725,6 @@ export default () => {
 					);
 				}}
 			</Popout>
-			<PanelButton
-				icon="people"
-				iconVariant={iconVariant()}
-				name="Toggle blame view"
-				id="workspace-blame"
-				className={blameOpen() ? 'active' : ''}
-				onClick={() => {
-					LocationStore.setBlameOpen(!blameOpen());
-				}}
-			/>
 			<Popout
 				position="bottom"
 				align="end"

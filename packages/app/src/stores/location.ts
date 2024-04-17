@@ -12,7 +12,6 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedFile: GitFile | undefined = undefined;
 	#selectedRepository: Repository | undefined = undefined;
 	#historyOpen = false;
-	#blameOpen = false;
 	#selectedCommit: LogCommit | undefined = undefined;
 	#selectedCommitFiles: PastCommit | undefined = undefined;
 	#selectedCommitFile: PastCommit['files'][number] | undefined = undefined;
@@ -27,11 +26,6 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 		window.Native.listeners.HISTORY((_, value) => {
 			this.#historyOpen = value ?? !this.#historyOpen;
-			this.emit();
-		});
-
-		window.Native.listeners.BLAME((_, value) => {
-			this.#blameOpen = value ?? !this.#blameOpen;
 			this.emit();
 		});
 
@@ -68,10 +62,6 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		return this.#historyOpen;
 	}
 
-	get blameOpen() {
-		return this.#blameOpen;
-	}
-
 	get isRefetchingSelectedRepository() {
 		return this.#isRefetchingSelectedRepository;
 	}
@@ -101,11 +91,6 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	setHistoryOpen(open: boolean) {
 		this.#historyOpen = open;
-		this.emit();
-	}
-
-	setBlameOpen(open: boolean) {
-		this.#blameOpen = open;
 		this.emit();
 	}
 

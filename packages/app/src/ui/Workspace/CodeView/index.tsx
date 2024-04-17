@@ -1,9 +1,11 @@
 import type { AddedLine, DeletedLine, GitDiff } from 'parse-git-diff';
-import { For, Show, createSignal } from 'solid-js';
+import { For, JSX, Show, createSignal } from 'solid-js';
 
 import { GitStatus } from '@app/modules/git/diff';
 import { parseDiff } from '@app/modules/git/parse-diff';
 import { t } from '@app/modules/i18n';
+import { relative } from '@app/modules/time';
+import Tooltip from '@app/ui/Common/Tooltip';
 import * as Git from '@modules/git';
 import { DIFF } from '@modules/git/constants';
 import highlighter, { langFrom } from '@modules/highlighter';
@@ -67,6 +69,55 @@ const dealWithTabs = (line: string) => {
 	return line.replaceAll(/(?<!\S)(\t|  )/g, '<span class="pl-tab">  </span>');
 };
 
+const BlameIndicator = (props: {
+	blame?: GitBlame[number];
+	children: (p: {
+		onMouseEnter: (e: MouseEvent) => void;
+		onMouseLeave: () => void;
+		onFocus: (e: FocusEvent) => void;
+		onBlur: () => void;
+		tabIndex: number;
+		'aria-labeledby': string;
+	}) => JSX.Element;
+}) => {
+	return (
+		<Show when={props.blame}>
+			<Tooltip
+				delay={1000}
+				text={
+					<div class="blame-tooltip">
+						<div class="blame-tooltip__commit">
+							<div class="blame-tooltip__commit__info">
+								{props.blame!.message}
+								<span class="blame-tooltip__commit__info__hash">
+									{props.blame!.hash?.slice(0, 7)}
+								</span>
+							</div>
+							<div class="blame-tooltip__commit__changes">{props.blame!.changes}</div>
+						</div>
+						<div class="blame-tooltip__footer">
+							<div class="blame-tooltip__footer__author">{props.blame!.author}</div>
+							<div class="blame-tooltip__footer__date">
+								{relative(new Date(props.blame!.date).getTime())}
+								{` (${new Date(props.blame!.date).toLocaleString('en-US', {
+									month: 'long',
+									day: 'numeric',
+									year: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric'
+								})})`}
+							</div>
+						</div>
+					</div>
+				}
+				size="expanded"
+			>
+				{props.children}
+			</Tooltip>
+		</Show>
+	);
+};
+
 export default (props: CodeViewProps) => {
 	const [showOverridden, setShowOverridden] = createSignal<boolean>(false);
 	const [shouldShow, setShouldShow] = createSignal<boolean>(false);
@@ -85,12 +136,13 @@ export default (props: CodeViewProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
-	const blameOpen = createStoreListener([LocationStore], () => LocationStore.blameOpen);
 	const fileStatus = createStoreListener([FileStore, LocationStore], () =>
 		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
 	);
 
 	createStoreListener([LocationStore, FileStore], async () => {
+		setBlame(null);
+
 		try {
 			if (LocationStore.historyOpen) {
 				setShowCommit(true);
@@ -375,52 +427,50 @@ export default (props: CodeViewProps) => {
 															);
 
 															return (
-																<div
-																	classList={{
-																		codeview__line: true,
-																		[status()]: true
-																	}}
-																>
-																	<div
-																		class="codeview__line__number"
-																		style={{
-																			'min-width': `${numberWidth}px`
-																		}}
-																	>
-																		{index()}
-																	</div>
-																	<div
-																		classList={{
-																			codeview__line__indicator:
-																				true,
-																			[status()]: true
-																		}}
-																	>
-																		{status() === 'added' ?
-																			'+'
-																		:	'-'}
-																	</div>
-																	<div
-																		class="codeview__line__content"
-																		innerHTML={dealWithTabs(
-																			line
-																		)}
-																	></div>
-
-																	<Show
-																		when={
-																			blameOpen() && lineBlame
-																		}
-																	>
+																<BlameIndicator blame={lineBlame}>
+																	{(p) => (
 																		<div
-																			{...props}
-																			class="codeview__line__blame"
+																			{...p}
+																			classList={{
+																				codeview__line:
+																					true,
+																				[status()]: true
+																			}}
 																		>
-																			{lineBlame!.author},{' '}
-																			{lineBlame!.message}
+																			<div
+																				class="codeview__line__number"
+																				style={{
+																					'min-width': `${numberWidth}px`
+																				}}
+																			>
+																				{index()}
+																			</div>
+																			<div
+																				classList={{
+																					codeview__line__indicator:
+																						true,
+																					[status()]: true
+																				}}
+																			>
+																				{(
+																					status() ===
+																					'added'
+																				) ?
+																					'+'
+																				:	'-'}
+																			</div>
+																			<div
+																				class="codeview__line__content"
+																				innerHTML={dealWithTabs(
+																					line
+																				)}
+																			></div>
+																			<div class="codeview__line__blame">
+																				<Icon name="person" />
+																			</div>
 																		</div>
-																	</Show>
-																</div>
+																	)}
+																</BlameIndicator>
 															);
 														}}
 													</For>
@@ -498,7 +548,8 @@ export default (props: CodeViewProps) => {
 
 																		const lineBlame =
 																				blame()?.[
-																					line_number_one
+																					line_number_two -
+																						1
 																				],
 																			lineStatus = status(
 																				change.type
@@ -515,94 +566,89 @@ export default (props: CodeViewProps) => {
 																			);
 
 																		return (
-																			<div
-																				classList={{
-																					codeview__line:
-																						true,
-																					[lineStatus]:
-																						true
-																				}}
+																			<BlameIndicator
+																				blame={lineBlame}
 																			>
-																				<div
-																					class="codeview__line__number"
-																					style={{
-																						'min-width': `${numberWidth}px`
-																					}}
-																				>
-																					{
-																						line_number_one
-																					}
-																				</div>
-																				<div
-																					class="codeview__line__number"
-																					style={{
-																						'min-width': `${numberWidth}px`
-																					}}
-																				>
-																					{
-																						line_number_two
-																					}
-																				</div>
-																				<div
-																					classList={{
-																						codeview__line__indicator:
-																							true,
-																						[lineStatus]:
-																							true
-																					}}
-																				>
-																					<Show
-																						when={
-																							lineStatus !==
-																							'unchanged'
-																						}
-																						fallback={
-																							' '
-																						}
-																					>
-																						{(
-																							lineStatus ===
-																							'added'
-																						) ?
-																							'+'
-																						:	'-'}
-																					</Show>
-																				</div>
-																				<div
-																					class="codeview__line__content"
-																					innerHTML={dealWithTabs(
-																						highlighter(
-																							change.content,
-																							langFrom(
-																								props.file ||
-																									commit()
-																										?.filename
-																							)
-																						)
-																					)}
-																				></div>
-																				<Show
-																					when={
-																						blameOpen() &&
-																						lineBlame
-																					}
-																				>
+																				{(p) => (
 																					<div
-																						{...props}
-																						class="codeview__line__blame"
+																						{...p}
+																						classList={{
+																							codeview__line:
+																								true,
+																							[lineStatus]:
+																								true
+																						}}
 																					>
-																						{
-																							lineBlame!
-																								.author
-																						}
-																						,{' '}
-																						{
-																							lineBlame!
-																								.message
-																						}
+																						<div
+																							class="codeview__line__number"
+																							style={{
+																								'min-width': `${numberWidth}px`
+																							}}
+																						>
+																							{
+																								line_number_one
+																							}
+																						</div>
+																						<div
+																							class="codeview__line__number"
+																							style={{
+																								'min-width': `${numberWidth}px`
+																							}}
+																						>
+																							{
+																								line_number_two
+																							}
+																						</div>
+																						<div
+																							classList={{
+																								codeview__line__indicator:
+																									true,
+																								[lineStatus]:
+																									true
+																							}}
+																						>
+																							<Show
+																								when={
+																									lineStatus !==
+																									'unchanged'
+																								}
+																								fallback={
+																									' '
+																								}
+																							>
+																								{(
+																									lineStatus ===
+																									'added'
+																								) ?
+																									'+'
+																								:	'-'
+																								}
+																							</Show>
+																						</div>
+																						<div
+																							class="codeview__line__content"
+																							innerHTML={dealWithTabs(
+																								highlighter(
+																									change.content,
+																									langFrom(
+																										props.file ||
+																											commit()
+																												?.filename
+																									)
+																								)
+																							)}
+																						></div>
+																						<div class="codeview__line__blame">
+																							<Icon
+																								name="person"
+																								size={
+																									12
+																								}
+																							/>
+																						</div>
 																					</div>
-																				</Show>
-																			</div>
+																				)}
+																			</BlameIndicator>
 																		);
 																	}}
 																</For>

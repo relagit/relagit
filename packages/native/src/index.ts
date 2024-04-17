@@ -289,13 +289,6 @@ const constructWindow = async () => {
 					}
 				},
 				{
-					label: 'Blame View',
-					accelerator: 'CmdOrCtrl+J',
-					click: () => {
-						dispatch(ipc.OPEN_BLAME);
-					}
-				},
-				{
 					type: 'separator'
 				},
 				{

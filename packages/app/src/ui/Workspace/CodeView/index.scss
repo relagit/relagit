@@ -1,3 +1,50 @@
+.blame-tooltip {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-width: 600px;
+
+	&__commit {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		&__info {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+
+			&__hash {
+				font-size: 0.85rem;
+				color: var(--color-secondary);
+				font-family: var(--font-mono);
+			}
+		}
+
+		&__changes {
+			color: var(--color-secondary);
+			font-family: var(--font-mono);
+			overflow-x: scroll;
+			white-space: nowrap;
+			font-size: 0.85rem;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+	}
+
+	&__footer {
+		font-size: 0.85rem;
+		color: var(--color-secondary);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+}
+
 .codeview {
 	overflow: hidden auto;
 	display: flex;
@@ -65,6 +112,10 @@
 
 		&:hover {
 			background-color: var(--bg-c-hover);
+
+			.codeview__line__blame {
+				opacity: 0.5;
+			}
 		}
 
 		&__indicator {
@@ -103,13 +154,10 @@
 		}
 
 		&__blame {
-			opacity: 0.5;
-			font-size: 0.85rem;
-			padding-inline: 5px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
 			user-select: none;
+			opacity: 0;
+			margin-left: auto;
+			padding-inline: 8px;
 		}
 
 		&.message {

@@ -8,8 +8,9 @@ export const parseBlame = (
 	date: Date;
 	message?: string;
 	line?: string;
+	changes: string;
 }[] => {
-	const lines = rawBlame.split('boundary');
+	const lines = rawBlame.split(/^(?=\S{40} \d)/gm).filter(Boolean);
 	const blame = [];
 
 	for (let i = 0; i < lines.length; i++) {
@@ -27,7 +28,7 @@ export const parseBlame = (
 				.slice(1)
 				.join(' '),
 			date: new Date(
-				Number(parts.find((part) => part.startsWith('author-time '))?.split(' ')[1])
+				Number(parts.find((part) => part.startsWith('author-time '))?.split(' ')[1]) * 1000
 			),
 			message: parts
 				.find((part) => part.startsWith('summary '))
@@ -36,7 +37,8 @@ export const parseBlame = (
 				.join(' '),
 			line: parts
 				.find((part) => !part.startsWith('filename ') && !part.startsWith('\t'))
-				?.split(' ')[1]
+				?.split(' ')[1],
+			changes: parts[parts.length - 1]
 		});
 	}
 
@@ -49,7 +51,7 @@ export const Blame = async (repo: string, file: string) => {
 	const result = await Git({
 		directory: repo,
 		command: 'blame',
-		args: ['-w', '--line-porcelain', file]
+		args: ['-w', '--line-porcelain', '--date=iso', file]
 	});
 
 	return parseBlame(result);

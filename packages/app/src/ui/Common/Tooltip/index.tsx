@@ -13,9 +13,10 @@ export interface Tooltip {
 		tabIndex: number;
 		'aria-labeledby': string;
 	}) => JSX.Element | JSX.Element[];
-	text: string;
+	text: JSX.Element | string;
 	position?: 'top' | 'bottom' | 'auto';
 	delay?: number;
+	size?: 'small' | 'expanded';
 }
 
 export default (props: Tooltip) => {
@@ -26,16 +27,12 @@ export default (props: Tooltip) => {
 	const [tooltip, setTooltip] = createSignal<HTMLDivElement>();
 	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();
 
-	let hasRecentlyHidden = false;
+	let timeout: NodeJS.Timeout;
 
 	const hide = () => {
+		if (timeout) clearTimeout(timeout);
+
 		setOpen(false);
-
-		hasRecentlyHidden = true;
-
-		setTimeout(() => {
-			hasRecentlyHidden = false;
-		}, 500);
 	};
 
 	const show = (e: MouseEvent | FocusEvent, show?: boolean) => {
@@ -56,8 +53,8 @@ export default (props: Tooltip) => {
 	};
 
 	const delay = (e: FocusEvent | MouseEvent, ms = 300) => {
-		setTimeout(() => {
-			if (!hasRecentlyHidden) show(e, true);
+		timeout = setTimeout(() => {
+			show(e, true);
 		}, ms);
 	};
 
@@ -115,6 +112,7 @@ export default (props: Tooltip) => {
 							role="tooltip"
 							classList={{
 								tooltip: true,
+								[props.size || 'small']: true,
 								[props.position || 'top']: true
 							}}
 							ref={setTooltip}
