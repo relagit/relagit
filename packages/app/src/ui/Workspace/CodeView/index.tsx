@@ -81,10 +81,10 @@ const BlameIndicator = (props: {
 	}) => JSX.Element;
 }) => {
 	return (
-		<Show when={props.blame}>
-			<Tooltip
-				delay={1000}
-				text={
+		<Tooltip
+			delay={1000}
+			text={
+				<Show when={props.blame}>
 					<div class="blame-tooltip">
 						<div class="blame-tooltip__commit">
 							<div class="blame-tooltip__commit__info">
@@ -109,12 +109,12 @@ const BlameIndicator = (props: {
 							</div>
 						</div>
 					</div>
-				}
-				size="expanded"
-			>
-				{props.children}
-			</Tooltip>
-		</Show>
+				</Show>
+			}
+			size="expanded"
+		>
+			{props.children}
+		</Tooltip>
 	);
 };
 
@@ -430,7 +430,7 @@ export default (props: CodeViewProps) => {
 																<BlameIndicator blame={lineBlame}>
 																	{(p) => (
 																		<div
-																			{...p}
+																			{...(lineBlame && p)}
 																			classList={{
 																				codeview__line:
 																					true,
@@ -465,9 +465,11 @@ export default (props: CodeViewProps) => {
 																					line
 																				)}
 																			></div>
-																			<div class="codeview__line__blame">
-																				<Icon name="person" />
-																			</div>
+																			<Show when={lineBlame}>
+																				<div class="codeview__line__blame">
+																					<Icon name="person" />
+																				</div>
+																			</Show>
 																		</div>
 																	)}
 																</BlameIndicator>
@@ -571,7 +573,8 @@ export default (props: CodeViewProps) => {
 																			>
 																				{(p) => (
 																					<div
-																						{...p}
+																						{...(lineBlame &&
+																							p)}
 																						classList={{
 																							codeview__line:
 																								true,
@@ -638,14 +641,20 @@ export default (props: CodeViewProps) => {
 																								)
 																							)}
 																						></div>
-																						<div class="codeview__line__blame">
-																							<Icon
-																								name="person"
-																								size={
-																									12
-																								}
-																							/>
-																						</div>
+																						<Show
+																							when={
+																								lineBlame
+																							}
+																						>
+																							<div class="codeview__line__blame">
+																								<Icon
+																									name="person"
+																									size={
+																										12
+																									}
+																								/>
+																							</div>
+																						</Show>
 																					</div>
 																				)}
 																			</BlameIndicator>
