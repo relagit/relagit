@@ -467,7 +467,10 @@ export default (props: CodeViewProps) => {
 																			></div>
 																			<Show when={lineBlame}>
 																				<div class="codeview__line__blame">
-																					<Icon name="person" />
+																					<Icon
+																						name="person"
+																						size={12}
+																					/>
 																				</div>
 																			</Show>
 																		</div>
