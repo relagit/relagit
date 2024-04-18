@@ -29,6 +29,8 @@ app.setAboutPanelOptions({
 	website: 'https://rela.dev'
 });
 
+// TODO: Fix auto-updater
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const updateCheck = () => {
 	if (__NODE_ENV__ === 'development') return;
 
