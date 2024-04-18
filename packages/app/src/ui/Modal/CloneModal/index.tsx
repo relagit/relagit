@@ -209,6 +209,7 @@ const CloneModal = (props: CloneModalProps) => {
 						provider={tab()}
 						account={account()!}
 						selected={selected}
+						setUrl={setURL}
 						setSelected={setSelected}
 						state={props.response}
 					/>

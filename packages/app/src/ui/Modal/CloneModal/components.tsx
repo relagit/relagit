@@ -51,6 +51,7 @@ export const RepoList = <T extends Provider>(props: {
 	state: T extends 'github' ? GitHubRepository[]
 	: T extends 'gitlab' ? GitLabProject[]
 	: CodebergRepository[] | null;
+	setUrl: Setter<string>;
 	setSelected: Setter<GitHubRepository | GitLabProject | CodebergRepository | null | undefined>;
 	selected: Accessor<
 		T extends 'github' ? GitHubRepository
@@ -124,6 +125,24 @@ export const RepoList = <T extends Provider>(props: {
 										tabIndex={0}
 										onClick={() => {
 											props.setSelected(repo);
+
+											let url = '';
+
+											switch (props.provider) {
+												case 'github':
+													url = (repo as GitHubRepository).clone_url;
+													break;
+												case 'gitlab':
+													url = (repo as GitLabProject).http_url_to_repo;
+													break;
+												case 'codeberg':
+													url = (repo as CodebergRepository).clone_url;
+													break;
+												default:
+													break;
+											}
+
+											props.setUrl(url);
 										}}
 										onKeyDown={(e) => {
 											if (e.key === 'Enter') {
