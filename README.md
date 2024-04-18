@@ -61,7 +61,7 @@ git clone https://github.com/relagit/relagit relagit
 cd relagit
 
 pnpm i
-pnpm build
+pnpm build # you can also use <pnpm dev:once> if you don't want to wait 4 minutes for terser
 pnpm make:{platform}
 ```
 
