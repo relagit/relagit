@@ -159,6 +159,24 @@ export default (props: CodeViewProps) => {
 					return;
 				}
 
+				try {
+					if (LocationStore.selectedCommit?.hash)
+						setBlame(
+							await Git.Blame(
+								props.repository,
+								path.join(
+									LocationStore.selectedCommitFile.path,
+									LocationStore.selectedCommitFile.filename
+								),
+								LocationStore.selectedCommit?.hash
+							)
+						);
+				} catch (e) {
+					setBlame(null);
+
+					error(e);
+				}
+
 				setDiff(LocationStore.selectedCommitFile?.diff);
 				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 250);
 				setShowOverridden(false);

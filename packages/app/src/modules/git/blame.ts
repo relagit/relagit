@@ -53,13 +53,17 @@ export const parseBlame = (
 	return blame;
 };
 
-export const Blame = async (repo: string, file: string) => {
+export const Blame = async (repo: string, file: string, commitish?: string) => {
 	if (!repo || !file) return [];
 
 	const result = await Git({
 		directory: repo,
 		command: 'blame',
-		args: ['-w', '--line-porcelain', '--date=iso', file]
+		args:
+			// we have to do this as just passing "" will be a bad revision
+			commitish ?
+				['-w', '--line-porcelain', '--date=iso', commitish, '--', file]
+			:	['-w', '--line-porcelain', '--date=iso', '--', file]
 	});
 
 	return parseBlame(result);
