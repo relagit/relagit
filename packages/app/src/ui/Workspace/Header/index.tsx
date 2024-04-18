@@ -501,6 +501,7 @@ export default () => {
 			<div class="workspace__header__spacer" />
 			<Popout
 				position="bottom"
+				align="end"
 				body={() => (
 					<div class="branches-picker">
 						<div class="branches-picker__label" tabIndex={0}>
