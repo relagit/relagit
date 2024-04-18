@@ -68,11 +68,11 @@ const updateCheck = () => {
 	};
 };
 
-app.on('ready', () => {
-	updateCheck();
-});
+// app.on('ready', () => {
+// 	updateCheck();
+// });
 
-setInterval(updateCheck, 60000);
+// setInterval(updateCheck, 60000);
 
 const constructWindow = async () => {
 	const settings = await getSettings();
