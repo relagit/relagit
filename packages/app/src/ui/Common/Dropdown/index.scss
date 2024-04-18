@@ -9,7 +9,9 @@
 		}
 
 		&__icon__arrow {
-			margin-left: 8px;
+			&.right {
+				margin-left: 8px;
+			}
 
 			svg {
 				color: var(--color-secondary);
@@ -40,7 +42,7 @@
 			color: var(--color-primary);
 			align-items: center;
 			gap: 8px;
-			border-radius: 4px;
+			border-radius: 2px;
 			width: 100%;
 
 			&:focus {

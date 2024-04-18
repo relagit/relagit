@@ -1,4 +1,4 @@
-import { Accessor, For, Setter, Show } from 'solid-js';
+import { Accessor, For, Setter, Show, createEffect, createSignal, untrack } from 'solid-js';
 
 import { CodebergRepository } from '@app/modules/codeberg';
 import { GitHubRepository } from '@app/modules/github';
@@ -21,27 +21,45 @@ const getLanguageColor = (language: string) => {
 	return languageFile[language]?.color || '#000';
 };
 
-const makeSorter = (provider: Provider) => {
+const makeSorter = (provider: Provider, sort: 'stars' | 'updated' | 'name') => {
 	return (
 		a: GitHubRepository | GitLabProject | CodebergRepository,
 		b: GitHubRepository | GitLabProject | CodebergRepository
 	) => {
-		switch (provider) {
-			case 'github':
-				return (
-					(b as GitHubRepository).stargazers_count -
-					(a as GitHubRepository).stargazers_count
-				);
-			case 'gitlab':
-				return (b as GitLabProject).star_count - (a as GitLabProject).star_count;
-			case 'codeberg':
-				return (
-					(b as CodebergRepository).stars_count - (a as CodebergRepository).stars_count
-				);
-			default:
-				return 0;
+		const normalA = makeNormal(provider, a);
+		const normalB = makeNormal(provider, b);
+
+		switch (sort) {
+			case 'stars':
+				return normalB.stargazers_count - normalA.stargazers_count;
+			case 'updated':
+				return normalB.updated - normalA.updated;
+			case 'name':
+				return normalA.name.localeCompare(normalB.name);
 		}
+
+		return 0;
 	};
+};
+
+const match = (
+	repo: ReturnType<typeof makeNormal>,
+	account: NormalProviderAccount<Provider>,
+	search: string
+) => {
+	for (const part of search.split(' ')) {
+		const nameMatch = repo.name?.toLowerCase().includes(part.toLowerCase());
+		const ownerMatch =
+			repo.owner?.login?.toLowerCase().includes(part.toLowerCase()) &&
+			repo.owner?.login !== account.username;
+		const descriptionMatch = repo.description?.toLowerCase().includes(part.toLowerCase());
+
+		if (nameMatch || ownerMatch || descriptionMatch) {
+			return true;
+		}
+	}
+
+	return false;
 };
 
 export const RepoList = <T extends Provider>(props: {
@@ -58,7 +76,24 @@ export const RepoList = <T extends Provider>(props: {
 		: T extends 'gitlab' ? GitLabProject
 		: CodebergRepository | null | undefined
 	>;
+	search: string;
+	sort: 'stars' | 'updated' | 'name';
 }) => {
+	const [showing, setShowing] = createSignal<
+		(GitHubRepository | GitLabProject | CodebergRepository)[] | null
+	>(null);
+
+	createEffect(() => {
+		for (const repo of props.state || []) {
+			if (match(makeNormal(props.provider, repo), props.account, props.search)) {
+				if (!untrack(showing)?.includes(repo))
+					setShowing([...(untrack(showing) || []), repo]);
+			} else {
+				setShowing(untrack(showing)?.filter((r) => r.id !== repo.id) || []);
+			}
+		}
+	});
+
 	return (
 		<Show
 			when={props.done}
@@ -71,7 +106,7 @@ export const RepoList = <T extends Provider>(props: {
 			}
 		>
 			<Show
-				when={props.state?.length}
+				when={showing()?.length}
 				fallback={
 					<EmptyState
 						detail={t('modal.clone.noRepos')}
@@ -103,7 +138,7 @@ export const RepoList = <T extends Provider>(props: {
 				}
 			>
 				<div class="clone-modal__list">
-					<For each={props.state?.sort(makeSorter(props.provider))}>
+					<For each={showing()?.sort(makeSorter(props.provider, props.sort))}>
 						{(repo) => {
 							const normalRepo = makeNormal(props.provider, repo);
 

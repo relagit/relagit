@@ -11,6 +11,7 @@ import { createStoreListener } from '@app/stores';
 import AccountStore, { Provider } from '@app/stores/account';
 import ModalStore from '@app/stores/modal';
 import Button from '@app/ui/Common/Button';
+import Dropdown from '@app/ui/Common/Dropdown';
 import EmptyState from '@app/ui/Common/EmptyState';
 import FileSelect from '@app/ui/Common/FileSelect';
 import Icon from '@app/ui/Common/Icon';
@@ -83,6 +84,8 @@ const CloneModal = (props: CloneModalProps) => {
 	const [path, setPath] = createSignal('');
 	const [url, setURL] = createSignal(props.url || '');
 	const [tab, setTab] = createSignal<Provider>(props.tab || 'github');
+	const [search, setSearch] = createSignal('');
+	const [sort, setSort] = createSignal<'stars' | 'updated' | 'name'>('stars');
 	const account = createStoreListener([AccountStore], () =>
 		AccountStore.getNormalisedAccount(tab() || 'github')
 	);
@@ -212,6 +215,8 @@ const CloneModal = (props: CloneModalProps) => {
 						setUrl={setURL}
 						setSelected={setSelected}
 						state={props.response}
+						search={search()}
+						sort={sort()}
 					/>
 				</Show>
 			</Show>
@@ -253,7 +258,39 @@ const CloneModal = (props: CloneModalProps) => {
 							</>
 						}
 					>
-						<ModalCloseButton {...props} />
+						<div class="clone-modal__header">
+							<Show when={tab() !== 'url'}>
+								<TextArea
+									label={t('modal.clone.searchLabel')}
+									placeholder={t('modal.clone.search')}
+									value={search()}
+									onChange={setSearch}
+									icon="search"
+								/>
+								<Dropdown
+									label={t('modal.clone.filter')}
+									value={sort()}
+									onChange={setSort}
+									icon="sort-desc"
+									iconPosition="left"
+									options={[
+										{
+											label: 'Star Count',
+											value: 'stars'
+										},
+										{
+											label: 'Name',
+											value: 'name'
+										},
+										{
+											label: 'Last Updated',
+											value: 'updated'
+										}
+									]}
+								/>
+							</Show>
+							<ModalCloseButton {...props} />
+						</div>
 					</ModalHeader>
 					<ModalBody>
 						<TabView

@@ -83,51 +83,26 @@
 
 	&__header {
 		display: flex;
-		gap: 8px;
-		margin-bottom: 16px;
 		align-items: center;
+		margin-left: 16px;
+		max-width: 400px;
+		width: 100%;
+
+		.dropdown button,
+		.textarea__wrapper {
+			height: 32px !important;
+		}
 
 		textarea {
-			width: 100%;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			border-right-width: 0;
 		}
 
-		&__title {
-			color: var(--color-primary);
-			font-size: 1.5rem;
-			font-weight: 600;
-			line-height: 30px;
-			margin-left: 8px;
-		}
-
-		&__social {
-			margin-left: 8px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			gap: 16px;
-			color: var(--color-secondary);
-			font-size: 0.85rem;
-
-			&__stars,
-			&__forks {
-				display: flex;
-				align-items: center;
-				gap: 4px;
-			}
-
-			&__language {
-				display: flex;
-				gap: 8px;
-				align-items: center;
-				justify-content: center;
-
-				&__indicator {
-					width: 12px;
-					height: 12px;
-					border-radius: 50%;
-					border: 1px solid var(--separator-secondary);
-				}
-			}
+		.dropdown button {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			margin-right: 16px;
 		}
 	}
 

@@ -3,7 +3,7 @@ import { For, Show, createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import Button from '../Button';
-import Icon from '../Icon';
+import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
@@ -15,6 +15,8 @@ export interface DropdownProps<T> {
 	}[];
 	label: string;
 	value: T;
+	icon?: IconName;
+	iconPosition?: 'left' | 'right';
 	onChange: (value: T) => void;
 }
 
@@ -58,6 +60,7 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 		onDeactivate: () => {
 			setOpen(false);
 		},
+		initialFocus: false,
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true
 	});
@@ -78,16 +81,23 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 						deactivate();
 					}
 				}}
-				label={active().label || props.label}
+				label={active().label ? `${props.label} (${active().label})` : props.label}
 				type="default"
 			>
+				<Show when={props.iconPosition === 'left' && !active().icon}>
+					<div class="dropdown__button__icon__arrow left">
+						<Icon name={props.icon || 'chevron-down'} />
+					</div>
+				</Show>
 				<Show when={active().icon}>
 					<img src={active().icon} class="dropdown__button__icon" />
 				</Show>
 				{active().label || props.label}
-				<div class="dropdown__button__icon__arrow">
-					<Icon name="chevron-down" />
-				</div>
+				<Show when={props.iconPosition === 'right'}>
+					<div class="dropdown__button__icon__arrow right">
+						<Icon name={props.icon || 'chevron-down'} />
+					</div>
+				</Show>
 			</Button>
 			<Show when={open()}>
 				<Portal mount={document.getElementById('app-container')!}>

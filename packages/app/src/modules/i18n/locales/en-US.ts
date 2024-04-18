@@ -366,6 +366,8 @@ export default {
 			title: 'Clone Repository',
 			clone: 'Clone',
 			search: 'Search',
+			searchLabel: 'Search for a repository...',
+			filter: 'Filter',
 			loading: 'Loading...',
 			loadingHint: 'Please wait while we fetch your repositories.',
 			noRepos: 'No repositories found.',
