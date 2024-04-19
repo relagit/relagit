@@ -152,7 +152,7 @@ export default (props: Menu) => {
 						<For each={props.items.filter(Boolean)}>
 							{(item) => <MenuItem {...item} hide={hide} />}
 						</For>
-						<Show when={extensions[props.interfaceId].length}>
+						<Show when={extensions[props.interfaceId]?.length}>
 							<Show when={props.items.filter(Boolean).length}>
 								<div class="menu__separator"></div>
 							</Show>
