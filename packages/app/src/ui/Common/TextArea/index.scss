@@ -28,7 +28,11 @@
 	&__wrapper {
 		position: relative;
 		width: 100%;
-		height: fit-content;
+		height: 32px;
+
+		&.expanded {
+			height: fit-content;
+		}
 
 		&.expanded::after,
 		&::before {
