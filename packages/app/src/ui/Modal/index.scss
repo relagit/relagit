@@ -31,8 +31,7 @@
 	}
 
 	::-webkit-scrollbar-track {
-		background-color: var(--bg-secondary);
-		border-radius: 4px;
+		background-color: transparent;
 	}
 
 	&.visible {
