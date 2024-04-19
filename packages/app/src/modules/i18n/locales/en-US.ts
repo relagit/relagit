@@ -226,7 +226,9 @@ export default {
 			from: 'Fetching changes from',
 			revision: 'Submodule is on revision',
 			clone: 'Clone Submodule',
-			cloneHint: 'Clone this submodule from remote to commit changes to it directly.'
+			cloneHint: 'Clone this submodule from remote to commit changes to it directly.',
+			clonedHint: 'This submodule is already cloned to your workspace.',
+			open: 'Open {{name}}'
 		},
 		imageview: {
 			error: 'Could not find an image to display',

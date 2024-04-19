@@ -41,7 +41,16 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 	}
 
 	getByPath(path: string) {
-		return [...this.repositories.values()].find((f) => f.path === path);
+		return Array.from(this.repositories).find((f) => f[1].path === path)?.[1];
+	}
+
+	getByRemote(remote: string) {
+		return Array.from(this.repositories).find((f) => {
+			const fRemote = f[1].remote.replace(/^(https|http|git):\/\//, '').replace(/\.git$/, '');
+			const remoteRemote = remote.replace(/^(https|http|git):\/\//, '').replace(/\.git$/, '');
+
+			return fRemote === remoteRemote;
+		})?.[1];
 	}
 
 	attachListeners(path: string) {

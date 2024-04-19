@@ -56,20 +56,48 @@ export default () => {
 						{t('codeview.submodule.revision')} <code>{file()!.submodule!.sha}</code>
 					</div>
 				</div>
-				<div class="submodule-view__clone">
-					<div class="submodule-view__clone__header">
-						{t('codeview.submodule.cloneHint')}
+				<Show
+					when={!RepositoryStore.getByRemote(file()!.submodule!.remote!)}
+					fallback={
+						<div class="submodule-view__clone">
+							<div class="submodule-view__clone__header">
+								{t('codeview.submodule.clonedHint')}
+							</div>
+							<Button
+								label={t('codeview.submodule.open', {
+									name: RepositoryStore.getByRemote(file()!.submodule!.remote!)
+										?.name
+								})}
+								onClick={() => {
+									LocationStore.setSelectedRepository(
+										RepositoryStore.getByRemote(file()!.submodule!.remote!)
+									);
+								}}
+								type="brand"
+							>
+								{t('codeview.submodule.open', {
+									name: RepositoryStore.getByRemote(file()!.submodule!.remote!)
+										?.name
+								})}
+							</Button>
+						</div>
+					}
+				>
+					<div class="submodule-view__clone">
+						<div class="submodule-view__clone__header">
+							{t('codeview.submodule.cloneHint')}
+						</div>
+						<Button
+							label={t('codeview.submodule.clone')}
+							onClick={() => {
+								showCloneModal('url', file()!.submodule!.remote || '');
+							}}
+							type="brand"
+						>
+							{t('codeview.submodule.clone')}
+						</Button>
 					</div>
-					<Button
-						label={t('codeview.submodule.clone')}
-						onClick={() => {
-							showCloneModal('url', file()!.submodule!.remote || '');
-						}}
-						type="brand"
-					>
-						{t('codeview.submodule.clone')}
-					</Button>
-				</div>
+				</Show>
 			</Show>
 		</div>
 	);

@@ -150,6 +150,7 @@ export default (props: CodeViewProps) => {
 
 	createStoreListener([LocationStore, FileStore], async () => {
 		setBlame(null);
+		setThrew(null);
 
 		try {
 			if (LocationStore.historyOpen) {
@@ -181,7 +182,6 @@ export default (props: CodeViewProps) => {
 				setShouldShow(totalLines(LocationStore.selectedCommitFile?.diff?.files?.[0]) < 250);
 				setShowOverridden(false);
 				setShowCommit(false);
-				setThrew(null);
 
 				const lastChunk =
 					LocationStore.selectedCommitFile?.diff?.files?.[0]?.chunks?.slice(-1)[0];
@@ -206,7 +206,6 @@ export default (props: CodeViewProps) => {
 			setShowOverridden(false);
 			setShowCommit(false);
 			setShouldShow(false);
-			setThrew(null);
 
 			let _diff: string | boolean = '';
 			let contents: string | null = null;
