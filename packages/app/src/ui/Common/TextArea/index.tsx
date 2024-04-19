@@ -28,6 +28,7 @@ export default (props: TextareaProps) => {
 					[props.className!]: true,
 					expanded: props.expanded
 				}}
+				spellcheck={false}
 				value={props.value}
 				onInput={(e) => {
 					const proposedValue = e.target.value;
