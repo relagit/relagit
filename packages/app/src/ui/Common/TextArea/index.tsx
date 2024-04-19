@@ -20,7 +20,13 @@ interface TextareaProps {
 
 export default (props: TextareaProps) => {
 	return (
-		<div class="textarea__wrapper" style={{ height: props.expanded ? '100%' : '' }}>
+		<div
+			classList={{
+				textarea__wrapper: true,
+				expanded: props.expanded
+			}}
+			style={{ height: props.expanded ? '100%' : '' }}
+		>
 			<textarea
 				aria-label={props.label}
 				classList={{

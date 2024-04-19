@@ -30,7 +30,7 @@
 		width: 100%;
 		height: fit-content;
 
-		&::after,
+		&.expanded::after,
 		&::before {
 			// more content hint
 			content: '';
@@ -43,7 +43,7 @@
 			z-index: 1;
 		}
 
-		&::after {
+		&.expanded::after {
 			background: linear-gradient(
 				to top,
 				var(--bg-tertiary) 0,
@@ -63,7 +63,7 @@
 			);
 		}
 
-		&:focus-within::after,
+		&.expanded:focus-within::after,
 		&:focus-within::before {
 			width: calc(100% - 4px);
 			height: calc(100% - 4px);

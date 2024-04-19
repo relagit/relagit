@@ -15,7 +15,7 @@
 .sidebar__drawer {
 	position: absolute;
 	inset: 0;
-	z-index: 1;
+	z-index: 4;
 	background-color: var(--bg-tertiary);
 	border-right: 1px solid var(--separator-primary);
 	display: flex;
