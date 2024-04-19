@@ -57,6 +57,7 @@ export default (props: HeaderDrawerProps) => {
 					<Tooltip text={t('sidebar.drawer.contextMenu.addRepository')}>
 						{(p) => (
 							<Menu
+								interfaceId="sidebar-drawer"
 								event="click"
 								items={[
 									{
@@ -119,6 +120,7 @@ export default (props: HeaderDrawerProps) => {
 						{([, repository]) => (
 							<>
 								<Menu
+									interfaceId="sidebar-drawer-repository"
 									items={[
 										{
 											type: 'item',

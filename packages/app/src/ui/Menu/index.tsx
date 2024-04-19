@@ -30,6 +30,7 @@ export interface Menu {
 	children?: JSX.Element | JSX.Element[];
 	items: IMenuItem[];
 	event?: keyof HTMLElementEventMap;
+	interfaceId: string;
 }
 
 export default (props: Menu) => {
@@ -135,6 +136,7 @@ export default (props: Menu) => {
 						}}
 						ref={setMenu}
 						class="menu"
+						data-id={props.interfaceId}
 						style={{
 							'--x': `${x()}px`,
 							'--y': `${y()}px`

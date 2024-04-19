@@ -23,6 +23,7 @@ export default (props: LogCommit) => {
 
 	return (
 		<Menu
+			interfaceId="sidebar-commit"
 			items={[
 				{
 					type: 'item',

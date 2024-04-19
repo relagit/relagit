@@ -56,6 +56,7 @@ export default () => {
 		<>
 			<Drawer ref={ref} open={[open, toggle]} />
 			<Menu
+				interfaceId="sidebar-header"
 				items={[
 					{
 						type: 'item',

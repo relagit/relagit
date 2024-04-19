@@ -40,6 +40,7 @@ export default (props: GitFile) => {
 
 	return (
 		<Menu
+			interfaceId="sidebar-item"
 			items={[
 				{
 					label:

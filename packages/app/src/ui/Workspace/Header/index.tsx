@@ -214,6 +214,7 @@ export default () => {
 				}}
 			/>
 			<Menu
+				interfaceId="workspace-pull"
 				items={[
 					status() === 'ahead' &&
 						({
@@ -427,6 +428,7 @@ export default () => {
 			</Menu>
 			<Show when={Object.keys(stashes() || {}).length > 0}>
 				<Menu
+					interfaceId="workspace-pop-stash"
 					items={[
 						{
 							type: 'item',
@@ -511,6 +513,7 @@ export default () => {
 							<For each={branches()}>
 								{(branch) => (
 									<Menu
+										interfaceId="workspace-branch"
 										items={[
 											{
 												type: 'item',

@@ -100,6 +100,7 @@ export default (props: WorkspaceProps) => {
 						<For each={commitFiles()?.files}>
 							{(commitFile) => (
 								<Menu
+									interfaceId="workspace-commit-file"
 									items={[
 										{
 											type: 'item',
