@@ -4,7 +4,7 @@ import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
-export interface SegmentedControlProps<T extends string> {
+export interface SegmentedControlProps<T extends string | undefined> {
 	items: {
 		label: string;
 		value: T;
@@ -17,7 +17,7 @@ export interface SegmentedControlProps<T extends string> {
 	className?: string;
 }
 
-export default <T extends string>(props: SegmentedControlProps<T>) => {
+export default <T extends string | undefined>(props: SegmentedControlProps<T>) => {
 	const [value, setValue] = createSignal<T>(props.value || props.items[0].value);
 
 	return (

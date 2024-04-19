@@ -19,6 +19,8 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const mimeFromPath = (path: string) => {
 	const ext = path.split('.').pop();
 
+	console.log('mimeFromPath', path);
+
 	switch (ext) {
 		case 'jpg':
 		case 'jpeg':
@@ -61,11 +63,11 @@ export default (props: ImageViewProps) => {
 	const [size, setSize] = createSignal<[number, number]>([0, 0]);
 	const [removedRef, setRemovedRef] = createSignal<HTMLImageElement>();
 	const [addedRef, setAddedRef] = createSignal<HTMLImageElement>();
-	const [display, setDisplay] = createSignal<'sidebyside' | 'difference'>('sidebyside');
 
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const commitFile = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
+	const display = createStoreListener([LocationStore], () => LocationStore.imageDisplayMode);
 
 	const repository = createStoreListener([RepositoryStore], () =>
 		RepositoryStore.getByPath(props.repository)
@@ -90,7 +92,11 @@ export default (props: ImageViewProps) => {
 				if (remote !== null) {
 					const base64 = await ipcRenderer.invoke(ipc.BASE64_FROM_BINARY, remote);
 
-					out[0] = `data:${mimeFromPath(props.fromPath || props.path)};base64,${base64}`;
+					out[0] = `data:${mimeFromPath(
+						props.fromPath === '.' ?
+							props.path.replace(props.repository, '')
+						:	props.fromPath!.replace(props.repository, '')
+					)};base64,${base64}`;
 
 					sizeOut[0] = remote.length;
 				}
@@ -138,7 +144,7 @@ export default (props: ImageViewProps) => {
 	});
 
 	return (
-		<div classList={{ 'image-view': true, [display()]: true }}>
+		<div classList={{ 'image-view': true, [display() || 'sidebyside']: true }}>
 			<div class="image-view__images">
 				<Show
 					when={URIs()[0] || URIs()[1]}
@@ -227,7 +233,9 @@ export default (props: ImageViewProps) => {
 							}
 						]}
 						value={display()}
-						onChange={setDisplay}
+						onChange={(value) => {
+							LocationStore.setImageDisplayMode(value as 'sidebyside' | 'difference');
+						}}
 					/>
 				</div>
 			</Show>

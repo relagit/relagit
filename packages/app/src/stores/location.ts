@@ -16,6 +16,7 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedCommitFiles: PastCommit | undefined = undefined;
 	#selectedCommitFile: PastCommit['files'][number] | undefined = undefined;
 	#showingPalette = false;
+	#imageDisplayMode: 'sidebyside' | 'difference' = 'sidebyside';
 
 	#isRefetchingSelectedRepository = false;
 
@@ -72,6 +73,10 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	get showingPalette() {
 		return this.#showingPalette;
+	}
+
+	get imageDisplayMode() {
+		return this.#imageDisplayMode ?? 'sidebyside';
 	}
 
 	setShowingPalette(showing: boolean | ((s: boolean) => boolean)) {
@@ -146,6 +151,11 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	setDragState(e: DragEvent | null) {
 		this.#dragState = e;
+		this.emit();
+	}
+
+	setImageDisplayMode(mode: 'sidebyside' | 'difference') {
+		this.#imageDisplayMode = mode;
 		this.emit();
 	}
 })();
