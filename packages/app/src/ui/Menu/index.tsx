@@ -4,6 +4,8 @@ import { Portal } from 'solid-js/web';
 
 import './index.scss';
 
+const extensions: Record<string, MenuItem[]> = {};
+
 export type Accelerator = {
 	shift?: boolean;
 	meta?: boolean;
@@ -13,7 +15,7 @@ export type Accelerator = {
 
 const meta = window.Native.platform === 'win32' ? '⌃' : '⌘';
 
-export type IMenuItem =
+export type MenuItem =
 	| {
 			type: 'item';
 			label: string;
@@ -28,7 +30,7 @@ export type IMenuItem =
 
 export interface Menu {
 	children?: JSX.Element | JSX.Element[];
-	items: IMenuItem[];
+	items: MenuItem[];
 	event?: keyof HTMLElementEventMap;
 	interfaceId: string;
 }
@@ -148,61 +150,16 @@ export default (props: Menu) => {
 							</div>
 						</Show>
 						<For each={props.items.filter(Boolean)}>
-							{(item) => {
-								switch (item.type) {
-									case 'separator':
-										return <div class="menu__separator"></div>;
-									case 'item':
-										return (
-											<div
-												aria-role="button"
-												aria-label={item.label}
-												classList={{
-													menu__item: true,
-													[item.color || '']: true,
-													disabled: item.disabled
-												}}
-												data-id={item.label
-													.toLowerCase()
-													.replace(/\W/g, '-')}
-												onClick={() => {
-													if (!item.onClick) return hide();
-
-													item.onClick();
-
-													hide();
-												}}
-												onKeyDown={(e) => {
-													if (e.key === 'Enter') {
-														if (!item.onClick) return hide();
-
-														item.onClick();
-
-														hide();
-													}
-												}}
-												tabIndex={0}
-											>
-												{item.label}
-												<Show when={item.accelerator}>
-													<div class="menu__item__accelerator">
-														<span>
-															{item.accelerator?.shift ? '⇧' : null}
-														</span>
-														<span>
-															{item.accelerator?.meta ? meta : null}
-														</span>
-														<span>
-															{item.accelerator?.alt ? '⌥' : null}
-														</span>
-														<span>{item.accelerator?.key}</span>
-													</div>
-												</Show>
-											</div>
-										);
-								}
-							}}
+							{(item) => <MenuItem {...item} hide={hide} />}
 						</For>
+						<Show when={extensions[props.interfaceId].length}>
+							<Show when={props.items.filter(Boolean).length}>
+								<div class="menu__separator"></div>
+							</Show>
+							<For each={extensions[props.interfaceId]}>
+								{(item) => <MenuItem {...item} hide={hide} />}
+							</For>
+						</Show>
 					</div>
 				</Portal>
 			</Show>
@@ -211,4 +168,60 @@ export default (props: Menu) => {
 			</div>
 		</>
 	);
+};
+
+export const addExtensions = (id: string, items: MenuItem[]) => {
+	extensions[id] ??= [];
+	extensions[id].push(...items);
+};
+
+export const MenuItem = (
+	props: MenuItem & {
+		hide: () => void;
+	}
+) => {
+	switch (props.type) {
+		case 'separator':
+			return <div class="menu__separator"></div>;
+		case 'item':
+			return (
+				<div
+					aria-role="button"
+					aria-label={props.label}
+					classList={{
+						menu__item: true,
+						[props.color || '']: true,
+						disabled: props.disabled
+					}}
+					data-id={props.label.toLowerCase().replace(/\W/g, '-')}
+					onClick={() => {
+						if (!props.onClick) return props.hide();
+
+						props.onClick();
+
+						props.hide();
+					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							if (!props.onClick) return props.hide();
+
+							props.onClick();
+
+							props.hide();
+						}
+					}}
+					tabIndex={0}
+				>
+					{props.label}
+					<Show when={props.accelerator}>
+						<div class="menu__item__accelerator">
+							<span>{props.accelerator?.shift ? '⇧' : null}</span>
+							<span>{props.accelerator?.meta ? meta : null}</span>
+							<span>{props.accelerator?.alt ? '⌥' : null}</span>
+							<span>{props.accelerator?.key}</span>
+						</div>
+					</Show>
+				</div>
+			);
+	}
 };

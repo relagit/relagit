@@ -1,7 +1,9 @@
 import def from '@content/modules/actions/def.d.ts';
+import { RequireIdentifier } from '~/native/src/types';
 
 import NotificationStore from '@app/stores/notification';
 import { type IconName } from '@app/ui/Common/Icon';
+import { addExtensions } from '@app/ui/Menu';
 import { NotificationProps } from '@app/ui/Notification';
 import * as Git from '@modules/git';
 import { error } from '@modules/logger';
@@ -161,6 +163,9 @@ export const require = (id: string) => {
 					},
 					app: {
 						registerSettingsPane
+					},
+					menu: {
+						extend: addExtensions
 					}
 				};
 			case 'client':
@@ -170,7 +175,7 @@ export const require = (id: string) => {
 		return null;
 	}
 
-	return window.Native.DANGEROUS__NODE__REQUIRE(id);
+	return window.Native.DANGEROUS__NODE__REQUIRE(id as RequireIdentifier);
 };
 
 export const loadWorkflows = async () => {
