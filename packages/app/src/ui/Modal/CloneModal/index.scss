@@ -3,7 +3,7 @@
 		justify-content: space-between !important;
 		gap: 16px;
 
-		@media screen and (width <= 724px) {
+		@container (width <= 625px) {
 			flex-direction: column !important;
 			align-items: flex-start !important;
 		}

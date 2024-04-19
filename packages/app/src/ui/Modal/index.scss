@@ -51,6 +51,7 @@
 		position: relative;
 		background-color: var(--bg-primary);
 		color: var(--color-primary);
+		container-type: inline-size;
 
 		&:focus {
 			outline: none;

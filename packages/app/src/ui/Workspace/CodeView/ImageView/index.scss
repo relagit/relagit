@@ -8,11 +8,8 @@
 	display: flex;
 	gap: 32px;
 	padding: 16px;
-	padding-bottom: 68px;
-
-	@media screen and (width <= 768px) {
-		flex-direction: column;
-	}
+	padding-bottom: 100px;
+	overflow: hidden;
 
 	&__views {
 		position: absolute;
@@ -40,6 +37,19 @@
 		justify-content: center;
 		display: flex;
 		gap: 2rem;
+
+		@container (width <= 475px) {
+			flex-direction: column;
+			height: 100%;
+
+			&__image {
+				max-height: 50% !important;
+
+				&__image {
+					max-height: 50% !important;
+				}
+			}
+		}
 
 		&__image {
 			display: flex;

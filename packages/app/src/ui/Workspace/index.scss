@@ -231,6 +231,7 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
+			container-type: inline-size;
 
 			&__file {
 				display: flex;
