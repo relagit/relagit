@@ -135,7 +135,10 @@ const constructWindow = async () => {
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			height: 27,
-			color: backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors),
+			color: backgroundFromTheme(
+				settings.ui?.theme || 'system',
+				nativeTheme.shouldUseDarkColors
+			),
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
