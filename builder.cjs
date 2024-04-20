@@ -36,7 +36,8 @@ const config = {
 		output: 'out'
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
-	asar: false, // we cannot build as asar because vscode-oniguruma needs to be required from starry-night
+	asar: true,
+	asarUnpack: ['node_modules'],
 	afterPack: async () => {
 		if (process.platform !== 'darwin') return;
 
