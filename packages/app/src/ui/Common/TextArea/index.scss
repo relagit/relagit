@@ -10,12 +10,10 @@
 	padding: 7px 16px;
 	scroll-padding: 7px 16px;
 	border-radius: 4px;
-	color: var(--input-color);
-	background: var(--input-bg);
+	color: var(--color-primary);
+	background: var(--bg-tertiary);
 	border: 1px solid var(--input-stroke);
 
-	--input-color: var(--color-primary);
-	--input-bg: var(--bg-tertiary);
 	--input-stroke: var(--separator-primary);
 	--input-focus: var(--color-blue-500);
 

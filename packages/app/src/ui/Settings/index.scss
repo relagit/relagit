@@ -218,17 +218,10 @@
 		font-size: 1rem;
 		font-weight: 400;
 		padding: 12px 32px;
-		color: var(--radio-color);
-		background-color: var(--radio-bg);
-		border: 1px solid var(--radio-stroke);
+		color: var(--color-primary);
+		background-color: var(--bg-tertiary);
+		border: 1px solid var(--separator-primary);
 		border-bottom-width: 0;
-
-		--radio-bg: var(--bg-tertiary);
-		--radio-color: var(--color-primary);
-		--radio-stroke: var(--separator-primary);
-		--radio-hover: var(--bg-quaternary);
-		--radio-active: var(--bg-quinary);
-		--radio-focus: var(--color-blue-500);
 
 		&:nth-child(1) {
 			border-radius: 4px 4px 0 0;
@@ -244,11 +237,11 @@
 		}
 
 		&:hover {
-			background-color: var(--radio-hover);
+			background-color: var(--bg-quaternary);
 		}
 
 		&:active {
-			background-color: var(--radio-active);
+			background-color: var(--bg-quinary);
 		}
 
 		&.active {
@@ -261,7 +254,7 @@
 		}
 
 		&:focus {
-			border: 2px solid var(--radio-focus);
+			border: 2px solid var(--color-blue-500);
 			outline: none;
 			padding: 11px 31px; // visually compensate for border
 			padding-bottom: 10px;
@@ -282,7 +275,7 @@
 
 			&:focus {
 				outline: none;
-				border: 2px solid var(--radio-focus);
+				border: 2px solid var(--color-blue-500);
 				padding: 10px 30px;
 			}
 		}
@@ -356,12 +349,10 @@
 			height: 22px;
 			border-radius: 20px;
 			transition: transform 0.1s ease-in;
-			color: var(--switch-color);
-			background: var(--switch-bg);
+			color: var(--color-primary);
+			background: var(--bg-tertiary);
 			border: 1px solid var(--switch-stroke);
 
-			--switch-color: var(--color-primary);
-			--switch-bg: var(--bg-tertiary);
 			--switch-thumb: var(--bg-hover);
 			--switch-stroke: var(--base-dark-grey);
 			--switch-slider-stroke: var(--switch-stroke);
@@ -373,7 +364,7 @@
 			}
 
 			&:hover {
-				--switch-bg: var(--bg-quaternary);
+				background: var(--bg-quaternary);
 			}
 
 			input {
@@ -396,8 +387,9 @@
 			&.active {
 				--switch-slider-stroke: var(--color-blue-500);
 				--switch-thumb: #1c84ec85; // hardcoded 50% alpha
-				--switch-bg: #1c84ec33; // hardcoded 20% alpha
 				--switch-stroke: var(--bg-active);
+
+				background: #1c84ec33; // hardcoded 20% alpha
 
 				.slider {
 					transform: translateX(18px);
