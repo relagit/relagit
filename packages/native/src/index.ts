@@ -20,6 +20,7 @@ import openPopout, { popout, reposition } from './modules/popout';
 import initProtocol from './modules/protocol';
 import { backgroundFromTheme, editorName, getSettings, updateSettings } from './modules/settings';
 import { updateEnvironmentForProcess } from './modules/shell';
+import { getPlatformWindowOptions } from './modules/window';
 
 app.setAboutPanelOptions({
 	applicationName: 'RelaGit',
@@ -87,48 +88,13 @@ const constructWindow = async () => {
 		return onboarding.dismissed !== true && onboarding.step === 0;
 	};
 
-	let vibrancy:
-		| 'sidebar'
-		| 'fullscreen-ui'
-		| 'selection'
-		| 'menu'
-		| 'popover'
-		| 'sidebar-header'
-		| 'titlebar'
-		| 'header'
-		| 'sheet'
-		| 'window'
-		| undefined = settings.ui?.vibrancy ? 'sidebar' : undefined;
-	let backgroundMaterial: 'mica' | 'auto' | 'none' | 'acrylic' | 'tabbed' | undefined =
-		settings.ui?.vibrancy ? 'mica' : undefined;
-	let transparent = settings.ui?.vibrancy && process.platform === 'win32' ? true : undefined;
-	let backgroundColor =
-		settings.ui?.vibrancy ?
-			'#00000000'
-		:	backgroundFromTheme(settings.ui?.theme || '', nativeTheme.shouldUseDarkColors);
-
 	if (isOnboarding()) {
-		vibrancy = 'sidebar';
-		backgroundMaterial = 'mica';
-		transparent = process.platform === 'win32';
-		backgroundColor = '#00000000';
-
 		await updateSettings({
 			ui: {
 				...settings.ui,
 				vibrancy: true
 			}
 		});
-	}
-
-	if (process.platform === 'linux') {
-		vibrancy = undefined;
-		backgroundMaterial = undefined;
-		transparent = undefined;
-		backgroundColor = backgroundFromTheme(
-			settings.ui?.theme || '',
-			nativeTheme.shouldUseDarkColors
-		);
 	}
 
 	const win = new BrowserWindow({
@@ -142,10 +108,6 @@ const constructWindow = async () => {
 			symbolColor: '#cacaca'
 		},
 		title: 'RelaGit',
-		vibrancy,
-		backgroundMaterial,
-		transparent,
-		backgroundColor,
 		height: settings.window?.height || 600,
 		width: settings.window?.width || 1000,
 		minWidth: 500,
@@ -153,6 +115,7 @@ const constructWindow = async () => {
 		x: settings.window?.x || undefined,
 		y: settings.window?.y || undefined,
 		show: false,
+		...getPlatformWindowOptions(isOnboarding(), settings),
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
 			preload: path.resolve(__dirname, 'preload.js'),
