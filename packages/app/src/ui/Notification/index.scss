@@ -109,9 +109,11 @@
 		opacity: 0;
 		scale: 0.8;
 		transition:
-			opacity 0.2s ease-in-out,
-			scale 0.2s ease-in-out,
-			translate 0.2s ease-in-out;
+			opacity 0.2s var(--easing),
+			scale 0.2s var(--easing),
+			translate 0.2s var(--easing);
+
+		--easing: cubic-bezier(0, 0, 0.52, 0.96);
 
 		&:nth-last-child(1) {
 			translate: 0;
