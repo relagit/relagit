@@ -8,6 +8,10 @@ export default {
 			decline: 'Decline'
 		}
 	},
+	update: {
+		download: 'Download',
+		ignore: 'Ignore'
+	},
 	onboarding: {
 		takeTour: 'Take the Tour',
 		next: 'Next',

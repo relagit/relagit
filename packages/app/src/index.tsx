@@ -7,9 +7,13 @@ import * as ipc from '~/common/ipc';
 import EmptyState from '@ui/Common/EmptyState';
 
 import Main from './app';
+import { checkForUpdates } from './modules/updater';
 
 loadWorkflows();
 loadThemes();
+
+checkForUpdates();
+setInterval(checkForUpdates, 1000 * 60 * 60);
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
