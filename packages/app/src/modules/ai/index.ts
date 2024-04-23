@@ -19,7 +19,7 @@ export async function* sendAIRequest(prompt: string): AsyncGenerator<{
 	message: string;
 } | null> {
 	if (!SettingsStore.settings.ai?.termsAccepted) {
-		NotificationStore.add({
+		const id = NotificationStore.add({
 			title: t('ai.terms.title'),
 			description: t('ai.terms.message') + ' https://ai.google.dev/terms',
 			level: 'info',
@@ -32,7 +32,7 @@ export async function* sendAIRequest(prompt: string): AsyncGenerator<{
 					onClick: () => {
 						SettingsStore.setSetting('ai.termsAccepted', true);
 
-						NotificationStore.remove('ai-terms');
+						NotificationStore.remove(id);
 					}
 				},
 				{
@@ -42,7 +42,7 @@ export async function* sendAIRequest(prompt: string): AsyncGenerator<{
 					onClick: () => {
 						SettingsStore.setSetting('ai.termsAccepted', false);
 
-						NotificationStore.remove('ai-terms');
+						NotificationStore.remove(id);
 					}
 				}
 			]

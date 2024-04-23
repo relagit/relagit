@@ -157,7 +157,7 @@ export const require = (id: string) => {
 						show: (props: NotificationProps): number => {
 							return NotificationStore.add(props);
 						},
-						hide: (id: string | number) => {
+						hide: (id: number) => {
 							NotificationStore.remove(id);
 						}
 					},

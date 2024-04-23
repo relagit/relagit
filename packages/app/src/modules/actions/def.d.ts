@@ -289,8 +289,8 @@ interface Actions {
 			} & {
 				dismiss?: boolean;
 			})[];
-		}) => void;
-		hide: (id: string | number) => void;
+		}) => number;
+		hide: (id:  number) => void;
 	};
 	app: {
 		registerSettingsPane: (

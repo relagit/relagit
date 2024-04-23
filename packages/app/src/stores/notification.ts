@@ -10,7 +10,7 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 		props: NotificationProps;
 		timestamp: number;
 	}[] = [];
-	#removeListeners: Record<string | number, () => void> = {};
+	#removeListeners: Record<number, () => void> = {};
 
 	constructor() {
 		super();
@@ -20,7 +20,7 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 		return this.#state;
 	}
 
-	onRemoved(type: string | number, callback: () => void) {
+	onRemoved(type: number, callback: () => void) {
 		this.#removeListeners[type] = callback;
 	}
 
@@ -46,11 +46,9 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 		return this.#state.find((notification) => notification.props === id);
 	}
 
-	remove(id: string | number) {
-		if (typeof id === 'string' || typeof id === 'number') {
-			const index = this.#state.findIndex((notification) => notification.id === id);
-			this.#state.splice(index, 1);
-		}
+	remove(id: number) {
+		const index = this.#state.findIndex((notification) => notification.id === id);
+		this.#state.splice(index, 1);
 
 		this.emit();
 	}

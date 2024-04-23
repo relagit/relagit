@@ -24,7 +24,7 @@ export interface NotificationProps {
 
 export const Notification = (
 	props: NotificationProps & {
-		id: string | number;
+		id: number;
 	}
 ) => {
 	const [ref, setRef] = createSignal<HTMLDivElement>();
