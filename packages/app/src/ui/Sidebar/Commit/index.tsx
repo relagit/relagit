@@ -153,7 +153,7 @@ export default (props: LogCommit) => {
 					<div class="sidebar__commit__diff">
 						<div class="sidebar__commit__diff__left">
 							<div class="sidebar__commit__diff__left__files">
-								{props.files} {t('ui.filepicker.file', {}, props.files)}
+								{props.files} {t('ui.filepicker.file', undefined, props.files)}
 							</div>
 							<Show when={props.from === 'HEAD'}>
 								<div class="sidebar__commit__diff__left__push">

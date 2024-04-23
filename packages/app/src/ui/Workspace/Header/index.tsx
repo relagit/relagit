@@ -507,7 +507,7 @@ export default () => {
 				body={() => (
 					<div class="branches-picker">
 						<div class="branches-picker__label" tabIndex={0}>
-							{t('git.branches', {}, branches()?.length)}
+							{t('git.branches', undefined, branches()?.length)}
 						</div>
 						<div class="branches-picker__list">
 							<For each={branches()}>

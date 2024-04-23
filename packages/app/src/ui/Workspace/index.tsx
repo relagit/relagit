@@ -185,7 +185,7 @@ export default (props: WorkspaceProps) => {
 										tabIndex={0}
 										aria-role="button"
 										aria-label={t('workspace.commit.open', {
-											name: commitFile.filename
+											hash: commitFile.filename
 										})}
 										aria-selected={selectedCommitFile() === commitFile}
 										data-active={selectedCommitFile() === commitFile}
