@@ -250,4 +250,4 @@ export default {
 				'Wir haben den Ball fallen gelassen, als wir versuchten, deine Repositories zu sammeln.'
 		}
 	}
-};
+} as const;

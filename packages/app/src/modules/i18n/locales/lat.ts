@@ -242,4 +242,4 @@ export default {
 			errorHint: 'Nos pilam demittimus dum repositoria tua colligere conatur.'
 		}
 	}
-};
+} as const;

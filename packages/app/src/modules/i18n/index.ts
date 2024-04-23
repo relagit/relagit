@@ -5,6 +5,8 @@ import de from './locales/de';
 import enUS from './locales/en-US';
 import lat from './locales/lat';
 
+// NOTE: I am sorry for the types in this file, they are very complex but somehow work :)
+
 export type Locale = typeof import('./locales/en-US').default;
 export type LocaleKey = ObjectToDotProp<Locale>;
 
@@ -34,7 +36,7 @@ export type ObjectToDotPropInternal<T extends object> = {
 export type Unstrict<T> = {
 	[K in keyof T]: T[K] extends Record<string, unknown> ? Unstrict<T[K]>
 	: T[K] extends string ? string
-	: readonly [string, string] | string[];
+	: readonly [string, string];
 };
 
 const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
@@ -45,18 +47,32 @@ const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 
 export type ValidLocale = keyof typeof ALL_LOCALES;
 
-type TResult<Trans extends LocaleKey> =
+type TResult<Trans extends LocaleKey, P extends PluralType<Trans>> =
 	ResolvePropDeep<Locale, Trans> extends string ? ResolvePropDeep<Locale, Trans>
-	:	ResolvePropDeep<Locale, Trans>[0];
-
+	:	ResolvePropDeep<Locale, Trans>[P];
+type PluralType<Trans extends LocaleKey> =
+	ResolvePropDeep<Locale, Trans> extends readonly [string, string] ? number : never;
 type Stringifyable = string | number | boolean | null | undefined;
 
-const findTranslation = <Trans extends LocaleKey>(
+// i hate it here, but i also love it here
+type TransParams<Trans extends LocaleKey, P extends PluralType<Trans>> =
+	TResult<Trans, P> extends (
+		`${string}{{${'lc:' | 'uc:'}${infer U}}}${string}{{${'lc:' | 'uc:'}${infer V}}}${string}`
+	) ?
+		{ [K in U | V]: Stringifyable }
+	: TResult<Trans, P> extends `${string}{{${infer U}}}${string}{{${infer V}}}${string}` ?
+		{ [K in U | V]: Stringifyable }
+	: TResult<Trans, P> extends `${string}{{${'lc:' | 'uc:'}${infer U}}}${string}` ?
+		{ [K in U]: Stringifyable }
+	: TResult<Trans, P> extends `${string}{{${infer U}}}${string}` ? { [K in U]: Stringifyable }
+	: never;
+
+const findTranslation = <Trans extends LocaleKey, P extends PluralType<Trans>>(
 	locale: RecursivePartial<Unstrict<Locale>>,
 	key: LocaleKey,
-	args?: Record<string, Stringifyable>,
-	plural?: number
-): TResult<Trans> => {
+	args?: TransParams<Trans, P>,
+	plural?: P
+): TResult<Trans, P> => {
 	const paths = key.split('.');
 
 	let out = '';
@@ -82,13 +98,15 @@ const findTranslation = <Trans extends LocaleKey>(
 	}
 
 	if (Array.isArray(out)) {
-		out = out[plural! > 1 ? 1 : 0];
+		if (typeof plural === 'number') {
+			out = out[plural! > 1 ? 1 : 0];
+		}
 	}
 
 	if (typeof out !== 'string') {
 		console.warn(`Translation for ${key} is not a string`);
 
-		return `{{${key}}}` as TResult<Trans>;
+		return `{{${key}}}` as TResult<Trans, P>;
 	}
 
 	for (const arg in args) {
@@ -97,25 +115,18 @@ const findTranslation = <Trans extends LocaleKey>(
 		out = out.replace(`{{uc:${arg}}}`, String(args[arg]).toUpperCase());
 	}
 
-	return out as TResult<Trans>;
+	return out as TResult<Trans, P>;
 };
 
-export const i18nFactory = (locale: (typeof ALL_LOCALES)[keyof typeof ALL_LOCALES]) => {
-	return <Trans extends LocaleKey>(
-		trans: Trans,
-		params?: Record<string, Stringifyable>,
-		plural?: number
-	): TResult<Trans> => {
-		return findTranslation(locale, trans, params, plural);
-	};
-};
-
-export const useI18n = () => {
-	return i18nFactory(ALL_LOCALES[SettingsStore.getSetting('locale') || 'en-US'] || enUS);
-};
-
-export const t: <Trans extends LocaleKey>(
+export const t = <Trans extends LocaleKey, P extends PluralType<Trans>>(
 	trans: Trans,
-	params?: Record<string, Stringifyable>,
-	plural?: number
-) => TResult<Trans> = useI18n();
+	params?: TransParams<Trans, P>,
+	plural?: P
+): TResult<Trans, P> => {
+	return findTranslation(
+		ALL_LOCALES[SettingsStore.getSetting('locale') || 'en-US'] || enUS,
+		trans,
+		params,
+		plural
+	);
+};
