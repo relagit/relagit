@@ -95,7 +95,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 			setCommits(commits);
 		});
 
-		if (props.repo.remote.includes('://github.com')) {
+		if (/^(https?|git):\/\/github\.com/.test(props.repo.remote)) {
 			try {
 				GitHub('repos/:username/:repo/actions/runs')
 					.query({
