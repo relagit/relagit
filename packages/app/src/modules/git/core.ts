@@ -24,7 +24,8 @@ export const [commands, setCommands] = createSignal<
 	}[]
 >([]);
 
-const escape = (str: string) => str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`');
+const escape = (str: string) =>
+	str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/`/g, '\\`').replace('\\', '\\\\');
 
 export const Git = async (params: GitParams): Promise<string> => {
 	const { directory, command, args } = params;
