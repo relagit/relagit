@@ -17,6 +17,7 @@ export type Settings = {
 		styles: Record<string, CommitStyle>;
 		enforceStyle: boolean;
 		preferParens: boolean;
+		annotate: boolean;
 	};
 	ai: {
 		termsAccepted: boolean;

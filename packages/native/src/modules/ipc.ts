@@ -129,17 +129,27 @@ export default (window: BrowserWindow) => {
 			};
 
 			return new Promise((resolve) => {
-				const process = child_process.exec(cmd, opts, (error, stdout, stderr) => {
-					if (opts.encoding) {
-						process.stdout?.setEncoding?.(opts.encoding);
+				const proc = child_process.exec(
+					cmd,
+					{
+						...opts,
+						env: {
+							...process.env,
+							...opts.env
+						}
+					},
+					(error, stdout, stderr) => {
+						if (opts.encoding) {
+							proc.stdout?.setEncoding?.(opts.encoding);
+						}
+
+						out.error = error;
+						out.stdout = stdout;
+						out.stderr = stderr;
+
+						resolve(out);
 					}
-
-					out.error = error;
-					out.stdout = stdout;
-					out.stderr = stderr;
-
-					resolve(out);
-				});
+				);
 			});
 		}
 	);

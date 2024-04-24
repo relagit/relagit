@@ -200,6 +200,16 @@ const SettingsModal = () => {
 	const Commits = (
 		<>
 			<div class="settings-layer__setting">
+				<Switch
+					label={t('settings.general.annotateCommit.label')}
+					note={t('settings.general.annotateCommit.description')}
+					value={() => settings()?.commit?.annotate || false}
+					onChange={(value) => {
+						SettingsStore.setSetting('commit.annotate', value);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-commit-style">
 					{t('settings.general.commitStyle.label')}
 				</label>

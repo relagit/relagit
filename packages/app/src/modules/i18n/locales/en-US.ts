@@ -90,6 +90,11 @@ export default {
 				relational: 'Relational Commits',
 				none: 'None'
 			},
+			annotateCommit: {
+				label: 'Annotate Commits',
+				description:
+					'Credit @relagit-client as the committer (not author) of your commits. This is a free way to give us some recognition!'
+			},
 			enforceCommitStyle: {
 				label: 'Enforce Commit Message Style',
 				description:
