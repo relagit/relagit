@@ -40,12 +40,13 @@ export const queueRepositoryLoad = () => {
 				continue;
 			}
 
+			if (RepositoryStore.getByPath(repo)) continue;
+
 			debug('Loading', repo);
 
 			RepositoryStore.createDraft(repo);
 		}
 
-		debug('Emitting');
 		RepositoryStore._emit();
 	});
 };
