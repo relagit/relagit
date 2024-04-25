@@ -2,6 +2,8 @@ import { GenericStore } from '.';
 
 import { type NotificationProps } from '@app/ui/Notification';
 
+export const NOTIFICATION_REMOVE_DELAY = 500;
+
 let i = 0;
 
 const NotificationStore = new (class NotificationStore extends GenericStore {
@@ -10,7 +12,7 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 		props: NotificationProps;
 		timestamp: number;
 	}[] = [];
-	#removeListeners: Record<number, () => void> = {};
+	#removeListeners: Record<number, (() => void)[]> = {};
 
 	constructor() {
 		super();
@@ -20,8 +22,15 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 		return this.#state;
 	}
 
-	onRemoved(type: number, callback: () => void) {
-		this.#removeListeners[type] = callback;
+	onRemoved(id: number, callback: () => void) {
+		this.#removeListeners[id] ??= [];
+		this.#removeListeners[id].push(() => {
+			callback();
+
+			this.#removeListeners[id] = this.#removeListeners[id].filter(
+				(listener) => listener !== callback
+			);
+		});
 	}
 
 	add(props: NotificationProps): number {
@@ -48,16 +57,32 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 
 	remove(id: number) {
 		const index = this.#state.findIndex((notification) => notification.id === id);
-		this.#state.splice(index, 1);
 
-		this.emit();
+		console.log('removing__', id, this.#removeListeners);
+		if (this.#removeListeners[id]?.length) {
+			for (const listener of this.#removeListeners[id]) {
+				listener();
+			}
+		}
+
+		setTimeout(() => {
+			this.#state.splice(index, 1);
+
+			this.emit();
+
+			console.log('removed', id);
+		}, NOTIFICATION_REMOVE_DELAY);
 	}
 
 	clear() {
 		this.#state = [];
 
-		for (const type in this.#removeListeners) {
-			this.#removeListeners[type]();
+		for (const id in this.#removeListeners) {
+			if (this.#removeListeners[id]?.length) {
+				for (const listener of this.#removeListeners[id]) {
+					listener();
+				}
+			}
 		}
 
 		this.emit();
