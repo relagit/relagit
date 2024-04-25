@@ -116,7 +116,7 @@ const constructWindow = async () => {
 		show: false,
 		...getPlatformWindowOptions(isOnboarding(), settings),
 		webPreferences: {
-			// devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
+			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
 			preload: path.join(__dirname, '../preload/preload.mjs'),
 			nodeIntegration: true,
 			contextIsolation: true
@@ -410,7 +410,7 @@ const constructWindow = async () => {
 				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
 					type: 'separator'
 				},
-				/*(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && */ {
+				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
 					role: 'toggleDevTools'
 				}
 			].filter(Boolean) as MenuItemConstructorOptions[]
