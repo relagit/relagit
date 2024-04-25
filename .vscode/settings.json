@@ -3,6 +3,9 @@
 	"stylelint.validate": ["css", "scss"],
 	"workbench.editor.customLabels.patterns": {
 		"**/ui/**/*": "${dirname} (${extname}) - UI",
-		"**/modules/**/*": "${filename} (${dirname})  - Modules"
+		"**/modules/**/*": "${filename} (${dirname})  - Modules",
+		"**/app/src/*": "${filename}.${extname} - App",
+		"**/app/popout/src/*": "${filename}.${extname} - Popout",
+		"**/main/src/*": "${filename}.${extname} - Main"
 	}
 }
