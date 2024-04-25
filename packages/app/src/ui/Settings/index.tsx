@@ -158,8 +158,6 @@ export const Switch = (props: SwitchProps) => {
 				onClick={(e) => {
 					e.preventDefault();
 
-					console.log('label received click event');
-
 					props.onChange(!value());
 
 					setValue(!value()); // optimistically update the value
@@ -184,8 +182,6 @@ export const Switch = (props: SwitchProps) => {
 					onClick={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
-
-						console.log('check received click event');
 
 						props.onChange(!value());
 
@@ -220,8 +216,6 @@ const SettingsModal = () => {
 					value={settings()?.commit?.annotate || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.annotate', value);
-
-						console.log('onchange', value);
 					}}
 				/>
 			</div>

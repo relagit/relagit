@@ -19,8 +19,6 @@ const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 const mimeFromPath = (path: string) => {
 	const ext = path.split('.').pop();
 
-	console.log('mimeFromPath', path);
-
 	switch (ext) {
 		case 'jpg':
 		case 'jpeg':
