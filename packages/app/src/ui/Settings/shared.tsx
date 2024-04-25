@@ -7,9 +7,11 @@ import './index.scss';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
+let lastId: number | null = null;
+
 export const showReloadNotification = () => {
 	if (!NotificationStore.has('reload'))
-		NotificationStore.add({
+		lastId = NotificationStore.add({
 			title: t('modal.reload.title'),
 			level: 'warning',
 			icon: 'alert',
@@ -25,4 +27,11 @@ export const showReloadNotification = () => {
 				}
 			]
 		});
+};
+
+export const hideReloadNotification = () => {
+	if (lastId) {
+		NotificationStore.remove(lastId);
+		lastId = null;
+	}
 };

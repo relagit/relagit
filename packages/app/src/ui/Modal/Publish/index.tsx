@@ -117,14 +117,14 @@ const PublishModal = (props: { repo: Repository }) => {
 								/>
 								<Switch
 									label={t('modal.publish.private')}
-									value={isPrivate}
+									value={isPrivate()}
 									onChange={(val) => {
 										setIsPrivate(val);
 									}}
 								/>
 								<Switch
 									label={t('modal.publish.push')}
-									value={willPush}
+									value={willPush()}
 									onChange={(val) => {
 										setWillPush(val);
 									}}

@@ -1,4 +1,4 @@
-import { Accessor, For, JSX, Show, createRoot, createSignal } from 'solid-js';
+import { For, JSX, Show, createRoot, createSignal } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import { __WORKFLOWS_PATH__, workflows } from '@app/modules/actions';
@@ -22,7 +22,7 @@ import EmptyState from '../Common/EmptyState';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '../Modal';
-import { showReloadNotification } from './shared';
+import { hideReloadNotification, showReloadNotification } from './shared';
 
 import './index.scss';
 
@@ -136,7 +136,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 };
 
 export interface SwitchProps {
-	value: Accessor<boolean>;
+	value: boolean;
 	label: string;
 	onChange: (value: boolean) => void;
 	disabled?: boolean;
@@ -144,19 +144,25 @@ export interface SwitchProps {
 }
 
 export const Switch = (props: SwitchProps) => {
+	const [value, setValue] = createSignal(props.value);
+
 	return (
 		<div
 			classList={{ 'settings-layer__setting__input switch': true, disabled: props.disabled }}
 		>
 			<label
 				aria-label={props.label}
-				aria-selected={props.value()}
+				aria-selected={value()}
 				aria-disabled={props.disabled}
-				classList={{ active: props.value() }}
+				classList={{ active: value() }}
 				onClick={(e) => {
 					e.preventDefault();
 
-					props.onChange(!props.value());
+					console.log('label received click event');
+
+					props.onChange(!value());
+
+					setValue(!value()); // optimistically update the value
 				}}
 			>
 				<div class="label">
@@ -167,23 +173,29 @@ export const Switch = (props: SwitchProps) => {
 				</div>
 				<div
 					aria-label={props.label}
-					aria-checked={props.value()}
+					aria-checked={value()}
 					aria-role="checkbox"
 					role="checkbox"
 					classList={{
 						check: true,
-						active: props.value()
+						active: value()
 					}}
 					tabIndex={0}
 					onClick={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
 
-						props.onChange(!props.value());
+						console.log('check received click event');
+
+						props.onChange(!value());
+
+						setValue(!value());
 					}}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							props.onChange(!props.value());
+							props.onChange(!value());
+
+							setValue(!value());
 						}
 					}}
 				>
@@ -197,15 +209,19 @@ export const Switch = (props: SwitchProps) => {
 const SettingsModal = () => {
 	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
 
+	const initialUponOpen = structuredClone(SettingsStore.settings);
+
 	const Commits = (
 		<>
 			<div class="settings-layer__setting">
 				<Switch
 					label={t('settings.general.annotateCommit.label')}
 					note={t('settings.general.annotateCommit.description')}
-					value={() => settings()?.commit?.annotate || false}
+					value={settings()?.commit?.annotate || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.annotate', value);
+
+						console.log('onchange', value);
 					}}
 				/>
 			</div>
@@ -249,7 +265,7 @@ const SettingsModal = () => {
 				<Switch
 					label={t('settings.general.enforceCommitStyle.label')}
 					note={t('settings.general.enforceCommitStyle.description')}
-					value={() => settings()?.commit?.enforceStyle || false}
+					value={settings()?.commit?.enforceStyle || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.enforceStyle', value);
 					}}
@@ -259,7 +275,7 @@ const SettingsModal = () => {
 				<Switch
 					label={t('settings.general.preferParens.label')}
 					note={t('settings.general.preferParens.description')}
-					value={() => settings()?.commit?.preferParens || false}
+					value={settings()?.commit?.preferParens || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('commit.preferParens', value);
 					}}
@@ -368,7 +384,11 @@ const SettingsModal = () => {
 					onChange={(value) => {
 						SettingsStore.setSetting('locale', value);
 
-						showReloadNotification();
+						if (value !== initialUponOpen.locale) {
+							showReloadNotification();
+						} else {
+							hideReloadNotification();
+						}
 					}}
 				/>
 			</div>
@@ -413,7 +433,11 @@ const SettingsModal = () => {
 							value as Settings['externalEditor']
 						);
 
-						showReloadNotification();
+						if (value !== initialUponOpen.externalEditor) {
+							showReloadNotification();
+						} else {
+							hideReloadNotification();
+						}
 					}}
 				/>
 			</div>
@@ -421,7 +445,7 @@ const SettingsModal = () => {
 				<Switch
 					label={t('settings.general.autoFetch.label')}
 					note={t('settings.general.autoFetch.description')}
-					value={() => settings()?.autoFetch || false}
+					value={settings()?.autoFetch || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('autoFetch', value);
 					}}
@@ -520,12 +544,14 @@ const SettingsModal = () => {
 					disabled={
 						window.Native.platform !== 'darwin' && window.Native.platform !== 'win32'
 					}
-					value={() => !!settings()?.ui?.vibrancy}
+					value={!!settings()?.ui?.vibrancy}
 					onChange={(value) => {
 						SettingsStore.setSetting('ui.vibrancy', value);
 
-						if (value) {
+						if (value !== initialUponOpen.ui?.vibrancy) {
 							showReloadNotification();
+						} else {
+							hideReloadNotification();
 						}
 					}}
 				/>
@@ -623,7 +649,7 @@ const SettingsModal = () => {
 				<Switch
 					label={t('settings.appearance.thinIcons.label')}
 					note={t('settings.appearance.thinIcons.description')}
-					value={() => settings()?.ui?.thinIcons || false}
+					value={settings()?.ui?.thinIcons || false}
 					onChange={(value) => {
 						SettingsStore.setSetting('ui.thinIcons', value);
 					}}
@@ -646,7 +672,7 @@ const SettingsModal = () => {
 										note={`${theme.description || ''} (${theme.authors
 											.map((a) => a.name)
 											.join(', ')})`}
-										value={() =>
+										value={
 											settings()?.ui?.userThemes?.includes?.(theme.id) ||
 											false
 										}
