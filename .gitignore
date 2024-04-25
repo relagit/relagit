@@ -4,9 +4,10 @@ out
 
 # dependencies
 node_modules
+public/icons
 
 # misc
-.DS_Store
+**/*.DS_Store
 *.log
 npm-debug.log*
 

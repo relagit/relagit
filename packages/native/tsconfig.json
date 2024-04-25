@@ -1,4 +1,0 @@
-{
-	"extends": "../../tsconfig.json",
-	"exclude": ["**/rollup.config.js"]
-}

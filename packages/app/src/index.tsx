@@ -1,8 +1,8 @@
 import { ErrorBoundary, render } from 'solid-js/web';
+import * as ipc from '~/shared/ipc';
 
 import { loadWorkflows } from '@modules/actions';
 import { loadThemes } from '@modules/actions/themes';
-import * as ipc from '~/common/ipc';
 
 import EmptyState from '@ui/Common/EmptyState';
 

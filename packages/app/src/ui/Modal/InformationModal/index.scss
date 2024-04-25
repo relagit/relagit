@@ -1,3 +1,5 @@
+@use '../../../illyrica/mixins' as mixins;
+
 .information-modal {
 	&__graph {
 		flex-direction: column;

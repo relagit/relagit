@@ -153,10 +153,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 								<Show when={getIconForFilePath(file.name)}>
 									<div class="icon">
 										<img
-											src={getIconUrlForFilePath(
-												file.name,
-												'../node_modules/vscode-material-icons/generated/icons'
-											)}
+											src={getIconUrlForFilePath(file.name, '../icons')}
 											alt={getIconForFilePath(file.name)}
 										/>
 									</div>

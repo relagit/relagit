@@ -1,0 +1,23 @@
+{
+	"include": ["electron.vite.config.ts", "packages/app/**/*", "packages/popout/**/*"],
+	"compilerOptions": {
+		"strict": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./packages/*"],
+			"@/*": ["./packages/app/src/*"],
+			"@app/*": ["./packages/app/src/*"],
+			"@ui/*": ["./packages/app/src/ui/*"],
+			"@stores/*": ["./packages/app/src/stores/*"],
+			"@modules/*": ["./packages/app/src/modules/*"]
+		}
+	}
+}

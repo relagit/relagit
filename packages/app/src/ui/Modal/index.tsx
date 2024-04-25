@@ -1,12 +1,12 @@
 import { createConfetti } from '@neoconfetti/solid';
 import { JSX, Show, createEffect, createRoot, createSignal } from 'solid-js';
 import { Transition } from 'solid-transition-group';
+import * as ipc from '~/shared/ipc';
 
 import { LocaleKey, t } from '@modules/i18n';
 import { createStoreListener } from '@stores/index';
 import LayerStore from '@stores/layer';
 import ModalStore from '@stores/modal';
-import * as ipc from '~/common/ipc';
 
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';

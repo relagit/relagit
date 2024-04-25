@@ -1,3 +1,6 @@
+@use '../../illyrica/mixins' as mixins;
+@use '../../illyrica/os' as *;
+
 @keyframes visibilityout {
 	0% {
 		visibility: visible;

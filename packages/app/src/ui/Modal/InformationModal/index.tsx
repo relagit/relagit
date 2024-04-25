@@ -1,5 +1,6 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
 import { For, Show, createRoot, createSignal } from 'solid-js';
+import * as ipc from '~/shared/ipc';
 
 import * as Git from '@app/modules/git';
 import { commitFormatsForProvider } from '@app/modules/github';
@@ -18,7 +19,6 @@ import TabView from '@app/ui/Common/TabView';
 import Tooltip from '@app/ui/Common/Tooltip';
 import { GraphPoint } from '@modules/git/graph';
 import { LogCommit, getMonthCounts } from '@modules/git/log';
-import * as ipc from '~/common/ipc';
 
 import './index.scss';
 

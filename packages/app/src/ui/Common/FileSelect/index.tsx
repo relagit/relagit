@@ -1,8 +1,8 @@
 import { JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
+import * as ipc from '~/shared/ipc';
 
 import { t } from '@app/modules/i18n';
 import { PassthroughRef } from '@app/shared';
-import * as ipc from '~/common/ipc';
 
 import Icon from '../Icon';
 import TextArea from '../TextArea';

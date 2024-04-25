@@ -1,10 +1,10 @@
 import * as starryNight from '@wooorm/starry-night';
-import { IpcRendererEvent, app, contextBridge, ipcRenderer } from 'electron';
+import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
+import * as ipc from '~/shared/ipc';
 
 import fs, { WatchListener } from 'node:fs';
 
 import type { Workflow } from '~/app/src/modules/actions';
-import * as ipc from '~/common/ipc';
 
 import _eval from './modules/eval';
 import { updateEnvironmentForProcess } from './modules/shell';
@@ -36,7 +36,7 @@ export const Native = {
 		ipcRenderer.invoke(ipc.ALERT, message, type);
 	},
 	quit: () => {
-		app.quit();
+		// app.quit();
 	},
 	libraries: {
 		starryNight

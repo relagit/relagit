@@ -1,5 +1,5 @@
 import def from '@content/modules/actions/def.d.ts';
-import { RequireIdentifier } from '~/native/src/types';
+import { RequireIdentifier } from '~/main/src/types';
 
 import NotificationStore from '@app/stores/notification';
 import { type IconName } from '@app/ui/Common/Icon';
@@ -10,7 +10,7 @@ import { error } from '@modules/logger';
 import LocationStore from '@stores/location';
 import RepositoryStore, { type Repository } from '@stores/repository';
 
-import pkj from '../../../../../package.json' assert { type: 'json' };
+import pkj from '../../../../../package.json';
 import { registerSettingsPane } from './app';
 import { getExternalWorkflows } from './external';
 import { getOptionsProxy } from './settings';

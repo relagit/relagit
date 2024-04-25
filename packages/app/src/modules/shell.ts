@@ -1,4 +1,4 @@
-import * as ipc from '~/common/ipc';
+import * as ipc from '~/shared/ipc';
 
 const shell = window.Native.DANGEROUS__NODE__REQUIRE('electron:shell');
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');

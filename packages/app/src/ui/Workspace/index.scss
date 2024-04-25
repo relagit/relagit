@@ -1,3 +1,5 @@
+@use '../../illyrica/mixins' as mixins;
+
 .workspace {
 	background-color: var(--bg-primary);
 	height: 100%;

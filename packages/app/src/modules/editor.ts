@@ -1,6 +1,7 @@
+import * as ipc from '~/shared/ipc';
+
 import SettingsStore from '@app/stores/settings';
 import { showErrorModal } from '@app/ui/Modal';
-import * as ipc from '~/common/ipc';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 

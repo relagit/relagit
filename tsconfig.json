@@ -1,22 +1,4 @@
 {
-	"compilerOptions": {
-		"strict": true,
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
-		"resolveJsonModule": true,
-		"baseUrl": ".",
-		"paths": {
-			"~/*": ["./packages/*"],
-			"@app/*": ["./packages/app/src/*"],
-			"@ui/*": ["./packages/app/src/ui/*"],
-			"@stores/*": ["./packages/app/src/stores/*"],
-			"@modules/*": ["./packages/app/src/modules/*"]
-		}
-	},
-	"exclude": ["**/*.js"]
+	"files": [],
+	"references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
 }

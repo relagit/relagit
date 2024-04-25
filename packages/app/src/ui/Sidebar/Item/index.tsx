@@ -151,10 +151,7 @@ export default (props: GitFile) => {
 				<Show when={getIconForFilePath(props.name)}>
 					<div class="sidebar__item__fileicon">
 						<img
-							src={getIconUrlForFilePath(
-								props.name,
-								'../node_modules/vscode-material-icons/generated/icons'
-							)}
+							src={getIconUrlForFilePath(props.name, './icons')}
 							alt={getIconForFilePath(props.name)}
 						/>
 					</div>

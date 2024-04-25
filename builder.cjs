@@ -25,7 +25,7 @@ const config = {
 		schemes: ['relagit']
 	},
 	extraMetadata: {
-		main: 'dist/main.js',
+		main: 'dist/main/index.js',
 		homepage: 'https://rela.dev',
 		source: 'github:relagit/relagit'
 	},
@@ -36,8 +36,8 @@ const config = {
 		output: 'out'
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
-	asar: true,
-	asarUnpack: ['node_modules'],
+	// asar: true,
+	// asarUnpack: ['node_modules'],
 	afterPack: async () => {
 		if (process.platform !== 'darwin') return;
 

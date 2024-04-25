@@ -1,4 +1,4 @@
-import pkj from '../../../../../package.json' assert { type: 'json' };
+import pkj from '../../../../../package.json';
 import type { GithubRelease } from '../github/types';
 import { error } from '../logger';
 

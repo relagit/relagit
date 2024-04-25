@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
+import * as ipc from '~/shared/ipc';
 
 import SettingsStore from '~/app/src/stores/settings';
-import * as ipc from '~/common/ipc';
 
 import Main from './app';
 

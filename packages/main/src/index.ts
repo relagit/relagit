@@ -8,12 +8,11 @@ import {
 	webContents
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import * as ipc from '~/shared/ipc';
 
 import * as path from 'path';
 
-import * as ipc from '~/common/ipc';
-
-import pkj from '../../../package.json' assert { type: 'json' };
+import pkj from '../../../package.json';
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
 import openPopout, { popout, reposition } from './modules/popout';
@@ -117,8 +116,8 @@ const constructWindow = async () => {
 		show: false,
 		...getPlatformWindowOptions(isOnboarding(), settings),
 		webPreferences: {
-			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
-			preload: path.resolve(__dirname, 'preload.js'),
+			// devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
+			preload: path.join(__dirname, '../preload/preload.mjs'),
 			nodeIntegration: true,
 			contextIsolation: true
 		}
@@ -162,7 +161,11 @@ const constructWindow = async () => {
 	log('Version: ' + pkj.version);
 	log('Running on: ' + process.platform + ' ' + process.arch);
 
-	win.loadFile(path.join(__dirname, '..', 'public', 'index.html'));
+	if (__NODE_ENV__ === 'development' && process.env['ELECTRON_RENDERER_URL']) {
+		win.loadURL(process.env['ELECTRON_RENDERER_URL']);
+	} else {
+		win.loadFile(path.join(__dirname, '../app/index.html'));
+	}
 
 	const menu = Menu.buildFromTemplate([
 		{
@@ -407,7 +410,7 @@ const constructWindow = async () => {
 				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
 					type: 'separator'
 				},
-				(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && {
+				/*(__NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true') && */ {
 					role: 'toggleDevTools'
 				}
 			].filter(Boolean) as MenuItemConstructorOptions[]
