@@ -1,6 +1,5 @@
 import { GenericStore } from '.';
-
-import * as ipc from '~/common/ipc';
+import * as ipc from '~/shared/ipc';
 
 import type { NormalProviderAccount, Provider, ProviderAccount } from './shared';
 

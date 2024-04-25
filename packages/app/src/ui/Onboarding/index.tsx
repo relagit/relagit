@@ -9,7 +9,7 @@ import Icon from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import Modal, { ModalBody, ModalFooter, ModalHeader } from '@ui/Modal';
 
-import pkj from '../../../../../package.json' assert { type: 'json' };
+import pkj from '../../../../../package.json';
 
 import './index.scss';
 

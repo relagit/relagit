@@ -1,0 +1,21 @@
+{
+	"include": ["electron.vite.config.ts", "packages/main/**/*"],
+	"compilerOptions": {
+		"strict": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./packages/*"],
+			"@/*": ["./packages/app/src/*"],
+			"@app/*": ["./packages/app/src/*"],
+			"@ui/*": ["./packages/app/src/ui/*"],
+			"@stores/*": ["./packages/app/src/stores/*"],
+			"@modules/*": ["./packages/app/src/modules/*"]
+		}
+	}
+}

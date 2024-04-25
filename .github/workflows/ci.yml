@@ -35,6 +35,7 @@ jobs:
               env:
                   GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
                   GITLAB_CLIENT_ID: ${{ secrets.GITLAB_CLIENT_ID }}
+                  CODEBERG_CLIENT_ID: ${{ secrets.CODEBERG_CLIENT_ID }}
                   AI_API_URL: ${{ secrets.AI_API_URL }}
                   AI_API_PASSWORD: ${{ secrets.AI_API_PASSWORD }}
             - name: log dist size

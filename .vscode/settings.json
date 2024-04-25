@@ -1,4 +1,8 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
-	"stylelint.validate": ["css", "scss"]
+	"stylelint.validate": ["css", "scss"],
+	"workbench.editor.customLabels.patterns": {
+		"**/ui/**/*": "${dirname} (${extname}) - UI",
+		"**/modules/**/*": "${filename} (${dirname})  - Modules"
+	}
 }

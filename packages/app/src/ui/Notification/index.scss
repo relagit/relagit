@@ -1,3 +1,5 @@
+@use '../../illyrica/mixins' as mixins;
+
 @keyframes slidein {
 	0% {
 		scale: 1 1;

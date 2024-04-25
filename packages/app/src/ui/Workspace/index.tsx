@@ -208,7 +208,7 @@ export default (props: WorkspaceProps) => {
 												<img
 													src={getIconUrlForFilePath(
 														commitFile.filename,
-														'../node_modules/vscode-material-icons/generated/icons'
+														'./icons'
 													)}
 													alt={getIconForFilePath(commitFile.filename)}
 												/>

@@ -1,4 +1,5 @@
 import { Show, createEffect, createSignal } from 'solid-js';
+import * as ipc from '~/shared/ipc';
 
 import { t } from '@app/modules/i18n';
 import { error } from '@app/modules/logger';
@@ -9,7 +10,6 @@ import EmptyState from '@app/ui/Common/EmptyState';
 import SegmentedControl from '@app/ui/Common/SegmentedControl';
 import * as Git from '@modules/git';
 import { GitStatus } from '@modules/git/diff';
-import * as ipc from '~/common/ipc';
 
 import './index.scss';
 

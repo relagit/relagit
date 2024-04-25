@@ -1,17 +1,3 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-		"target": "ESNext",
-		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
-		"baseUrl": ".",
-		"paths": {
-			"@app/*": ["./src/*"],
-			"@ui/*": ["./src/ui/*"],
-			"@stores/*": ["./src/stores/*"],
-			"@modules/*": ["./src/modules/*"],
-			"~/*": ["../*"]
-		}
-	},
-	"exclude": ["**/rollup.config.js"]
+	"extends": "../../tsconfig.web.json"
 }

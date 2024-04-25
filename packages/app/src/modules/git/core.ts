@@ -1,8 +1,7 @@
 import { createSignal } from 'solid-js';
+import * as ipc from '~/shared/ipc';
 
 import { ExecException } from 'child_process';
-
-import * as ipc from '~/common/ipc';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');

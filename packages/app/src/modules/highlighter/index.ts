@@ -7,7 +7,7 @@ const StarryNight = window.Native.libraries.starryNight;
 
 let highlighter: Awaited<ReturnType<typeof StarryNight.createStarryNight>>;
 
-StarryNight.createStarryNight(StarryNight.all).then((h) => (highlighter = h));
+StarryNight.createStarryNight(StarryNight.all, {}).then((h) => (highlighter = h));
 
 export default (code: string, language: string) => {
 	if (!highlighter) {

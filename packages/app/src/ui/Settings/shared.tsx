@@ -1,6 +1,7 @@
+import * as ipc from '~/shared/ipc';
+
 import { t } from '@app/modules/i18n';
 import NotificationStore from '@stores/notification';
-import * as ipc from '~/common/ipc';
 
 import './index.scss';
 

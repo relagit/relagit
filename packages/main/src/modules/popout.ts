@@ -1,8 +1,7 @@
 import { BrowserWindow, ipcMain, screen, systemPreferences } from 'electron';
+import * as ipc from '~/shared/ipc';
 
 import path from 'path';
-
-import * as ipc from '~/common/ipc';
 
 import { getSettings, updateSettings } from './settings';
 
@@ -40,7 +39,7 @@ export default async () => {
 		show: false,
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.env.DEBUG_PROD === 'true',
-			preload: path.resolve(__dirname, 'preload.js'),
+			preload: path.join(__dirname, '../preload/preload.mjs'),
 			scrollBounce: true,
 			nodeIntegration: true,
 			contextIsolation: true
@@ -69,7 +68,11 @@ export default async () => {
 	popout.setVisibleOnAllWorkspaces?.(true);
 	popout.setWindowButtonVisibility?.(false);
 
-	popout.loadFile(path.join(__dirname, '..', 'public', 'popout.html'));
+	if (__NODE_ENV__ === 'development' && process.env['ELECTRON_RENDERER_URL']) {
+		popout.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/popout/index.html`);
+	} else {
+		popout.loadFile(path.join(__dirname, '../app/popout/index.html'));
+	}
 
 	popout.on('ready-to-show', () => {
 		popout?.show();

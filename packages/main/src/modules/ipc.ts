@@ -7,10 +7,9 @@ import {
 	safeStorage,
 	shell
 } from 'electron';
+import * as ipc from '~/shared/ipc';
 
 import child_process from 'child_process';
-
-import * as ipc from '~/common/ipc';
 
 const preloadPathEnv = () => {
 	try {

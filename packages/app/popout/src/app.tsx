@@ -1,4 +1,5 @@
 import { createSignal, onMount } from 'solid-js';
+import * as ipc from '~/shared/ipc';
 
 import { getRepositoryStatus } from '@app/modules/actions/files';
 import type { RecursivePartial } from '@app/shared';
@@ -7,7 +8,6 @@ import SettingsStore, { type Settings } from '@app/stores/settings';
 import { Fetch } from '~/app/src/modules/git/fetch';
 import LocationStore from '~/app/src/stores/location';
 import RepositoryStore from '~/app/src/stores/repository';
-import * as ipc from '~/common/ipc';
 
 import Content from './ui/Content';
 import PanelButton from './ui/PanelButton';

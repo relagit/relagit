@@ -1,7 +1,7 @@
+import { Native as _Native } from '~/main/src/preload';
+
 import { getRepositoryStatus, refetchRepository, triggerWorkflow } from '@app/modules/actions';
 import { showErrorModal } from '@app/ui/Modal';
-
-import { Native as _Native } from '../native/src/preload';
 
 declare global {
 	interface Window {
