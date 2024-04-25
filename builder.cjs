@@ -36,7 +36,7 @@ const config = {
 		output: 'out'
 	},
 	icon: buildInfo.env === 'development' ? './build/dev' : './build/icon',
-	// asar: true,
+	asar: false, // we need to disable asar because of the way vscode-oniguruma is built
 	// asarUnpack: ['node_modules'],
 	afterPack: async () => {
 		if (process.platform !== 'darwin') return;
