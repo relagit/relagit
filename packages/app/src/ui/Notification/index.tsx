@@ -2,7 +2,7 @@ import { For, Show, createSignal, onMount } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
-import NotificationStore, { NOTIFICATION_REMOVE_DELAY } from '@stores/notification';
+import NotificationStore from '@stores/notification';
 
 import Button, { ButtonProps } from '@ui/Common/Button';
 import Icon, { IconName } from '@ui/Common/Icon';
@@ -117,13 +117,7 @@ Notification.Layer = () => {
 							setOpen(true);
 						}, 10);
 
-						if (n.props.timeout)
-							setTimeout(() => {
-								setOpen(false);
-							}, n.props.timeout! - NOTIFICATION_REMOVE_DELAY);
-
 						NotificationStore.onRemoved(n.id, () => {
-							console.log('removed', n.id);
 							setOpen(false);
 						});
 

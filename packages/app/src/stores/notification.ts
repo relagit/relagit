@@ -2,7 +2,7 @@ import { GenericStore } from '.';
 
 import { type NotificationProps } from '@app/ui/Notification';
 
-export const NOTIFICATION_REMOVE_DELAY = 500;
+export const NOTIFICATION_REMOVE_DELAY = 200;
 
 let i = 0;
 
@@ -58,7 +58,6 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 	remove(id: number) {
 		const index = this.#state.findIndex((notification) => notification.id === id);
 
-		console.log('removing__', id, this.#removeListeners);
 		if (this.#removeListeners[id]?.length) {
 			for (const listener of this.#removeListeners[id]) {
 				listener();
@@ -69,8 +68,6 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 			this.#state.splice(index, 1);
 
 			this.emit();
-
-			console.log('removed', id);
 		}, NOTIFICATION_REMOVE_DELAY);
 	}
 
