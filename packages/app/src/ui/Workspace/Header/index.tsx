@@ -18,6 +18,8 @@ import { debug, error } from '@modules/logger';
 import { renderDate } from '@modules/time';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
+import { branchFormatsForProvider } from '~/app/src/modules/github';
+import { openExternal } from '~/app/src/modules/shell';
 
 import Icon, { IconName, customIcons } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
@@ -533,6 +535,27 @@ export default () => {
 														showErrorModal(e, 'error.git');
 
 														error(e);
+													}
+												}
+											},
+											{
+												type: 'item',
+												label: t('sidebar.contextMenu.openRemote'),
+												disabled: !(branch.hasUpstream || branch.isRemote),
+												onClick: () => {
+													const remote =
+														LocationStore.selectedRepository?.remote.replace(
+															/\.git$/,
+															''
+														);
+
+													if (
+														remote &&
+														(branch.hasUpstream || branch.isRemote)
+													) {
+														const url = `${remote}${branchFormatsForProvider(remote, branch.gitName.replace(/^origin\//, ''))}`;
+
+														openExternal(url);
 													}
 												}
 											}

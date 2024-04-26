@@ -4,13 +4,13 @@ import { openInEditor } from '@app/modules/editor';
 import { t } from '@app/modules/i18n';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
 import OnboardingStore from '@app/stores/onboarding';
-import RemoteStore from '@app/stores/remote';
 import SettingsStore from '@app/stores/settings';
 import Popout from '@app/ui/Common/Popout';
 import Menu from '@app/ui/Menu';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import RespositoryStore from '@stores/repository';
+import { branchFormatsForProvider } from '~/app/src/modules/github';
 
 import Icon from '@ui/Common/Icon';
 
@@ -83,9 +83,14 @@ export default () => {
 						},
 						type: 'item',
 						onClick: () => {
-							const remotes = RemoteStore.getByRepoPath(selected()?.path || '');
+							const url = selected()?.remote.replace(/\.git$/, '');
 
-							if (remotes[0]?.url) openExternal(remotes[0].url);
+							if (selected()?.branch && url)
+								return openExternal(
+									`${url}${branchFormatsForProvider(url, selected()!.branch!)}`
+								);
+
+							if (url) openExternal(url);
 						}
 					},
 					{

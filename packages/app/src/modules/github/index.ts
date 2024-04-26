@@ -16,3 +16,9 @@ export const commitFormatsForProvider = (url: string, sha: string) => {
 	if (url.includes('gitlab')) return `/commit/${sha}`;
 	if (url.includes('codeberg')) return `/commits/${sha}`;
 };
+
+export const branchFormatsForProvider = (url: string, branch: string) => {
+	if (url.includes('github')) return `/tree/${branch}`;
+	if (url.includes('gitlab')) return `/tree/${branch}`;
+	if (url.includes('codeberg')) return `/src/branch/${branch}`;
+};
