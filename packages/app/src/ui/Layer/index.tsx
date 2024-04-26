@@ -86,7 +86,7 @@ const transitions = {
 			const a = el.animate(
 				[
 					{
-						opacity: 1,
+						// opacity: 1, // infer from current value
 						transform: 'translateY(0px) scale(1)'
 					},
 					{

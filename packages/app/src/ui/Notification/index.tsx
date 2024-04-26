@@ -1,4 +1,14 @@
-import { For, Show, createSignal, onMount } from 'solid-js';
+// with massive inspiration from https://github.com/emilkowalski/sonner/blob/main/src/index.tsx
+import {
+	Accessor,
+	For,
+	Setter,
+	Show,
+	createEffect,
+	createMemo,
+	createSignal,
+	onMount
+} from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
@@ -25,11 +35,52 @@ export interface NotificationProps {
 export const Notification = (
 	props: NotificationProps & {
 		id: number;
+		heights: Accessor<{ value: number; id: number }[]>;
+		setHeights: Setter<{ value: number; id: number }[]>;
 	}
 ) => {
 	const [ref, setRef] = createSignal<HTMLDivElement>();
+	const [initialHeight, setInitialHeight] = createSignal(NaN);
+
+	const heightIndex = createMemo(() => {
+		const index = props.heights().findIndex((height) => height.id === props.id);
+
+		return index === -1 ? 0 : index;
+	});
+	const heightsBefore = createMemo(() => {
+		const next = props.heights().reduce((prev, current, index) => {
+			if (index >= heightIndex()) return prev;
+
+			return prev + current.value;
+		}, 0);
+
+		return next;
+	});
 
 	let timeout: ReturnType<typeof setTimeout>;
+
+	createEffect(() => {
+		const toastNode = ref();
+
+		if (!toastNode) return;
+		const originalHeight = toastNode.style.height;
+		toastNode.style.height = 'auto';
+		const newHeight = toastNode.getBoundingClientRect().height;
+		toastNode.style.height = originalHeight;
+
+		setInitialHeight(newHeight);
+
+		props.setHeights((heights) => {
+			const alreadyExists = heights.find((height) => height.id === props.id);
+			if (!alreadyExists) {
+				return [{ id: props.id, value: newHeight }, ...heights];
+			} else {
+				return heights.map((height) =>
+					height.id === props.id ? { ...height, value: newHeight } : height
+				);
+			}
+		});
+	});
 
 	onMount(() => {
 		const element: HTMLElement | null | undefined = ref()?.querySelector(
@@ -47,10 +98,27 @@ export const Notification = (
 
 	NotificationStore.onRemoved(props.id, () => {
 		clearTimeout(timeout);
+
+		props.setHeights((h) => h.filter((height) => height.id !== props.id));
 	});
 
 	return (
-		<div class="notification" aria-label={props.description} ref={setRef}>
+		<div
+			class="notification"
+			style={{
+				'--initial-height': `${initialHeight()}px`,
+				'--heights-before': `${heightsBefore()}px`,
+				'--first-height': `${props.heights()[0]?.value}px`
+			}}
+			aria-label={props.description}
+			data-id={props.id}
+			ref={setRef}
+			onContextMenu={(e) => {
+				e.preventDefault();
+
+				NotificationStore.remove(props.id);
+			}}
+		>
 			<div class="notification__content">
 				<div classList={{ notification__icon: true, [props.level]: true }}>
 					<Show
@@ -101,13 +169,30 @@ export const Notification = (
 export default Notification;
 
 Notification.Layer = () => {
+	const [heights, setHeights] = createSignal<
+		{
+			value: number;
+			id: number;
+		}[]
+	>([]);
+
 	const notifications = createStoreListener([NotificationStore], () => {
 		return NotificationStore.state;
 	});
 
 	return (
 		<Layer key="notification" transitions={Layer.Transitions.None} type="bare" initialVisible>
-			<div class="notification__list">
+			<div
+				class="notification__list"
+				style={{
+					'--sum-heights': `${heights().reduce((prev, current, i) => {
+						if (i > 2) return prev;
+
+						return prev + current.value;
+					}, 0)}px`,
+					'--num-gaps': `${heights().slice(0, 2).length - 1}`
+				}}
+			>
 				<For each={notifications()}>
 					{(n) => {
 						const [open, setOpen] = createSignal(false);
@@ -128,25 +213,32 @@ Notification.Layer = () => {
 										[
 											{
 												opacity: 0,
-												transform: 'translateY(10px) scale(0.9)'
+												transform: 'translateY(32px)'
 											},
 											{
 												opacity: (notifications()?.length || 0) > 3 ? 0 : 1,
-												transform: 'translateY(0px) scale(1)'
+												transform: 'translateY(0px)'
 											}
 										],
 										{
 											duration: 400,
-											easing: 'cubic-bezier(0.6, 0.6, 0, 1)'
+											easing: 'ease'
 										}
 									);
 
-									a.finished.then(done);
+									a.finished.then(() => {
+										done();
+									});
 								}}
 								onExit={Layer.Transitions.Fade.exit}
 							>
 								<Show when={open()}>
-									<Notification {...n.props} id={n.id} />
+									<Notification
+										{...n.props}
+										id={n.id}
+										heights={heights}
+										setHeights={setHeights}
+									/>
 								</Show>
 							</Transition>
 						);

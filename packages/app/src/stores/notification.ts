@@ -36,7 +36,7 @@ const NotificationStore = new (class NotificationStore extends GenericStore {
 	add(props: NotificationProps): number {
 		const id = i++;
 
-		this.#state.unshift({
+		this.#state.push({
 			id,
 			props,
 			timestamp: Date.now()
