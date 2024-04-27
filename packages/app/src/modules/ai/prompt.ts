@@ -16,7 +16,10 @@ import { ignoredPaths } from './shared';
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
 export const generatePrompt = async (repo: Repository) => {
-	const paths = StageStore.getStagedFilePaths(repo.path) || [];
+	const paths =
+		StageStore.getStagedFilePaths(repo.path)?.concat(
+			...(StageStore.getRemovedFilePaths(repo.path) || [])
+		) || [];
 
 	const files: { diff: GitDiff; file: GitFile }[] = [];
 

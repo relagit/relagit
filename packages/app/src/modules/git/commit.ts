@@ -14,16 +14,27 @@ export const Commit = async (
 	}
 
 	const filePaths = StageStore.getStagedFilePaths(repository.path);
+	const removed = StageStore.getRemovedFilePaths(repository.path);
 
-	if (!filePaths || !filePaths.length) {
+	if (!filePaths?.length && !removed?.length) {
 		return;
 	}
 
-	await Git({
-		directory: repository.path,
-		command: 'add',
-		args: ['--', ...filePaths]
-	});
+	if (filePaths && filePaths.length) {
+		await Git({
+			directory: repository.path,
+			command: 'add',
+			args: ['--', ...filePaths]
+		});
+	}
+
+	if (removed && removed.length) {
+		await Git({
+			directory: repository.path,
+			command: 'rm',
+			args: ['--cached', '--', ...removed]
+		});
+	}
 
 	const signingOptions = [];
 

@@ -34,6 +34,18 @@ const StageStore = new (class StageStore extends GenericStore {
 			.map((f) => nodepath.join(f.path, f.name));
 	}
 
+	getRemovedFilePaths(path: string | undefined) {
+		return FileStore.getByRepositoryPath(path)
+			?.filter((f) => {
+				if (!this.isStaged(nodepath.join(f.path, f.name))) return false;
+
+				if (f.status !== 'deleted') return false;
+
+				return true;
+			})
+			.map((f) => nodepath.join(f.path, f.name));
+	}
+
 	invert(repository: Repository | undefined) {
 		if (!repository) return;
 
