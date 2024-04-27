@@ -167,9 +167,13 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 		if (fs.existsSync(__SETTINGS_PATH__)) {
 			let settings: RecursivePartial<Settings> = {};
 
-			const json = fs.readFileSync(__SETTINGS_PATH__, 'utf-8');
+			let json = fs.readFileSync(__SETTINGS_PATH__, 'utf-8');
 
 			if (!json || !json.length) return;
+
+			try {
+				json = json.replace(/(?<! )}\s?}$/, '}'); // attempt to recover from corrupt settings file
+			} catch (error) {}
 
 			try {
 				settings = JSON.parse(json) as Settings;
