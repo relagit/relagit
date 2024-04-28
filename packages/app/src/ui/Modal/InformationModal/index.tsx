@@ -84,6 +84,8 @@ export const InformationModal = () => {
 
 			const months = getMonthCounts(history);
 
+			console.log(months);
+
 			setMonths(months);
 
 			const largestMonth = Math.max(...months.map((m) => m.value));
@@ -158,11 +160,11 @@ export const InformationModal = () => {
 						<div class="information-modal__metadata__panel__graph">
 							<div class="information-modal__metadata__panel__graph__values">
 								<For each={months() || []}>
-									{({ index }, i) => {
+									{({ index, value }) => {
 										return (
 											<Tooltip
 												text={t('modal.information.commitsInMonth', {
-													count: months()?.[i()].value || 0,
+													count: value || 0,
 													month: t(
 														`modal.information.month.${index as 0}`
 													)
@@ -171,18 +173,16 @@ export const InformationModal = () => {
 												{(p) => (
 													<div
 														{...p}
-														tabIndex={months()![i()].value > 0 ? 0 : -1}
+														tabIndex={value > 0 ? 0 : -1}
 														class="information-modal__metadata__panel__graph__values__item"
 														style={{
 															'--alpha-factor': `${
-																((months()?.[i()].value || 0) /
-																	largestMonth()!) *
+																((value || 0) / largestMonth()!) *
 																	0.5 +
 																0.3
 															}`,
 															height: `${
-																((months()?.[i()].value || 0) /
-																	largestMonth()!) *
+																((value || 0) / largestMonth()!) *
 																100
 															}%`
 														}}

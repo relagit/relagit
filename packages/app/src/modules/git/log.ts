@@ -145,13 +145,20 @@ export const getMonthCounts = (
 
 		const index = monthCounts.findIndex((m) => m.index === actualMonth);
 
-		monthCounts[index].sortindex = year + month;
+		// the startMonth should always be the first month in the array, then the next month, etc.
+		monthCounts[index].sortindex =
+			month >= startMonth ? month - startMonth : 12 - startMonth + month;
+
 		monthCounts[index].value++;
 	}
 
 	for (let i = 0; i < 12; i++) {
 		if (!monthCounts.find((m) => m.index === i)) {
-			monthCounts.push({ index: i, value: 0, sortindex: startYear + i });
+			monthCounts.push({
+				index: i,
+				value: 0,
+				sortindex: i >= startMonth ? i - startMonth : 12 - startMonth + i
+			});
 		}
 	}
 
