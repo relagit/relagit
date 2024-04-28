@@ -23,11 +23,11 @@
 				<div class="workspace__container"></div>
 			</div>
 		</div>
-		<script>
+		<script type="module" src="./src/index.tsx"></script>
+		<script defer type="module">
 			if (window.Native.platform !== 'darwin' && window.Native.platform !== 'win32') {
 				document.querySelector('.window-control-bar').remove();
 			}
 		</script>
-		<script type="module" src="./src/index.tsx"></script>
 	</body>
 </html>
