@@ -3,6 +3,7 @@ import {
 	Menu,
 	MenuItemConstructorOptions,
 	app,
+	ipcMain,
 	nativeImage,
 	nativeTheme,
 	webContents
@@ -28,6 +29,9 @@ app.setAboutPanelOptions({
 	copyright: 'Copyright © 2023-2024 TheCommieAxolotl & RelaGit contributors',
 	website: 'https://rela.dev'
 });
+
+const listeners: ((window: BrowserWindow) => void)[] = [];
+let loaded = false;
 
 // TODO: Fix auto-updater
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -125,6 +129,28 @@ const constructWindow = async () => {
 
 	win.once('ready-to-show', () => {
 		win.show();
+	});
+
+	win.webContents.once('did-finish-load', () => {
+		if (loaded) return;
+
+		loaded = true;
+
+		for (const listener of listeners) {
+			listener(win);
+		}
+	});
+
+	ipcMain.once('renderer-ready', (_, readyTime) => {
+		log(`Renderer ready in ${readyTime}ms`);
+
+		if (loaded) return;
+
+		loaded = true;
+
+		for (const listener of listeners) {
+			listener(win);
+		}
 	});
 
 	win.on('move', () => {
@@ -446,6 +472,10 @@ app.once('ready', async () => {
 			initIPC(newWindow);
 		}
 	});
+
+	if (process.argv.slice(2)[0]) {
+		mainWindow?.webContents.send(ipc.OPEN_ADD, process.argv.slice(2)[0]);
+	}
 });
 
 app.on('window-all-closed', () => {
@@ -456,12 +486,32 @@ app.on('window-all-closed', () => {
 
 app.setAsDefaultProtocolClient('relagit');
 
-app.on('open-url', (_, url) => {
-	if (!mainWindow) return;
-
-	mainWindow.focus();
-
-	if (url.includes('oauth-captive')) {
-		mainWindow.webContents.send(ipc.OAUTH_CAPTIVE, url);
+const onLoaded = (cb: (window: BrowserWindow) => void) => {
+	if (loaded) {
+		cb(mainWindow!);
+	} else {
+		listeners.push(cb);
 	}
+};
+
+app.on('open-url', (_, url) => {
+	onLoaded((window) => {
+		window.focus();
+
+		if (url.includes('/oauth-captive')) {
+			window.webContents.send(ipc.OAUTH_CAPTIVE, url);
+		}
+
+		if (url.includes('/clone/')) {
+			window.webContents.send(ipc.CLONE_CAPTIVE, url);
+		}
+	});
+});
+
+app.on('open-file', (e, path) => {
+	e.preventDefault();
+
+	onLoaded((window) => {
+		window.webContents.send(ipc.OPEN_ADD, path);
+	});
 });

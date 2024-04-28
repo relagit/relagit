@@ -49,12 +49,18 @@ export const registerAccelerators = () => {
 		showRepoModal('create');
 	});
 
-	window.Native.listeners.ADD(() => {
-		showRepoModal('add');
+	window.Native.listeners.ADD((_, path) => {
+		showRepoModal('add', path);
 	});
 
 	window.Native.listeners.CLONE(() => {
 		showCloneModal();
+	});
+
+	window.Native.listeners.CLONE_CAPTIVE((_, url) => {
+		const urlMatch = url.match(/relagit:\/\/clone\/(.+)/);
+
+		showCloneModal('url', urlMatch ? decodeURIComponent(urlMatch[1]).trim() : '');
 	});
 };
 

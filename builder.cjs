@@ -88,6 +88,18 @@ const config = {
 		entitlements: './build/entitlements.mac.plist',
 		entitlementsInherit: './build/entitlements.mac.plist',
 		artifactName: '${productName}-${os}-${arch}.${ext}',
+		extendInfo: {
+			CFBundleDocumentTypes: [
+				{
+					CFBundleTypeExtensions: [],
+					CFBundleTypeIconFile: 'default.icns',
+					CFBundleTypeName: 'Folder',
+					CFBundleTypeOSTypes: ['TEXT', 'utxt', 'TUTX', '****'],
+					CFBundleTypeRole: 'Viewer',
+					LSItemContentTypes: ['public.folder']
+				}
+			]
+		},
 		target: [
 			{
 				target: 'dmg',

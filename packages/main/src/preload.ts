@@ -48,6 +48,9 @@ export const Native = {
 		OAUTH: (fn: (e: IpcRendererEvent, url: string) => void) => {
 			ipcRenderer.on(ipc.OAUTH_CAPTIVE, fn);
 		},
+		CLONE_CAPTIVE: (fn: (e: IpcRendererEvent, url: string) => void) => {
+			ipcRenderer.on(ipc.CLONE_CAPTIVE, fn);
+		},
 		SHOW_IN_FOLDER: (fn: () => void) => {
 			ipcRenderer.on(ipc.SHOW_IN_FOLDER, fn);
 		},
@@ -60,7 +63,7 @@ export const Native = {
 		CREATE: (fn: () => void) => {
 			ipcRenderer.on(ipc.OPEN_CREATE, fn);
 		},
-		ADD: (fn: () => void) => {
+		ADD: (fn: (e: IpcRendererEvent, path?: string) => void) => {
 			ipcRenderer.on(ipc.OPEN_ADD, fn);
 		},
 		CLONE: (fn: () => void) => {

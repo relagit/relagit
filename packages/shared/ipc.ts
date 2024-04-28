@@ -10,6 +10,7 @@ export const SHOW_IN_FOLDER = 'window:show-in-folder';
 export const OPEN_SWITCHER = 'window:open-switcher';
 export const OPEN_PALETTE = 'window:open-palette';
 export const OAUTH_CAPTIVE = 'window:oauth-captive';
+export const CLONE_CAPTIVE = 'window:clone-captive';
 export const OPEN_BRANCHES = 'window:open-branches';
 export const OPEN_SIDEBAR = 'window:open-sidebar';
 export const OPEN_HISTORY = 'window:open-history';
