@@ -22,11 +22,12 @@ export default async () => {
 	popout = new BrowserWindow({
 		titleBarStyle: 'hidden',
 		title: 'RelaGit Popout',
-		vibrancy: 'hud',
-		backgroundMaterial: 'mica',
+		vibrancy: process.platform === 'darwin' ? 'hud' : undefined,
+		backgroundMaterial: process.platform === 'win32' ? 'mica' : undefined,
 		transparent: process.platform === 'win32',
-		visualEffectState: 'active',
-		backgroundColor: '#00000000',
+		visualEffectState: process.platform === 'darwin' ? 'active' : undefined,
+		backgroundColor:
+			process.platform === 'darwin' || process.platform === 'win32' ? '#00000000' : undefined,
 		height: settings?.popout?.height || 150,
 		width: settings?.popout?.width || 430,
 		minWidth: 350,
