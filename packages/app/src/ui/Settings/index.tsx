@@ -493,13 +493,16 @@ const SettingsModal = () => {
 									aria-role="button"
 									onClick={() => {
 										showItemInFolder(
-											nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
+											nodepath.resolve(__WORKFLOWS_PATH__, workflow.filename)
 										);
 									}}
 									onKeyDown={(e) => {
 										if (e.key === 'Enter') {
 											showItemInFolder(
-												nodepath.join(__WORKFLOWS_PATH__, workflow.filename)
+												nodepath.resolve(
+													__WORKFLOWS_PATH__,
+													workflow.filename
+												)
 											);
 										}
 									}}
