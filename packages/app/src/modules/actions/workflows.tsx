@@ -64,8 +64,11 @@ export const iconFromAction = (act: action | action[]): IconName => {
 	}
 };
 
+type OptionTypes = 'string' | 'number' | 'boolean' | 'enum';
+
 export interface Workflow {
 	filename: string;
+	id?: string;
 	name: string;
 	description?: string;
 	hooks?: {
@@ -73,6 +76,14 @@ export interface Workflow {
 			event: K | action,
 			...params: ParamsFromEventType<K>
 		) => Promise<void> | void;
+	};
+	options?: {
+		[key: string]: {
+			type: OptionTypes;
+			description: string;
+			values?: string[];
+			placeholder?: string;
+		};
 	};
 }
 
@@ -145,11 +156,22 @@ export const require = (id: string) => {
 								...params: ParamsFromEventType<K>
 							) => Promise<void> | void;
 						};
+						options?: {
+							[key: string]: {
+								type: OptionTypes;
+								description: string;
+								values?: string[];
+								placeholder?: string;
+							};
+						};
+						id?: string;
 
 						constructor(options: Workflow) {
 							this.name = options.name;
 							this.description = options.description;
 							this.hooks = options.hooks;
+							this.options = options.options;
+							this.id = options.id;
 						}
 					},
 					context: getContext,
@@ -162,7 +184,10 @@ export const require = (id: string) => {
 						}
 					},
 					app: {
-						registerSettingsPane
+						registerSettingsPane,
+						getInstalledWorkflows: () => {
+							return Array.from(workflows);
+						}
 					},
 					menu: {
 						extend: addExtensions

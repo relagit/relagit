@@ -35,6 +35,7 @@ type OptionTypes = 'string' | 'number' | 'boolean' | 'enum';
 
 interface WorkflowOptions {
 	name: string;
+	id?: string;
 	description?: string;
 	hooks?: {
 		[K in action]?: (event: K, ...params: ParamsFromEventType<K>) => Promise<void> | void;
@@ -43,6 +44,7 @@ interface WorkflowOptions {
 		[key: string]: {
 			type: OptionTypes;
 			description: string;
+			values?: string[];
 			placeholder?: string;
 		};
 	};
@@ -303,6 +305,7 @@ interface Actions {
 				icon: keyof typeof import('@primer/octicons');
 			}
 		) => void;
+		getInstalledWorkflows: () => WorkflowOptions[];
 	};
 	menu: {
 		extend: (type: string, items: MenuItem[]) => void;
@@ -327,6 +330,7 @@ declare module 'relagit:actions' {
 			[key: string]: {
 				type: OptionTypes;
 				description: string;
+				values?: string[];
 				placeholder?: string;
 			};
 		}

@@ -17,7 +17,9 @@ import SettingsStore, { type Settings } from '@stores/settings';
 import Icon from '@ui/Common/Icon';
 import TextArea from '@ui/Common/TextArea';
 
+import { getOptionsProxy } from '../../modules/actions/settings';
 import Button from '../Common/Button';
+import Dropdown from '../Common/Dropdown';
 import EmptyState from '../Common/EmptyState';
 import TabView from '../Common/TabView';
 import Tooltip from '../Common/Tooltip';
@@ -137,7 +139,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 
 export interface SwitchProps {
 	value: boolean;
-	label: string;
+	label?: string;
 	onChange: (value: boolean) => void;
 	disabled?: boolean;
 	note?: string;
@@ -521,6 +523,95 @@ const SettingsModal = () => {
 											</p>
 										</div>
 									</div>
+									<Show when={workflow.options}>
+										<div
+											class="settings-layer__workflows__workflow__options"
+											onClick={(e) => {
+												e.stopPropagation();
+											}}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter') {
+													e.stopPropagation();
+												}
+											}}
+										>
+											<For each={Object.entries(workflow.options || {})}>
+												{([key, option]) => {
+													const values = getOptionsProxy(
+														workflow.filename
+													);
+
+													switch (option.type) {
+														case 'boolean':
+															return (
+																<Switch
+																	note={option.description}
+																	value={values[key] as boolean}
+																	onChange={(value) => {
+																		values[key] = value;
+																	}}
+																/>
+															);
+														case 'string':
+														case 'number':
+															return (
+																<div class="settings-layer__workflows__workflow__options__option">
+																	<div class="settings-layer__workflows__workflow__options__option__label">
+																		{option.description}
+																	</div>
+																	<TextArea
+																		label={option.description}
+																		value={
+																			values[key] as string
+																		}
+																		placeholder={
+																			option.placeholder
+																		}
+																		onChange={(value) => {
+																			values[key] =
+																				(
+																					option.type ===
+																					'number'
+																				) ?
+																					Number(value)
+																				:	value;
+																		}}
+																	/>
+																</div>
+															);
+														case 'enum':
+															return (
+																<div class="settings-layer__workflows__workflow__options__option">
+																	<div class="settings-layer__workflows__workflow__options__option__label">
+																		{option.description}
+																	</div>
+																	<Dropdown
+																		options={
+																			option.values?.map(
+																				(value) => ({
+																					label: value,
+																					value
+																				})
+																			) || []
+																		}
+																		label={option.description}
+																		value={
+																			values[key] as string
+																		}
+																		onChange={(value) => {
+																			values[key] = value;
+																		}}
+																	/>
+																</div>
+															);
+
+														default:
+															return null;
+													}
+												}}
+											</For>
+										</div>
+									</Show>
 								</div>
 							);
 						}}

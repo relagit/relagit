@@ -174,24 +174,23 @@
 				}
 			}
 
-			&__steps {
+			&__options {
 				display: flex;
 				flex-direction: column;
-				justify-content: center;
-				align-items: flex-start;
-				gap: 8px;
+				gap: 16px;
 				width: 100%;
 
-				&__step {
+				&__option {
 					display: flex;
-					padding: 8px 16px;
-					justify-content: space-between;
-					align-items: center;
-					border-radius: 2px;
-					border: 1px solid var(--separator-primary);
-					background: var(--bg-quaternary);
-					text-transform: capitalize;
+					flex-direction: column;
+					gap: 8px;
 					width: 100%;
+
+					&__label {
+						font-size: 1rem;
+						font-weight: 400;
+						color: var(--color-secondary);
+					}
 				}
 			}
 		}
