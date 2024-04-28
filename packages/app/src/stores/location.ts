@@ -32,9 +32,14 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 		window.Native.listeners.WATCHER.add(__SETTINGS_PATH__, () => {
 			if (SettingsStore.getSetting('activeRepository') !== this.selectedRepository?.path) {
-				this.setSelectedRepository(
-					RepositoryStore.getByPath(SettingsStore.getSetting('activeRepository') ?? '')
+				const repo = RepositoryStore.getByPath(
+					SettingsStore.getSetting('activeRepository') ?? ''
 				);
+				if (!repo) return;
+
+				RepositoryStore.makePermanent(repo);
+
+				this.setSelectedRepository(repo);
 			}
 		});
 	}
