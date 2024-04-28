@@ -119,8 +119,8 @@
 			align-items: center;
 			padding: 40px 40px 20px;
 			user-select: none;
+			white-space: nowrap;
 			border-bottom: 1px solid var(--separator-secondary);
-			overflow: hidden;
 
 			&__title {
 				font-size: 2rem;
