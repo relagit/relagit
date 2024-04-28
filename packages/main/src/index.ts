@@ -472,10 +472,6 @@ app.once('ready', async () => {
 			initIPC(newWindow);
 		}
 	});
-
-	if (process.argv.slice(2)[0]) {
-		mainWindow?.webContents.send(ipc.OPEN_ADD, process.argv.slice(2)[0]);
-	}
 });
 
 app.on('window-all-closed', () => {
@@ -515,3 +511,7 @@ app.on('open-file', (e, path) => {
 		window.webContents.send(ipc.OPEN_ADD, path);
 	});
 });
+
+if (process.argv.slice(2)[0]) {
+	onLoaded((window) => window.webContents.send(ipc.OPEN_ADD, process.argv.slice(2)[0]));
+}
