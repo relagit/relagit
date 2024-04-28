@@ -98,8 +98,6 @@ export default (props: GitFile) => {
 											dismiss: true,
 											onClick: async () => {
 												for (const file of files) {
-													console.log('Discarding', file);
-
 													await Git.Discard(selected(), file);
 												}
 											}

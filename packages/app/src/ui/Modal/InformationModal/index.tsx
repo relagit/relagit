@@ -84,8 +84,6 @@ export const InformationModal = () => {
 
 			const months = getMonthCounts(history);
 
-			console.log(months);
-
 			setMonths(months);
 
 			const largestMonth = Math.max(...months.map((m) => m.value));
