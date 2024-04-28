@@ -1,4 +1,4 @@
-import { GitFile } from '@app/stores/files';
+import FileStore, { GitFile } from '@app/stores/files';
 import LocationStore from '@app/stores/location';
 import { Repository } from '@app/stores/repository';
 
@@ -12,15 +12,17 @@ export const Discard = async (repository: Repository | undefined, file: GitFile)
 		return;
 	}
 
-	if (file.status == 'added') {
-		return fs.unlinkSync(path.join(repository.path, file.path, file.name));
-	}
-
 	if (
 		LocationStore.selectedFile?.path == file.path &&
 		LocationStore.selectedFile?.name == file.name
 	) {
 		LocationStore.setSelectedFile(undefined);
+	}
+
+	FileStore.removeFile(repository.path, file);
+
+	if (file.status === 'added') {
+		return fs.unlinkSync(path.join(repository.path, file.path, file.name));
 	}
 
 	const result = await Git({

@@ -20,12 +20,16 @@ export type MenuItem =
 			type: 'item';
 			label: string;
 			disabled?: boolean;
-			onClick?: () => void;
+			onClick?: (arg?: unknown) => void;
 			accelerator?: Accelerator;
 			color?: 'default' | 'danger';
 	  }
 	| {
 			type: 'separator';
+	  }
+	| {
+			type: 'label';
+			label: string;
 	  };
 
 export interface Menu {
@@ -33,6 +37,7 @@ export interface Menu {
 	items: MenuItem[];
 	event?: keyof HTMLElementEventMap;
 	interfaceId: string;
+	forward?: unknown;
 }
 
 export default (props: Menu) => {
@@ -157,7 +162,9 @@ export default (props: Menu) => {
 								<div class="menu__separator"></div>
 							</Show>
 							<For each={extensions[props.interfaceId]}>
-								{(item) => <MenuItem {...item} hide={hide} />}
+								{(item) => (
+									<MenuItem forward={props.forward} {...item} hide={hide} />
+								)}
 							</For>
 						</Show>
 					</div>
@@ -178,9 +185,12 @@ export const addExtensions = (id: string, items: MenuItem[]) => {
 export const MenuItem = (
 	props: MenuItem & {
 		hide: () => void;
+		forward?: unknown;
 	}
 ) => {
 	switch (props.type) {
+		case 'label':
+			return <div class="menu__label">{props.label}</div>;
 		case 'separator':
 			return <div class="menu__separator"></div>;
 		case 'item':
@@ -197,7 +207,7 @@ export const MenuItem = (
 					onClick={() => {
 						if (!props.onClick) return props.hide();
 
-						props.onClick();
+						props.onClick(props.forward);
 
 						props.hide();
 					}}
@@ -205,7 +215,7 @@ export const MenuItem = (
 						if (e.key === 'Enter') {
 							if (!props.onClick) return props.hide();
 
-							props.onClick();
+							props.onClick(props.forward);
 
 							props.hide();
 						}

@@ -11,6 +11,13 @@
 	min-width: 200px;
 	z-index: 99;
 
+	&__label {
+		font-size: 0.8rem;
+		padding: 10px 18px;
+		color: var(--color-secondary);
+		border-bottom: 1px solid var(--separator-secondary);
+	}
+
 	&__item {
 		font-size: 1rem;
 		font-weight: 400;

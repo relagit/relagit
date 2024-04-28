@@ -8,6 +8,7 @@ import { statusToAlpha } from '@app/modules/git/diff';
 import { addToGitignore } from '@app/modules/git/gitignore';
 import { t } from '@app/modules/i18n';
 import RepositoryStore from '@app/stores/repository';
+import SelectionStore from '@app/stores/selection';
 import SettingsStore from '@app/stores/settings';
 import StageStore from '@app/stores/stage';
 import Icon from '@app/ui/Common/Icon';
@@ -17,6 +18,7 @@ import { showItemInFolder } from '@modules/shell';
 import type { GitFile } from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
+import NotificationStore from '~/app/src/stores/notification';
 
 import Menu from '@ui/Menu';
 
@@ -32,6 +34,10 @@ export default (props: GitFile) => {
 	const staged = createStoreListener([StageStore], () =>
 		StageStore.isStaged(path.join(props.path, props.name))
 	);
+	const sidebarSelection = createStoreListener(
+		[SelectionStore],
+		() => SelectionStore.sidebarSelection
+	);
 
 	const extension = (name: string) => {
 		const parts = name.split('.');
@@ -41,102 +47,207 @@ export default (props: GitFile) => {
 	return (
 		<Menu
 			interfaceId="sidebar-item"
-			items={[
-				{
-					label:
-						staged() ?
-							t('sidebar.contextMenu.unstage')
-						:	t('sidebar.contextMenu.stage'),
-					type: 'item',
-					onClick: () => {
-						StageStore.toggleStaged(path.join(props.path, props.name));
-					}
-				},
-				{
-					label: t('sidebar.contextMenu.stash'),
-					type: 'item',
-					onClick: async () => {
-						try {
-							await Git.Stash(selected());
+			forward={sidebarSelection()?.has(props) ? sidebarSelection() : props}
+			items={
+				sidebarSelection()?.has(props) && sidebarSelection()!.size > 1 ?
+					([
+						{
+							type: 'label',
+							label: t(
+								'sidebar.contextMenu.selected',
+								{
+									count: sidebarSelection()!.size
+								},
+								sidebarSelection()!.size
+							)
+						},
+						{
+							label:
+								staged() ?
+									t('sidebar.contextMenu.unstage')
+								:	t('sidebar.contextMenu.stage'),
+							type: 'item',
+							onClick: () => {
+								for (const file of sidebarSelection()!) {
+									StageStore.setStaged(
+										path.join(file.path, file.name),
+										!staged()! // to keep consistent state
+									);
+								}
+							}
+						},
+						{
+							label: t('sidebar.contextMenu.discard'),
+							type: 'item',
+							color: 'danger',
+							onClick: () => {
+								const files = Array.from(sidebarSelection()!);
 
-							triggerWorkflow('stash', selected()!);
-						} catch (e) {
-							showErrorModal(e, 'error.git');
+								NotificationStore.add({
+									title: t('sidebar.contextMenu.confirm.discard'),
+									description: t('sidebar.contextMenu.confirm.discardMessage', {
+										count: files.length
+									}),
+									level: 'warning',
+									icon: 'repo-deleted',
+									actions: [
+										{
+											type: 'danger',
+											label: t('sidebar.contextMenu.discard'),
+											children: t('sidebar.contextMenu.discard'),
+											dismiss: true,
+											onClick: async () => {
+												for (const file of files) {
+													console.log('Discarding', file);
 
-							error(e);
+													await Git.Discard(selected(), file);
+												}
+											}
+										},
+										{
+											type: 'default',
+											label: t('modal.cancel'),
+											children: t('modal.cancel'),
+											dismiss: true
+										}
+									]
+								});
+							}
+						},
+						{
+							type: 'separator'
+						},
+						{
+							label: t('sidebar.contextMenu.ignoreAll'),
+							type: 'item',
+							onClick: () => {
+								for (const file of sidebarSelection()!) {
+									addToGitignore(selected(), file.name);
+								}
+							}
+						},
+						...Array.from(sidebarSelection()!)
+							.map((f) => extension(f.name))
+							.filter((value, index, array) => array.indexOf(value) === index)
+							.map((ext) => {
+								return {
+									label: t('sidebar.contextMenu.ignoreExt', {
+										ext
+									}),
+									type: 'item',
+									onClick: () => {
+										addToGitignore(selected(), '.' + ext);
+									}
+								} as const;
+							})
+					] as const)
+				:	[
+						{
+							label:
+								staged() ?
+									t('sidebar.contextMenu.unstage')
+								:	t('sidebar.contextMenu.stage'),
+							type: 'item',
+							onClick: () => {
+								StageStore.toggleStaged(path.join(props.path, props.name));
+							}
+						},
+						{
+							label: t('sidebar.contextMenu.stash'),
+							type: 'item',
+							onClick: async () => {
+								try {
+									await Git.Stash(selected());
+
+									triggerWorkflow('stash', selected()!);
+								} catch (e) {
+									showErrorModal(e, 'error.git');
+
+									error(e);
+								}
+							}
+						},
+						{
+							label: t('sidebar.contextMenu.discard'),
+							type: 'item',
+							color: 'danger',
+							onClick: async () => {
+								await Git.Discard(selected(), props);
+							}
+						},
+						{
+							type: 'separator'
+						},
+						{
+							label: t('sidebar.contextMenu.ignore'),
+							type: 'item',
+							disabled: extension(props.name) === 'gitignore',
+							onClick: () => {
+								addToGitignore(selected(), path.join(props.path, props.name));
+							}
+						},
+						{
+							label: t('sidebar.contextMenu.ignoreExt', {
+								ext: extension(props.name)
+							}),
+							type: 'item',
+							disabled: extension(props.name) === 'gitignore',
+							onClick: () => {
+								addToGitignore(selected(), '.' + extension(props.name));
+							}
+						},
+						{
+							type: 'separator'
+						},
+						{
+							label: t('sidebar.contextMenu.viewIn', {
+								name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
+							}),
+							type: 'item',
+							onClick: () => {
+								showItemInFolder(
+									path.join(selected()!.path, props.path, props.name)
+								);
+							},
+							disabled: props.status === 'deleted'
+						},
+						{
+							label: t('sidebar.contextMenu.openIn', {
+								name: t(
+									`settings.general.editor.${
+										SettingsStore.getSetting('externalEditor') || 'code'
+									}`
+								)
+							}),
+							type: 'item',
+							disabled: props.status === 'deleted',
+							onClick: () => {
+								openInEditor(path.join(selected()!.path, props.path, props.name));
+							}
 						}
-					}
-				},
-				{
-					label: t('sidebar.contextMenu.discard'),
-					type: 'item',
-					color: 'danger',
-					onClick: async () => {
-						await Git.Discard(selected(), props);
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: t('sidebar.contextMenu.ignore'),
-					type: 'item',
-					disabled: extension(props.name) === 'gitignore',
-					onClick: () => {
-						addToGitignore(selected(), path.join(props.path, props.name));
-					}
-				},
-				{
-					label: t('sidebar.contextMenu.ignoreExt', { ext: extension(props.name) }),
-					type: 'item',
-					disabled: extension(props.name) === 'gitignore',
-					onClick: () => {
-						addToGitignore(selected(), '.' + extension(props.name));
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: t('sidebar.contextMenu.viewIn', {
-						name: window.Native.platform === 'darwin' ? 'Finder' : 'Explorer'
-					}),
-					type: 'item',
-					onClick: () => {
-						showItemInFolder(path.join(selected()!.path, props.path, props.name));
-					},
-					disabled: props.status === 'deleted'
-				},
-				{
-					label: t('sidebar.contextMenu.openIn', {
-						name: t(
-							`settings.general.editor.${
-								SettingsStore.getSetting('externalEditor') || 'code'
-							}`
-						)
-					}),
-					type: 'item',
-					disabled: props.status === 'deleted',
-					onClick: () => {
-						openInEditor(path.join(selected()!.path, props.path, props.name));
-					}
-				}
-			]}
+					]
+			}
 		>
 			<div
 				aria-role="button"
 				aria-label={t('sidebar.open', {
 					name: path.join(props.path, props.name)
 				})}
-				aria-selected={selectedFile() === props}
+				aria-selected={selectedFile() === props || sidebarSelection()?.has(props)}
 				classList={{
 					sidebar__item: true,
-					active: selectedFile() === props
+					active: selectedFile() === props || sidebarSelection()?.has(props)
 				}}
 				data-id={props.id}
-				data-active={selectedFile() === props}
+				data-active={selectedFile() === props || sidebarSelection()?.has(props)}
 				data-status={props.status}
-				onClick={() => {
+				onClick={(e) => {
+					if (e.shiftKey) {
+						SelectionStore.addToSidebarSelection(props);
+
+						return;
+					}
+
 					debug('Transitioning to file', props.name, 'in', props.path);
 					LocationStore.setSelectedFile(props);
 				}}

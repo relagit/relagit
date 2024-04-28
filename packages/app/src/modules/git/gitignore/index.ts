@@ -10,7 +10,11 @@ export const addToGitignore = (repo: Repository | undefined, fileOrExt: string) 
 	const isExt = fileOrExt.startsWith('.');
 	const gitignore = path.join(repo.path, '.gitignore');
 
-	const newContent = isExt ? `**/*${fileOrExt}` : `\n${fileOrExt}`;
+	const newContent = isExt ? `\n**/*${fileOrExt}` : `\n${fileOrExt}`;
+
+	if (fs.existsSync(gitignore) && fs.readFileSync(gitignore, 'utf-8').includes(newContent)) {
+		return;
+	}
 
 	if (fs.existsSync(gitignore)) {
 		fs.appendFileSync(gitignore, newContent);

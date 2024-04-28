@@ -208,13 +208,19 @@ export default {
 			unstash: 'Unstash Changes',
 			discard: 'Discard Changes',
 			ignore: 'Add to gitignore',
+			ignoreAll: 'Add all files to gitignore',
 			ignoreExt: 'Add all .{{ext}} files to gitignore',
+			selected: ['{{count}} selected file', '{{count}} selected files'],
 			viewIn: 'View in {{name}}',
 			openIn: 'Open in {{name}}',
 			openRemote: 'Open Remote',
 			copySha: 'Copy SHA',
 			checkout: 'Checkout Commit',
-			revert: 'Revert Commit'
+			revert: 'Revert Commit',
+			confirm: {
+				discard: 'Bulk Discard',
+				discardMessage: 'Are you sure you want to discard {{count}} changes?'
+			}
 		}
 	},
 	time: {

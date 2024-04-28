@@ -6,6 +6,7 @@ import { PastCommit } from '@app/modules/git/show';
 import FileStore, { GitFile } from './files';
 import type { Repository } from './repository';
 import RepositoryStore from './repository';
+import SelectionStore from './selection';
 import SettingsStore, { __SETTINGS_PATH__ } from './settings';
 
 const LocationStore = new (class LocationStore extends GenericStore {
@@ -93,10 +94,14 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	setSelectedFile(file: GitFile | undefined) {
 		if (file?.id === this.#selectedFile?.id) return;
 
+		SelectionStore.clearSidebarSelection();
+
 		this.#selectedFile = file;
 		this.emit();
 
 		window._triggerWorkflow('navigate', this.selectedRepository, file);
+
+		if (file) SelectionStore.addToSidebarSelection(file);
 	}
 
 	setHistoryOpen(open: boolean) {
