@@ -4,6 +4,10 @@
 	justify-content: center;
 }
 
+.modal:has(.settings-layer__title__buttons) {
+	height: 100% !important;
+}
+
 .settings-layer {
 	width: min(100%, 900px);
 	height: min(100%, 600px);
