@@ -42,6 +42,13 @@ const set = (
 	fs.writeFileSync(path.join(__SETTINGS_PATH__, `${key}.json`), JSON.stringify(settings), 'utf8');
 };
 
+const optionsListeners: Record<string, ((settings: RecordType) => void)[]> = {};
+
+const addOptionsListener = (key: string, cb: (settings: RecordType) => void) => {
+	optionsListeners[key] ??= [];
+	optionsListeners[key].push(cb);
+};
+
 export const getOptionsProxy = (file: string) => {
 	const key = file.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 
@@ -49,17 +56,29 @@ export const getOptionsProxy = (file: string) => {
 
 	return new Proxy(settings, {
 		get(_, prop) {
+			if (prop === '_listener') {
+				return (cb: (settings: RecordType) => void) => addOptionsListener(key, cb);
+			}
+
 			return settings[prop] || get(key, prop);
 		},
 		set(_, prop, value) {
 			settings[prop] = value;
 			set(key, prop, value);
 
+			if (optionsListeners[key]) {
+				optionsListeners[key].forEach((cb) => cb(getAll(key)));
+			}
+
 			return true;
 		},
 		deleteProperty(_, prop) {
 			delete settings[prop];
 			set(key, prop, undefined);
+
+			if (optionsListeners[key]) {
+				optionsListeners[key].forEach((cb) => cb(getAll(key)));
+			}
 
 			return true;
 		}

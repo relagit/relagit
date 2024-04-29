@@ -44,8 +44,8 @@ interface WorkflowOptions {
 		[key: string]: {
 			type: OptionTypes;
 			description: string;
-			values?: string[];
 			placeholder?: string;
+			values?: string[];
 		};
 	};
 }
@@ -330,8 +330,8 @@ declare module 'relagit:actions' {
 			[key: string]: {
 				type: OptionTypes;
 				description: string;
-				values?: string[];
 				placeholder?: string;
+				values?: string[];
 			};
 		}
 	> = {
@@ -340,6 +340,8 @@ declare module 'relagit:actions' {
 		: T[key]['type'] extends 'boolean' ? boolean
 		: T[key]['type'] extends 'enum' ? string
 		: never;
+	} & {
+		_listener: (cb: (options: OptionsType<T>) => void) => void;
 	};
 }
 
