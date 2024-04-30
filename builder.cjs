@@ -66,16 +66,20 @@ const config = {
 		background: './build/background.png',
 		icon: './build/dmg.icns',
 		iconSize: 72,
+		window: {
+			width: 616,
+			height: 370
+		},
 		contents: [
 			{
 				x: 462,
-				y: 160,
+				y: 132,
 				type: 'link',
 				path: '/Applications'
 			},
 			{
 				x: 155,
-				y: 160,
+				y: 132,
 				type: 'file'
 			}
 		]
