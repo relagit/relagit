@@ -239,7 +239,7 @@ export default (props: GitFile) => {
 				data-id={props.id}
 				data-active={selectedFile() === props || sidebarSelection()?.has(props)}
 				data-status={props.status}
-				onClick={(e) => {
+				onMouseDown={(e) => {
 					if (e.shiftKey) {
 						SelectionStore.addToSidebarSelection(props);
 

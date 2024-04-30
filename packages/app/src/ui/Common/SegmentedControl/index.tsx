@@ -41,7 +41,7 @@ export default <T extends string | undefined>(props: SegmentedControlProps<T>) =
 							disabled: item.disabled
 						}}
 						tabIndex={0}
-						onClick={() => {
+						onMouseDown={() => {
 							if (item.disabled || props.disabled) return;
 
 							setValue(() => item.value);

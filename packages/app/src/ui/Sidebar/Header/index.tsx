@@ -145,7 +145,7 @@ export default () => {
 							aria-expanded={open()}
 							tabIndex={0}
 							class="sidebar__header"
-							onClick={() => {
+							onMouseDown={() => {
 								toggle(!open());
 
 								if (onboardingStepState[0]()) {
