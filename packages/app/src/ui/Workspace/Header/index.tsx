@@ -32,7 +32,8 @@ export interface PanelButtonProps {
 	icon: IconName | keyof typeof customIcons;
 	iconVariant?: 12 | 16 | 24;
 	name?: string;
-	onClick: (e: MouseEvent) => void;
+	onClick?: (e: MouseEvent) => void;
+	onMouseDown?: (e: MouseEvent) => void;
 	size?: 'small' | 'medium' | 'large';
 	label?: string;
 	detail?: JSX.Element | string;
@@ -64,6 +65,7 @@ const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 							[props.className!]: true
 						}}
 						onClick={props.onClick}
+						onMouseDown={props.onMouseDown}
 						id={props.id}
 					>
 						<Icon name={props.icon} variant={props.iconVariant} />
@@ -211,7 +213,7 @@ export default () => {
 				iconVariant={iconVariant()}
 				id="workspace-fetch-changes-and-remote"
 				disabled={!repository()}
-				onClick={() => {
+				onMouseDown={() => {
 					refetchRepository(LocationStore.selectedRepository);
 				}}
 			/>
@@ -745,7 +747,7 @@ export default () => {
 							name="Switch branch"
 							id="workspace-branch"
 							className={p.open() ? 'active' : ''}
-							onClick={(e) => {
+							onMouseDown={(e) => {
 								p.toggle(e);
 							}}
 						/>
@@ -784,7 +786,7 @@ export default () => {
 						name="Toggle history"
 						id="workspace-history"
 						className={historyOpen() ? 'active' : ''}
-						onClick={() => {
+						onMouseDown={() => {
 							if (onboardingStepState[0]()) {
 								p.hide();
 

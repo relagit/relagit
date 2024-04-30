@@ -58,7 +58,7 @@ export default (props: HeaderDrawerProps) => {
 						{(p) => (
 							<Menu
 								interfaceId="sidebar-drawer"
-								event="click"
+								event="mousedown"
 								items={[
 									{
 										type: 'item',
