@@ -50,7 +50,7 @@ export type Settings = {
 	};
 	autoFetch: boolean;
 	locale: ValidLocale;
-	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl' | 'fleet' | 'zed';
+	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl' | 'codium' | 'fleet' | 'zed';
 	activeRepository: string | null;
 	repositories: string[];
 };

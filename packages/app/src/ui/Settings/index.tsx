@@ -410,6 +410,10 @@ const SettingsModal = () => {
 							value: 'code-insiders'
 						},
 						{
+							element: t('settings.general.editor.codium'),
+							value: 'codium'
+						},
+						{
 							element: t('settings.general.editor.subl'),
 							value: 'subl'
 						},

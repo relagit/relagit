@@ -76,6 +76,7 @@ export default {
 				label: 'External Editor',
 				description: 'Select the editor you would like to use for opening files.',
 				code: 'Visual Studio Code',
+				codium: 'VSCodium',
 				subl: 'Sublime Text',
 				'code-insiders': 'Visual Studio Code Insiders',
 				atom: 'Atom',

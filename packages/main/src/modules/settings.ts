@@ -22,6 +22,8 @@ export const editorName = (name?: Settings['externalEditor']) => {
 			return 'Visual Studio Code';
 		case 'subl':
 			return 'Sublime Text';
+		case 'codium':
+			return 'VSCodium';
 		case 'atom':
 			return 'Atom';
 		case 'fleet':
