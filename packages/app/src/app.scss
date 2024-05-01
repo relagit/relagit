@@ -13,7 +13,8 @@
 }
 
 @mixin light-theme {
-	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
+	--font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
+		Cantarell, 'Helvetica Neue', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 	--color-contrast: var(--base-black);
 	--color-primary: var(--base-dark-grey);
@@ -55,7 +56,8 @@
 }
 
 @mixin dark-theme {
-	--font-primary: 'SF Pro Display', 'Inter', sans-serif;
+	--font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
+		Cantarell, 'Helvetica Neue', sans-serif;
 	--font-mono: var(--settings-font-family, 'SF Mono', 'Fira Code', monospace);
 	--color-contrast: var(--base-white);
 	--color-primary: var(--dark-base-dark-grey);
