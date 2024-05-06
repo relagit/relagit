@@ -50,8 +50,14 @@ export const checkForOTANotifications = async () => {
 
 	if (!otaData || !otaData.length) return;
 
+	const dismissed = localStorage.getItem('notifications:dismissed');
+
 	for (const data of otaData) {
 		const notif = data;
+
+		if (dismissed && dismissed.includes(`${notif.title}:${notif.description}`)) {
+			continue;
+		}
 
 		const id = NotificationStore.add({
 			level: 'info',
@@ -73,6 +79,20 @@ export const checkForOTANotifications = async () => {
 
 						if (action.dismiss) {
 							NotificationStore.remove(id);
+
+							const dismissed = localStorage.getItem('notifications:dismissed');
+
+							if (dismissed) {
+								localStorage.setItem(
+									'notifications:dismissed',
+									`${dismissed},${notif.title}:${notif.description}`
+								);
+							} else {
+								localStorage.setItem(
+									'notifications:dismissed',
+									`${notif.title}:${notif.description}`
+								);
+							}
 						}
 					}
 				})
