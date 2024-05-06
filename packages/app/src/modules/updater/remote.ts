@@ -1,8 +1,11 @@
+import { NotificationProps } from '../../ui/Notification';
+
 import pkj from '../../../../../package.json';
 import type { GithubRelease } from '../github/types';
 import { error } from '../logger';
 
 const api = 'https://api.github.com/repos/relagit/relagit/releases/latest';
+const otaApi = 'https://rela.dev/api/ota';
 
 export const getLatestRelease = async (): Promise<GithubRelease | null> => {
 	try {
@@ -29,4 +32,24 @@ export const semanticCompare = (latest: string, current: string): 'equal' | 'beh
 	}
 
 	return 'equal';
+};
+
+export const getOTAData = async (): Promise<
+	| Partial<
+			NotificationProps & {
+				actions: unknown;
+			}
+	  >[]
+	| null
+> => {
+	try {
+		const response = await fetch(otaApi);
+		const data = await response.json();
+
+		return data as Partial<NotificationProps>[];
+	} catch (e) {
+		error('Unable to check for OTA notifications', e);
+
+		return null;
+	}
 };

@@ -1,10 +1,12 @@
 import NotificationStore from '@app/stores/notification';
 
+import { NotificationProps } from '../../ui/Notification';
+
 import { GithubRelease } from '../github';
 import { t } from '../i18n';
 import { log } from '../logger';
 import { openExternal } from '../shell';
-import { currentTag, getLatestRelease, semanticCompare } from './remote';
+import { currentTag, getLatestRelease, getOTAData, semanticCompare } from './remote';
 
 export const checkForUpdates = async () => {
 	const latest = await getLatestRelease();
@@ -41,4 +43,40 @@ const notifyUpdate = (release: GithubRelease) => {
 			}
 		]
 	});
+};
+
+export const checkForOTANotifications = async () => {
+	const otaData = await getOTAData();
+
+	if (!otaData || !otaData.length) return;
+
+	for (const data of otaData) {
+		const notif = data;
+
+		const id = NotificationStore.add({
+			level: 'info',
+			icon: 'bell',
+			title: 'Notification',
+			description: '',
+			...notif,
+			actions: notif.actions?.map(
+				(
+					action: NonNullable<NotificationProps['actions']>[number] & {
+						href?: string;
+					}
+				) => ({
+					...action,
+					onClick: () => {
+						if (action.href) {
+							openExternal(action.href);
+						}
+
+						if (action.dismiss) {
+							NotificationStore.remove(id);
+						}
+					}
+				})
+			)
+		});
+	}
 };
