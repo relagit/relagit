@@ -31,7 +31,7 @@ export default {
 			title: 'Workflows'
 		},
 		commits: {
-			title: 'Commits'
+			title: 'Git'
 		},
 		general: {
 			title: 'Generalis',

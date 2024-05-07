@@ -209,7 +209,7 @@ const SettingsModal = () => {
 
 	const initialUponOpen = structuredClone(SettingsStore.settings);
 
-	const Commits = (
+	const Git = (
 		<>
 			<div class="settings-layer__setting">
 				<Switch
@@ -807,9 +807,9 @@ const SettingsModal = () => {
 								},
 								{
 									label: t('settings.commits.title'),
-									value: 'commits',
-									element: Commits,
-									icon: 'git-commit'
+									value: 'git',
+									element: Git,
+									icon: 'git-pull-request'
 								},
 								{
 									label: t('settings.appearance.title'),

@@ -49,7 +49,7 @@ export default {
 			}
 		},
 		commits: {
-			title: 'Commits'
+			title: 'Git'
 		},
 		accounts: {
 			title: 'Accounts',
