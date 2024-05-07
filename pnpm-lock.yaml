@@ -32,8 +32,8 @@ devDependencies:
     specifier: ^0.1.0
     version: 0.1.0(solid-js@1.8.16)
   '@primer/octicons':
-    specifier: ^18.3.0
-    version: 18.3.0
+    specifier: ^19.9.0
+    version: 19.9.0
   '@rollup/plugin-babel':
     specifier: ^6.0.4
     version: 6.0.4(@babel/core@7.24.4)(@types/babel__core@7.20.5)(rollup@3.29.4)
@@ -2383,8 +2383,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@primer/octicons@18.3.0:
-    resolution: {integrity: sha512-vyUej5rKjXfqHAmYSo2k3pA9IsL5KJaYOBVXvc188FwBfUweA+WVP3qwWyZTSQnp9LK6yOajGyr0SCMIa9ombw==}
+  /@primer/octicons@19.9.0:
+    resolution: {integrity: sha512-uAZa9cMgWkzbEsZnYWB7tg0vt7QprubD7ljtprz2fBJ8CjyqoxFRRsFvH4UiJdjK/3o87ODgDkhiflyJXDh+Lg==}
     dependencies:
       object-assign: 4.1.1
     dev: true

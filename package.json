@@ -37,7 +37,7 @@
 		"@babel/preset-env": "^7.23.7",
 		"@babel/preset-typescript": "^7.23.3",
 		"@neoconfetti/solid": "^0.1.0",
-		"@primer/octicons": "^18.3.0",
+		"@primer/octicons": "^19.9.0",
 		"@rollup/plugin-babel": "^6.0.4",
 		"@rollup/plugin-commonjs": "^24.1.0",
 		"@rollup/plugin-json": "^6.1.0",
