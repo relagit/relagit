@@ -1,6 +1,6 @@
 import { JSX } from 'solid-js';
 
-import { IconName, customIcons } from '../Icon';
+import { IconName } from '../Icon';
 
 import './index.scss';
 
@@ -15,7 +15,7 @@ interface TextareaProps {
 	disabled?: boolean;
 	expanded?: boolean;
 	footer?: JSX.Element;
-	icon?: IconName | keyof typeof customIcons;
+	icon?: IconName;
 }
 
 export default (props: TextareaProps) => {

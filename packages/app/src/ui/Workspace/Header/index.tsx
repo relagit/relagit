@@ -21,7 +21,7 @@ import LocationStore from '@stores/location';
 import { branchFormatsForProvider } from '~/app/src/modules/github';
 import { openExternal } from '~/app/src/modules/shell';
 
-import Icon, { IconName, customIcons } from '@ui/Common/Icon';
+import Icon, { IconName } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import { showPublishModal } from '@ui/Modal/Publish';
 
@@ -29,7 +29,7 @@ import './index.scss';
 
 export interface PanelButtonProps {
 	id: string;
-	icon: IconName | keyof typeof customIcons;
+	icon: IconName;
 	iconVariant?: 12 | 16 | 24;
 	name?: string;
 	onClick?: (e: MouseEvent) => void;
@@ -269,12 +269,12 @@ export default () => {
 			>
 				<PanelButton
 					loading={actioning()}
-					icon={((): IconName | keyof typeof customIcons => {
+					icon={((): IconName => {
 						switch (status()) {
 							case 'ahead':
 								return 'repo-push';
 							case 'behind':
-								return 'x-repo-pull';
+								return 'repo-pull';
 							case 'publish':
 								return 'repo-push';
 							case 'diverged':
