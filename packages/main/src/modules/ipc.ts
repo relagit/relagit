@@ -11,6 +11,12 @@ import * as ipc from '~/shared/ipc';
 
 import child_process from 'child_process';
 
+const beforeQuitController = new AbortController();
+
+app.on('before-quit', () => {
+	beforeQuitController.abort();
+});
+
 const preloadPathEnv = () => {
 	try {
 		const command = process.platform === 'win32' ? 'PATH' : 'echo $PATH';
@@ -135,7 +141,8 @@ export default (window: BrowserWindow) => {
 						env: {
 							...process.env,
 							...opts.env
-						}
+						},
+						signal: beforeQuitController.signal
 					},
 					(error, stdout, stderr) => {
 						if (opts.encoding) {
