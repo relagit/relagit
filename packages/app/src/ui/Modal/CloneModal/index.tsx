@@ -18,6 +18,7 @@ import Icon from '@app/ui/Common/Icon';
 import TabView from '@app/ui/Common/TabView';
 import TextArea from '@app/ui/Common/TextArea';
 import * as logger from '@modules/logger';
+import SettingsStore from '~/app/src/stores/settings';
 
 import { RepoList } from './components';
 
@@ -365,14 +366,45 @@ const CloneModal = (props: CloneModalProps) => {
 
 											switch (tab()) {
 												case 'github':
+													if (
+														SettingsStore.settings?.commit
+															?.cloneMethod === 'ssh'
+													) {
+														cloneLike = (selected() as GitHubRepository)
+															.ssh_url;
+
+														break;
+													}
+
 													cloneLike = (selected() as GitHubRepository)
 														.clone_url;
 													break;
 												case 'gitlab':
+													if (
+														SettingsStore.settings?.commit
+															?.cloneMethod === 'ssh'
+													) {
+														cloneLike = (selected() as GitLabProject)
+															.ssh_url_to_repo;
+
+														break;
+													}
+
 													cloneLike = (selected() as GitLabProject)
 														.http_url_to_repo;
 													break;
 												case 'codeberg':
+													if (
+														SettingsStore.settings?.commit
+															?.cloneMethod === 'ssh'
+													) {
+														cloneLike = (
+															selected() as CodebergRepository
+														).ssh_url;
+
+														break;
+													}
+
 													cloneLike = (selected() as CodebergRepository)
 														.clone_url;
 													break;

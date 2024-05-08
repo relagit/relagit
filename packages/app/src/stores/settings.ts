@@ -18,6 +18,7 @@ export type Settings = {
 		enforceStyle: boolean;
 		preferParens: boolean;
 		annotate: boolean;
+		cloneMethod: 'ssh' | 'http';
 	};
 	ai: {
 		termsAccepted: boolean;

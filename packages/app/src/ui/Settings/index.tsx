@@ -80,6 +80,7 @@ export interface RadioGroupProps {
 	options: {
 		element: string;
 		value: string;
+		hint?: string;
 	}[];
 	value: string;
 	onChange: (value: string) => void;
@@ -126,7 +127,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 							{option.element}
 							<Show when={props.hints}>
 								<div classList={{ hint: true, mono: props.monoHints }}>
-									{option.value}
+									{option.hint ?? option.value}
 								</div>
 							</Show>
 						</div>
@@ -222,6 +223,33 @@ const SettingsModal = () => {
 				/>
 			</div>
 			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-clone-method">
+					{t('settings.general.cloneMethod.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.general.cloneMethod.description')}
+				</p>
+				<RadioGroup
+					hints
+					options={[
+						{
+							element: t('settings.general.cloneMethod.http'),
+							hint: t('settings.general.cloneMethod.httpHint'),
+							value: 'http'
+						},
+						{
+							element: t('settings.general.cloneMethod.ssh'),
+							hint: t('settings.general.cloneMethod.sshHint'),
+							value: 'ssh'
+						}
+					]}
+					value={settings()?.commit?.cloneMethod || 'http'}
+					onChange={(value) => {
+						SettingsStore.setSetting('commit.cloneMethod', value as 'http' | 'ssh');
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
 				<label class="settings-layer__setting__label" id="settings-commit-style">
 					{t('settings.general.commitStyle.label')}
 				</label>
@@ -229,17 +257,22 @@ const SettingsModal = () => {
 					{t('settings.general.commitStyle.description')}
 				</p>
 				<RadioGroup
+					hints
+					monoHints
 					options={[
 						{
 							element: t('settings.general.commitStyle.conventional'),
+							hint: 'type(scope): description',
 							value: 'conventional'
 						},
 						{
 							element: t('settings.general.commitStyle.relational'),
+							hint: '!(scope) type: description',
 							value: 'relational'
 						},
 						{
 							element: t('settings.general.commitStyle.none'),
+							hint: '',
 							value: 'none'
 						}
 					]}

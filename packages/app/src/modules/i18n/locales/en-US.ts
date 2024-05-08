@@ -91,6 +91,14 @@ export default {
 				relational: 'Relational Commits',
 				none: 'None'
 			},
+			cloneMethod: {
+				label: 'Clone Method',
+				description: 'Select the method you would like to use to clone repositories.',
+				http: 'HTTP',
+				httpHint: 'Recommended',
+				ssh: 'SSH',
+				sshHint: 'Requires you to have an SSH key set up with your provider.'
+			},
 			annotateCommit: {
 				label: 'Annotate Commits',
 				description:
