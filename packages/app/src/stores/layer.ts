@@ -32,6 +32,10 @@ const LayerStore = new (class LayerStore extends GenericStore {
 		this.emit();
 	}
 
+	getVisible() {
+		return this.layers.filter((f) => f.visible);
+	}
+
 	addLayer(layer: Layer) {
 		this.layers.push(layer);
 		this.emit();

@@ -117,6 +117,9 @@ export default {
 				label: 'Auto Fetch Repositories',
 				description:
 					'Automatically fetch repositories on startup. Heavily impacts startup performance.'
+			},
+			debug: {
+				copy: 'Copy Debug Info'
 			}
 		},
 		appearance: {

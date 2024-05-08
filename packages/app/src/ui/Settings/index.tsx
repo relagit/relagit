@@ -17,7 +17,9 @@ import SettingsStore, { type Settings } from '@stores/settings';
 import Icon from '@ui/Common/Icon';
 import TextArea from '@ui/Common/TextArea';
 
+import pkj from '../../../../../package.json';
 import { getOptionsProxy } from '../../modules/actions/settings';
+import LayerStore from '../../stores/layer';
 import Button from '../Common/Button';
 import Dropdown from '../Common/Dropdown';
 import EmptyState from '../Common/EmptyState';
@@ -29,6 +31,32 @@ import { hideReloadNotification, showReloadNotification } from './shared';
 import './index.scss';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
+const clipboard = window.Native.DANGEROUS__NODE__REQUIRE('electron:clipboard');
+
+const copyDebugInfo = () => {
+	const debugInfo = JSON.stringify({
+		platform: window.Native.platform,
+		version: pkj.version,
+		commit: __COMMIT_HASH__,
+		location: {
+			history: LocationStore.historyOpen,
+			selected: LocationStore.selectedRepository ? '<Repository>' : '<None>',
+			isRefetching: LocationStore.isRefetchingSelectedRepository,
+			imageDisplay: LocationStore.imageDisplayMode,
+			dragState: LocationStore.dragState,
+			palette: LocationStore.showingPalette,
+			commit: LocationStore.selectedCommit ? '<Commit>' : '<None>',
+			commitFile: LocationStore.selectedCommitFile ? '<CommitFile>' : '<None>',
+			file: LocationStore.selectedFile ? '<File>' : '<None>'
+		},
+		layers: LayerStore.getVisible()
+			.map((layer) => layer.key)
+			.join(', '),
+		modals: `Active: ${ModalStore.state.active?.type}, Previous: ${ModalStore.state.previous?.type}`
+	});
+
+	clipboard.writeText(debugInfo);
+};
 
 const buildElements = (
 	children?:
@@ -483,6 +511,15 @@ const SettingsModal = () => {
 						SettingsStore.setSetting('autoFetch', value);
 					}}
 				/>
+			</div>
+			<div class="settings-layer__debug">
+				<Button
+					type="brand"
+					label={t('settings.general.debug.copy')}
+					onClick={copyDebugInfo}
+				>
+					{t('settings.general.debug.copy')}
+				</Button>
 			</div>
 		</>
 	);
