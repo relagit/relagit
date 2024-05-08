@@ -185,7 +185,7 @@ const CloneModal = (props: CloneModalProps) => {
 					<EmptyState
 						detail={t('modal.clone.auth')}
 						hint={t('modal.clone.authHint')}
-						icon="shield"
+						icon="repo-clone"
 						actions={[
 							{
 								label: t('modal.clone.authButton'),
@@ -242,7 +242,7 @@ const CloneModal = (props: CloneModalProps) => {
 											when={account()}
 											fallback={
 												<>
-													<Icon name="shield" />
+													<Icon name="repo-clone" />
 													{t('modal.clone.authenticate')}
 												</>
 											}
@@ -259,7 +259,7 @@ const CloneModal = (props: CloneModalProps) => {
 						}
 					>
 						<div class="clone-modal__header">
-							<Show when={tab() !== 'url'}>
+							<Show when={tab() !== 'url'} fallback={<div class="spacer"></div>}>
 								<TextArea
 									label={t('modal.clone.searchLabel')}
 									placeholder={t('modal.clone.search')}
