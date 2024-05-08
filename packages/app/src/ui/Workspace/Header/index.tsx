@@ -276,7 +276,7 @@ export default () => {
 							case 'behind':
 								return 'repo-pull';
 							case 'publish':
-								return 'repo-push';
+								return 'repo-template';
 							case 'diverged':
 								return 'repo-forked';
 							default:
