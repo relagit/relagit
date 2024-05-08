@@ -203,6 +203,19 @@
 					border: 1px solid var(--separator-primary);
 					margin-right: 4px;
 				}
+
+				&__visibility {
+					margin-left: auto;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: var(--color-secondary);
+
+					svg {
+						width: 14px;
+						height: 14px;
+					}
+				}
 			}
 
 			&__description {

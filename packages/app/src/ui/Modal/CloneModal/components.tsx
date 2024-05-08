@@ -212,6 +212,14 @@ export const RepoList = <T extends Provider>(props: {
 											<div class="clone-modal__list__item__name__part">
 												{normalRepo.name}
 											</div>
+											<div class="clone-modal__list__item__name__visibility">
+												<Show
+													when={normalRepo.private}
+													fallback={<Icon name="eye" />}
+												>
+													<Icon name="lock" />
+												</Show>
+											</div>
 										</h3>
 										<p class="clone-modal__list__item__description">
 											{normalRepo.description}
@@ -272,6 +280,7 @@ const makeNormal = (
 		language: string;
 		html_url: string;
 		updated: number;
+		private: boolean;
 	} = {
 		owner: { login: '', avatar_url: '' },
 		name: '',
@@ -280,7 +289,8 @@ const makeNormal = (
 		forks_count: 0,
 		language: '',
 		html_url: '',
-		updated: 0
+		updated: 0,
+		private: false
 	};
 
 	switch (provider) {
@@ -296,6 +306,7 @@ const makeNormal = (
 			normalRepo.language = _repo.language;
 			normalRepo.html_url = _repo.html_url;
 			normalRepo.updated = new Date(_repo.updated_at).getTime();
+			normalRepo.private = _repo.private;
 			break;
 		}
 		case 'gitlab': {
@@ -310,6 +321,7 @@ const makeNormal = (
 			normalRepo.language = '';
 			normalRepo.html_url = _repo.web_url;
 			normalRepo.updated = new Date(_repo.last_activity_at).getTime();
+			normalRepo.private = _repo.visibility === 'private';
 			break;
 		}
 		case 'codeberg': {
@@ -324,6 +336,7 @@ const makeNormal = (
 			normalRepo.language = _repo.language;
 			normalRepo.html_url = _repo.html_url;
 			normalRepo.updated = new Date(_repo.updated_at).getTime();
+			normalRepo.private = _repo.private;
 			break;
 		}
 	}
