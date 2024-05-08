@@ -12,6 +12,20 @@ import type { RequireIdentifier, RequireResult } from './types';
 
 if (process.platform === 'darwin') updateEnvironmentForProcess();
 
+const normalise = (platform: NodeJS.Platform) => {
+	switch (platform) {
+		case 'freebsd':
+		case 'openbsd':
+		case 'sunos':
+		case 'aix':
+		case 'cygwin':
+		case 'netbsd':
+			return 'linux';
+		default:
+			return platform;
+	}
+};
+
 export const Native = {
 	DANGEROUS__NODE__REQUIRE: <I extends RequireIdentifier>(id: I): RequireResult<I> => {
 		if (id.startsWith('electron:')) {
@@ -119,7 +133,7 @@ export const Native = {
 			}
 		}
 	},
-	platform: process.platform
+	platform: normalise(process.platform)
 };
 
 contextBridge.exposeInMainWorld('Native', Native);
