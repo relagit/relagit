@@ -435,6 +435,10 @@ const SettingsModal = () => {
 						{
 							element: 'Latin',
 							value: 'lat'
+						},
+						{
+							element: 'Español',
+							value: 'es'
 						}
 					]}
 					value={settings()?.locale || 'en-US'}
