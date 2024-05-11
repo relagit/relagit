@@ -16,6 +16,15 @@ try {
 		path: resolve(__dirname, '.env.local')
 	});
 } catch (e) {
+	try {
+		dotenv.config({
+			path: resolve(__dirname, '.env.example')
+		});
+	} catch (e) {
+		console.error(e);
+		console.error('Failed to load .env.example');
+	}
+
 	console.error(e);
 	console.error('Failed to load .env.local');
 }
