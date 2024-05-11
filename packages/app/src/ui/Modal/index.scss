@@ -119,7 +119,7 @@
 			align-items: center;
 			padding: 40px 40px 20px;
 			user-select: none;
-			white-space: nowrap;
+			gap: 32px;
 			border-bottom: 1px solid var(--separator-secondary);
 
 			&__title {
@@ -128,6 +128,9 @@
 				display: flex;
 				gap: 16px;
 				align-items: center;
+				overflow: hidden;
+				max-width: 100%;
+				width: 100%;
 			}
 		}
 
