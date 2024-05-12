@@ -618,6 +618,7 @@ export default () => {
 									<input
 										type="text"
 										placeholder="branch-name"
+										spellcheck={false}
 										inputmode="text"
 										autocomplete="off"
 										value={newBranch()}

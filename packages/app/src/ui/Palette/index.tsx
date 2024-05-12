@@ -104,6 +104,7 @@ export const CommandPalette = () => {
 							type="text"
 							class="palette__body__input__input"
 							placeholder="Search repositories..."
+							spellcheck={false}
 							value={filter()}
 							onKeyDown={(e) => {
 								e.stopPropagation();
