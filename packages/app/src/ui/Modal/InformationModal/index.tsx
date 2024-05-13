@@ -209,7 +209,7 @@ export const InformationModal = () => {
 		</>
 	);
 
-	const colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple', 'pink', 'cyan'];
+	const colors = ['blue', 'green', 'yellow', 'orange', 'red', 'indigo', 'violet'];
 
 	const Graph = (
 		<Show

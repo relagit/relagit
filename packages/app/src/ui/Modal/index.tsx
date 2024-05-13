@@ -183,18 +183,16 @@ const Modal = (props: ModalProps) => {
 						<div
 							class="modal__confetti"
 							use:confetti={{
-								// yay
 								particleCount: 300,
 								particleSize: 8,
 								colors: [
-									'var(--color-blue-500)',
-									'var(--color-green-500)',
-									'var(--color-yellow-500)',
 									'var(--color-red-500)',
-									'var(--color-purple-500)',
-									'var(--color-pink-500)',
 									'var(--color-orange-500)',
-									'var(--color-cyan-500)'
+									'var(--color-yellow-500)',
+									'var(--color-green-500)',
+									'var(--color-blue-500)',
+									'var(--color-indigo-500)',
+									'var(--color-violet-500)'
 								]
 							}}
 						></div>
