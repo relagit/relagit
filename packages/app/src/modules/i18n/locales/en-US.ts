@@ -81,7 +81,9 @@ export default {
 				'code-insiders': 'Visual Studio Code Insiders',
 				atom: 'Atom',
 				zed: 'Zed',
-				fleet: 'Fleet'
+				fleet: 'Fleet',
+				custom: 'Custom Editor',
+				customPlaceholder: 'my-custom-editor --args'
 			},
 			commitStyle: {
 				label: 'Commit Message Style',

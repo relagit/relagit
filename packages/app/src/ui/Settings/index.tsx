@@ -19,6 +19,7 @@ import TextArea from '@ui/Common/TextArea';
 
 import pkj from '../../../../../package.json';
 import { getOptionsProxy } from '../../modules/actions/settings';
+import { getAvailableEditors } from '../../modules/editor';
 import LayerStore from '../../stores/layer';
 import Button from '../Common/Button';
 import Dropdown from '../Common/Dropdown';
@@ -465,32 +466,22 @@ const SettingsModal = () => {
 				<RadioGroup
 					hints
 					monoHints
-					options={[
+					options={(
+						getAvailableEditors().map((editor) => ({
+							element: t(`settings.general.editor.${editor}`),
+							value: editor
+						})) as {
+							element: string;
+							value: string;
+							hint?: string | undefined;
+						}[]
+					).concat([
 						{
-							element: t('settings.general.editor.code'),
-							value: 'code'
-						},
-						{
-							element: t('settings.general.editor.code-insiders'),
-							value: 'code-insiders'
-						},
-						{
-							element: t('settings.general.editor.codium'),
-							value: 'codium'
-						},
-						{
-							element: t('settings.general.editor.subl'),
-							value: 'subl'
-						},
-						{
-							element: t('settings.general.editor.zed'),
-							value: 'zed'
-						},
-						{
-							element: t('settings.general.editor.fleet'),
-							value: 'fleet'
+							element: t('settings.general.editor.custom'),
+							value: 'custom',
+							hint: ''
 						}
-					]}
+					])}
 					value={settings()?.externalEditor || 'code'}
 					onChange={(value) => {
 						SettingsStore.setSetting(
@@ -506,6 +497,18 @@ const SettingsModal = () => {
 					}}
 				/>
 			</div>
+			<Show when={settings()?.externalEditor === 'custom'}>
+				<div class="settings-layer__setting">
+					<TextArea
+						label={t('settings.general.editor.custom')}
+						value={settings()?.customEditor || ''}
+						onChange={(value) => {
+							SettingsStore.setSetting('customEditor', value);
+						}}
+						placeholder={t('settings.general.editor.customPlaceholder')}
+					/>
+				</div>
+			</Show>
 			<div class="settings-layer__setting">
 				<Switch
 					label={t('settings.general.autoFetch.label')}

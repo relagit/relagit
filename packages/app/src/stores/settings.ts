@@ -51,7 +51,8 @@ export type Settings = {
 	};
 	autoFetch: boolean;
 	locale: ValidLocale;
-	externalEditor: 'code' | 'code-insiders' | 'atom' | 'subl' | 'codium' | 'fleet' | 'zed';
+	externalEditor: (typeof import('../modules/editor'))['editors'][number] | 'custom';
+	customEditor: string;
 	activeRepository: string | null;
 	repositories: string[];
 };

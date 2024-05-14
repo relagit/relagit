@@ -80,7 +80,10 @@ export default (window: BrowserWindow) => {
 	});
 
 	ipcMain.handle(ipc.SPAWN_ENV, (_, exec: string, path: string) => {
-		child_process.spawn(exec, [path], {
+		const parts = exec.split(' ');
+		const command = parts.shift()!;
+
+		child_process.spawn(command, [...parts, path], {
 			detached: true,
 			env: preloadPathEnv()
 		});
