@@ -127,6 +127,10 @@ const constructWindow = async () => {
 		}
 	});
 
+	if (process.argv.includes('--devtools')) {
+		win.webContents.openDevTools();
+	}
+
 	win.once('ready-to-show', () => {
 		win.show();
 	});
