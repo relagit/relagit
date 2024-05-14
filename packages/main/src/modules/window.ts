@@ -46,7 +46,7 @@ export const getDefaultBrowserWindowOptions = (
 ): Partial<BrowserWindowConstructorOptions> => {
 	return {
 		backgroundColor: backgroundFromTheme(
-			settings?.ui?.theme || '',
+			settings?.ui?.theme || 'system',
 			nativeTheme.shouldUseDarkColors
 		)
 	};
