@@ -2,6 +2,7 @@ import NotificationStore from '@app/stores/notification';
 import SettingsStore from '@app/stores/settings';
 
 import { t } from '../i18n';
+import { error } from '../logger';
 
 export * from './prompt';
 
@@ -91,7 +92,7 @@ export async function* sendAIRequest(prompt: string): AsyncGenerator<{
 
 		return makeRes(result);
 	} catch (e) {
-		console.error(e);
-		return null;
+		error(e);
+		throw e;
 	}
 }
