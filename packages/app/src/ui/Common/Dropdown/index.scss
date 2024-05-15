@@ -1,3 +1,5 @@
+@use '../../../illyrica/mixins';
+
 .dropdown {
 	position: relative;
 
@@ -45,11 +47,7 @@
 			border-radius: 2px;
 			width: 100%;
 
-			&:focus {
-				outline: none;
-				border: 2px solid var(--color-blue-500);
-				padding: 4px 6px;
-			}
+			@include mixins.focusable;
 
 			&:hover {
 				background-color: var(--bg-hover);

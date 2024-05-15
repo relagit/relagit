@@ -1,3 +1,5 @@
+@use '../../../illyrica/mixins';
+
 .sidebar__commit {
 	display: flex;
 	font-weight: 400;
@@ -9,12 +11,7 @@
 	user-select: none;
 	gap: 8px;
 
-	&:focus {
-		outline: none;
-		box-shadow: none;
-		border: 2px solid var(--color-blue-500);
-		padding: 6px 10px 7px;
-	}
+	@include mixins.focusable;
 
 	&:hover {
 		background-color: var(--bg-hover);

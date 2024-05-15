@@ -1,3 +1,5 @@
+@use '../../../illyrica/mixins';
+
 @keyframes loading {
 	0% {
 		background-position-x: -200px;
@@ -36,13 +38,7 @@
 		-webkit-app-region: no-drag;
 		overflow: hidden;
 
-		&:focus {
-			border-color: transparent;
-			box-shadow: none;
-			border: 2px solid var(--color-blue-500);
-			outline: none;
-			padding-inline: 33px !important;
-		}
+		@include mixins.focusable;
 
 		&:hover {
 			background-color: var(--bg-hover);
@@ -58,10 +54,6 @@
 
 		&:not(:has(.workspace__header__panelbutton__info)) {
 			padding-inline: 20px;
-
-			&:focus {
-				padding-inline: 18px !important;
-			}
 		}
 
 		&.disabled {
@@ -161,13 +153,7 @@
 			width: 100%;
 			gap: 8px;
 
-			&:focus {
-				outline: none;
-				box-shadow: none;
-				border: 2px solid var(--color-blue-500);
-				padding: 6px 14px;
-				padding-top: 7px;
-			}
+			@include mixins.focusable;
 
 			&__name {
 				overflow: hidden;

@@ -12,7 +12,7 @@
 	background: var(--button-bg);
 	border: 1px solid var(--button-stroke);
 
-	@include mixins.focusable(var(--button-focus));
+	@include mixins.focusable(var(--button-focus), 1px);
 
 	&:hover {
 		background-color: var(--button-hover, var(--bg-quaternary));

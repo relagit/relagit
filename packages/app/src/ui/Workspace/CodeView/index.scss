@@ -1,3 +1,5 @@
+@use '../../../illyrica/mixins';
+
 .blame-tooltip {
 	display: flex;
 	flex-direction: column;
@@ -112,6 +114,8 @@
 		background-color: var(--bg-c);
 		overflow: hidden;
 		flex-shrink: 0;
+
+		@include mixins.focusable;
 
 		&.deleted {
 			--bg-c: var(--bg-diff-del);

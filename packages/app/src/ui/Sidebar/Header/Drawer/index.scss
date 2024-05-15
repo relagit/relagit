@@ -1,3 +1,5 @@
+@use '../../../../illyrica/mixins';
+
 @keyframes visibilityout {
 	0% {
 		visibility: visible;
@@ -106,18 +108,14 @@
 				align-items: center;
 				justify-content: space-between;
 
+				@include mixins.focusable;
+
 				&:not(:last-child) {
 					border-bottom: 1px solid var(--separator-secondary);
 				}
 
 				&:hover {
 					background-color: var(--bg-hover);
-				}
-
-				&:focus {
-					outline: none;
-					border: 2px solid var(--color-blue-500);
-					padding: 8px 18px;
 				}
 
 				&.active {
