@@ -107,18 +107,12 @@ export default (window: BrowserWindow) => {
 	});
 
 	ipcMain.handle(ipc.CHECK_IS_IN_PATH, (_, bin: string) => {
-		win?.webContents.executeJavaScript(`console.log('NATIVE:CHECK_IS_IN_PATH, ${bin}')`);
 		try {
 			const command = process.platform === 'win32' ? 'where' : 'which';
 
-			win?.webContents.executeJavaScript(
-				`console.log('executing NATIVE:CHECK_IS_IN_PATH, ${command} ${bin}', '${JSON.stringify(preloadPathEnv())}')`
-			);
 			const path = child_process.execSync(`${command} ${bin}`, {
 				env: preloadPathEnv()
 			});
-
-			win?.webContents.executeJavaScript(`console.log('NATIVE:CHECK_IS_IN_PATH, ${path}')`);
 
 			return new TextDecoder().decode(path);
 		} catch (error) {
