@@ -51,7 +51,7 @@ export type Settings = {
 	};
 	autoFetch: boolean;
 	locale: ValidLocale;
-	externalEditor: (typeof import('../modules/editor'))['editors'][number] | 'custom';
+	externalEditor: (typeof import('../modules/editor'))['editors'][number]['exec'] | 'custom';
 	customEditor: string;
 	activeRepository: string | null;
 	repositories: string[];

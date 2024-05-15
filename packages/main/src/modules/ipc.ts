@@ -4,12 +4,15 @@ import {
 	app,
 	dialog,
 	ipcMain,
+	nativeImage,
 	safeStorage,
 	shell
 } from 'electron';
 import * as ipc from '~/shared/ipc';
 
 import child_process from 'child_process';
+
+import appPath from 'app-path';
 
 const beforeQuitController = new AbortController();
 
@@ -48,6 +51,42 @@ export default (window: BrowserWindow) => {
 		return await dialog.showOpenDialog(win!, options);
 	});
 
+	ipcMain.handle(ipc.GET_THUMBNAIL, async (_, bundleid: string | string[]) => {
+		if (process.platform !== 'darwin') return null;
+
+		try {
+			if (Array.isArray(bundleid)) {
+				for (const id of bundleid) {
+					try {
+						const path = await appPath(id);
+
+						const img = await nativeImage.createThumbnailFromPath(path, {
+							width: 256,
+							height: 256
+						});
+
+						return img.toDataURL();
+					} catch (error) {
+						continue;
+					}
+				}
+
+				return null;
+			}
+
+			const path = await appPath(bundleid);
+
+			const img = await nativeImage.createThumbnailFromPath(path, {
+				width: 256,
+				height: 256
+			});
+
+			return img.toDataURL();
+		} catch (error) {
+			return null;
+		}
+	});
+
 	ipcMain.handle(
 		ipc.ALERT,
 		(_, message: string, type: 'none' | 'info' | 'error' | 'question' | 'warning') => {
@@ -68,12 +107,20 @@ export default (window: BrowserWindow) => {
 	});
 
 	ipcMain.handle(ipc.CHECK_IS_IN_PATH, (_, bin: string) => {
+		win?.webContents.executeJavaScript(`console.log('NATIVE:CHECK_IS_IN_PATH, ${bin}')`);
 		try {
-			const command = process.platform === 'win32' ? 'where' : 'command -v';
+			const command = process.platform === 'win32' ? 'where' : 'which';
 
-			child_process.execSync(`${command} ${bin}`);
+			win?.webContents.executeJavaScript(
+				`console.log('executing NATIVE:CHECK_IS_IN_PATH, ${command} ${bin}', '${JSON.stringify(preloadPathEnv())}')`
+			);
+			const path = child_process.execSync(`${command} ${bin}`, {
+				env: preloadPathEnv()
+			});
 
-			return true;
+			win?.webContents.executeJavaScript(`console.log('NATIVE:CHECK_IS_IN_PATH, ${path}')`);
+
+			return new TextDecoder().decode(path);
 		} catch (error) {
 			return false;
 		}

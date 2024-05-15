@@ -90,7 +90,7 @@
 		padding: 4px;
 		border-radius: 4px;
 
-		@include mixins.focusable;
+		@include mixins.focusable(var(--color-blue-500), 0);
 
 		&.staged {
 			opacity: 1;

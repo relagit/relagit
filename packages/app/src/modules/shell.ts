@@ -11,7 +11,7 @@ export const showItemInFolder = (path: string) => {
 	ipcRenderer.invoke(ipc.SHOW_ITEM_IN_FOLDER, path);
 };
 
-export const checkIsInPath = async (bin: string): Promise<boolean> => {
+export const checkIsInPath = async (bin: string): Promise<false | string> => {
 	const result = await ipcRenderer.invoke(ipc.CHECK_IS_IN_PATH, bin);
 
 	return result;

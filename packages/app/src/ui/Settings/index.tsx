@@ -110,6 +110,7 @@ export interface RadioGroupProps {
 		element: string;
 		value: string;
 		hint?: string;
+		image?: string;
 	}[];
 	value: string;
 	onChange: (value: string) => void;
@@ -153,6 +154,9 @@ export const RadioGroup = (props: RadioGroupProps) => {
 							}}
 						>
 							<div class="check"></div>
+							<Show when={option.image}>
+								<img class="image" src={option.image} alt={option.value} />
+							</Show>
 							{option.element}
 							<Show when={props.hints}>
 								<div classList={{ hint: true, mono: props.monoHints }}>
@@ -466,22 +470,21 @@ const SettingsModal = () => {
 				<RadioGroup
 					hints
 					monoHints
-					options={(
-						getAvailableEditors().map((editor) => ({
-							element: t(`settings.general.editor.${editor}`),
-							value: editor
-						})) as {
-							element: string;
-							value: string;
-							hint?: string | undefined;
-						}[]
-					).concat([
-						{
-							element: t('settings.general.editor.custom'),
-							value: 'custom',
-							hint: ''
-						}
-					])}
+					options={getAvailableEditors()
+						.map((editor) => ({
+							element: t(`settings.general.editor.${editor.exec}`),
+							value: editor.exec,
+							hint: editor.exec as string,
+							image: editor.image
+						}))
+						.concat([
+							{
+								element: t('settings.general.editor.custom'),
+								value: 'custom',
+								hint: '',
+								image: undefined
+							}
+						])}
 					value={settings()?.externalEditor || 'code'}
 					onChange={(value) => {
 						SettingsStore.setSetting(

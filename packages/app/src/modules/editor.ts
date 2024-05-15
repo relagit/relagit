@@ -4,19 +4,54 @@ import SettingsStore from '@stores/settings';
 
 import { showErrorModal } from '@ui/Modal';
 
+import { checkIsInPath } from './shell';
+
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+export const editors = [
+	{ exec: 'code', bundle: 'com.microsoft.VSCode', image: '' },
+	{ exec: 'code-insiders', bundle: 'com.microsoft.VSCodeInsiders', image: '' },
+	{ exec: 'atom', bundle: 'com.github.atom', image: '' },
+	{
+		exec: 'subl',
+		bundle: ['com.sublimetext.3', 'com.sublimetext.2', 'com.sublimetext.4'],
+		image: ''
+	},
+	{ exec: 'codium', bundle: 'com.vscodium.codium', image: '' },
+	{ exec: 'fleet', bundle: 'Fleet.app', image: '' },
+	{ exec: 'zed', bundle: ['dev.zed.Zed', 'dev.zed.Zed-Preview'], image: '' }
+] as const;
 
-export const editors = ['code', 'code-insiders', 'atom', 'subl', 'codium', 'fleet', 'zed'] as const;
+const existing: string[] = [];
 
-const editorsExist = await Promise.allSettled(
-	editors.map((editor) => ipcRenderer.invoke(ipc.CHECK_IS_IN_PATH, editor))
-);
+for (const editor of editors) {
+	ipcRenderer.invoke(ipc.GET_THUMBNAIL, editor.bundle).then((image: string) => {
+		// @ts-expect-error - guh
+		editor.image = image;
+	});
 
-export const getAvailableEditors = (): ((typeof editors)[number] | 'custom')[] => {
-	const editorStatus = editorsExist;
+	// sometimes the path does not exist immediately on startup
+	setTimeout(() => {
+		checkIsInPath(editor.exec).then((isInPath) => {
+			if (isInPath) existing.push(editor.exec);
+		});
+	}, 100);
+}
 
-	// @ts-expect-error - allSettled types?
-	return editors.filter((_, i) => _ == 'code' || editorStatus[i].value);
+export const getAvailableEditors = (): (
+	| (typeof editors)[number]
+	| { exec: 'custom'; bundle: []; image?: string }
+)[] => {
+	return editors.filter((editor) => {
+		const isCode = editor.exec === 'code';
+
+		if (isCode) return true;
+
+		return (
+			existing.includes(editor.exec) ||
+			(Array.isArray(editor.bundle) &&
+				editor.bundle.some((b) => existing.includes(b as string)))
+		);
+	});
 };
 
 export const openInEditor = (path: string) => {

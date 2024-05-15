@@ -224,7 +224,8 @@
 		align-items: center;
 		font-size: 1rem;
 		font-weight: 400;
-		padding: 12px 32px;
+		min-height: 40px;
+		padding: 8px 32px;
 		color: var(--color-primary);
 		background-color: var(--bg-tertiary);
 		border: 1px solid var(--separator-primary);
@@ -239,10 +240,6 @@
 			border-bottom-left-radius: 4px;
 			border-bottom-right-radius: 4px;
 			border-bottom-width: 1px;
-
-			&:focus {
-				padding-bottom: 11px !important;
-			}
 		}
 
 		&:hover {
@@ -263,14 +260,8 @@
 		}
 
 		&:focus {
-			border: 2px solid var(--color-blue-500);
-			outline: none;
-			padding: 11px 31px; // visually compensate for border
-			padding-bottom: 10px;
-
-			.check {
-				left: 9px;
-			}
+			outline: 2px solid var(--color-blue-500);
+			outline-offset: -2px;
 		}
 
 		input {
@@ -297,6 +288,12 @@
 			background-color: transparent;
 			border: 1px solid var(--separator-primary);
 			border-radius: 50%;
+		}
+
+		.image {
+			width: 20px;
+			height: 20px;
+			border-radius: 4px;
 		}
 
 		.hint {

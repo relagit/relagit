@@ -27,6 +27,7 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"app-path": "^4.0.0",
 		"electron-updater": "^6.1.7",
 		"sucrase": "^3.35.0",
 		"vscode-material-icons": "^0.1.0",
