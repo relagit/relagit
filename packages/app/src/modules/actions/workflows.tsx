@@ -9,6 +9,7 @@ import * as Git from '@modules/git';
 import { error } from '@modules/logger';
 import LocationStore from '@stores/location';
 import RepositoryStore, { type Repository } from '@stores/repository';
+import { __RELAGIT_PATH__ } from '@stores/settings';
 
 import pkj from '../../../../../package.json';
 import { registerSettingsPane } from './app';
@@ -18,7 +19,6 @@ import { getOptionsProxy } from './settings';
 const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
-const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
 type action =
 	| 'navigate'
@@ -98,8 +98,7 @@ export interface Theme {
 	}[];
 }
 
-export const __RELAGIT_PATH__ = path.join(os.homedir(), '.relagit');
-export const __WORKFLOWS_PATH__ = path.join(os.homedir(), '.relagit', 'workflows');
+export const __WORKFLOWS_PATH__ = path.join(__RELAGIT_PATH__, 'workflows');
 
 if (!fs.existsSync(__RELAGIT_PATH__)) {
 	fs.mkdirSync(__RELAGIT_PATH__);

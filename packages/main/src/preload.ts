@@ -7,6 +7,7 @@ import fs, { WatchListener } from 'node:fs';
 import type { Workflow } from '~/app/src/modules/actions';
 
 import _eval from './modules/eval';
+import { ensureStorageLocation } from './modules/native';
 import { updateEnvironmentForProcess } from './modules/shell';
 import type { RequireIdentifier, RequireResult } from './types';
 
@@ -27,6 +28,7 @@ const normalise = (platform: NodeJS.Platform) => {
 };
 
 export const Native = {
+	RELAGIT_PATH: ensureStorageLocation(),
 	DANGEROUS__NODE__REQUIRE: <I extends RequireIdentifier>(id: I): RequireResult<I> => {
 		if (id.startsWith('electron:')) {
 			// https://www.electronjs.org/blog/electron-29-0#behavior-changed-ipcrenderer-can-no-longer-be-sent-over-the-contextbridge

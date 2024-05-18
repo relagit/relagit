@@ -1,8 +1,9 @@
+import { __RELAGIT_PATH__ } from '../../stores/settings';
+
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
 
-const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings');
+const __SETTINGS_PATH__ = path.join(__RELAGIT_PATH__, 'settings');
 
 if (!fs.existsSync(__SETTINGS_PATH__)) {
 	fs.mkdirSync(__SETTINGS_PATH__, { recursive: true });

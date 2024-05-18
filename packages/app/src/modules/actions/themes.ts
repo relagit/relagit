@@ -1,8 +1,9 @@
 import SettingsStore from '@app/stores/settings';
+import { __RELAGIT_PATH__ } from '@stores/settings';
 
 import { addCSS, removeCSS, updateCSS } from '../dom';
 import { error } from '../logger';
-import { Theme, __RELAGIT_PATH__, makeConsole, require } from './workflows';
+import { Theme, makeConsole, require } from './workflows';
 
 const sucrase = window.Native.DANGEROUS__NODE__REQUIRE('sucrase');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');

@@ -6,11 +6,11 @@ import { RecursivePartial } from '@app/shared';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
-const os = window.Native.DANGEROUS__NODE__REQUIRE('os');
 
-export const __EXTERNAL_PATH__ = path.join(os.homedir(), '.relagit', 'external.json');
-export const __REPOSITORIES_PATH__ = path.join(os.homedir(), '.relagit', 'repositories.json');
-export const __SETTINGS_PATH__ = path.join(os.homedir(), '.relagit', 'settings.json');
+export const __RELAGIT_PATH__ = window.Native.RELAGIT_PATH;
+export const __EXTERNAL_PATH__ = path.join(__RELAGIT_PATH__, 'external.json');
+export const __REPOSITORIES_PATH__ = path.join(__RELAGIT_PATH__, 'repositories.json');
+export const __SETTINGS_PATH__ = path.join(__RELAGIT_PATH__, 'settings.json');
 
 export type Settings = {
 	commit: {
@@ -66,10 +66,8 @@ export type SettingsKey =
 	| 'onboarding';
 
 const validatePath = () => {
-	const settingsPath = path.join(os.homedir(), '.relagit');
-
-	if (!fs.existsSync(settingsPath)) {
-		fs.mkdirSync(settingsPath);
+	if (!fs.existsSync(__RELAGIT_PATH__)) {
+		fs.mkdirSync(__RELAGIT_PATH__);
 	}
 
 	if (!fs.existsSync(__SETTINGS_PATH__)) {
