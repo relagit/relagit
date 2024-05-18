@@ -9,7 +9,7 @@ export const getStorageLocation = () => {
 
 	if (process.platform === 'win32') {
 		return path.join(
-			process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Local'),
+			process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local'),
 			'relagit'
 		);
 	}
