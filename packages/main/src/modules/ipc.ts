@@ -5,6 +5,7 @@ import {
 	dialog,
 	ipcMain,
 	nativeImage,
+	nativeTheme,
 	safeStorage,
 	shell
 } from 'electron';
@@ -45,6 +46,10 @@ export default (window: BrowserWindow) => {
 		e.preventDefault();
 
 		shell.openExternal(url);
+	});
+
+	nativeTheme.on('updated', () => {
+		dispatch(ipc.THEME_UPDATED);
 	});
 
 	ipcMain.handle(ipc.OPEN_FILE_DIALOG, async (_, options: OpenDialogOptions) => {

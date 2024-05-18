@@ -23,6 +23,7 @@ export const RELOAD_CLIENT = 'window:reload-client';
 export const GET_ENCRYPTED = 'native:get-encrypted';
 export const GET_DECRYPTED = 'native:get-decrypted';
 export const GET_THUMBNAIL = 'native:get-thumbnail';
+export const THEME_UPDATED = 'native:theme-updated';
 export const SPAWN_ENV = 'native:spawn-env';
 export const DISK_SIZE = 'native:disk-size';
 export const FOCUS = 'window:focus';

@@ -110,6 +110,9 @@ export const Native = {
 		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},
+		NATIVE_THEME_UPDATED: (fn: () => void) => {
+			ipcRenderer.on(ipc.THEME_UPDATED, fn);
+		},
 		LOAD_NATIVE_SCRIPT: async (code: string, filename: string) => {
 			const res = await _eval(code, filename);
 
@@ -119,6 +122,7 @@ export const Native = {
 
 			return random;
 		},
+
 		WATCHER: {
 			add: (path: string, fn: WatchListener<string>, tryRecursive = true) => {
 				fs.watch(

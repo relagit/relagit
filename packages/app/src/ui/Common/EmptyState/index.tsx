@@ -39,7 +39,7 @@ const EmptyState = (props: EmptyStateProps) => {
 
 	const [imageSrc, setImageSrc] = createSignal<EMPTY_STATE_IMAGES>();
 
-	createEffect(() => {
+	const update = () => {
 		if (props.image) {
 			let imageSrc: EMPTY_STATE_IMAGES;
 
@@ -57,7 +57,10 @@ const EmptyState = (props: EmptyStateProps) => {
 
 			setImageSrc(imageSrc);
 		}
-	});
+	};
+
+	createEffect(update);
+	window.Native.listeners.NATIVE_THEME_UPDATED(update);
 
 	return (
 		<div class="empty-state">
