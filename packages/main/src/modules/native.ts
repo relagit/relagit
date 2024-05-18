@@ -15,7 +15,7 @@ export const getStorageLocation = () => {
 	}
 
 	return path.join(
-		process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.local', 'share'),
+		process.env.XDG_DATA_HOME || path.join(os.homedir(), '.local', 'share'),
 		'relagit'
 	);
 };
