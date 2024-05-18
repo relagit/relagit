@@ -95,7 +95,7 @@ const constructWindow = async () => {
 		await updateSettings({
 			ui: {
 				...settings.ui,
-				vibrancy: true
+				vibrancy: process.platform === 'darwin' || process.platform === 'win32'
 			}
 		});
 	}
