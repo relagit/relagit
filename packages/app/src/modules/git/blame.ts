@@ -62,8 +62,8 @@ export const Blame = async (repo: string, file: string, commitish?: string) => {
 		args:
 			// we have to do this as just passing "" will be a bad revision
 			commitish ?
-				['-w', '--line-porcelain', '--date=iso', commitish, '--', file]
-			:	['-w', '--line-porcelain', '--date=iso', '--', file]
+				['-w', '-C', '--line-porcelain', '--date=iso', commitish, '--', file]
+			:	['-w', '-C', '--line-porcelain', '--date=iso', '--', file]
 	});
 
 	return parseBlame(result);
