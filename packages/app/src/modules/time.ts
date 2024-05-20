@@ -1,20 +1,17 @@
 import { Accessor, createRenderEffect, from } from 'solid-js';
 
-import { LocaleKey, t } from './i18n';
+import { t } from './i18n';
 
 export const relative = (ms: number, useSeconds = false) => {
 	const seconds = Math.floor((Date.now() - ms) / 1000);
 
-	const timeIntervals: {
-		interval: number;
-		label: LocaleKey;
-	}[] = [
+	const timeIntervals = [
 		{ interval: 31536000, label: 'time.year' },
 		{ interval: 2592000, label: 'time.month' },
 		{ interval: 86400, label: 'time.day' },
 		{ interval: 3600, label: 'time.hour' },
 		{ interval: 60, label: 'time.minute' }
-	];
+	] as const;
 
 	for (let i = 0; i < timeIntervals.length; i++) {
 		const { interval, label } = timeIntervals[i];
