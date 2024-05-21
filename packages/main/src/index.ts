@@ -190,6 +190,7 @@ const constructWindow = async () => {
 	log('Startup' + (__NODE_ENV__ === 'development' ? ' (development)' : ' (production)'));
 	log('Version: ' + pkj.version);
 	log('Running on: ' + process.platform + ' ' + process.arch);
+	log('Commit: ' + __COMMIT_HASH__);
 
 	if (__NODE_ENV__ === 'development' && process.env['ELECTRON_RENDERER_URL']) {
 		win.loadURL(process.env['ELECTRON_RENDERER_URL']);
