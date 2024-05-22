@@ -21,7 +21,8 @@ export default {
 			tooltip: 'Agrega tus repositorios desde el selector de repositorios.'
 		},
 		add: {
-			tooltip: 'Utiliza este selector de archivos para agregar un repositorio desde tu dispositivo.',
+			tooltip:
+				'Utiliza este selector de archivos para agregar un repositorio desde tu dispositivo.',
 			button: 'Ahora agrégalo a tu espacio de trabajo.'
 		},
 		history: {
@@ -111,7 +112,8 @@ export default {
 			},
 			preferParens: {
 				label: 'Preferir paréntesis',
-				description: 'Prefiere paréntesis en lugar de corchetes angulares para los estilos de mensajes de confirmación.'
+				description:
+					'Prefiere paréntesis en lugar de corchetes angulares para los estilos de mensajes de confirmación.'
 			},
 			autoFetch: {
 				label: 'Buscar automáticamente repositorios',
@@ -126,7 +128,8 @@ export default {
 			title: 'Apariencia',
 			vibrancy: {
 				label: 'Vibración debajo de la ventana',
-				description: 'Habilita la vibración debajo de la ventana. Esto puede afectar el rendimiento.'
+				description:
+					'Habilita la vibración debajo de la ventana. Esto puede afectar el rendimiento.'
 			},
 			theme: {
 				label: 'Tema',
@@ -134,7 +137,8 @@ export default {
 				light: 'Claro',
 				dark: 'Oscuro',
 				system: 'Sistema',
-				systemNote: 'La apariencia de la aplicación cambiará según las preferencias del sistema operativo.',
+				systemNote:
+					'La apariencia de la aplicación cambiará según las preferencias del sistema operativo.',
 				choose: 'Seleccionar tema {{theme}}'
 			},
 			font: {
@@ -154,7 +158,8 @@ export default {
 		}
 	},
 	error: {
-		corruptSettings: 'Uno o más de tus archivos de configuración están corruptos. Restablécelos, por favor.',
+		corruptSettings:
+			'Uno o más de tus archivos de configuración están corruptos. Restablécelos, por favor.',
 		fetching: 'Error inesperado al obtener el estado del repositorio',
 		remote: 'Error inesperado al obtener el estado remoto',
 		git: 'Error inesperado al ejecutar el comando git',
@@ -253,13 +258,15 @@ export default {
 			from: 'Obteniendo cambios de',
 			revision: 'El submódulo está en la revisión',
 			clone: 'Clonar submódulo',
-			cloneHint: 'Clona este submódulo desde el remoto para confirmar cambios directamente en él.',
+			cloneHint:
+				'Clona este submódulo desde el remoto para confirmar cambios directamente en él.',
 			clonedHint: 'Este submódulo ya está clonado en tu espacio de trabajo.',
 			open: 'Abrir {{name}}'
 		},
 		imageview: {
 			error: 'No se pudo encontrar una imagen para mostrar',
-			errorHint: 'Esto probablemente se debe a que la imagen es demasiado grande para mostrarla.',
+			errorHint:
+				'Esto probablemente se debe a que la imagen es demasiado grande para mostrarla.',
 			sidebyside: 'Lado a lado',
 			difference: 'Diferencia'
 		},
@@ -268,7 +275,8 @@ export default {
 		noCommit: 'No hay nada que ver aquí',
 		noCommitHint: 'Debes seleccionar un archivo para ver sus cambios. (´・｀)',
 		binary: 'Archivo binario',
-		binaryHint: 'Lo siento, no podemos mostrarte la diferencia de este archivo ya que es un archivo binario.',
+		binaryHint:
+			'Lo siento, no podemos mostrarte la diferencia de este archivo ya que es un archivo binario.',
 		loading: 'Cargando...',
 		loadingHint: 'Esto no debería tardar mucho.',
 		errorHint: 'Algo salió mal al cargar el archivo.',
@@ -277,7 +285,8 @@ export default {
 		noFile: 'Ningún archivo seleccionado.',
 		noFileHint: 'Haz clic en uno en la barra lateral allí （´・｀） para comenzar.',
 		tooBig: '¡Archivos demasiado poderosos!',
-		tooBigHint: 'Este archivo es tan grande que no lo estamos mostrando por razones de rendimiento.'
+		tooBigHint:
+			'Este archivo es tan grande que no lo estamos mostrando por razones de rendimiento.'
 	},
 	git: {
 		sync: 'Sincronizar',
@@ -298,7 +307,10 @@ export default {
 		nothingToSee: 'Nada que ver aquí',
 		popStash: 'Recuperar cambios guardados',
 		commits: ['{{count}} confirmación', '{{count}} confirmaciones'],
-		stashedChanges: ['{{stashCount}} cambio guardado ({{count}})', '{{stashCount}} cambios guardados ({{count}})'],
+		stashedChanges: [
+			'{{stashCount}} cambio guardado ({{count}})',
+			'{{stashCount}} cambios guardados ({{count}})'
+		],
 		removeStash: 'Eliminar cambio guardado',
 		files: ['{{count}} archivo', '{{count}} archivos'],
 		undo: 'Deshacer {{sha}}'
