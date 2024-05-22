@@ -68,7 +68,7 @@ export const iconFromAction = (act: action | action[]): IconName => {
 
 type OptionTypes = 'string' | 'number' | 'boolean' | 'enum';
 
-export interface Workflow {
+export interface WorkflowOptions {
 	filename: string;
 	id?: string;
 	name: string;
@@ -167,13 +167,16 @@ export const require = (id: string) => {
 						};
 						id?: string;
 
-						constructor(options: Workflow) {
+						constructor(options: WorkflowOptions) {
 							this.name = options.name;
 							this.description = options.description;
 							this.hooks = options.hooks;
 							this.options = options.options;
 							this.id = options.id;
 						}
+					},
+					defineWorkflow: (workflow: WorkflowOptions) => {
+						return workflow;
 					},
 					context: getContext,
 					notifications: {
@@ -338,7 +341,7 @@ export const loadWorkflows = async () => {
 	}
 };
 
-export const workflows = new Set<Workflow>();
+export const workflows = new Set<WorkflowOptions>();
 
 type ParamsFromEventType<E extends action> =
 	E extends 'commit' ? [Repository, { message: string; description: string }]

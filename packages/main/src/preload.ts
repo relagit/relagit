@@ -4,7 +4,7 @@ import * as ipc from '~/shared/ipc';
 
 import fs, { WatchListener } from 'node:fs';
 
-import type { Workflow } from '~/app/src/modules/actions';
+import type { WorkflowOptions } from '~/app/src/modules/actions';
 
 import _eval from './modules/eval';
 import { ensureStorageLocation } from './modules/native';
@@ -109,7 +109,7 @@ export const Native = {
 		LOG: (fn: (e: IpcRendererEvent, value: boolean) => void) => {
 			ipcRenderer.on(ipc.OPEN_LOG, fn);
 		},
-		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: Workflow) => void) => {
+		LOAD_WORKFLOW: (fn: (e: IpcRendererEvent, wf: WorkflowOptions) => void) => {
 			ipcRenderer.on(ipc.LOAD_WORKFLOW, fn);
 		},
 		NATIVE_THEME_UPDATED: (fn: () => void) => {

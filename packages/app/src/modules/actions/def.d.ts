@@ -258,7 +258,6 @@ type MenuItem =
 			type: 'separator';
 	  };
 
-
 type Captures = Record<string, Rule>;
 
 type GetOnigurumaUrl = () => Promise<Readonly<URL>> | Readonly<URL>;
@@ -266,54 +265,52 @@ type GetOnigurumaUrl = () => Promise<Readonly<URL>> | Readonly<URL>;
 type Rule = RuleDefinition | RuleInclude | RuleName;
 
 interface Grammar {
-  dependencies?: Array<string>;
-  extensions: Array<string>;
-  extensionsWithDot?: Array<string>;
-  injections?: Record<string, Rule>;
-  names: Array<string>;
-  patterns: Array<Rule>;
-  repository?: Record<string, Rule>;
-  scopeName: string;
+	dependencies?: Array<string>;
+	extensions: Array<string>;
+	extensionsWithDot?: Array<string>;
+	injections?: Record<string, Rule>;
+	names: Array<string>;
+	patterns: Array<Rule>;
+	repository?: Record<string, Rule>;
+	scopeName: string;
 }
 
 interface Options {
-  getOnigurumaUrlFetch?: GetOnigurumaUrl | null | undefined;
-  getOnigurumaUrlFs?: GetOnigurumaUrl | null | undefined;
+	getOnigurumaUrlFetch?: GetOnigurumaUrl | null | undefined;
+	getOnigurumaUrlFs?: GetOnigurumaUrl | null | undefined;
 }
 
 interface RuleDefinition {
-  applyEndPatternLast?: boolean;
-  begin?: string;
-  beginCaptures?: Captures;
-  captures?: Captures;
-  contentName?: string;
-  end?: string;
-  endCaptures?: Captures;
-  injections?: Record<string, Rule>;
-  match?: string;
-  name?: string;
-  patterns?: Array<Rule>;
-  repository?: Record<string, Rule>;
-  while?: string;
-  whileCaptures?: Captures;
+	applyEndPatternLast?: boolean;
+	begin?: string;
+	beginCaptures?: Captures;
+	captures?: Captures;
+	contentName?: string;
+	end?: string;
+	endCaptures?: Captures;
+	injections?: Record<string, Rule>;
+	match?: string;
+	name?: string;
+	patterns?: Array<Rule>;
+	repository?: Record<string, Rule>;
+	while?: string;
+	whileCaptures?: Captures;
 }
 
 interface RuleInclude {
-  begin?: string;
-  end?: string;
-  include: string;
-  match?: string;
-  name?: string;
+	begin?: string;
+	end?: string;
+	include: string;
+	match?: string;
+	name?: string;
 }
 
 interface RuleName {
-  begin?: never;
-  include?: never;
-  match?: never;
-  name: string;
+	begin?: never;
+	include?: never;
+	match?: never;
+	name: string;
 }
-
-
 
 interface Actions {
 	/**
@@ -324,6 +321,14 @@ interface Actions {
 	 * export default new Workflow({...})
 	 */
 	Workflow: new (options: WorkflowOptions) => void;
+	/**
+	 * Define a new workflow runner
+	 * @example
+	 * import { defineWorkflow } from "relagit:actions";
+	 *
+	 * export default defineWorkflow({...})
+	 */
+	defineWorkflow: (options: WorkflowOptions) => WorkflowOptions;
 	/**
 	 * When run in a workflow, will return current information about the state of the application.
 	 * @returns {Context}
@@ -349,12 +354,12 @@ interface Actions {
 				dismiss?: boolean;
 			})[];
 		}) => number;
-		hide: (id:  number) => void;
+		hide: (id: number) => void;
 	};
 	codeview: {
 		registerGrammar: (grammar: Grammar | Grammar[]) => void;
 		onceLoaded: (cb: () => void) => Promise<void>;
-	},
+	};
 	app: {
 		registerSettingsPane: (
 			id: string,
@@ -373,19 +378,30 @@ interface Actions {
 	};
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // NOTE: uncomment these to use prettier, it throws an error when it sees the exported types below
-// const Workflow = null,
-// context = null,
-// Theme = null,
-// notifications = null,
-// app = null,
-// menu = null,
-// codeview = null;
+// @ts-ignore
+const Workflow = '',
+	// @ts-ignore
+	defineWorkflow = '',
+	// @ts-ignore
+	context = '',
+	// @ts-ignore
+	Theme = '',
+	// @ts-ignore
+	notifications = '',
+	// @ts-ignore
+	app = '',
+	// @ts-ignore
+	menu = '',
+	// @ts-ignore
+	codeview = '';
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 declare module 'relagit:actions' {
-	const { Workflow, context, notifications, app, menu, codeview }: Actions;
+	const { Workflow, defineWorkflow, context, notifications, app, menu, codeview }: Actions;
 
-	export { Workflow, context, notifications, app, menu, codeview };
+	export { Workflow, defineWorkflow, context, notifications, app, menu, codeview };
 
 	export type OptionsType<
 		T extends {
