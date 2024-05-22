@@ -39,19 +39,9 @@ export default (code: string, language: string) => {
 };
 
 export const langFrom = (filename: string | undefined) => {
-	const known: Record<string, string> = {
-		'.html': 'text.html.basic'
-	};
-
 	if (!filename) return 'text';
 
 	const ext = '.' + filename.split('.').pop();
 
-	if (known[ext]) return known[ext];
-
-	return (
-		StarryNight.all.find((g) => g.extensions.includes(ext))?.scopeName ??
-		StarryNight.all.find((g) => g.scopeName.includes(ext))?.scopeName ?? // some grammars do not have their main file extension in the extensions array (*cough* YAML *cough*)
-		'text'
-	);
+	return highlighter.flagToScope(ext);
 };
