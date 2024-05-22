@@ -5,7 +5,7 @@ import { error, warn } from '@modules/logger';
 
 const StarryNight = window.Native.libraries.starryNight;
 
-let highlighter: Awaited<ReturnType<typeof StarryNight.createStarryNight>>;
+export let highlighter: Awaited<ReturnType<typeof StarryNight.createStarryNight>>;
 
 StarryNight.createStarryNight(StarryNight.all, {}).then((h) => (highlighter = h));
 

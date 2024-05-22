@@ -1,4 +1,5 @@
 import def from '@content/modules/actions/def.d.ts';
+import { Grammar } from '@wooorm/starry-night';
 import { RequireIdentifier } from '~/main/src/types';
 
 import NotificationStore from '@app/stores/notification';
@@ -12,6 +13,7 @@ import RepositoryStore, { type Repository } from '@stores/repository';
 import { __RELAGIT_PATH__ } from '@stores/settings';
 
 import pkj from '../../../../../package.json';
+import { highlighter } from '../highlighter';
 import { registerSettingsPane } from './app';
 import { getExternalWorkflows } from './external';
 import { getOptionsProxy } from './settings';
@@ -180,6 +182,41 @@ export const require = (id: string) => {
 						},
 						hide: (id: number) => {
 							NotificationStore.remove(id);
+						}
+					},
+					codeview: {
+						registerGrammar: (grammar: Grammar | Grammar[]) => {
+							if (!highlighter) {
+								throw new Error(
+									'Highlighter not initialized, try again in a few ms'
+								);
+							}
+
+							highlighter.register(Array.isArray(grammar) ? grammar : [grammar]);
+						},
+						onceLoaded: (cb: () => void) => {
+							const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+							let timeedOut = false;
+
+							const check = async (): Promise<void> => {
+								if (timeedOut) {
+									throw new Error('Highlighter did not load in time');
+								}
+
+								if (!highlighter) {
+									await sleep(10);
+									return check();
+								}
+
+								cb();
+							};
+
+							setTimeout(() => {
+								timeedOut = true;
+							}, 100);
+
+							return check();
 						}
 					},
 					app: {

@@ -258,6 +258,63 @@ type MenuItem =
 			type: 'separator';
 	  };
 
+
+type Captures = Record<string, Rule>;
+
+type GetOnigurumaUrl = () => Promise<Readonly<URL>> | Readonly<URL>;
+
+type Rule = RuleDefinition | RuleInclude | RuleName;
+
+interface Grammar {
+  dependencies?: Array<string>;
+  extensions: Array<string>;
+  extensionsWithDot?: Array<string>;
+  injections?: Record<string, Rule>;
+  names: Array<string>;
+  patterns: Array<Rule>;
+  repository?: Record<string, Rule>;
+  scopeName: string;
+}
+
+interface Options {
+  getOnigurumaUrlFetch?: GetOnigurumaUrl | null | undefined;
+  getOnigurumaUrlFs?: GetOnigurumaUrl | null | undefined;
+}
+
+interface RuleDefinition {
+  applyEndPatternLast?: boolean;
+  begin?: string;
+  beginCaptures?: Captures;
+  captures?: Captures;
+  contentName?: string;
+  end?: string;
+  endCaptures?: Captures;
+  injections?: Record<string, Rule>;
+  match?: string;
+  name?: string;
+  patterns?: Array<Rule>;
+  repository?: Record<string, Rule>;
+  while?: string;
+  whileCaptures?: Captures;
+}
+
+interface RuleInclude {
+  begin?: string;
+  end?: string;
+  include: string;
+  match?: string;
+  name?: string;
+}
+
+interface RuleName {
+  begin?: never;
+  include?: never;
+  match?: never;
+  name: string;
+}
+
+
+
 interface Actions {
 	/**
 	 * Construct a new workflow runner
@@ -294,6 +351,10 @@ interface Actions {
 		}) => number;
 		hide: (id:  number) => void;
 	};
+	codeview: {
+		registerGrammar: (grammar: Grammar | Grammar[]) => void;
+		onceLoaded: (cb: () => void) => Promise<void>;
+	},
 	app: {
 		registerSettingsPane: (
 			id: string,
@@ -314,16 +375,17 @@ interface Actions {
 
 // NOTE: uncomment these to use prettier, it throws an error when it sees the exported types below
 // const Workflow = null,
-// 	context = null,
-// 	Theme = null,
-// 	notifications = null,
-// 	app = null,
-// 	menu = null;
+// context = null,
+// Theme = null,
+// notifications = null,
+// app = null,
+// menu = null,
+// codeview = null;
 
 declare module 'relagit:actions' {
-	const { Workflow, context, notifications, app, menu }: Actions;
+	const { Workflow, context, notifications, app, menu, codeview }: Actions;
 
-	export { Workflow, context, notifications, app, menu };
+	export { Workflow, context, notifications, app, menu, codeview };
 
 	export type OptionsType<
 		T extends {
