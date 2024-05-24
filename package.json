@@ -90,7 +90,7 @@
 		"stylelint-config-standard-scss": "^12.0.0",
 		"terser": "^5.30.3",
 		"thena": "^0.0.9",
-		"typescript": "^5.3.3",
+		"typescript": "^5.4.5",
 		"vite": "^5.2.10",
 		"vite-plugin-replace": "^0.1.1",
 		"vite-plugin-solid": "^2.10.2",
