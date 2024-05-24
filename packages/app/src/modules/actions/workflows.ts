@@ -113,6 +113,17 @@ if (
 	fs.promises.writeFile(path.join(__RELAGIT_PATH__, 'index.d.ts'), defFile);
 }
 
+if (!fs.existsSync(path.join(__RELAGIT_PATH__, 'global.d.ts'))) {
+	fs.promises.writeFile(
+		path.join(__RELAGIT_PATH__, 'global.d.ts'),
+		`export {};
+
+declare global {
+	const options: any;
+}`
+	);
+}
+
 export const extnames = (str: string) => {
 	const extenstions = str.split('.');
 	extenstions.shift();
@@ -230,7 +241,8 @@ export const require = (id: string) => {
 					},
 					menu: {
 						extend: addExtensions
-					}
+					},
+					cron
 				};
 			case 'client':
 				return {};
@@ -414,5 +426,85 @@ export const makeConsole = (prefix: string) => {
 		error: (...args: unknown[]) => {
 			console.log(`%c[${prefix}]`, 'color: #e56269', ...args);
 		}
+	};
+};
+
+interface CronStringsArray
+	extends ReadonlyArray<`${number} ${'minute' | 'hour' | 'day' | 'month'}${'s' | ''}`> {
+	readonly raw: readonly string[];
+}
+
+/**
+ * A utility to generate CRON timings.
+ * @param time - Either a CRON string `'*\/5 * * * * *'` or a template string `'5 minutes'` or a number `5`.
+ * @returns - If a CRON or template string is passed, it returns a number. If a number is passed, it returns an object with the time in minutes, hours, days, months and years.
+ * @example
+ * cron`5 minutes` // returns 5
+ * cron`*\/5 * * * * *` // returns 5
+ */
+const cron = <T extends CronStringsArray | number>(
+	time: T
+): T extends number ?
+	{
+		[unit in 'minutes' | 'hours' | 'days' | 'months']: number;
+	}
+:	number => {
+	if (typeof time === 'number') {
+		return {
+			minutes: time * 60 * 1000,
+			hours: time * 60 * 60 * 1000,
+			days: time * 24 * 60 * 60 * 1000,
+			months: time * 30 * 24 * 60 * 60 * 1000
+		} as ReturnType<typeof cron<T>>;
+	}
+
+	const units = ['minute', 'hour', 'day', 'month'];
+
+	const [value, unit] = time[0].split(' ');
+
+	if (!units.includes(unit.replace(/s$/, ''))) {
+		throw new Error('Invalid unit');
+	}
+
+	switch (unit.replace(/s$/, '')) {
+		case 'minute':
+			return (parseInt(value, 10) * 60 * 1000) as unknown as ReturnType<typeof cron<T>>;
+		case 'hour':
+			return (parseInt(value, 10) * 60 * 60 * 1000) as unknown as ReturnType<typeof cron<T>>;
+		case 'day':
+			return (parseInt(value, 10) * 24 * 60 * 60 * 1000) as unknown as ReturnType<
+				typeof cron<T>
+			>;
+		case 'month':
+			return (parseInt(value, 10) * 30 * 24 * 60 * 60 * 1000) as unknown as ReturnType<
+				typeof cron<T>
+			>;
+	}
+
+	throw new Error('Invalid input');
+};
+
+cron.schedule = (
+	time: number,
+	cb: () => void | Promise<void>,
+	proxy: ReturnType<typeof getOptionsProxy>
+) => {
+	const now = Date.now();
+	const lastRun = (proxy['__cronLastRun'] as number | undefined) || now;
+
+	if (now - lastRun >= time) {
+		cb();
+
+		proxy['__cronLastRun'] = now;
+	}
+
+	if (!proxy['__cronLastRun']) {
+		proxy['__cronLastRun'] = now;
+	}
+
+	const timeout = setTimeout(() => cron.schedule(time, cb, proxy), time - (now - lastRun));
+
+	return () => {
+		clearTimeout(timeout);
 	};
 };

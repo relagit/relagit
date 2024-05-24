@@ -312,6 +312,10 @@ interface RuleName {
 	name: string;
 }
 
+type RecordType = {
+	[key: string | symbol]: string | boolean | number | object | undefined;
+};
+
 interface Actions {
 	/**
 	 * Construct a new workflow runner
@@ -376,10 +380,30 @@ interface Actions {
 	menu: {
 		extend: (type: string, items: MenuItem[]) => void;
 	};
+	/**
+	 * A utility to generate CRON timings.
+	 * @param time - Either a template string `'5 minutes'` or a number `5`.
+	 * @returns - If a template string is passed, it returns a number. If a number is passed, it returns an object with the time in minutes, hours, days and months.
+	 * @example
+	 * cron`5 minutes` // returns 5
+	 * cron`*\/5 * * * * *` // returns 5
+	 */
+	cron: (<T extends TemplateStringsArray | number>(
+		time: T
+	) => T extends number ?
+		{
+			[key in 'seconds' | 'minutes' | 'hours' | 'days' | 'months']: number;
+		}
+	:	number) & {
+		/**
+		 * Schedule a function to run at specific times.
+		 */
+		schedule: (time: number, cb: () => void, proxy: RecordType) => void;
+	};
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// NOTE: uncomment these to use prettier, it throws an error when it sees the exported types below
+// NOTE: these are just here for prettier to not complain about unknown variables
 // @ts-ignore
 const Workflow = '',
 	// @ts-ignore
@@ -395,13 +419,15 @@ const Workflow = '',
 	// @ts-ignore
 	menu = '',
 	// @ts-ignore
-	codeview = '';
+	codeview = '',
+	// @ts-ignore
+	cron = '';
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 declare module 'relagit:actions' {
-	const { Workflow, defineWorkflow, context, notifications, app, menu, codeview }: Actions;
+	const { Workflow, defineWorkflow, context, notifications, app, menu, codeview, cron }: Actions;
 
-	export { Workflow, defineWorkflow, context, notifications, app, menu, codeview };
+	export { Workflow, defineWorkflow, context, notifications, app, menu, codeview, cron };
 
 	export type OptionsType<
 		T extends {
