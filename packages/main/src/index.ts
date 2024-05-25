@@ -13,6 +13,8 @@ import * as ipc from '~/shared/ipc';
 
 import * as path from 'path';
 
+// @ts-expect-error - png types lmao
+import icon from '../../../build/icon_lin.png?asset';
 import pkj from '../../../package.json';
 import initIPC, { dispatch } from './modules/ipc';
 import { log } from './modules/logger';
@@ -118,6 +120,7 @@ const constructWindow = async () => {
 		x: settings.window?.x || undefined,
 		y: settings.window?.y || undefined,
 		show: false,
+		icon: process.platform === 'linux' ? icon : undefined,
 		...getPlatformWindowOptions(isOnboarding(), settings),
 		webPreferences: {
 			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
