@@ -190,7 +190,7 @@ export const CommandPalette = () => {
 							</Show>
 						</div>
 					</div>
-					<Show when={filter().trim()}>
+					<Show when={filter().trim() && showing().length}>
 						<div class="palette__body__separator"></div>
 						<div
 							class="palette__body__list"
