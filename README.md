@@ -76,3 +76,9 @@ You will find an executable in the `out` folder.
 ## Creating Workflows
 
 Please refer to the [Creating Workflows](https://rela.dev/docs/workflows/creating-workflows) tutorial.
+
+## Licensing
+
+All files, unless otherwise stated, are licensed under the Lesser GPL v3.0 or later. A copy of the license can be found in the `LICENSE` file.
+
+All assets which contain [RelaGit brand images](https://rela.dev/docs/press/branding) are property of the Rela organisation and may not be used without permission.
