@@ -21,6 +21,11 @@
 
 	@include mixins.focusable(var(--input-focus));
 
+	&.hide-data {
+		-webkit-text-security: disc;
+		color: var(--color-secondary);
+	}
+
 	&__wrapper {
 		position: relative;
 		width: 100%;
@@ -74,8 +79,8 @@
 
 	&__footer {
 		position: absolute;
-		right: 10px;
-		bottom: 10px;
+		right: 8px;
+		bottom: 8px;
 		display: flex;
 		align-items: center;
 		gap: 8px;

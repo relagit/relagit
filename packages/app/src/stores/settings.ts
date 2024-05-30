@@ -22,6 +22,17 @@ export type Settings = {
 	};
 	ai: {
 		termsAccepted: boolean;
+		api_key: string;
+		provider:
+			| 'none'
+			| 'gpt-3.5'
+			| 'gpt-4'
+			| 'gpt-4o'
+			| 'gemini-pro'
+			| 'gemini-1.5-pro'
+			| 'claude-haiku'
+			| 'claude-sonnet'
+			| 'claude-opus';
 	};
 	popout: {
 		position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';

@@ -6,6 +6,11 @@ export default {
 				'Before you can use Generative features, you must accept the terms of service.',
 			accept: 'Accept',
 			decline: 'Decline'
+		},
+		error: {
+			title: 'Error while initializing AI',
+			message:
+				'An error occurred while initializing the AI service, please review your settings.'
 		}
 	},
 	update: {
@@ -50,6 +55,32 @@ export default {
 		},
 		commits: {
 			title: 'Git'
+		},
+		ai: {
+			title: 'AI',
+			model: {
+				label: 'Language Model',
+				description: 'Select the language model you would like to use.',
+				none: 'None',
+				noneHint: 'Disables all AI features',
+				openai: 'OpenAI',
+				gemini: 'Google Gemini',
+				anthropic: 'Anthropic',
+				'gpt-3-5': 'GPT 3.5 Turbo',
+				'gpt-4': 'GPT 4 Turbo',
+				'gpt-4o': 'GPT 4o',
+				'gemini-pro': 'Gemini Pro',
+				'gemini-1-5-pro': 'Gemini 1.5 Pro',
+				'claude-haiku': 'Claude 3 Haiku',
+				'claude-sonnet': 'Claude 3 Sonnet',
+				'claude-opus': 'Claude 3 Opus'
+			},
+			apiKey: {
+				label: 'API Key',
+				description: 'Enter your API key for {{provider}}.',
+				selected: 'your Selected Provider',
+				placeholder: '123456789012345678901234567-1234567890'
+			}
 		},
 		accounts: {
 			title: 'Accounts',

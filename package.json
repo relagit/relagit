@@ -27,6 +27,10 @@
 	},
 	"author": "TheCommieAxolotl",
 	"dependencies": {
+		"@ai-sdk/anthropic": "^0.0.17",
+		"@ai-sdk/google": "^0.0.17",
+		"@ai-sdk/openai": "^0.0.17",
+		"ai": "^3.1.18",
 		"app-path": "^4.0.0",
 		"electron-updater": "^6.1.7",
 		"sucrase": "^3.35.0",

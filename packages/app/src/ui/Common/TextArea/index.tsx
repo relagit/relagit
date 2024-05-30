@@ -1,6 +1,6 @@
-import { JSX } from 'solid-js';
+import { JSX, Show, createSignal } from 'solid-js';
 
-import { IconName } from '../Icon';
+import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
@@ -16,9 +16,12 @@ interface TextareaProps {
 	expanded?: boolean;
 	footer?: JSX.Element;
 	icon?: IconName;
+	type?: 'password' | 'text';
 }
 
 export default (props: TextareaProps) => {
+	const [hidden, setHidden] = createSignal(props.type === 'password');
+
 	return (
 		<div
 			classList={{
@@ -32,7 +35,8 @@ export default (props: TextareaProps) => {
 				classList={{
 					textarea: true,
 					[props.className!]: true,
-					expanded: props.expanded
+					expanded: props.expanded,
+					'hide-data': hidden()
 				}}
 				spellcheck={false}
 				value={props.value}
@@ -53,7 +57,20 @@ export default (props: TextareaProps) => {
 				disabled={props.disabled}
 				style={{ height: props.expanded ? '100%' : '' }}
 			/>
-			<div class="textarea__footer">{props.footer}</div>
+			<div class="textarea__footer">
+				{props.footer}
+				<Show when={props.type === 'password'}>
+					<button
+						class="sidebar__footer__textarea__button"
+						onClick={() => setHidden(!hidden())}
+						type="button"
+					>
+						<Show when={hidden()} fallback={<Icon name="eye-closed" />}>
+							<Icon name="eye" />
+						</Show>
+					</button>
+				</Show>
+			</div>
 		</div>
 	);
 };

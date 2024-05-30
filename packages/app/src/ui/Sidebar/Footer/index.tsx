@@ -1,6 +1,6 @@
 import { Show, Signal, createEffect, createSignal } from 'solid-js';
 
-import { generatePrompt, sendAIRequest } from '@app/modules/ai';
+import { generate, generatePrompt } from '@app/modules/ai';
 import { t } from '@app/modules/i18n';
 import DraftStore from '@app/stores/draft';
 import RepositoryStore from '@app/stores/repository';
@@ -165,93 +165,95 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 					});
 				}}
 				footer={
-					<>
-						<Tooltip text={t('sidebar.footer.autogenerate')}>
-							{(p) => (
-								<button
-									{...p}
-									class="sidebar__footer__textarea__button"
-									aria-label={t('sidebar.footer.autogenerate')}
-									disabled={
-										!(selected() && changes() && staged()) || generating()
-									}
-									onClick={async () => {
-										setGenerating(true);
-										setGenError(false);
+					settings()?.ai?.provider !== 'none' && (
+						<>
+							<Tooltip text={t('sidebar.footer.autogenerate')}>
+								{(p) => (
+									<button
+										{...p}
+										class="sidebar__footer__textarea__button"
+										aria-label={t('sidebar.footer.autogenerate')}
+										disabled={
+											!(selected() && changes() && staged()) || generating()
+										}
+										onClick={async () => {
+											setGenerating(true);
+											setGenError(false);
 
-										try {
-											for await (const val of sendAIRequest(
-												await generatePrompt(selected()!)
-											)) {
-												if (!val) continue;
+											try {
+												for await (const val of generate(
+													await generatePrompt(selected()!)
+												)) {
+													if (!val) continue;
 
-												DraftStore.setDraft(
-													LocationStore.selectedRepository,
-													{
-														message: val.message,
-														description:
-															val.body ||
-															DraftStore.getDraft(
-																LocationStore.selectedRepository
-															).description
-													}
-												);
+													DraftStore.setDraft(
+														LocationStore.selectedRepository,
+														{
+															message: val.message,
+															description:
+																val.body ||
+																DraftStore.getDraft(
+																	LocationStore.selectedRepository
+																).description
+														}
+													);
+												}
+
+												setGenerating(false);
+											} catch (e) {
+												setGenError(true);
+
+												return setGenerating(false);
 											}
-
-											setGenerating(false);
-										} catch (e) {
-											setGenError(true);
-
-											return setGenerating(false);
-										}
-									}}
-								>
-									<Show
-										when={generating()}
-										fallback={
-											<Show
-												when={!genError()}
-												fallback={<Icon name="alert" />}
-											>
-												<Icon name="sparkle-fill" />
-											</Show>
-										}
+										}}
 									>
-										<svg
-											viewBox="0 0 38 38"
-											xmlns="http://www.w3.org/2000/svg"
-											fill="currentColor"
-											role="img"
-											stroke="currentColor"
-											width={14}
-											height={14}
+										<Show
+											when={generating()}
+											fallback={
+												<Show
+													when={!genError()}
+													fallback={<Icon name="alert" />}
+												>
+													<Icon name="sparkle-fill" />
+												</Show>
+											}
 										>
-											<g fill="none" fill-rule="evenodd">
-												<g transform="translate(1 1)" stroke-width="2">
-													<circle
-														stroke-opacity=".5"
-														cx="18"
-														cy="18"
-														r="18"
-													/>
-													<path d="M36 18c0-9.94-8.06-18-18-18">
-														<animateTransform
-															attributeName="transform"
-															type="rotate"
-															from="0 18 18"
-															to="360 18 18"
-															dur="1s"
-															repeatCount="indefinite"
+											<svg
+												viewBox="0 0 38 38"
+												xmlns="http://www.w3.org/2000/svg"
+												fill="currentColor"
+												role="img"
+												stroke="currentColor"
+												width={14}
+												height={14}
+											>
+												<g fill="none" fill-rule="evenodd">
+													<g transform="translate(1 1)" stroke-width="2">
+														<circle
+															stroke-opacity=".5"
+															cx="18"
+															cy="18"
+															r="18"
 														/>
-													</path>
+														<path d="M36 18c0-9.94-8.06-18-18-18">
+															<animateTransform
+																attributeName="transform"
+																type="rotate"
+																from="0 18 18"
+																to="360 18 18"
+																dur="1s"
+																repeatCount="indefinite"
+															/>
+														</path>
+													</g>
 												</g>
-											</g>
-										</svg>
-									</Show>
-								</button>
-							)}
-						</Tooltip>
-					</>
+											</svg>
+										</Show>
+									</button>
+								)}
+							</Tooltip>
+						</>
+					)
 				}
 				expanded={true}
 			/>

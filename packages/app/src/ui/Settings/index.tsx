@@ -5,7 +5,7 @@ import { __WORKFLOWS_PATH__, workflows } from '@app/modules/actions';
 import { Element, USER_PANES } from '@app/modules/actions/app';
 import { themes, toggleTheme } from '@app/modules/actions/themes';
 import { CommitStyle } from '@app/modules/commits';
-import { t } from '@app/modules/i18n';
+import { LocaleKey, t } from '@app/modules/i18n';
 import { beginProviderFlow } from '@app/modules/oauth';
 import { openExternal, showItemInFolder } from '@app/modules/shell';
 import AccountStore, { Provider } from '@app/stores/account';
@@ -106,12 +106,19 @@ const buildElements = (
 };
 
 export interface RadioGroupProps {
-	options: {
-		element: string;
-		value: string;
-		hint?: string;
-		image?: string;
-	}[];
+	options: (
+		| {
+				type?: 'item';
+				element: string;
+				value: string;
+				hint?: string;
+				image?: string;
+		  }
+		| {
+				type: 'divider';
+				name: string;
+		  }
+	)[];
 	value: string;
 	onChange: (value: string) => void;
 	disabled?: boolean;
@@ -128,16 +135,25 @@ export const RadioGroup = (props: RadioGroupProps) => {
 			role="radiogroup"
 		>
 			<For each={props.options}>
-				{(option) => {
+				{(option, i) => {
+					if (option.type === 'divider') {
+						return (
+							<div class="settings-layer__setting__input__divider">{option.name}</div>
+						);
+					}
+
 					return (
 						<div
 							aria-role="radio"
 							role="radio"
-							class="settings-layer__setting__input__radio"
+							classList={{
+								'settings-layer__setting__input__radio': true,
+								active: value() === option.value,
+								'before-divider': props.options[i() + 1]?.type === 'divider'
+							}}
 							aria-disabled={props.disabled}
 							aria-label={option.element}
 							aria-checked={value() === option.value}
-							classList={{ active: value() === option.value }}
 							tabIndex={0}
 							onClick={(e) => {
 								e.preventDefault();
@@ -158,7 +174,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 								<img class="image" src={option.image} alt={option.value} />
 							</Show>
 							{option.element}
-							<Show when={props.hints}>
+							<Show when={props.hints || option.hint}>
 								<div classList={{ hint: true, mono: props.monoHints }}>
 									{option.hint ?? option.value}
 								</div>
@@ -534,6 +550,102 @@ const SettingsModal = () => {
 		</>
 	);
 
+	const Ai = (
+		<>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-ai-provider">
+					{t('settings.ai.model.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.ai.model.description')}
+				</p>
+				<RadioGroup
+					options={[
+						{
+							element: t('settings.ai.model.none'),
+							value: 'none',
+							hint: t('settings.ai.model.noneHint')
+						},
+						{
+							type: 'divider',
+							name: t('settings.ai.model.openai')
+						},
+						{
+							element: t('settings.ai.model.gpt-3-5'),
+							value: 'gpt-3.5'
+						},
+						{
+							element: t('settings.ai.model.gpt-4'),
+							value: 'gpt-4'
+						},
+						{
+							element: t('settings.ai.model.gpt-4o'),
+							value: 'gpt-4o'
+						},
+						{
+							type: 'divider',
+							name: t('settings.ai.model.gemini')
+						},
+						{
+							element: t('settings.ai.model.gemini-pro'),
+							value: 'gemini-pro'
+						},
+						{
+							element: t('settings.ai.model.gemini-1-5-pro'),
+							value: 'gemini-1.5-pro'
+						},
+						{
+							type: 'divider',
+							name: t('settings.ai.model.anthropic')
+						},
+						{
+							element: t('settings.ai.model.claude-haiku'),
+							value: 'claude-haiku'
+						},
+						{
+							element: t('settings.ai.model.claude-sonnet'),
+							value: 'claude-sonnet'
+						},
+						{
+							element: t('settings.ai.model.claude-opus'),
+							value: 'claude-opus'
+						}
+					]}
+					value={settings()?.ai?.provider || 'none'}
+					onChange={(value) => {
+						SettingsStore.setSetting(
+							'ai.provider',
+							value as Settings['ai']['provider']
+						);
+					}}
+				/>
+			</div>
+			<div class="settings-layer__setting">
+				<label class="settings-layer__setting__label" id="settings-ai-key">
+					{t('settings.ai.apiKey.label')}
+				</label>
+				<p class="settings-layer__setting__description">
+					{t('settings.ai.apiKey.description', {
+						provider: t(
+							settings()?.ai?.provider === 'none' ?
+								'settings.ai.apiKey.selected'
+							:	(`settings.ai.model.${settings()?.ai?.provider?.replace('.', '-') || 'none'}` as LocaleKey)
+						)
+					})}
+				</p>
+				<TextArea
+					label={t('settings.ai.apiKey.label')}
+					value={settings()?.ai?.api_key || ''}
+					onChange={(value) => {
+						SettingsStore.setSetting('ai.api_key', value);
+					}}
+					type="password"
+					placeholder={t('settings.ai.apiKey.placeholder')}
+				/>
+			</div>
+		</>
+	);
+
 	const Workflows = (
 		<>
 			<div class="settings-layer__workflows">
@@ -896,6 +1008,13 @@ const SettingsModal = () => {
 									value: 'appearance',
 									element: Appearance,
 									icon: 'eye'
+								},
+
+								{
+									label: t('settings.ai.title'),
+									value: 'ai',
+									element: Ai,
+									icon: 'sparkle-fill'
 								},
 								{
 									label: t('settings.workflows.title'),
