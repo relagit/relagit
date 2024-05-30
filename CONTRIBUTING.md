@@ -24,20 +24,22 @@ You are more than welcome to submit a pull request with a bug fix or feature. Pl
 
 ## Architecture
 
-RelaGit is separated into 3 packages, you can access these through the `~/package` import alias.
+RelaGit uses vite (via [electron-vite](https://electron-vite.org/)) as its build/dev tool, HMR is enabled by default for the renderer process only.
+RelaGit is separated into 3 packages, you can access these through their import aliases.
 
 ```
 packages/
   ├── app
-  ├── common
-  └── native/
-    ├── main
-    └── preload
+  ├── shared
+  └── main/
+    └── src/
+      ├── preload.ts
+      └── ... (main)
 ```
 
 ### `app`
 
-App is dedicated to [renderer](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process) code. It is written in [TypeScript](https://www.typescriptlang.org/) and [SolidJS](https://www.solidjs.com/). Both it and native contain their own `rollup.config.js` files which control how the code is bundled.
+App is dedicated to [renderer](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process) code. It is written in [TypeScript](https://www.typescriptlang.org/) and [SolidJS](https://www.solidjs.com/).
 
 The app directory also contains all of RelaGit's styling, which is written in [SCSS](https://sass-lang.com/), any scss file which is imported into a TypeScript file will be compiled into the bundled CSS file.
 
@@ -45,13 +47,13 @@ The app directory also contains all of RelaGit's styling, which is written in [S
 import './index.scss';
 ```
 
-### `common`
+### `shared`
 
 The common directory contains shared code between the app and native packages. It is written in TypeScript but **not** bundled. It is imported by each file that requires it.
 
-### `native`
+### `main`
 
-Native is dedicated to [main](https://www.electronjs.org/docs/latest/tutorial/process-model#the-main-process) and [preload](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts) code.
+Main is dedicated to [main process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-main-process) and [preload](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts) code.
 
 ## Code Style
 
@@ -64,8 +66,8 @@ All class names should be written in the following form(s):
 ```scss
 component
 component__element
-component__element-modifier // this is mainly used if the component itself has a modifier. (e.g. layer-bare)
 component__element modifier // the more common modifier form. (e.g. button primary)
+component__element-modifier // this is mainly used if the component itself has a modifier. (e.g. layer-bare)
 ```
 
 ## Commit Messages
@@ -74,4 +76,6 @@ Please follow the [Relational Commits](https://github.com/relagit/commits/blob/m
 
 ## License
 
-By contributing to RelaGit, you agree that your contributions will be licensed under its [RLPL License](https://github.com/relagit/relagit/blob/main/LICENSE).
+By contributing to RelaGit, you agree that your contributions will be licensed under its [LGPL License](https://github.com/relagit/relagit/blob/main/LICENSE).
+
+Any images contributed which contain the RelaGit brand must be approved by the Rela organisation before being merged. They will thereafter be property of the Rela organisation.
