@@ -213,10 +213,7 @@ export const RepoList = <T extends Provider>(props: {
 												{normalRepo.name}
 											</div>
 											<div class="clone-modal__list__item__name__visibility">
-												<Show
-													when={normalRepo.private}
-													fallback={<Icon name="eye" />}
-												>
+												<Show when={normalRepo.private}>
 													<Icon name="lock" />
 												</Show>
 											</div>
