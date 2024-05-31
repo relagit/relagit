@@ -78,7 +78,7 @@ const BlameIndicator = (props: {
 		onFocus: (e: FocusEvent) => void;
 		onBlur: () => void;
 		tabIndex: number;
-		'aria-labeledby': string;
+		'aria-labelledby': string;
 	}) => JSX.Element;
 }) => (
 	<Tooltip

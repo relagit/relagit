@@ -207,7 +207,7 @@ const Modal = (props: ModalProps) => {
 export const ModalCloseButton = (props: { close: () => void }) => {
 	return (
 		<button
-			aria-role="button"
+			role="button"
 			aria-label={t('modal.closeModal')}
 			class="modal__close"
 			onClick={props.close}

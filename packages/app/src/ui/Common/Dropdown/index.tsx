@@ -103,7 +103,6 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 				<Portal mount={document.getElementById('app-container')!}>
 					<div
 						role="menu"
-						aria-role="menu"
 						aria-expanded="true"
 						aria-haspopup="true"
 						class="dropdown__options"

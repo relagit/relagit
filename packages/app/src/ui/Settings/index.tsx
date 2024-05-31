@@ -144,7 +144,6 @@ export const RadioGroup = (props: RadioGroupProps) => {
 
 					return (
 						<div
-							aria-role="radio"
 							role="radio"
 							classList={{
 								'settings-layer__setting__input__radio': true,
@@ -224,7 +223,6 @@ export const Switch = (props: SwitchProps) => {
 				<div
 					aria-label={props.label}
 					aria-checked={value()}
-					aria-role="checkbox"
 					role="checkbox"
 					classList={{
 						check: true,
@@ -688,7 +686,7 @@ const SettingsModal = () => {
 								<div
 									class="settings-layer__workflows__workflow"
 									aria-label={workflow.name}
-									aria-role="button"
+									role="button"
 									onClick={() => {
 										showItemInFolder(
 											nodepath.resolve(__WORKFLOWS_PATH__, workflow.filename)

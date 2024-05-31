@@ -156,7 +156,7 @@ export const RepoList = <T extends Provider>(props: {
 									]}
 								>
 									<div
-										aria-role="button"
+										role="button"
 										aria-label={`${t('modal.clone.clone')} ${repo.name}`}
 										tabIndex={0}
 										onClick={() => {

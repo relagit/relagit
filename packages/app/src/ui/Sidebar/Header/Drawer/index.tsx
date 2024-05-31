@@ -101,7 +101,7 @@ export default (props: HeaderDrawerProps) => {
 							>
 								<button
 									{...p}
-									aria-role="button"
+									role="button"
 									aria-label={t('sidebar.drawer.contextMenu.addRepository')}
 									class="sidebar__drawer__body__header__button"
 								>
@@ -181,7 +181,7 @@ export default (props: HeaderDrawerProps) => {
 									]}
 								>
 									<button
-										aria-role="button"
+										role="button"
 										aria-label={t('sidebar.drawer.switchTo', {
 											name: repository.name
 										})}

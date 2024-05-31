@@ -142,7 +142,6 @@ export default (props: Popout) => {
 					<Show when={open()}>
 						<div
 							role="menu"
-							aria-role="menu"
 							aria-expanded="true"
 							aria-haspopup="true"
 							classList={{

@@ -13,7 +13,7 @@ export interface AnchorProps {
 export default (props: AnchorProps) => {
 	return (
 		<button
-			aria-role="link"
+			role="link"
 			class="anchor"
 			onClick={() => {
 				if (props.onClick) props.onClick();

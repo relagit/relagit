@@ -82,7 +82,7 @@ export default (props: LogCommit) => {
 			]}
 		>
 			<div
-				aria-role="button"
+				role="button"
 				aria-label={t('sidebar.commit.label', {
 					hash: props.message
 				})}

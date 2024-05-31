@@ -22,7 +22,7 @@ export default (props: PassthroughRef<ButtonProps>) => {
 		<button
 			{...props.rest}
 			ref={props.ref}
-			aria-role="button"
+			role="button"
 			aria-label={props.label}
 			aria-disabled={tempDisabled() || props.disabled}
 			aria-busy={tempDisabled()}

@@ -53,7 +53,7 @@ export default (props: SidebarProps) => {
 	return (
 		<div
 			classList={{ sidebar: true, 'sidebar-active': props.sidebar }}
-			aria-role="sidebar"
+			role="complementary"
 			aria-hidden={props.sidebar}
 		>
 			<Header />

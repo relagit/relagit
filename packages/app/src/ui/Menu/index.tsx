@@ -196,7 +196,7 @@ export const MenuItem = (
 		case 'item':
 			return (
 				<div
-					aria-role="button"
+					role="button"
 					aria-label={props.label}
 					classList={{
 						menu__item: true,

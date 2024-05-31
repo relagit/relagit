@@ -140,7 +140,7 @@ export default () => {
 					{(p) => (
 						<div
 							ref={p.ref}
-							aria-role="button"
+							role="button"
 							aria-label={t('sidebar.openDrawer')}
 							aria-expanded={open()}
 							tabIndex={0}

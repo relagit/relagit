@@ -183,7 +183,7 @@ export default (props: WorkspaceProps) => {
 								>
 									<div
 										tabIndex={0}
-										aria-role="button"
+										role="button"
 										aria-label={t('workspace.commit.open', {
 											hash: commitFile.filename
 										})}

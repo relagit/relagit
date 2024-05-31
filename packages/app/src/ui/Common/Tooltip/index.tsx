@@ -11,7 +11,7 @@ export interface Tooltip {
 		onFocus: (e: FocusEvent) => void;
 		onBlur: () => void;
 		tabIndex: number;
-		'aria-labeledby': string;
+		'aria-labelledby': string;
 	}) => JSX.Element | JSX.Element[];
 	text: JSX.Element | string;
 	position?: 'top' | 'bottom' | 'auto';
@@ -69,7 +69,7 @@ export default (props: Tooltip) => {
 				onMouseEnter={show}
 				onMouseLeave={hide}
 				ref={setWrapper}
-				aria-labeledby={open() ? id : ''}
+				aria-labelledby={open() ? id : ''}
 			></props.children>
 			<Portal mount={document.getElementById('app-container')!}>
 				<Transition
@@ -108,7 +108,6 @@ export default (props: Tooltip) => {
 						<div
 							id={id}
 							aria-hidden={!open()}
-							aria-role="tooltip"
 							role="tooltip"
 							classList={{
 								tooltip: true,

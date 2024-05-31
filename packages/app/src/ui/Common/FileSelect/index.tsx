@@ -95,7 +95,7 @@ export default (props: PassthroughRef<FileSelectProps>) => {
 					/>
 				</Show>
 				<button
-					aria-role="button"
+					role="button"
 					aria-label={t('ui.filepicker.label')}
 					aria-disabled={props.disabled}
 					class="filepicker__input__button"

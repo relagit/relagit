@@ -52,7 +52,7 @@ const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
 					<button
 						{...p}
 						ref={props.ref}
-						aria-role="button"
+						role="button"
 						aria-label={props.label || props.name}
 						aria-selected={props.className?.includes('active')}
 						disabled={props.loading || props.disabled}
@@ -565,7 +565,7 @@ export default () => {
 									>
 										<button
 											aria-selected={branch.gitName === repository()?.branch}
-											aria-role="option"
+											role="option"
 											aria-label={branch.gitName}
 											classList={{
 												'branches-picker__list__item': true,
@@ -678,7 +678,7 @@ export default () => {
 									<button
 										class="branches-picker__list__item-new__hint"
 										aria-label={t('git.createBranch')}
-										aria-role="button"
+										role="button"
 										onClick={async () => {
 											const input = inputRef()?.querySelector('input');
 

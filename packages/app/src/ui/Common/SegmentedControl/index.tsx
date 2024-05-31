@@ -31,7 +31,7 @@ export default <T extends string | undefined>(props: SegmentedControlProps<T>) =
 			<For each={props.items}>
 				{(item) => (
 					<div
-						aria-role="button"
+						role="button"
 						aria-label={item.label}
 						aria-selected={value() === item.value}
 						aria-disabled={item.disabled || props.disabled}

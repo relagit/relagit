@@ -227,7 +227,7 @@ export default (props: GitFile) => {
 			}
 		>
 			<div
-				aria-role="button"
+				role="button"
 				aria-label={t('sidebar.open', {
 					name: path.join(props.path, props.name)
 				})}
@@ -291,7 +291,7 @@ export default (props: GitFile) => {
 					</span>
 				</div>
 				<button
-					aria-role="button"
+					role="button"
 					aria-label={
 						staged() ? t('sidebar.contextMenu.unstage') : t('sidebar.contextMenu.stage')
 					}
