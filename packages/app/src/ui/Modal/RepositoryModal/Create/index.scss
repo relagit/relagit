@@ -14,7 +14,7 @@
 		width: 100%;
 		outline: var(--separator-secondary) solid 1px;
 
-		&:focus {
+		&:focus-visible {
 			outline: var(--separator-primary) solid 1px;
 		}
 	}

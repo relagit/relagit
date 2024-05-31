@@ -42,7 +42,7 @@
 			background-color: transparent;
 			opacity: 0.6;
 
-			&:focus {
+			&:focus-visible {
 				color: var(--color-blue-500);
 				opacity: 1;
 				outline: none;
@@ -368,7 +368,7 @@
 			--switch-slider-stroke: var(--switch-stroke);
 			--switch-focus: var(--color-blue-500);
 
-			&:focus {
+			&:focus-visible {
 				border-color: transparent;
 				outline: 1px solid var(--switch-focus);
 			}

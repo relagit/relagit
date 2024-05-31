@@ -7,7 +7,7 @@
 	border-bottom: 1px solid var(--separator-primary);
 	user-select: none;
 
-	&:focus {
+	&:focus-visible {
 		outline: none;
 		background-color: var(--bg-hover);
 	}

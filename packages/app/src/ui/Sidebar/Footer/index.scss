@@ -52,7 +52,7 @@
 			color: var(--color-primary);
 		}
 
-		&:focus {
+		&:focus-visible {
 			outline: none;
 			color: var(--color-blue-500);
 		}

@@ -37,7 +37,7 @@
 		background: none;
 		color: var(--color-secondary);
 
-		&:focus {
+		&:focus-visible {
 			outline: none;
 			text-decoration: underline;
 		}

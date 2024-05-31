@@ -30,7 +30,7 @@
 			background: var(--fill-vibrant-tertiary);
 		}
 
-		&:focus {
+		&:focus-visible {
 			border: 2px solid var(--accent, --text-blue);
 			padding: 4px 6px;
 			outline: none;

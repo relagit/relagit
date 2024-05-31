@@ -55,7 +55,7 @@
 			color: inherit;
 			border: none;
 
-			&:focus {
+			&:focus-visible {
 				outline: none;
 				color: var(--text-vibrant-primary);
 			}
