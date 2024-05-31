@@ -51,10 +51,9 @@ export default (props: SidebarProps) => {
 	});
 
 	return (
-		<div
+		<aside
 			classList={{ sidebar: true, 'sidebar-active': props.sidebar }}
-			role="complementary"
-			aria-hidden={props.sidebar}
+			aria-hidden={!props.sidebar}
 		>
 			<Header />
 			<Show when={historyOpen()}>
@@ -95,6 +94,6 @@ export default (props: SidebarProps) => {
 			<Show when={!historyOpen()}>
 				<Footer showingSignal={[footerShowing, setFooterShowing]} />
 			</Show>
-		</div>
+		</aside>
 	);
 };
