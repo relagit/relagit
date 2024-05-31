@@ -1,3 +1,4 @@
+import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import {
 	Accessor,
 	JSX,
@@ -32,6 +33,7 @@ export interface Popout {
 	position?: 'top' | 'bottom' | 'auto';
 	align?: 'start' | 'end' | 'center';
 	open?: Signal<boolean>;
+	trapFocus?: boolean;
 }
 
 export default (props: Popout) => {
@@ -61,6 +63,8 @@ export default (props: Popout) => {
 
 	const hide = () => {
 		setOpen(false);
+
+		deactivate();
 	};
 
 	createEffect(() => {
@@ -75,15 +79,17 @@ export default (props: Popout) => {
 
 		setOpen(true);
 
+		activate();
+
 		listener();
 
-		const el: HTMLElement | null | undefined = popout()?.querySelector(
-			'button,input,a,select,textarea,[tabindex]'
-		);
+		// const el: HTMLElement | null | undefined = popout()?.querySelector(
+		// 	'button,input,a,select,textarea,[tabindex]'
+		// );
 
-		if (el) {
-			el.focus();
-		}
+		// if (el) {
+		// 	el.focus();
+		// }
 	};
 
 	const toggle = (e?: MouseEvent | KeyboardEvent) => {
@@ -95,6 +101,19 @@ export default (props: Popout) => {
 			show(e);
 		}
 	};
+
+	const { activate, deactivate } = useFocusTrap(popout, {
+		onDeactivate: () => {
+			hide();
+		},
+		initialFocus: false,
+		allowOutsideClick: true,
+		clickOutsideDeactivates: (e) => {
+			if (e.target === wrapper()) return false;
+
+			return true;
+		}
+	});
 
 	return (
 		<>

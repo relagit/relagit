@@ -506,6 +506,7 @@ export default () => {
 			</Show>
 			<div class="workspace__header__spacer" />
 			<Popout
+				trapFocus
 				position="bottom"
 				align="end"
 				body={() => (
