@@ -2,7 +2,7 @@ import { JSX, Setter, Show, createEffect, createSignal } from 'solid-js';
 import * as ipc from '~/shared/ipc';
 
 import { t } from '@app/modules/i18n';
-import { PassthroughRef } from '@app/shared';
+import { Reffable } from '@app/shared';
 
 import Icon from '../Icon';
 import TextArea from '../TextArea';
@@ -26,7 +26,7 @@ export interface FileSelectProps {
 	}[];
 }
 
-export default (props: PassthroughRef<FileSelectProps>) => {
+export default (props: Reffable<FileSelectProps>) => {
 	const [inputValue, setInputValue] = createSignal(props.initial || '');
 	const [valid, setValid] = createSignal<string | boolean | JSX.Element>(null);
 	const [status, setStatus] = createSignal<'valid' | 'invalid' | null>(null);

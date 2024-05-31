@@ -1,6 +1,6 @@
 import { JSX, createSignal } from 'solid-js';
 
-import { PassthroughRef } from '@app/shared';
+import { Reffable } from '@app/shared';
 
 import './index.scss';
 
@@ -15,7 +15,7 @@ export interface ButtonProps {
 	rest?: JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-export default (props: PassthroughRef<ButtonProps>) => {
+export default (props: Reffable<ButtonProps>) => {
 	const [tempDisabled, setTempDisabled] = createSignal(false);
 
 	return (

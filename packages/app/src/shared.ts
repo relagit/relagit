@@ -1,6 +1,6 @@
 import { Setter } from 'solid-js';
 
-export type PassthroughRef<T> = T & {
+export type Reffable<T> = T & {
 	ref?: Setter<HTMLElement | undefined>;
 };
 

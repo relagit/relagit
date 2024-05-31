@@ -2,7 +2,7 @@ import { Accessor, For, JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
-import { PassthroughRef } from '@app/shared';
+import { Reffable } from '@app/shared';
 import DraftStore from '@app/stores/draft';
 import OnboardingStore from '@app/stores/onboarding';
 import RemoteStore from '@app/stores/remote';
@@ -44,7 +44,7 @@ export interface PanelButtonProps {
 	loading?: boolean;
 }
 
-const PanelButton = (props: PassthroughRef<PanelButtonProps>) => {
+const PanelButton = (props: Reffable<PanelButtonProps>) => {
 	return (
 		<Tooltip text={props.tooltip || ''} position={props.tooltipPosition || 'auto'}>
 			{(p) => {
