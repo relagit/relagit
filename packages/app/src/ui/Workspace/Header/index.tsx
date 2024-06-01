@@ -543,6 +543,29 @@ export default () => {
 											},
 											{
 												type: 'item',
+												label: t('git.mergeBranch', {
+													current: repository()?.branch
+												}),
+												disabled: branch.gitName === repository()?.branch,
+												onClick: async () => {
+													try {
+														await Git.Merge(
+															LocationStore.selectedRepository,
+															branch.gitName
+														);
+
+														refetchRepository(
+															LocationStore.selectedRepository
+														);
+													} catch (e) {
+														showErrorModal(e, 'error.git');
+
+														error(e);
+													}
+												}
+											},
+											{
+												type: 'item',
 												label: t('sidebar.contextMenu.openRemote'),
 												disabled: !(branch.hasUpstream || branch.isRemote),
 												onClick: () => {

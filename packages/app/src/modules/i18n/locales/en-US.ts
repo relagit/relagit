@@ -190,7 +190,7 @@ export default {
 		corruptSettings: 'One or more of your configuration files are corrupt. Please reset them.',
 		fetching: 'Unexpected error while fetching repository status',
 		remote: 'Unexpected error while fetching remote status',
-		git: 'Unexpected error while executing git command',
+		git: 'Could not run Git command',
 		missingExternalEditor: 'RelaGit could not find your external editor in your PATH.'
 	},
 	ui: {
@@ -319,6 +319,7 @@ export default {
 		publishHint: 'Publish this branch to remote.',
 		branches: ['Branch', 'Branches'],
 		deleteBranch: 'Delete Branch',
+		mergeBranch: 'Merge Branch into {{current}}',
 		newBranch: 'New branch',
 		createBranch: 'Create Branch',
 		pushChanges: 'Push Changes',

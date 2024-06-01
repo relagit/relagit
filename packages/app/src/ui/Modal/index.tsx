@@ -260,7 +260,11 @@ Modal.Layer = () => {
 	);
 };
 
-export const showErrorModal = (error: Error | string | unknown, message: LocaleKey) => {
+export const showErrorModal = (
+	error: Error | string | unknown,
+	message: LocaleKey,
+	noStack = true
+) => {
 	ModalStore.pushState(
 		'error',
 		createRoot(() => (
@@ -275,7 +279,7 @@ export const showErrorModal = (error: Error | string | unknown, message: LocaleK
 								<p class="error-modal__message">
 									{(error as Error)['message'] || (error as string)}
 								</p>
-								<Show when={(error as Error)['stack']}>
+								<Show when={(error as Error)['stack'] && !noStack}>
 									<pre class="error-modal__stack">
 										{(error as Error)['stack']}
 									</pre>
