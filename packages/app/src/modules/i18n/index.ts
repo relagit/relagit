@@ -101,7 +101,7 @@ const findTranslation = <Trans extends LocaleKey, P extends PluralType<Trans>>(
 
 	if (Array.isArray(out)) {
 		if (typeof plural === 'number') {
-			out = out[plural > 1 ? 1 : 0];
+			out = out[Math.abs(plural) === 1 ? 0 : 1];
 		} else {
 			out = out[0];
 		}
