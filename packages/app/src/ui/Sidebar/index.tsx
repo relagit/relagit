@@ -1,4 +1,5 @@
 import { For, Show, createSignal } from 'solid-js';
+import { useInfiniteScroll } from 'solidjs-use';
 
 import { LogCommit } from '@app/modules/git/log';
 import { t } from '@app/modules/i18n';
@@ -29,6 +30,7 @@ export default (props: SidebarProps) => {
 	);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const [commits, setCommits] = createSignal<LogCommit[]>([]);
+	const [commitsRef, setCommitsRef] = createSignal<HTMLDivElement | null>(null);
 
 	const [footerShowing, setFooterShowing] = createSignal(false);
 
@@ -37,7 +39,7 @@ export default (props: SidebarProps) => {
 	createStoreListener([RepositoryStore, LocationStore], async () => {
 		if (!LocationStore.selectedRepository) return;
 
-		setCommits(await Git.Log(LocationStore.selectedRepository));
+		setCommits(await Git.Log(LocationStore.selectedRepository, 50));
 
 		try {
 			if (lastRepository === LocationStore.selectedRepository) return;
@@ -50,6 +52,24 @@ export default (props: SidebarProps) => {
 		}
 	});
 
+	useInfiniteScroll(
+		commitsRef,
+		async () => {
+			if (!LocationStore.selectedRepository) return;
+
+			const newItems = await Git.Log(
+				LocationStore.selectedRepository,
+				50,
+				commits()[commits().length - 1]
+			);
+
+			setCommits((commits) => commits.concat(newItems));
+		},
+		{
+			distance: 100
+		}
+	);
+
 	return (
 		<aside
 			classList={{ sidebar: true, 'sidebar-active': props.sidebar }}
@@ -57,7 +77,7 @@ export default (props: SidebarProps) => {
 		>
 			<Header />
 			<Show when={historyOpen()}>
-				<div class="sidebar__commits">
+				<div class="sidebar__commits" ref={setCommitsRef}>
 					<Show
 						when={commits()?.length}
 						fallback={<EmptyState hint={t('sidebar.noCommits')} />}

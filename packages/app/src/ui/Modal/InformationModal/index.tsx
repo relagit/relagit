@@ -79,7 +79,11 @@ export const InformationModal = () => {
 
 		last = repository()?.id || '';
 
-		Git.Log(repository()!).then((history) => {
+		Git.Log(
+			repository()!,
+			Infinity,
+			new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365)
+		).then((history) => {
 			setHistory(history);
 
 			const months = getMonthCounts(history);

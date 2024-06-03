@@ -42,16 +42,42 @@ const getTreeDetails = (refs: string) => {
 	}
 };
 
-export const Log = async (repository: Repository): Promise<LogCommit[]> => {
+export const Log = async (
+	repository: Repository,
+	limit = Infinity,
+	before?: Date | LogCommit
+): Promise<LogCommit[]> => {
 	if (!repository) return [];
+
+	const args = [
+		'--pretty=format:%H%n%an%n%ad%n%s%n%D%n',
+		'--stat',
+		'--no-color',
+		'--stat-width=1'
+	];
+
+	if (limit !== Infinity) {
+		args.push(`--max-count=${limit}`);
+	}
+
+	if (before) {
+		if (before instanceof Date) {
+			args.push(`--before="${before.toISOString()}"`);
+		} else {
+			// we're skipping the commit itself
+			args.push(`--before="${before.date}"`, '--skip=1');
+		}
+	}
 
 	const res = await Git({
 		directory: repository.path,
 		command: 'log',
-		args: ['--pretty=format:%H%n%an%n%ad%n%s%n%D%n', '--stat', '--no-color', '--stat-width=1']
+		args
 	});
 
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
+		if (!commit) return;
+
 		const [hash, author, date, message, refs] = commit.split('\n');
 
 		const treeDetails = getTreeDetails(refs);
@@ -104,7 +130,7 @@ export const Log = async (repository: Repository): Promise<LogCommit[]> => {
 		};
 	});
 
-	return commits;
+	return commits.filter(Boolean);
 };
 
 export const getMonthCounts = (
