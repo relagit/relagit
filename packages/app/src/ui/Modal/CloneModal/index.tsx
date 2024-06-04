@@ -104,7 +104,7 @@ const CloneModal = (props: CloneModalProps) => {
 					for await (const res of GitHub('user/repos').stream()) {
 						setResponse(res);
 
-						if (res['done']) setDone(true);
+						if (res.done) setDone(true);
 					}
 
 					break;
@@ -114,14 +114,14 @@ const CloneModal = (props: CloneModalProps) => {
 					)) {
 						setResponse(res);
 
-						if (res['done']) setDone(true);
+						if (res.done) setDone(true);
 					}
 					break;
 				case 'codeberg':
 					for await (const res of Codeberg('user/repos').stream()) {
 						setResponse(res);
 
-						if (res['done']) setDone(true);
+						if (res.done) setDone(true);
 					}
 					break;
 				default:

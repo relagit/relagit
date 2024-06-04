@@ -490,16 +490,16 @@ cron.schedule = (
 	proxy: ReturnType<typeof getOptionsProxy>
 ) => {
 	const now = Date.now();
-	const lastRun = (proxy['__cronLastRun'] as number | undefined) || now;
+	const lastRun = (proxy.__cronLastRun as number | undefined) || now;
 
 	if (now - lastRun >= time) {
 		cb();
 
-		proxy['__cronLastRun'] = now;
+		proxy.__cronLastRun = now;
 	}
 
-	if (!proxy['__cronLastRun']) {
-		proxy['__cronLastRun'] = now;
+	if (!proxy.__cronLastRun) {
+		proxy.__cronLastRun = now;
 	}
 
 	const timeout = setTimeout(() => cron.schedule(time, cb, proxy), time - (now - lastRun));

@@ -211,7 +211,7 @@ const SettingsStore = new (class SettingsStore extends GenericStore {
 
 				repositories = JSON.parse(json) as string[];
 
-				this.#record['repositories'] = repositories;
+				this.#record.repositories = repositories;
 			} catch (error) {
 				window._showErrorModal(error, 'error.corruptSettings');
 			}
