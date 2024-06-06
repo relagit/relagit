@@ -34,7 +34,7 @@
 		border: 1px solid var(--separator-primary);
 		box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
 		overflow: hidden;
-		z-index: 100;
+		z-index: calc(95 * var(--layer-index));
 		min-width: 200px;
 
 		&__option {

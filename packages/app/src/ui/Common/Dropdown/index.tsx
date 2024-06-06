@@ -2,6 +2,7 @@ import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { For, Show, createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import { useLayerContext } from '../../Layer';
 import Button from '../Button';
 import Icon, { IconName } from '../Icon';
 
@@ -29,6 +30,8 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 	const [container, setContainer] = createSignal<HTMLElement | undefined>(undefined);
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
+
+	const layerContext = useLayerContext('Dropdown');
 
 	const updatePosition = () => {
 		const containerRect = container()?.getBoundingClientRect();
@@ -118,7 +121,8 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 						}}
 						style={{
 							'--x': `${x()}px`,
-							'--y': `${y()}px`
+							'--y': `${y()}px`,
+							'--layer-index': layerContext
 						}}
 					>
 						<For

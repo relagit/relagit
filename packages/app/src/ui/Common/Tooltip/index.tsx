@@ -2,6 +2,8 @@ import { JSX, Show, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
+import { useLayerContext } from '../../Layer';
+
 import './index.scss';
 
 export interface Tooltip {
@@ -26,6 +28,8 @@ export default (props: Tooltip) => {
 
 	const [tooltip, setTooltip] = createSignal<HTMLDivElement>();
 	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();
+
+	const layerContext = useLayerContext('Tooltip');
 
 	let timeout: NodeJS.Timeout;
 
@@ -115,11 +119,15 @@ export default (props: Tooltip) => {
 								[props.position || 'top']: true
 							}}
 							ref={setTooltip}
-							style={`--h: ${tooltip()?.offsetHeight}px; --w: ${
-								tooltip()?.offsetWidth
-							}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${
-								wrapper()?.offsetHeight
-							}px; --w-w: ${wrapper()?.offsetWidth}px;`}
+							style={{
+								'--h': `${tooltip()?.offsetHeight}px`,
+								'--w': `${tooltip()?.offsetWidth}px`,
+								'--x': `${x()}px`,
+								'--y': `${y()}px`,
+								'--w-h': `${wrapper()?.offsetHeight}px`,
+								'--w-w': `${wrapper()?.offsetWidth}px`,
+								'--layer-index': layerContext
+							}}
 						>
 							{props.text}
 							<div class="tooltip__arrow"></div>

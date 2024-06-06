@@ -1,4 +1,4 @@
-import { JSX, Show, createSignal } from 'solid-js';
+import { JSX, Show, createContext, createSignal, useContext } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 
 import { createStoreListener } from '@stores/index';
@@ -9,6 +9,7 @@ import './index.scss';
 export interface LayerProps {
 	key: string;
 	type?: 'rich' | 'bare';
+	index?: number;
 	dismissable?: boolean;
 	initialVisible?: boolean;
 	children: JSX.Element | JSX.Element[];
@@ -17,6 +18,18 @@ export interface LayerProps {
 		exit?: (el: Element, done: () => void) => void;
 	};
 }
+
+export const LayerContext = createContext<number>(1);
+
+export const useLayerContext = (debugName?: string) => {
+	const val = useContext(LayerContext);
+
+	if (val === undefined) {
+		throw new Error(debugName + ' useLayerContext must be used within a LayerContext.Provider');
+	}
+
+	return val;
+};
 
 const Layer = (props: LayerProps) => {
 	LayerStore.addLayer({
@@ -29,24 +42,29 @@ const Layer = (props: LayerProps) => {
 	const [ref, setRef] = createSignal<HTMLDivElement>();
 
 	return (
-		<div
-			aria-live={props.key === 'notification' ? 'assertive' : 'off'}
-			classList={{
-				layer: true,
-				[`layer-${props.type || 'bare'}`]: true,
-				visible: visible()
-			}}
-			ref={setRef}
-			data-key={props.key}
-			onMouseDown={(e) => {
-				if (props.dismissable && e.target === ref())
-					LayerStore.setVisible(props.key, false);
-			}}
-		>
-			<Transition onEnter={props.transitions?.enter} onExit={props.transitions?.exit}>
-				<Show when={visible()}>{props.children}</Show>
-			</Transition>
-		</div>
+		<LayerContext.Provider value={props.index ?? 1}>
+			<div
+				aria-live={props.key === 'notification' ? 'assertive' : 'off'}
+				classList={{
+					layer: true,
+					[`layer-${props.type || 'bare'}`]: true,
+					visible: visible()
+				}}
+				style={{
+					'--layer-index': props.index
+				}}
+				ref={setRef}
+				data-key={props.key}
+				onMouseDown={(e) => {
+					if (props.dismissable && e.target === ref())
+						LayerStore.setVisible(props.key, false);
+				}}
+			>
+				<Transition onEnter={props.transitions?.enter} onExit={props.transitions?.exit}>
+					<Show when={visible()}>{props.children}</Show>
+				</Transition>
+			</div>
+		</LayerContext.Provider>
 	);
 };
 

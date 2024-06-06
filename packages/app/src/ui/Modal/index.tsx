@@ -1,5 +1,5 @@
 import { createConfetti } from '@neoconfetti/solid';
-import { JSX, Show, createEffect, createRoot, createSignal } from 'solid-js';
+import { JSX, Show, createEffect, createMemo, createRoot, createSignal } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 import * as ipc from '~/shared/ipc';
 
@@ -10,7 +10,7 @@ import ModalStore from '@stores/modal';
 
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
-import Layer from '@ui/Layer';
+import Layer, { LayerContext } from '@ui/Layer';
 
 import './index.scss';
 
@@ -58,7 +58,7 @@ interface ModalProps {
 	children: (props: { close: () => void }) => JSX.Element | JSX.Element[];
 	size: 'small' | 'medium' | 'large' | 'x-large';
 	confetti?: boolean;
-	id: string | string[];
+	id: string;
 }
 
 const Modal = (props: ModalProps) => {
@@ -148,59 +148,64 @@ const Modal = (props: ModalProps) => {
 		});
 	};
 
+	const index = createMemo(() => ModalStore.record.findIndex((r) => r.type === props.id));
+
 	return (
-		<div
-			ref={setRef}
-			onMouseDown={(e) => {
-				if (e.target !== ref()) return;
+		<LayerContext.Provider value={2}>
+			<div
+				ref={setRef}
+				onMouseDown={(e) => {
+					if (e.target !== ref()) return;
 
-				if (props.dismissable) return close();
+					if (props.dismissable) return close();
 
-				if (matchMedia('(prefers-reduced-motion: no-preference)'))
-					(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
-			}}
-			classList={{
-				'modal-container': true,
-				visible: open()
-			}}
-			style={{
-				'z-index': 98
-			}}
-		>
-			<Show when={open()}>
-				<dialog
-					open={open()}
-					classList={{
-						modal: true,
-						[props.size || '']: true
-					}}
-				>
-					<Show
-						when={
-							props.confetti && matchMedia('(prefers-reduced-motion: no-preference)')
-						}
+					if (matchMedia('(prefers-reduced-motion: no-preference)'))
+						(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
+				}}
+				classList={{
+					'modal-container': true,
+					visible: open()
+				}}
+				style={{
+					'--modal-index': index()
+				}}
+			>
+				<Show when={open()}>
+					<dialog
+						open={open()}
+						classList={{
+							modal: true,
+							[props.size || '']: true
+						}}
 					>
-						<div
-							class="modal__confetti"
-							use:confetti={{
-								particleCount: 300,
-								particleSize: 8,
-								colors: [
-									'var(--color-red-500)',
-									'var(--color-orange-500)',
-									'var(--color-yellow-500)',
-									'var(--color-green-500)',
-									'var(--color-blue-500)',
-									'var(--color-indigo-500)',
-									'var(--color-violet-500)'
-								]
-							}}
-						></div>
-					</Show>
-					{<props.children close={close}></props.children>}
-				</dialog>
-			</Show>
-		</div>
+						<Show
+							when={
+								props.confetti &&
+								matchMedia('(prefers-reduced-motion: no-preference)')
+							}
+						>
+							<div
+								class="modal__confetti"
+								use:confetti={{
+									particleCount: 300,
+									particleSize: 8,
+									colors: [
+										'var(--color-red-500)',
+										'var(--color-orange-500)',
+										'var(--color-yellow-500)',
+										'var(--color-green-500)',
+										'var(--color-blue-500)',
+										'var(--color-indigo-500)',
+										'var(--color-violet-500)'
+									]
+								}}
+							></div>
+						</Show>
+						{<props.children close={close}></props.children>}
+					</dialog>
+				</Show>
+			</div>
+		</LayerContext.Provider>
 	);
 };
 
@@ -252,7 +257,7 @@ Modal.Layer = () => {
 	});
 
 	return (
-		<Layer key="modal" transitions={Layer.Transitions.None} type="bare">
+		<Layer index={2} key="modal" transitions={Layer.Transitions.None} type="bare">
 			<Transition onEnter={Layer.Transitions.Fade.enter} onExit={Layer.Transitions.Fade.exit}>
 				<Show when={active()}>{modalState()?.active?.component}</Show>
 			</Transition>

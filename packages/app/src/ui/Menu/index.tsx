@@ -2,6 +2,8 @@ import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import { useLayerContext } from '../Layer';
+
 import './index.scss';
 
 const extensions: Record<string, MenuItem[]> = {};
@@ -47,6 +49,8 @@ export default (props: Menu) => {
 	const [menu, setMenu] = createSignal<HTMLDivElement>();
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
+
+	const layerContext = useLayerContext('Menu');
 
 	const { activate, deactivate } = useFocusTrap(menu, {
 		initialFocus: false,
@@ -146,7 +150,8 @@ export default (props: Menu) => {
 						data-id={props.interfaceId}
 						style={{
 							'--x': `${x()}px`,
-							'--y': `${y()}px`
+							'--y': `${y()}px`,
+							'--layer-index': layerContext
 						}}
 					>
 						<Show when={props.items.filter(Boolean).length === 0}>

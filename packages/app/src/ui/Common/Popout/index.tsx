@@ -13,6 +13,8 @@ import {
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
+import { useLayerContext } from '../../Layer';
+
 import './index.scss';
 
 export interface Popout {
@@ -43,6 +45,8 @@ export default (props: Popout) => {
 
 	const [wrapper, setWrapper] = createSignal<HTMLElement>();
 	const [popout, setPopout] = createSignal<HTMLElement>();
+
+	const layerContext = useLayerContext('Popout');
 
 	const listener = () => {
 		const rect = wrapper()?.getBoundingClientRect();
@@ -169,11 +173,15 @@ export default (props: Popout) => {
 								[props.align || 'center']: true
 							}}
 							ref={setPopout}
-							style={`--h: ${popout()?.offsetHeight}px; --w: ${
-								popout()?.offsetWidth
-							}px; --x: ${x()}px; --y: ${y()}px; --w-h: ${
-								wrapper()?.offsetHeight
-							}px; --w-w: ${wrapper()?.offsetWidth}px;`}
+							style={{
+								'--h': `${popout()?.offsetHeight}px`,
+								'--w': `${popout()?.offsetWidth}px`,
+								'--x': `${x()}px`,
+								'--y': `${y()}px`,
+								'--w-h': `${wrapper()?.offsetHeight}px`,
+								'--w-w': `${wrapper()?.offsetWidth}px`,
+								'--layer-index': layerContext
+							}}
 						>
 							<props.body open={open} hide={hide} toggle={toggle} show={show} />
 							<div class="popout__arrow"></div>

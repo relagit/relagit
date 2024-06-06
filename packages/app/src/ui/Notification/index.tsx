@@ -181,7 +181,13 @@ Notification.Layer = () => {
 	});
 
 	return (
-		<Layer key="notification" transitions={Layer.Transitions.None} type="bare" initialVisible>
+		<Layer
+			index={9}
+			key="notification"
+			transitions={Layer.Transitions.None}
+			type="bare"
+			initialVisible
+		>
 			<div
 				class="notification__list"
 				style={{

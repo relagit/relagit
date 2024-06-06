@@ -83,7 +83,7 @@ export const CommandPalette = () => {
 	});
 
 	return (
-		<Layer key="palette" transitions={Layer.Transitions.None} type="bare">
+		<Layer index={3} key="palette" transitions={Layer.Transitions.None} type="bare">
 			<div
 				class="palette"
 				onClick={(e) => {

@@ -9,7 +9,7 @@
 	border: 1px solid var(--separator-primary);
 	box-shadow: -2px 4px 11px rgb(0 0 0 / 25%);
 	min-width: 200px;
-	z-index: 99;
+	z-index: calc(95 * var(--layer-index));
 
 	&__label {
 		font-size: 0.8rem;
