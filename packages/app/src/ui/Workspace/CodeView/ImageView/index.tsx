@@ -24,7 +24,21 @@ const mimeFromPath = (path: string) => {
 		case 'jpeg':
 			return 'image/jpeg';
 		case 'png':
+		case 'apng':
 			return 'image/png';
+		case 'tiff':
+			return 'image/tiff';
+		case 'avif':
+			return 'image/avif';
+		case 'heif':
+		case 'heic':
+			return 'image/heic';
+		case 'ico':
+			return 'image/x-icon';
+		case 'bmp':
+			return 'image/bmp';
+		case 'webp':
+			return 'image/webp';
 		case 'gif':
 			return 'image/gif';
 		case 'svg':

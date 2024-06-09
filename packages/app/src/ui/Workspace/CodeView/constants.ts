@@ -1,7 +1,22 @@
-export const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
+export const IMAGE_EXTENSIONS = [
+	'.png',
+	'.jpg',
+	'.jpeg',
+	'.gif',
+	'.bmp',
+	'.webp',
+	'.tiff',
+	'.svg',
+	'.ico',
+	'.avif',
+	'.apng',
+	'.heif',
+	'.heic'
+];
 export const BINARY_EXTENSIONS = [
 	'.DS_Store',
 	'.exe',
+	'.icns',
 	'.dll',
 	'.so',
 	'.dylib',
