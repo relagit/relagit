@@ -145,7 +145,7 @@ export const reposition = (position: 'top-left' | 'top-right' | 'bottom-left' | 
 			break;
 	}
 
-	popout.setPosition(x, y);
+	popout.setPosition(x, y, true);
 };
 
 ipcMain.handle(
