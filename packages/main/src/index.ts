@@ -489,6 +489,11 @@ app.on('window-all-closed', () => {
 });
 
 app.setAsDefaultProtocolClient('relagit');
+const lock = app.requestSingleInstanceLock();
+
+if (!lock) {
+	app.quit();
+}
 
 const onLoaded = (cb: (window: BrowserWindow) => void) => {
 	if (loaded) {
@@ -500,6 +505,10 @@ const onLoaded = (cb: (window: BrowserWindow) => void) => {
 
 app.on('open-url', (_, url) => {
 	onLoaded((window) => {
+		if (window.isMinimized()) {
+			window.restore();
+		}
+
 		window.focus();
 
 		if (url.includes('/oauth-captive')) {
@@ -507,6 +516,26 @@ app.on('open-url', (_, url) => {
 		}
 
 		if (url.includes('/clone/')) {
+			window.webContents.send(ipc.CLONE_CAPTIVE, url);
+		}
+	});
+});
+
+app.on('second-instance', (_, commandLine) => {
+	onLoaded((window) => {
+		if (window.isMinimized()) {
+			window.restore();
+		}
+
+		window.focus();
+
+		const url = commandLine.pop();
+
+		if (url?.includes('/oauth-captive')) {
+			window.webContents.send(ipc.OAUTH_CAPTIVE, url);
+		}
+
+		if (url?.includes('/clone/')) {
 			window.webContents.send(ipc.CLONE_CAPTIVE, url);
 		}
 	});
