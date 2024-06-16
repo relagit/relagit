@@ -45,7 +45,7 @@ const getTreeDetails = (refs: string) => {
 export const Log = async (
 	repository: Repository,
 	limit = Infinity,
-	before?: Date | LogCommit
+	since?: Date | LogCommit
 ): Promise<LogCommit[]> => {
 	if (!repository) return [];
 
@@ -60,12 +60,12 @@ export const Log = async (
 		args.push(`--max-count=${limit}`);
 	}
 
-	if (before) {
-		if (before instanceof Date) {
-			args.push(`--before="${before.toISOString()}"`);
+	if (since) {
+		if (since instanceof Date) {
+			args.push(`--since="${since.toISOString()}"`);
 		} else {
 			// we're skipping the commit itself
-			args.push(`--before="${before.date}"`, '--skip=1');
+			args.push(`--since="${since.date}"`, '--skip=1');
 		}
 	}
 
