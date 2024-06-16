@@ -11,9 +11,20 @@ import * as Git from '@modules/git';
 import { DIFF } from '@modules/git/constants';
 import highlighter, { langFrom } from '@modules/highlighter';
 import { error } from '@modules/logger';
+import { useLazy } from '@modules/shared';
 import FileStore from '@stores/files';
 import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
+import { editors, openInEditor } from '~/app/src/modules/editor';
+import {
+	GitHub,
+	getProvider,
+	issuesUrlForProvider,
+	pullRequestsUrlForProvider,
+	repoParams
+} from '~/app/src/modules/github';
+import { openExternal } from '~/app/src/modules/shell';
+import SettingsStore from '~/app/src/stores/settings';
 
 import EmptyState from '@ui/Common/EmptyState';
 import Icon from '@ui/Common/Icon';
@@ -23,6 +34,8 @@ import SubmoduleView from './SubmoduleView';
 import { BINARY_EXTENSIONS, IMAGE_EXTENSIONS } from './constants';
 
 import './index.scss';
+
+const meta = window.Native.platform === 'win32' ? '⌃' : '⌘';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 
@@ -143,9 +156,18 @@ export default (props: CodeViewProps) => {
 		FileStore.getByRepositoryPath(props.repository)
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
+	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const fileStatus = createStoreListener([FileStore, LocationStore], () =>
 		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
+	);
+
+	// only run these when needed
+	const issues = useLazy(repo, (r) =>
+		GitHub('repos/:username/:repo/issues').get(...repoParams(r?.remote || ''), 'open')
+	);
+	const prs = useLazy(repo, (r) =>
+		GitHub('repos/:username/:repo/pulls').get(...repoParams(r?.remote || ''), 'open')
 	);
 
 	createStoreListener([LocationStore, FileStore], async () => {
@@ -334,11 +356,149 @@ export default (props: CodeViewProps) => {
 										<Show
 											when={changes()?.length}
 											fallback={
-												<EmptyState
-													detail={t('codeview.noChanges')}
-													hint={t('codeview.noChangesHint')}
-													image={EmptyState.Images.NothingHere}
-												/>
+												<div class="codeview__empty">
+													<EmptyState
+														horizontal
+														detail={t('codeview.noChanges')}
+														hint={t('codeview.noChangesHint')}
+														image={EmptyState.Images.NothingHere}
+													/>
+													<div class="codeview__empty__actions">
+														<button
+															class="codeview__empty__actions__action"
+															onClick={() => {
+																openInEditor(repo()?.path || '');
+															}}
+														>
+															<div class="codeview__empty__actions__action__label">
+																{t('sidebar.contextMenu.openIn', {
+																	name: t(
+																		`settings.general.editor.${
+																			SettingsStore.getSetting(
+																				'externalEditor'
+																			) || 'code'
+																		}`
+																	)
+																})}
+																<div class="codeview__empty__actions__action__label__accelerator">
+																	<span>{'⇧'}</span>
+																	<span>{meta}</span>
+																	<span>C</span>
+																</div>
+															</div>
+															<img
+																class="codeview__empty__actions__action__icon"
+																src={
+																	editors.find(
+																		(e) =>
+																			e.exec ===
+																			(SettingsStore.getSetting(
+																				'externalEditor'
+																			) || 'code')
+																	)?.image
+																}
+															/>
+														</button>
+														<button
+															class="codeview__empty__actions__action"
+															onClick={() => {
+																openExternal(repo()?.remote || '');
+															}}
+														>
+															<div class="codeview__empty__actions__action__label">
+																{t(
+																	'sidebar.contextMenu.openRemote'
+																)}
+																<div class="codeview__empty__actions__action__label__accelerator">
+																	<span>{'⇧'}</span>
+																	<span>{meta}</span>
+																	<span>G</span>
+																</div>
+															</div>
+														</button>
+														<Show
+															when={
+																getProvider(
+																	repo()?.remote ||
+																		'https://rela.dev'
+																) === 'github'
+															}
+														>
+															<div class="codeview__empty__actions__group">
+																<button
+																	class="codeview__empty__actions__action"
+																	onClick={() => {
+																		openExternal(
+																			issuesUrlForProvider(
+																				'https://github.com',
+																				repoParams(
+																					repo()
+																						?.remote ||
+																						''
+																				)
+																			) || ''
+																		);
+																	}}
+																>
+																	<div class="codeview__empty__actions__action__label">
+																		<span>
+																			{t('git.remote.view', {
+																				name: t(
+																					'git.remote.issue',
+																					undefined,
+																					issues()?.length
+																				)
+																			})}
+																			<Icon name="link-external" />
+																		</span>
+																		<div class="codeview__empty__actions__action__label__count">
+																			{issues()?.length}
+																		</div>
+																	</div>
+																	<Icon
+																		name="issue-opened"
+																		variant={24}
+																	/>
+																</button>
+																<button
+																	class="codeview__empty__actions__action"
+																	onClick={() => {
+																		openExternal(
+																			pullRequestsUrlForProvider(
+																				'https://github.com',
+																				repoParams(
+																					repo()
+																						?.remote ||
+																						''
+																				)
+																			) || ''
+																		);
+																	}}
+																>
+																	<div class="codeview__empty__actions__action__label">
+																		<span>
+																			{t('git.remote.view', {
+																				name: t(
+																					'git.remote.pull',
+																					undefined,
+																					prs()?.length
+																				)
+																			})}
+																			<Icon name="link-external" />
+																		</span>
+																		<div class="codeview__empty__actions__action__label__count">
+																			{prs()?.length}
+																		</div>
+																	</div>
+																	<Icon
+																		name="git-pull-request"
+																		variant={24}
+																	/>
+																</button>
+															</div>
+														</Show>
+													</div>
+												</div>
 											}
 										>
 											<EmptyState

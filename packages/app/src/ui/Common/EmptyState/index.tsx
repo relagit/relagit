@@ -24,6 +24,7 @@ export interface EmptyStateProps {
 	};
 	detail?: string;
 	hint?: string;
+	horizontal?: boolean;
 	opacity?: number;
 	icon?: IconName;
 	actions?: {
@@ -63,7 +64,12 @@ const EmptyState = (props: EmptyStateProps) => {
 	window.Native.listeners.NATIVE_THEME_UPDATED(update);
 
 	return (
-		<div class="empty-state">
+		<div
+			class="empty-state"
+			classList={{
+				horizontal: props.horizontal
+			}}
+		>
 			<Show when={props.icon}>
 				<Icon name={props.icon!} variant={24} />
 			</Show>
@@ -104,11 +110,13 @@ const EmptyState = (props: EmptyStateProps) => {
 					style={{ opacity: props.opacity || 1 }}
 				/>
 			</Show>
-			<Show when={props.detail}>
-				<div class="empty-state__text">{props.detail}</div>
-			</Show>
-			<Show when={props.hint}>
-				<div class="empty-state__hint">{props.hint}</div>
+			<Show when={props.detail || props.hint}>
+				<div class="empty-state__text">
+					{props.detail}
+					<Show when={props.hint}>
+						<div class="empty-state__text__hint">{props.hint}</div>
+					</Show>
+				</div>
 			</Show>
 			<Show when={props.actions?.length}>
 				<div class="empty-state__actions">

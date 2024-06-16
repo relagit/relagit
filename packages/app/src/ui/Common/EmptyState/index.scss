@@ -3,13 +3,33 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 20px 60px;
+	padding: 32px 64px;
 	text-align: center;
 	color: var(--color-secondary);
 	font-size: 1rem;
 	line-height: 1.5;
 	margin: 0 auto;
 	user-select: none;
+	gap: 32px;
+
+	&.horizontal {
+		flex-direction: row-reverse;
+		justify-content: space-between;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+
+		img {
+			width: 300px;
+			height: 300px;
+			margin: 0;
+		}
+
+		.empty-state__text {
+			text-align: start;
+			align-items: flex-start;
+		}
+	}
 
 	svg {
 		margin-bottom: 16px;
@@ -24,24 +44,26 @@
 	img {
 		width: 100%;
 		max-width: 400px;
-		margin-bottom: 20px;
 	}
 
 	&__text {
-		margin-bottom: 10px;
 		font-size: 1.25rem;
 		opacity: 0.7;
 		color: var(--color-secondary);
-	}
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
 
-	&__hint {
-		font-size: 1rem;
-		opacity: 0.5;
-		color: var(--color-secondary);
+		&__hint {
+			font-size: 1rem;
+			opacity: 0.5;
+			color: var(--color-secondary);
+		}
 	}
 
 	&__actions {
-		margin-top: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: center;

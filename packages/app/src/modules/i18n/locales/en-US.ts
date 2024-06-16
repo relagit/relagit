@@ -305,7 +305,7 @@ export default {
 		loading: 'Loading...',
 		loadingHint: "This shouldn't take too long.",
 		errorHint: 'Something went wrong while loading the file.',
-		noChanges: 'No pending changes!',
+		noChanges: 'No Pending Changes',
 		noChangesHint: "Go take a break! You've earned it.",
 		noFile: 'No files selected.',
 		noFileHint: 'Click one in the sidebar over there （´・｀） to get started.',
@@ -335,7 +335,12 @@ export default {
 		stashedChanges: ['{{stashCount}} stash ({{count}})', '{{stashCount}} stashes ({{count}})'],
 		removeStash: 'Remove Stash',
 		files: ['{{count}} file', '{{count}} files'],
-		undo: 'Undo {{sha}}'
+		undo: 'Undo {{sha}}',
+		remote: {
+			view: 'View {{name}}',
+			issue: ['Issue', 'Issues'],
+			pull: ['Pull Request', 'Pull Requests']
+		}
 	},
 	palette: {
 		hint: [
