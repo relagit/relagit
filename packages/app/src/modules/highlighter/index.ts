@@ -43,5 +43,5 @@ export const langFrom = (filename: string | undefined) => {
 
 	const ext = '.' + filename.split('.').pop();
 
-	return highlighter.flagToScope(ext);
+	return highlighter.flagToScope(ext) || '';
 };
