@@ -119,8 +119,7 @@ const config = {
 		category: 'Developer',
 		maintainer: 'TheCommieAxolotl',
 		target: ['deb', 'tar.gz', 'rpm'],
-		installerIcon:
-			buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
+		icon: buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
 	},
 	win: {
 		target: [
@@ -142,7 +141,7 @@ const config = {
 		allowToChangeInstallationDirectory: true,
 		createDesktopShortcut: true,
 		createStartMenuShortcut: true,
-		icon: './build/win/dmg.png'
+		installerIcon: './build/win/dmg.png'
 	},
 	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
