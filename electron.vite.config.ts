@@ -57,37 +57,47 @@ const paths: import('vite').AliasOptions = {
 	'@modules/*': resolve(__dirname, './packages/app/src/modules/*')
 };
 
+if (
+	!process.env.AI_API_PASSWORD ||
+	!process.env.AI_API_URL ||
+	!process.env.GITHUB_CLIENT_ID ||
+	!process.env.GITLAB_CLIENT_ID ||
+	!process.env.CODEBERG_CLIENT_ID
+) {
+	console.warn('Missing some required environment variables');
+}
+
 const commonPlugins: import('vite').PluginOption = [
 	tsconfig(),
 	replaceCodePlugin({
 		replacements: [
 			{
 				from: /__NODE_ENV__/g,
-				to: JSON.stringify(IS_DEV ? 'development' : 'production')
+				to: JSON.stringify(IS_DEV ? 'development' : 'production') ?? '""'
 			},
 			{
 				from: /__COMMIT_HASH__/g,
-				to: JSON.stringify(GIT_COMMIT_HASH)
+				to: JSON.stringify(GIT_COMMIT_HASH) ?? '""'
 			},
 			{
 				from: /__GITHUB_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.GITHUB_CLIENT_ID)
+				to: JSON.stringify(process.env.GITHUB_CLIENT_ID) ?? '""'
 			},
 			{
 				from: /__GITLAB_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.GITLAB_CLIENT_ID)
+				to: JSON.stringify(process.env.GITLAB_CLIENT_ID) ?? '""'
 			},
 			{
 				from: /__CODEBERG_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.CODEBERG_CLIENT_ID)
+				to: JSON.stringify(process.env.CODEBERG_CLIENT_ID) ?? '""'
 			},
 			{
 				from: /__AI_API_URL__/g,
-				to: JSON.stringify(process.env.AI_API_URL)
+				to: JSON.stringify(process.env.AI_API_URL) ?? '""'
 			},
 			{
 				from: /__AI_API_PASSWORD__/g,
-				to: JSON.stringify(process.env.AI_API_PASSWORD)
+				to: JSON.stringify(process.env.AI_API_PASSWORD) ?? '""'
 			}
 		]
 	})

@@ -131,7 +131,8 @@ const config = {
 				target: 'zip',
 				arch: ['x64']
 			}
-		]
+		],
+		icon: buildInfo.env === 'development' ? './build/win/dev.png' : './build/win/icon.png'
 	},
 	nsis: {
 		oneClick: false,
@@ -139,7 +140,8 @@ const config = {
 		allowElevation: true,
 		allowToChangeInstallationDirectory: true,
 		createDesktopShortcut: true,
-		createStartMenuShortcut: true
+		createStartMenuShortcut: true,
+		icon: './build/win/dmg.png'
 	},
 	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
