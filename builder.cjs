@@ -141,7 +141,7 @@ const config = {
 		allowToChangeInstallationDirectory: true,
 		createDesktopShortcut: true,
 		createStartMenuShortcut: true,
-		installerIcon: './build/win/dmg.png'
+		installerIcon: './build/win/dmg.ico'
 	},
 	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
