@@ -122,7 +122,8 @@ const config = {
 		icon: buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
 	},
 	win: {
-		target: ['zip']
+		target: ['zip'],
+		icon: buildInfo.env === 'development' ? './build/win/dev.png' : './build/win/icon.png'
 	},
 	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
