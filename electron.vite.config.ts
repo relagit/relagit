@@ -71,23 +71,23 @@ const commonPlugins: import('vite').PluginOption = [
 			},
 			{
 				from: /__GITHUB_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.GITHUB_CLIENT_ID)
+				to: JSON.stringify(process.env.GITHUB_CLIENT_ID || '')
 			},
 			{
 				from: /__GITLAB_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.GITLAB_CLIENT_ID)
+				to: JSON.stringify(process.env.GITLAB_CLIENT_ID || '')
 			},
 			{
 				from: /__CODEBERG_CLIENT_ID__/g,
-				to: JSON.stringify(process.env.CODEBERG_CLIENT_ID)
+				to: JSON.stringify(process.env.CODEBERG_CLIENT_ID || '')
 			},
 			{
 				from: /__AI_API_URL__/g,
-				to: JSON.stringify(process.env.AI_API_URL)
+				to: JSON.stringify(process.env.AI_API_URL || '')
 			},
 			{
 				from: /__AI_API_PASSWORD__/g,
-				to: JSON.stringify(process.env.AI_API_PASSWORD)
+				to: JSON.stringify(process.env.AI_API_PASSWORD || '')
 			}
 		]
 	})
