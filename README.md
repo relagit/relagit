@@ -4,7 +4,7 @@
 	<p>The elegant solution to graphical version control.</p>
 	<div>
 	<a href="https://rela.dev">rela.dev</a>
-	|
+	-
 	<a href="https://rela.dev/redirect/discord">Join Discord</a>
 	</div>
 	<br>
