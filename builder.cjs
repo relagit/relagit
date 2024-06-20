@@ -122,7 +122,24 @@ const config = {
 		icon: buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
 	},
 	win: {
-		target: ['zip']
+		target: [
+			{
+				target: 'nsis',
+				arch: ['x64']
+			},
+			{
+				target: 'zip',
+				arch: ['x64']
+			}
+		]
+	},
+	nsis: {
+		oneClick: false,
+		perMachine: true,
+		allowElevation: true,
+		allowToChangeInstallationDirectory: true,
+		createDesktopShortcut: true,
+		createStartMenuShortcut: true
 	},
 	files: ['dist', 'public', 'package.json', 'LICENSE']
 };
