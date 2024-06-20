@@ -119,7 +119,8 @@ const config = {
 		category: 'Developer',
 		maintainer: 'TheCommieAxolotl',
 		target: ['deb', 'tar.gz', 'rpm'],
-		icon: buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
+		installerIcon:
+			buildInfo.env === 'development' ? './build/dev_lin.png' : './build/icon_lin.png'
 	},
 	win: {
 		target: [
