@@ -23,6 +23,7 @@ import { openExternal } from '~/app/src/modules/shell';
 
 import Icon, { IconName } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
+import { showCherryPickModal } from '@ui/Modal/CherryPick';
 import { showPublishModal } from '@ui/Modal/Publish';
 
 import './index.scss';
@@ -543,8 +544,20 @@ export default () => {
 											},
 											{
 												type: 'item',
+												label: t('git.cherryPick', {
+													current: repository()?.branch,
+													branch: branch.gitName
+												}),
+												disabled: branch.gitName === repository()?.branch,
+												onClick: () => {
+													showCherryPickModal(repository(), branch);
+												}
+											},
+											{
+												type: 'item',
 												label: t('git.mergeBranch', {
-													current: repository()?.branch
+													current: repository()?.branch,
+													branch: branch.gitName
 												}),
 												disabled: branch.gitName === repository()?.branch,
 												onClick: async () => {

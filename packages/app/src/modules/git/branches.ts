@@ -51,6 +51,8 @@ export const ListBranches = async (repository: Repository | undefined): Promise<
 			const path = slashParts.slice(0, -1).join('/');
 			const name = slashParts.pop();
 
+			if (name === 'origin') return null;
+
 			return {
 				name: name!,
 				path: path,

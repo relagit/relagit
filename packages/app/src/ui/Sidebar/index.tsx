@@ -63,6 +63,10 @@ export default (props: SidebarProps) => {
 				commits()[commits().length - 1]
 			);
 
+			if (newItems.some((item) => commits().some((c) => c.hash === item.hash))) {
+				return; // we already have this item
+			}
+
 			setCommits((commits) => commits.concat(newItems));
 		},
 		{

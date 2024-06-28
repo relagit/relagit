@@ -1,0 +1,67 @@
+@use '../../../illyrica/mixins';
+
+.cherry-pick-modal__list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	&__item {
+		padding: 8px 16px;
+		border-radius: 4px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		border: none;
+		background: none;
+		color: var(--color-primary);
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		@include mixins.focusable;
+
+		&:hover {
+			background: var(--bg-hover);
+		}
+
+		&.active {
+			background: var(--bg-active);
+		}
+
+		&__message {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100%;
+		}
+
+		&__info {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+			width: 100%;
+			font-size: 0.85rem;
+			color: var(--color-secondary);
+			white-space: nowrap;
+
+			&__author {
+				margin-left: auto;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			&__hash {
+				color: var(--color-secondary);
+				font-family: var(--font-mono);
+			}
+
+			&__ref:not(:empty) {
+				color: var(--color-secondary);
+				background: var(--bg-secondary);
+				border-radius: 4px;
+				padding: 4px 8px;
+				font-size: 0.8rem;
+			}
+		}
+	}
+}

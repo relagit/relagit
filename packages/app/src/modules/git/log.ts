@@ -15,6 +15,7 @@ export interface LogCommit {
 	files: number;
 	insertions: number;
 	deletions: number;
+	parent: string;
 }
 
 const getTreeDetails = (refs: string) => {
@@ -45,16 +46,27 @@ const getTreeDetails = (refs: string) => {
 export const Log = async (
 	repository: Repository,
 	limit = Infinity,
-	since?: Date | LogCommit
+	since?: Date | LogCommit,
+	branch?: string | string[]
 ): Promise<LogCommit[]> => {
 	if (!repository) return [];
 
 	const args = [
-		'--pretty=format:%H%n%an%n%ad%n%s%n%D%n',
+		'--pretty=format:%H%n%an%n%ad%n%s%n%D%nP<>%P%n',
 		'--stat',
 		'--no-color',
 		'--stat-width=1'
 	];
+
+	if (branch) {
+		if (Array.isArray(branch)) {
+			for (const b of branch) {
+				args.unshift(b);
+			}
+		} else {
+			args.unshift(branch);
+		}
+	}
 
 	if (limit !== Infinity) {
 		args.push(`--max-count=${limit}`);
@@ -78,7 +90,7 @@ export const Log = async (
 	const commits = res.split(/\n(?=[\w]{40})/g).map((commit) => {
 		if (!commit) return;
 
-		const [hash, author, date, message, refs] = commit.split('\n');
+		const [hash, author, date, message, refs, parent] = commit.split('\n');
 
 		const treeDetails = getTreeDetails(refs);
 
@@ -92,6 +104,7 @@ export const Log = async (
 				date,
 				message,
 				refs,
+				parent: parent.substring(4), // remove the 'P<>' from the parent hash
 				files: 0,
 				insertions: 0,
 				deletions: 0

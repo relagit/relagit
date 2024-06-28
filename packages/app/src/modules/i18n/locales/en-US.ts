@@ -319,7 +319,8 @@ export default {
 		publishHint: 'Publish this branch to remote.',
 		branches: ['Branch', 'Branches'],
 		deleteBranch: 'Delete Branch',
-		mergeBranch: 'Merge Branch into {{current}}',
+		mergeBranch: 'Merge {{branch}} into {{current}}',
+		cherryPick: 'Cherry Pick from {{branch}} into {{current}}',
 		newBranch: 'New branch',
 		createBranch: 'Create Branch',
 		pushChanges: 'Push Changes',
@@ -374,6 +375,13 @@ export default {
 			auth: 'You need to authenticate with GitHub to publish your repository.',
 			authHint: 'Click the button below to begin the OAuth process.',
 			authButton: 'Authenticate'
+		},
+		cherryPick: {
+			title: 'Cherry Pick from {{branch}} into {{current}}',
+			noCommits: 'No Commits to Cherry Pick',
+			noCommitsHint:
+				'There are no commits in {{branch}} that are not already in {{current}}.',
+			action: 'Cherry Pick'
 		},
 		information: {
 			metadata: 'Metadata',

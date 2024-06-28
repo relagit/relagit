@@ -4,6 +4,7 @@ export { Show, ShowOrigin, Details } from './show';
 export { PreviousCommit } from './previous-commit';
 export { SubmoduleStatus } from './submodule';
 export { Remote, AddRemote } from './remote';
+export { CherryPick } from './cherry-pick';
 export { Discard } from './discard';
 export { Content } from './content';
 export { Analyse } from './analyse';
