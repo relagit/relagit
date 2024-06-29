@@ -67,6 +67,12 @@ const PanelButton = (props: Reffable<PanelButtonProps>) => {
 						}}
 						onClick={props.onClick}
 						onMouseDown={props.onMouseDown}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								if (props.onClick) props.onClick(e);
+								if (props.onMouseDown) props.onMouseDown(e);
+							}
+						}}
 						id={props.id}
 					>
 						<Icon name={props.icon} variant={props.iconVariant} />
