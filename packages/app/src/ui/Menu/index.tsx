@@ -175,7 +175,20 @@ export default (props: Menu) => {
 					</div>
 				</Portal>
 			</Show>
-			<div class="contextmenu-wrapper" ref={setWrapper}>
+			<div
+				class="contextmenu-wrapper"
+				ref={setWrapper}
+				onKeyDown={(e) => {
+					if (props.event === 'contextmenu' || !props.event) {
+						if (e.key === 'Enter' && e.shiftKey) {
+							e.preventDefault();
+							e.stopPropagation();
+
+							wrapperListener(e);
+						}
+					}
+				}}
+			>
 				{props.children}
 			</div>
 		</>
