@@ -33,8 +33,8 @@ export interface PanelButtonProps {
 	icon: IconName;
 	iconVariant?: 12 | 16 | 24;
 	name?: string;
-	onClick?: (e: MouseEvent) => void;
-	onMouseDown?: (e: MouseEvent) => void;
+	onClick?: (e: MouseEvent | KeyboardEvent) => void;
+	onMouseDown?: (e: MouseEvent | KeyboardEvent) => void;
 	size?: 'small' | 'medium' | 'large';
 	label?: string;
 	detail?: JSX.Element | string;
