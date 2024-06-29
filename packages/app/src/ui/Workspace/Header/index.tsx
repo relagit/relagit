@@ -1,4 +1,4 @@
-import { Accessor, For, JSX, Show, createEffect, createSignal } from 'solid-js';
+import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 
 import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
@@ -122,12 +122,10 @@ export default () => {
 		return SettingsStore.getSetting('ui.thinIcons') ? 24 : 16;
 	});
 
-	let branchesRef: Accessor<HTMLElement | undefined>;
+	const branchPickerSignal = createSignal(false);
 
 	window.Native.listeners.BRANCHES(() => {
-		if (!branchesRef()) return;
-
-		branchesRef()?.click();
+		branchPickerSignal[1]((b) => !b);
 	});
 
 	createEffect(async () => {
@@ -510,6 +508,7 @@ export default () => {
 				trapFocus
 				position="bottom"
 				align="end"
+				open={branchPickerSignal}
 				body={() => (
 					<div class="branches-picker">
 						<div class="branches-picker__label" tabIndex={0}>
@@ -773,24 +772,20 @@ export default () => {
 					</div>
 				)}
 			>
-				{(p) => {
-					branchesRef = p.getRef;
-
-					return (
-						<PanelButton
-							disabled={!repository() || branches() === null}
-							ref={p.ref}
-							icon="git-branch"
-							iconVariant={iconVariant()}
-							name="Switch branch"
-							id="workspace-branch"
-							className={p.open() ? 'active' : ''}
-							onMouseDown={(e) => {
-								p.toggle(e);
-							}}
-						/>
-					);
-				}}
+				{(p) => (
+					<PanelButton
+						disabled={!repository() || branches() === null}
+						ref={p.ref}
+						icon="git-branch"
+						iconVariant={iconVariant()}
+						name="Switch branch"
+						id="workspace-branch"
+						className={p.open() ? 'active' : ''}
+						onMouseDown={(e) => {
+							p.toggle(e);
+						}}
+					/>
+				)}
 			</Popout>
 			<Popout
 				position="bottom"
