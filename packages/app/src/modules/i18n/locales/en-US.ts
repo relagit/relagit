@@ -431,7 +431,7 @@ export default {
 		},
 		auth: {
 			title: 'Complete Authentication',
-			expired: 'Your verification code expire {{time}}. Please try again.',
+			expired: 'Your verification code expired {{time}}. Please try again.',
 			willExpire: 'Your verification code will expire {{time}}.',
 			error: 'An error occurred while authenticating. Please try again.',
 			success: 'Success! You may now close this modal.',
