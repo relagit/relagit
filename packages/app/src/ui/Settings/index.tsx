@@ -31,8 +31,59 @@ import { hideReloadNotification, showReloadNotification } from './shared';
 
 import './index.scss';
 
+const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
+
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const clipboard = window.Native.DANGEROUS__NODE__REQUIRE('electron:clipboard');
+
+const redact = (settings: Record<string, unknown> | string) => {
+	if (typeof settings === 'string') {
+		if (fs.existsSync(settings)) {
+			return '<path>';
+		}
+
+		return settings;
+	}
+
+	const redacted = { ...settings };
+
+	for (let key in redacted) {
+		if (redact(key) !== key) {
+			const stored = redacted[key];
+
+			delete redacted[key];
+
+			redacted[redact(key) as string] = stored;
+
+			key = redact(key) as string;
+		}
+
+		if (typeof redacted[key] === 'string') {
+			redacted[key] = redact(redacted[key] as string);
+		}
+
+		if (
+			Array.isArray(redacted[key]) &&
+			(redacted[key] as unknown[]).every((v) => typeof v === 'string')
+		) {
+			redacted[key] = (redacted[key] as string[]).map(redact);
+		}
+
+		if (typeof redacted[key] === 'object') {
+			if (redacted[key] === null) {
+				continue;
+			}
+
+			redacted[key] = redact(redacted[key] as Record<string, unknown>);
+		}
+
+		if (key.includes('path') || key.includes('key') || key.includes('token')) {
+			redacted[key] = '<value>';
+		}
+	}
+
+	return redacted;
+};
 
 const copyDebugInfo = () => {
 	const debugInfo = JSON.stringify({
@@ -50,6 +101,7 @@ const copyDebugInfo = () => {
 			commitFile: LocationStore.selectedCommitFile ? '<CommitFile>' : '<None>',
 			file: LocationStore.selectedFile ? '<File>' : '<None>'
 		},
+		settings: redact(SettingsStore.settings),
 		layers: LayerStore.getVisible()
 			.map((layer) => layer.key)
 			.join(', '),
