@@ -210,7 +210,7 @@ export default {
 			label: '打开提交{{hash}}'
 		},
 		drawer: {
-			title: '存储库',
+			title: '搜索存储库...',
 			contextMenu: {
 				addRepository: '添加存储库',
 				createRepository: '创建存储库',

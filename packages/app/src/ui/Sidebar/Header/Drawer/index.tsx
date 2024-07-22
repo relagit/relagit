@@ -1,4 +1,4 @@
-import { Accessor, For, Setter, Show, createRoot } from 'solid-js';
+import { Accessor, For, Setter, Show, createMemo, createRoot, createSignal } from 'solid-js';
 
 import { openInEditor } from '@app/modules/editor';
 import { t } from '@app/modules/i18n';
@@ -20,6 +20,8 @@ import Menu from '@ui/Menu';
 import CloneModal from '@ui/Modal/CloneModal';
 import { showRepoModal } from '@ui/Modal/RepositoryModal';
 
+import TextArea from '../../../Common/TextArea';
+
 import './index.scss';
 
 const hasUncommittedChanges = (files: Map<string, GitFile[]>, repository: Repository) => {
@@ -36,11 +38,30 @@ export interface HeaderDrawerProps {
 }
 
 export default (props: HeaderDrawerProps) => {
+	const [filter, setFilter] = createSignal('');
 	const repositories = createStoreListener([RepositoryStore], () => RepositoryStore.repositories);
 	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const files = createStoreListener([FileStore], () => FileStore.files);
+
+	const filtered = createMemo((): Repository[] => {
+		const filterValue = filter().toLowerCase();
+
+		const searchable = Array.from(repositories()?.values() || []).sort((a, b) =>
+			a.name.localeCompare(b.name)
+		);
+
+		return searchable.filter((repository) => {
+			if (!filterValue) return true;
+
+			const name = repository.name.toLowerCase().includes(filterValue);
+			const path = repository.path.toLowerCase().includes(filterValue);
+			const remote = repository.remote.toLowerCase().includes(filterValue);
+
+			return name || path || remote;
+		});
+	});
 
 	return (
 		<div
@@ -53,7 +74,14 @@ export default (props: HeaderDrawerProps) => {
 		>
 			<div class="sidebar__drawer__body">
 				<div class="sidebar__drawer__body__header" tabIndex={0}>
-					{t('sidebar.drawer.title')}
+					<TextArea
+						placeholder={t('sidebar.drawer.title')}
+						label={t('sidebar.drawer.title')}
+						value={filter()}
+						icon="search"
+						onChange={setFilter}
+						className="sidebar__drawer__body__header__search"
+					/>
 					<Tooltip text={t('sidebar.drawer.contextMenu.addRepository')}>
 						{(p) => (
 							<Menu
@@ -112,12 +140,8 @@ export default (props: HeaderDrawerProps) => {
 					</Tooltip>
 				</div>
 				<div class="sidebar__drawer__body__content">
-					<For
-						each={Array.from(repositories() || []).sort((a, b) =>
-							a[1].name.localeCompare(b[1].name)
-						)}
-					>
-						{([, repository]) => (
+					<For each={filtered()}>
+						{(repository) => (
 							<>
 								<Menu
 									interfaceId="sidebar-drawer-repository"

@@ -119,7 +119,7 @@ export default {
 			label: 'Ite ad Commit {{hash}}'
 		},
 		drawer: {
-			title: 'Repositoria',
+			title: 'Quaero Repositoria...',
 			contextMenu: {
 				addRepository: 'Add Repository',
 				createRepository: 'Fac Repository',

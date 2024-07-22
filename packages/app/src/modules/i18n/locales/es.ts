@@ -188,7 +188,7 @@ export default {
 			label: 'Abrir confirmación {{hash}}'
 		},
 		drawer: {
-			title: 'Repositorios',
+			title: 'Buscar Repositorios...',
 			contextMenu: {
 				addRepository: 'Agregar repositorio',
 				createRepository: 'Crear repositorio',

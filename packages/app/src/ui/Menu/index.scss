@@ -1,5 +1,9 @@
 @use '../../illyrica/mixins' as mixins;
 
+.contextmenu-wrapper {
+	display: contents;
+}
+
 .menu {
 	position: absolute;
 	left: var(--x);

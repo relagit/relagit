@@ -26,7 +26,7 @@
 	height: calc(100% - 72px);
 	width: 350px;
 	justify-content: space-between;
-	padding-top: 20px;
+	padding-top: 16px;
 	transform: translateX(-100%);
 	transition:
 		transform 0.2s ease-in-out,
@@ -61,11 +61,11 @@
 		&__header {
 			font-weight: 450;
 			font-size: 1.25rem;
-			margin-bottom: 10px;
-			padding: 0 20px;
+			padding: 0 16px 16px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+			gap: 16px;
 			color: var(--color-primary);
 			outline: none;
 
@@ -101,7 +101,7 @@
 				color: var(--color-primary);
 				font-size: 1rem;
 				font-weight: 400;
-				padding: 10px 20px;
+				padding: 8px 16px;
 				width: 100%;
 				display: flex;
 				gap: 16px;

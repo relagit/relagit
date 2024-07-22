@@ -125,7 +125,7 @@ export default {
 			label: 'Öffne Commit {{hash}}'
 		},
 		drawer: {
-			title: 'Repositories',
+			title: 'Suche Repositories...',
 			contextMenu: {
 				addRepository: 'Füge Repository hinzu',
 				createRepository: 'Erstelle Repository',

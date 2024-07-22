@@ -224,7 +224,7 @@ export default {
 			label: 'Ouvrir le commit {{hash}}'
 		},
 		drawer: {
-			title: 'Dépôts',
+			title: 'Rechercher des dépôts...',
 			contextMenu: {
 				addRepository: 'Ajouter un dépôt',
 				createRepository: 'Créer un dépôt',
