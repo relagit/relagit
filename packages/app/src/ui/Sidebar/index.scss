@@ -27,6 +27,10 @@
 	transition: transform 0.2s ease-in-out;
 	z-index: 9;
 
+	.empty-state__text__hint {
+		color: var(--color-primary);
+	}
+
 	@include darwin {
 		height: calc(100% - 28px);
 	}
@@ -93,10 +97,6 @@
 
 		&::-webkit-scrollbar-track {
 			background-color: transparent;
-		}
-
-		.empty-state__text__hint {
-			color: var(--color-primary);
 		}
 	}
 

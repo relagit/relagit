@@ -20,6 +20,7 @@ import Menu from '@ui/Menu';
 import CloneModal from '@ui/Modal/CloneModal';
 import { showRepoModal } from '@ui/Modal/RepositoryModal';
 
+import EmptyState from '../../../Common/EmptyState';
 import TextArea from '../../../Common/TextArea';
 
 import './index.scss';
@@ -140,118 +141,125 @@ export default (props: HeaderDrawerProps) => {
 					</Tooltip>
 				</div>
 				<div class="sidebar__drawer__body__content">
-					<For each={filtered()}>
-						{(repository) => (
-							<>
-								<Menu
-									interfaceId="sidebar-drawer-repository"
-									items={[
-										{
-											type: 'item',
-											label: t('sidebar.drawer.contextMenu.viewIn', {
-												name:
-													window.Native.platform === 'darwin' ?
-														'Finder'
-													:	'Explorer'
-											}),
-											onClick: () => {
-												showItemInFolder(repository.path);
+					<Show
+						when={filtered().length}
+						fallback={<EmptyState hint={t('sidebar.drawer.empty')} />}
+					>
+						<For each={filtered()}>
+							{(repository) => (
+								<>
+									<Menu
+										interfaceId="sidebar-drawer-repository"
+										items={[
+											{
+												type: 'item',
+												label: t('sidebar.drawer.contextMenu.viewIn', {
+													name:
+														window.Native.platform === 'darwin' ?
+															'Finder'
+														:	'Explorer'
+												}),
+												onClick: () => {
+													showItemInFolder(repository.path);
+												}
+											},
+											{
+												type: 'item',
+												label: t('sidebar.contextMenu.openRemote'),
+												onClick: () => {
+													openExternal(repository.remote);
+												}
+											},
+											{
+												type: 'item',
+												label: t('sidebar.contextMenu.openIn', {
+													name: t(
+														`settings.general.editor.${
+															SettingsStore.getSetting(
+																'externalEditor'
+															) || 'code'
+														}`
+													)
+												}),
+												onClick: () => {
+													openInEditor(repository.path);
+												}
+											},
+											{
+												type: 'separator'
+											},
+											{
+												type: 'item',
+												label: t('sidebar.drawer.contextMenu.useWorkflow'),
+												disabled: !canUseRepositoryAsWorkflow(repository),
+												onClick: () => {
+													useRepositoryAsWorkflow(repository);
+												}
+											},
+											{
+												type: 'separator'
+											},
+											{
+												type: 'item',
+												label: t('sidebar.drawer.contextMenu.remove'),
+												color: 'danger',
+												onClick: () => {
+													removeRepository(repository);
+												}
 											}
-										},
-										{
-											type: 'item',
-											label: t('sidebar.contextMenu.openRemote'),
-											onClick: () => {
-												openExternal(repository.remote);
-											}
-										},
-										{
-											type: 'item',
-											label: t('sidebar.contextMenu.openIn', {
-												name: t(
-													`settings.general.editor.${
-														SettingsStore.getSetting(
-															'externalEditor'
-														) || 'code'
-													}`
-												)
-											}),
-											onClick: () => {
-												openInEditor(repository.path);
-											}
-										},
-										{
-											type: 'separator'
-										},
-										{
-											type: 'item',
-											label: t('sidebar.drawer.contextMenu.useWorkflow'),
-											disabled: !canUseRepositoryAsWorkflow(repository),
-											onClick: () => {
-												useRepositoryAsWorkflow(repository);
-											}
-										},
-										{
-											type: 'separator'
-										},
-										{
-											type: 'item',
-											label: t('sidebar.drawer.contextMenu.remove'),
-											color: 'danger',
-											onClick: () => {
-												removeRepository(repository);
-											}
-										}
-									]}
-								>
-									<button
-										role="button"
-										aria-label={t('sidebar.drawer.switchTo', {
-											name: repository.name
-										})}
-										aria-selected={selected()?.id === repository.id}
-										classList={{
-											sidebar__drawer__body__content__item: true,
-											active: selected()?.id === repository.id
-										}}
-										onClick={() => {
-											props.open[1](false);
-
-											RepositoryStore.makePermanent(repository);
-
-											debug(
-												'Transitioning to repository: ' + repository.name
-											);
-
-											LocationStore.setSelectedRepository(repository);
-										}}
+										]}
 									>
-										<div class="sidebar__drawer__body__content__item__text">
-											{repository.name}
-											<div class="sidebar__drawer__body__content__item__text__details">
-												<Show when={repository.branch}>
-													{repository.branch}
-													{' • '}
-												</Show>
-												{renderDate(
-													repository.lastFetched || new Date().getTime()
-												)()}
-											</div>
-										</div>
-										<Show
-											when={
-												hasUncommittedChanges(files()!, repository) ||
-												repository.ahead ||
-												repository.behind
-											}
+										<button
+											role="button"
+											aria-label={t('sidebar.drawer.switchTo', {
+												name: repository.name
+											})}
+											aria-selected={selected()?.id === repository.id}
+											classList={{
+												sidebar__drawer__body__content__item: true,
+												active: selected()?.id === repository.id
+											}}
+											onClick={() => {
+												props.open[1](false);
+
+												RepositoryStore.makePermanent(repository);
+
+												debug(
+													'Transitioning to repository: ' +
+														repository.name
+												);
+
+												LocationStore.setSelectedRepository(repository);
+											}}
 										>
-											<div class="sidebar__drawer__body__content__item__indicator" />
-										</Show>
-									</button>
-								</Menu>
-							</>
-						)}
-					</For>
+											<div class="sidebar__drawer__body__content__item__text">
+												{repository.name}
+												<div class="sidebar__drawer__body__content__item__text__details">
+													<Show when={repository.branch}>
+														{repository.branch}
+														{' • '}
+													</Show>
+													{renderDate(
+														repository.lastFetched ||
+															new Date().getTime()
+													)()}
+												</div>
+											</div>
+											<Show
+												when={
+													hasUncommittedChanges(files()!, repository) ||
+													repository.ahead ||
+													repository.behind
+												}
+											>
+												<div class="sidebar__drawer__body__content__item__indicator" />
+											</Show>
+										</button>
+									</Menu>
+								</>
+							)}
+						</For>
+					</Show>
 				</div>
 			</div>
 		</div>

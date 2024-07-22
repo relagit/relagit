@@ -217,6 +217,7 @@ export default {
 		},
 		drawer: {
 			title: 'Search Repositories...',
+			empty: 'No repositories found.',
 			contextMenu: {
 				addRepository: 'Add Repository',
 				createRepository: 'Create Repository',
