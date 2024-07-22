@@ -2,20 +2,24 @@ import { useFocusTrap } from '@solidjs-use/integrations/useFocusTrap';
 import { For, Show, createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
-import { useLayerContext } from '../../Layer';
+import type { FloatingElement } from '@ui/Layer';
+
 import Button from '../Button';
 import Icon, { IconName } from '../Icon';
 
 import './index.scss';
 
-export interface DropdownProps<T> {
+export interface DropdownProps<T> extends FloatingElement {
 	options: {
 		value: T;
 		label: string;
-		icon?: string | undefined;
+		image?: string | URL;
+		hint?: string;
 	}[];
 	label: string;
 	value: T;
+	hints?: boolean;
+	monoHints?: boolean;
 	icon?: IconName;
 	iconPosition?: 'left' | 'right';
 	onChange: (value: T) => void;
@@ -30,8 +34,6 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 	const [container, setContainer] = createSignal<HTMLElement | undefined>(undefined);
 	const [x, setX] = createSignal(0);
 	const [y, setY] = createSignal(0);
-
-	const layerContext = useLayerContext('Dropdown');
 
 	const updatePosition = () => {
 		const containerRect = container()?.getBoundingClientRect();
@@ -87,13 +89,28 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 				label={active().label ? `${props.label} (${active().label})` : props.label}
 				type="default"
 			>
-				<Show when={props.iconPosition === 'left' && !active().icon}>
+				<Show when={props.iconPosition === 'left' && !active().image}>
 					<div class="dropdown__button__icon__arrow left">
 						<Icon name={props.icon || 'chevron-down'} />
 					</div>
 				</Show>
-				<Show when={active().icon}>
-					<img src={active().icon} class="dropdown__button__icon" />
+				<Show when={active().image}>
+					{(image) => {
+						return (
+							<Show
+								when={typeof image() !== 'string'}
+								fallback={
+									<div class="dropdown__button__icon">{image() as string}</div>
+								}
+							>
+								<img
+									class="dropdown__button__icon"
+									src={image().toString()}
+									alt={active().label}
+								/>
+							</Show>
+						);
+					}}
 				</Show>
 				{active().label || props.label}
 				<Show when={props.iconPosition === 'right'}>
@@ -122,7 +139,7 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 						style={{
 							'--x': `${x()}px`,
 							'--y': `${y()}px`,
-							'--layer-index': layerContext
+							'--layer-index': props.level ?? 1
 						}}
 					>
 						<For
@@ -145,13 +162,32 @@ export const Dropdown = <T,>(props: DropdownProps<T>) => {
 										deactivate();
 									}}
 								>
-									<Show when={option.icon}>
-										<img
-											src={option.icon}
-											class="dropdown__options__option__icon"
-										/>
+									<Show when={option.image}>
+										{(image) => {
+											return (
+												<Show
+													when={typeof image() !== 'string'}
+													fallback={
+														<div class="dropdown__options__option__icon">
+															{image() as string}
+														</div>
+													}
+												>
+													<img
+														class="dropdown__options__option__icon"
+														src={image().toString()}
+														alt={option.label}
+													/>
+												</Show>
+											);
+										}}
 									</Show>
 									{option.label}
+									<Show when={props.hints || option.hint}>
+										<div classList={{ hint: true, mono: props.monoHints }}>
+											{option.hint ?? String(option.value)}
+										</div>
+									</Show>
 								</button>
 							)}
 						</For>
