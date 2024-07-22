@@ -20,6 +20,7 @@ export const [commands, setCommands] = createSignal<
 		command: string;
 		args: string[];
 		path: string;
+		time: number;
 	}[]
 >([]);
 
@@ -35,7 +36,16 @@ export const Git = async (params: GitParams): Promise<string> => {
 		throw new Error(`Directory does not exist: ${directory}`);
 	}
 
-	setCommands((prev) => prev.concat({ command, args, path: directory }));
+	setCommands((prev) => {
+		prev.unshift({
+			command,
+			args,
+			path: directory,
+			time: Date.now()
+		});
+
+		return prev;
+	});
 
 	const opts = params.opts || {};
 

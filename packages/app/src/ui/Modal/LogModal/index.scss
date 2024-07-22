@@ -38,6 +38,14 @@
 					}
 				}
 			}
+
+			&__info {
+				display: flex;
+				gap: 8px;
+				color: var(--color-secondary);
+				font-size: 0.85rem;
+				font-weight: 400;
+			}
 		}
 	}
 }

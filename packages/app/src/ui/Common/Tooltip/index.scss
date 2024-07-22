@@ -12,6 +12,8 @@
 	z-index: calc(95 * var(--layer-index));
 	color: rgb(190 194 199); // hardcoded
 	max-width: 330px;
+	overflow: hidden;
+	overflow-wrap: break-word;
 
 	&.expanded {
 		max-width: 600px;

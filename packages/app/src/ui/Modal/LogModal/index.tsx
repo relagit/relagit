@@ -1,10 +1,12 @@
 import Modal, { ModalBody, ModalCloseButton, ModalHeader } from '..';
-import { For, Show, createRoot } from 'solid-js';
+import { For, createRoot } from 'solid-js';
 
 import { commands } from '@app/modules/git/core';
 import { t } from '@app/modules/i18n';
 import ModalStore from '@app/stores/modal';
-import EmptyState from '@app/ui/Common/EmptyState';
+import { renderDate } from '~/app/src/modules/time';
+
+import Tooltip from '../../Common/Tooltip';
 
 import './index.scss';
 
@@ -21,37 +23,37 @@ export const LogModal = () => {
 						</ModalHeader>
 						<ModalBody>
 							<div class="log-modal__list">
-								<For
-									each={commands()}
-									fallback={<EmptyState detail="hi" hint="hello" />}
-								>
+								<For each={commands()}>
 									{(cmd) => (
 										<div class="log-modal__list__item">
 											<div class="log-modal__list__item__command">
 												{cmd.command}
 												<div class="log-modal__list__item__command__args">
-													<span>[</span>
 													<For each={cmd.args}>
-														{(arg, i) => (
-															<span>
-																{20 < arg.length ?
-																	arg.substring(0, 20) + '...'
-																:	arg}
-																<Show
-																	when={
-																		i() !== cmd.args.length - 1
-																	}
-																>
-																	,
-																</Show>
-															</span>
+														{(arg) => (
+															<Tooltip
+																delay={500}
+																text={arg}
+																level={2}
+															>
+																{(p) => (
+																	<span {...p}>
+																		{20 < arg.length ?
+																			arg.substring(0, 40) +
+																			'...'
+																		:	arg}
+																	</span>
+																)}
+															</Tooltip>
 														)}
 													</For>
-													<span>]</span>
 												</div>
 											</div>
-											<div class="log-modal__list__item__path">
+											<div class="log-modal__list__item__info">
 												{path.basename(cmd.path)}
+												<div class="log-modal__list__item__info__time">
+													{renderDate(cmd.time)()}
+												</div>
 											</div>
 										</div>
 									)}
