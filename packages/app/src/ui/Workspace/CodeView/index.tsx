@@ -386,9 +386,8 @@ export default (props: CodeViewProps) => {
 																	<span>C</span>
 																</div>
 															</div>
-															<img
-																class="codeview__empty__actions__action__icon"
-																src={
+															<Show
+																when={
 																	editors.find(
 																		(e) =>
 																			e.exec ===
@@ -397,7 +396,23 @@ export default (props: CodeViewProps) => {
 																			) || 'code')
 																	)?.image
 																}
-															/>
+															>
+																<img
+																	class="codeview__empty__actions__action__icon"
+																	onError={(e) => {
+																		e.target.remove(); // remove the image if it fails to load
+																	}}
+																	src={
+																		editors.find(
+																			(e) =>
+																				e.exec ===
+																				(SettingsStore.getSetting(
+																					'externalEditor'
+																				) || 'code')
+																		)?.image
+																	}
+																/>
+															</Show>
 														</button>
 														<button
 															class="codeview__empty__actions__action"
