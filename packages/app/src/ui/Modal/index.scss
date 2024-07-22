@@ -117,7 +117,7 @@
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-			padding: 40px 40px 20px;
+			padding: 32px 32px 16px;
 			user-select: none;
 			gap: 32px;
 			border-bottom: 1px solid var(--separator-secondary);
@@ -148,7 +148,7 @@
 			flex-direction: row;
 			justify-content: flex-end;
 			align-items: center;
-			padding: 20px 40px;
+			padding: 16px 32px;
 			border-top: 1px solid var(--separator-secondary);
 
 			&__buttons {
