@@ -72,7 +72,7 @@ export default {
 				'gemini-pro': 'Gemini Pro',
 				'gemini-1-5-pro': 'Gemini 1.5 Pro',
 				'claude-haiku': 'Claude 3 Haiku',
-				'claude-sonnet': 'Claude 3 Sonnet',
+				'claude-sonnet': 'Claude 3.5 Sonnet',
 				'claude-opus': 'Claude 3 Opus'
 			},
 			apiKey: {

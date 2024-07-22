@@ -118,7 +118,7 @@ export async function* generate(prompt: string): AsyncGenerator<{
 				model = (provider as AnthropicProvider)('claude-3-haiku-20240307');
 				break;
 			case 'claude-sonnet':
-				model = (provider as AnthropicProvider)('claude-3-sonnet-20240229');
+				model = (provider as AnthropicProvider)('claude-3-5-sonnet-20240620');
 				break;
 			case 'claude-opus':
 				model = (provider as AnthropicProvider)('claude-3-opus-20240229');
