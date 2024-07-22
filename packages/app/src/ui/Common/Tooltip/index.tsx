@@ -2,11 +2,11 @@ import { JSX, Show, createSignal } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
-import { useLayerContext } from '../../Layer';
+import { FloatingElement } from '../../Layer';
 
 import './index.scss';
 
-export interface Tooltip {
+export interface Tooltip extends FloatingElement {
 	children: (p: {
 		onMouseEnter: (e: MouseEvent) => void;
 		onMouseLeave: () => void;
@@ -28,8 +28,6 @@ export default (props: Tooltip) => {
 
 	const [tooltip, setTooltip] = createSignal<HTMLDivElement>();
 	const [wrapper, setWrapper] = createSignal<HTMLDivElement>();
-
-	const layerContext = useLayerContext('Tooltip');
 
 	let timeout: NodeJS.Timeout;
 
@@ -126,7 +124,7 @@ export default (props: Tooltip) => {
 								'--y': `${y()}px`,
 								'--w-h': `${wrapper()?.offsetHeight}px`,
 								'--w-w': `${wrapper()?.offsetWidth}px`,
-								'--layer-index': layerContext
+								'--layer-index': props.level ?? 1
 							}}
 						>
 							{props.text}

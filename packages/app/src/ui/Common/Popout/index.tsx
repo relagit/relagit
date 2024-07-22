@@ -13,11 +13,11 @@ import {
 import { Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
-import { useLayerContext } from '../../Layer';
+import { FloatingElement } from '../../Layer';
 
 import './index.scss';
 
-export interface Popout {
+export interface Popout extends FloatingElement {
 	children: (p: {
 		show: (e?: MouseEvent | KeyboardEvent) => void;
 		toggle: (e?: MouseEvent | KeyboardEvent) => void;
@@ -45,8 +45,6 @@ export default (props: Popout) => {
 
 	const [wrapper, setWrapper] = createSignal<HTMLElement>();
 	const [popout, setPopout] = createSignal<HTMLElement>();
-
-	const layerContext = useLayerContext('Popout');
 
 	const listener = () => {
 		const rect = wrapper()?.getBoundingClientRect();
@@ -180,7 +178,7 @@ export default (props: Popout) => {
 								'--y': `${y()}px`,
 								'--w-h': `${wrapper()?.offsetHeight}px`,
 								'--w-w': `${wrapper()?.offsetWidth}px`,
-								'--layer-index': layerContext
+								'--layer-index': props.level ?? 1
 							}}
 						>
 							<props.body open={open} hide={hide} toggle={toggle} show={show} />

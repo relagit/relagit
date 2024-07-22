@@ -25,7 +25,7 @@ type ProviderButtonProps = {
 
 const ProviderButton = (props: ProviderButtonProps) => {
 	return (
-		<Tooltip text={props.label}>
+		<Tooltip text={props.label} level={2}>
 			{(p) => (
 				<button
 					{...p}

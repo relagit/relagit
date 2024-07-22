@@ -118,6 +118,7 @@ export default (props: AddRepositoryModalProps) => {
 				/>
 				<div class="repo__modal__body">
 					<Popout
+						level={2}
 						position="top"
 						open={onboardingStepState}
 						body={() => (
@@ -171,6 +172,7 @@ export default (props: AddRepositoryModalProps) => {
 						{t('modal.repository.cancel')}
 					</Button>
 					<Popout
+						level={2}
 						position="top"
 						open={onboardingStepState2}
 						body={() => (

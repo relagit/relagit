@@ -10,7 +10,7 @@ import ModalStore from '@stores/modal';
 
 import Button from '@ui/Common/Button';
 import Icon from '@ui/Common/Icon';
-import Layer, { LayerContext } from '@ui/Layer';
+import Layer from '@ui/Layer';
 
 import './index.scss';
 
@@ -151,61 +151,58 @@ const Modal = (props: ModalProps) => {
 	const index = createMemo(() => ModalStore.record.findIndex((r) => r.type === props.id));
 
 	return (
-		<LayerContext.Provider value={2}>
-			<div
-				ref={setRef}
-				onMouseDown={(e) => {
-					if (e.target !== ref()) return;
+		<div
+			ref={setRef}
+			onMouseDown={(e) => {
+				if (e.target !== ref()) return;
 
-					if (props.dismissable) return close();
+				if (props.dismissable) return close();
 
-					if (matchMedia('(prefers-reduced-motion: no-preference)'))
-						(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
-				}}
-				classList={{
-					'modal-container': true,
-					visible: open()
-				}}
-				style={{
-					'--modal-index': index()
-				}}
-			>
-				<Show when={open()}>
-					<dialog
-						open={open()}
-						classList={{
-							modal: true,
-							[props.size || '']: true
-						}}
+				if (matchMedia('(prefers-reduced-motion: no-preference)'))
+					(ref()?.firstChild as HTMLElement)?.animate(...SHAKE);
+			}}
+			classList={{
+				'modal-container': true,
+				visible: open()
+			}}
+			style={{
+				'--modal-index': index()
+			}}
+		>
+			<Show when={open()}>
+				<dialog
+					open={open()}
+					classList={{
+						modal: true,
+						[props.size || '']: true
+					}}
+				>
+					<Show
+						when={
+							props.confetti && matchMedia('(prefers-reduced-motion: no-preference)')
+						}
 					>
-						<Show
-							when={
-								props.confetti &&
-								matchMedia('(prefers-reduced-motion: no-preference)')
-							}
-						>
-							<div
-								class="modal__confetti"
-								use:confetti={{
-									particleCount: 300,
-									particleSize: 8,
-									colors: [
-										'var(--color-red-500)',
-										'var(--color-orange-500)',
-										'var(--color-yellow-500)',
-										'var(--color-green-500)',
-										'var(--color-blue-500)',
-										'var(--color-indigo-500)',
-										'var(--color-violet-500)'
-									]
-								}}
-							></div>
-						</Show>
-						{<props.children close={close}></props.children>}
-					</dialog>
-				</Show>
-			</div>
-		</LayerContext.Provider>
+						<div
+							class="modal__confetti"
+							use:confetti={{
+								particleCount: 300,
+								particleSize: 8,
+								colors: [
+									'var(--color-red-500)',
+									'var(--color-orange-500)',
+									'var(--color-yellow-500)',
+									'var(--color-green-500)',
+									'var(--color-blue-500)',
+									'var(--color-indigo-500)',
+									'var(--color-violet-500)'
+								]
+							}}
+						></div>
+					</Show>
+					{<props.children close={close}></props.children>}
+				</dialog>
+			</Show>
+		</div>
 	);
 };
 

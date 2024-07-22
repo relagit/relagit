@@ -269,6 +269,7 @@ const CloneModal = (props: CloneModalProps) => {
 									icon="search"
 								/>
 								<Dropdown
+									level={2}
 									label={t('modal.clone.filter')}
 									value={sort()}
 									onChange={setSort}

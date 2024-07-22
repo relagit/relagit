@@ -97,6 +97,7 @@ const PublishModal = (props: { repo: Repository }) => {
 									{t('modal.publish.owner')}
 								</label>
 								<Dropdown
+									level={2}
 									label={t('modal.publish.owner')}
 									value={owner()}
 									onChange={(val) => {
@@ -106,7 +107,7 @@ const PublishModal = (props: { repo: Repository }) => {
 										{
 											value: AccountStore.getAccountFor('github')!,
 											label: AccountStore.getAccountFor('github')!.login,
-											icon: AccountStore.getAccountFor('github')!.avatar_url
+											image: AccountStore.getAccountFor('github')!.avatar_url
 										},
 										...orgs().map((org) => ({
 											value: org,

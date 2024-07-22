@@ -144,6 +144,7 @@ export const RepoList = <T extends Provider>(props: {
 
 							return (
 								<Menu
+									level={2}
 									interfaceId="clone-modal-item"
 									items={[
 										{

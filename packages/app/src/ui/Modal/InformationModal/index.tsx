@@ -165,6 +165,7 @@ export const InformationModal = () => {
 									{({ index, value }) => {
 										return (
 											<Tooltip
+												level={2}
 												text={t('modal.information.commitsInMonth', {
 													count: value || 0,
 													month: t(

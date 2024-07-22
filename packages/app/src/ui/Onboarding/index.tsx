@@ -22,7 +22,7 @@ const OnboardingModal = () => {
 						<ModalHeader title={t('onboarding.modal.title')}>{''}</ModalHeader>
 						<ModalBody>
 							<div class="onboarding-modal__buttons">
-								<Tooltip text={t('onboarding.modal.themes')}>
+								<Tooltip level={2} text={t('onboarding.modal.themes')}>
 									{(p) => (
 										<a
 											{...p}
@@ -34,7 +34,7 @@ const OnboardingModal = () => {
 										</a>
 									)}
 								</Tooltip>
-								<Tooltip text={t('onboarding.modal.workflows')}>
+								<Tooltip level={2} text={t('onboarding.modal.workflows')}>
 									{(p) => (
 										<a
 											{...p}
@@ -46,7 +46,7 @@ const OnboardingModal = () => {
 										</a>
 									)}
 								</Tooltip>
-								<Tooltip text={t('onboarding.modal.clone')}>
+								<Tooltip level={2} text={t('onboarding.modal.clone')}>
 									{(p) => (
 										<a
 											{...p}

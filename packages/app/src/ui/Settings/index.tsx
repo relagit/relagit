@@ -454,37 +454,41 @@ const SettingsModal = () => {
 					<br />
 					{t('settings.restart')}
 				</p>
-				<RadioGroup
+				<Dropdown
+					level={2}
+					label={t('settings.general.language.label')}
 					hints
 					monoHints
+					icon="globe"
+					iconPosition="right"
 					options={[
 						{
-							element: 'Deutsch',
+							label: 'Deutsch',
 							image: '🇩🇪',
 							value: 'de'
 						},
 						{
-							element: 'English US',
+							label: 'English US',
 							image: '🇺🇸',
 							value: 'en-US'
 						},
 						{
-							element: 'Español',
+							label: 'Español',
 							image: '🇪🇸',
 							value: 'es'
 						},
 						{
-							element: 'Français',
+							label: 'Français',
 							image: '🇫🇷',
 							value: 'fr'
 						},
 						{
-							element: 'Latin',
+							label: 'Latin',
 							image: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
 							value: 'lat'
 						},
 						{
-							element: '中文',
+							label: '中文',
 							image: '🇨🇳',
 							value: 'zh'
 						}
@@ -919,6 +923,7 @@ const SettingsModal = () => {
 										<span class="title">
 											{t('settings.appearance.theme.system')}
 											<Tooltip
+												level={2}
 												text={t('settings.appearance.theme.systemNote')}
 											>
 												{(p) => (
