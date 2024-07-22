@@ -4,7 +4,9 @@ import SettingsStore from '@app/stores/settings';
 import de from './locales/de';
 import enUS from './locales/en-US';
 import es from './locales/es';
+import fr from './locales/fr';
 import lat from './locales/lat';
+import zh from './locales/zh';
 
 // NOTE: I am sorry for the types in this file, they are very complex but somehow work :)
 
@@ -44,7 +46,9 @@ const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 	'en-US': enUS,
 	lat: lat,
 	de: de,
-	es: es
+	es: es,
+	zh: zh,
+	fr: fr
 };
 
 export type ValidLocale = keyof typeof ALL_LOCALES;

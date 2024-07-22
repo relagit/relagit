@@ -112,7 +112,7 @@ export interface RadioGroupProps {
 				element: string;
 				value: string;
 				hint?: string;
-				image?: string;
+				image?: string | URL;
 		  }
 		| {
 				type: 'divider';
@@ -170,7 +170,20 @@ export const RadioGroup = (props: RadioGroupProps) => {
 						>
 							<div class="check"></div>
 							<Show when={option.image}>
-								<img class="image" src={option.image} alt={option.value} />
+								{(image) => {
+									return (
+										<Show
+											when={typeof image() !== 'string'}
+											fallback={<div class="image">{image() as string}</div>}
+										>
+											<img
+												class="image"
+												src={image().toString()}
+												alt={option.value}
+											/>
+										</Show>
+									);
+								}}
 							</Show>
 							{option.element}
 							<Show when={props.hints || option.hint}>
@@ -442,22 +455,38 @@ const SettingsModal = () => {
 					{t('settings.restart')}
 				</p>
 				<RadioGroup
+					hints
+					monoHints
 					options={[
 						{
 							element: 'Deutsch',
+							image: '🇩🇪',
 							value: 'de'
 						},
 						{
 							element: 'English US',
+							image: '🇺🇸',
 							value: 'en-US'
 						},
 						{
+							element: 'Español',
+							image: '🇪🇸',
+							value: 'es'
+						},
+						{
+							element: 'Français',
+							image: '🇫🇷',
+							value: 'fr'
+						},
+						{
 							element: 'Latin',
+							image: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
 							value: 'lat'
 						},
 						{
-							element: 'Español',
-							value: 'es'
+							element: '中文',
+							image: '🇨🇳',
+							value: 'zh'
 						}
 					]}
 					value={settings()?.locale || 'en-US'}
@@ -489,7 +518,7 @@ const SettingsModal = () => {
 							element: t(`settings.general.editor.${editor.exec}`),
 							value: editor.exec,
 							hint: editor.exec as string,
-							image: editor.image
+							image: editor.image ? new URL(editor.image) : undefined
 						}))
 						.concat([
 							{
