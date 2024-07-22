@@ -42,23 +42,23 @@
 	@include light {
 		background-color: #f8f9fb;
 
+		--separator-primary: rgb(0 0 0 / 10%);
+		--separator-secondary: rgb(0 0 0 / 3%);
+
 		&:is(#app-container.vibrancy .sidebar) {
 			background-color: #f6f8fad4;
 		}
-
-		--separator-primary: rgb(0 0 0 / 10%);
-		--separator-secondary: rgb(0 0 0 / 3%);
 	}
 
 	@include dark {
 		background-color: #161717;
 
+		--separator-primary: rgb(208 215 222 / 10%);
+		--separator-secondary: rgb(208 215 222 / 3%);
+
 		&:is(#app-container.vibrancy .sidebar) {
 			background-color: #1a1b1c4a;
 		}
-
-		--separator-primary: rgb(208 215 222 / 10%);
-		--separator-secondary: rgb(208 215 222 / 3%);
 	}
 
 	&:not(.sidebar-active) {
