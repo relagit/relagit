@@ -89,8 +89,8 @@
 		&.x-large {
 			margin: 10% 12%;
 			max-width: 100%;
-			min-height: 70%;
-			max-height: 80%;
+			min-height: min(70%, 638px);
+			max-height: min(80%, 638px);
 			height: fit-content;
 		}
 
