@@ -34,7 +34,7 @@ export default (props: IconProps) => {
 					}" fill="none" xmlns="http://www.w3.org/2000/svg">
                         ${octicons[props.name as IconName].heights[props.variant]!.path}
                     </svg>`
-				:	octicons[props.name as IconName].toSVG({
+				:	octicons[props.name as IconName]?.toSVG?.({
 						width: props.size || props.variant || 16
 					})
 			}
