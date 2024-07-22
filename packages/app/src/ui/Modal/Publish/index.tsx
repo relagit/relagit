@@ -107,12 +107,14 @@ const PublishModal = (props: { repo: Repository }) => {
 										{
 											value: AccountStore.getAccountFor('github')!,
 											label: AccountStore.getAccountFor('github')!.login,
-											image: AccountStore.getAccountFor('github')!.avatar_url
+											image: new URL(
+												AccountStore.getAccountFor('github')!.avatar_url
+											)
 										},
 										...orgs().map((org) => ({
 											value: org,
 											label: org.login,
-											icon: org.avatar_url
+											image: new URL(org.avatar_url)
 										}))
 									]}
 								/>
@@ -157,6 +159,7 @@ const PublishModal = (props: { repo: Repository }) => {
 									label={t('modal.publish.publish', {
 										name: name() || props.repo.name
 									})}
+									dedupe
 									type="brand"
 									disabled={!name() || !owner()}
 									onClick={async () => {
