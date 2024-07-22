@@ -90,10 +90,8 @@
 			display: flex;
 			flex-direction: column;
 			overflow-y: auto;
-
-			&::-webkit-scrollbar {
-				width: 0;
-			}
+			scrollbar-color: var(--separator-primary) transparent;
+			scrollbar-width: thin;
 
 			&__item {
 				background-color: transparent;
