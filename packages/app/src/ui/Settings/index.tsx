@@ -109,7 +109,7 @@ export interface RadioGroupProps {
 	options: (
 		| {
 				type?: 'item';
-				element: string;
+				label: string;
 				value: string;
 				hint?: string;
 				image?: string | URL;
@@ -151,7 +151,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 								'before-divider': props.options[i() + 1]?.type === 'divider'
 							}}
 							aria-disabled={props.disabled}
-							aria-label={option.element}
+							aria-label={option.label}
 							aria-checked={value() === option.value}
 							tabIndex={0}
 							onClick={(e) => {
@@ -185,7 +185,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
 									);
 								}}
 							</Show>
-							{option.element}
+							{option.label}
 							<Show when={props.hints || option.hint}>
 								<div classList={{ hint: true, mono: props.monoHints }}>
 									{option.hint ?? option.value}
@@ -293,12 +293,12 @@ const SettingsModal = () => {
 					hints
 					options={[
 						{
-							element: t('settings.general.cloneMethod.http'),
+							label: t('settings.general.cloneMethod.http'),
 							hint: t('settings.general.cloneMethod.httpHint'),
 							value: 'http'
 						},
 						{
-							element: t('settings.general.cloneMethod.ssh'),
+							label: t('settings.general.cloneMethod.ssh'),
 							hint: t('settings.general.cloneMethod.sshHint'),
 							value: 'ssh'
 						}
@@ -321,17 +321,17 @@ const SettingsModal = () => {
 					monoHints
 					options={[
 						{
-							element: t('settings.general.commitStyle.conventional'),
+							label: t('settings.general.commitStyle.conventional'),
 							hint: 'type(scope): description',
 							value: 'conventional'
 						},
 						{
-							element: t('settings.general.commitStyle.relational'),
+							label: t('settings.general.commitStyle.relational'),
 							hint: '!(scope) type: description',
 							value: 'relational'
 						},
 						{
-							element: t('settings.general.commitStyle.none'),
+							label: t('settings.general.commitStyle.none'),
 							hint: '',
 							value: 'none'
 						}
@@ -519,14 +519,14 @@ const SettingsModal = () => {
 					monoHints
 					options={getAvailableEditors()
 						.map((editor) => ({
-							element: t(`settings.general.editor.${editor.exec}`),
+							label: t(`settings.general.editor.${editor.exec}`),
 							value: editor.exec,
 							hint: editor.exec as string,
 							image: editor.image ? new URL(editor.image) : undefined
 						}))
 						.concat([
 							{
-								element: t('settings.general.editor.custom'),
+								label: t('settings.general.editor.custom'),
 								value: 'custom',
 								hint: '',
 								image: undefined
@@ -593,7 +593,7 @@ const SettingsModal = () => {
 				<RadioGroup
 					options={[
 						{
-							element: t('settings.ai.model.none'),
+							label: t('settings.ai.model.none'),
 							value: 'none',
 							hint: t('settings.ai.model.noneHint')
 						},
@@ -602,15 +602,15 @@ const SettingsModal = () => {
 							name: t('settings.ai.model.openai')
 						},
 						{
-							element: t('settings.ai.model.gpt-3-5'),
+							label: t('settings.ai.model.gpt-3-5'),
 							value: 'gpt-3.5'
 						},
 						{
-							element: t('settings.ai.model.gpt-4'),
+							label: t('settings.ai.model.gpt-4'),
 							value: 'gpt-4'
 						},
 						{
-							element: t('settings.ai.model.gpt-4o'),
+							label: t('settings.ai.model.gpt-4o'),
 							value: 'gpt-4o'
 						},
 						{
@@ -618,11 +618,11 @@ const SettingsModal = () => {
 							name: t('settings.ai.model.gemini')
 						},
 						{
-							element: t('settings.ai.model.gemini-pro'),
+							label: t('settings.ai.model.gemini-pro'),
 							value: 'gemini-pro'
 						},
 						{
-							element: t('settings.ai.model.gemini-1-5-pro'),
+							label: t('settings.ai.model.gemini-1-5-pro'),
 							value: 'gemini-1.5-pro'
 						},
 						{
@@ -630,15 +630,15 @@ const SettingsModal = () => {
 							name: t('settings.ai.model.anthropic')
 						},
 						{
-							element: t('settings.ai.model.claude-haiku'),
+							label: t('settings.ai.model.claude-haiku'),
 							value: 'claude-haiku'
 						},
 						{
-							element: t('settings.ai.model.claude-sonnet'),
+							label: t('settings.ai.model.claude-sonnet'),
 							value: 'claude-sonnet'
 						},
 						{
-							element: t('settings.ai.model.claude-opus'),
+							label: t('settings.ai.model.claude-opus'),
 							value: 'claude-opus'
 						}
 					]}
