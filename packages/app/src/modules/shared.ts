@@ -19,14 +19,22 @@ export const useLazy = <T extends Promise<unknown>, P extends Accessor<unknown>>
 	};
 
 	createEffect(() => {
-		load(param() as ReturnType<P>);
+		try {
+			load(param() as ReturnType<P>);
+		} catch (e) {
+			console.error(e);
+		}
 	});
 
 	let loaded = false;
 
 	const accessor = () => {
 		if (!loaded) {
-			load(param() as ReturnType<P>);
+			try {
+				load(param() as ReturnType<P>);
+			} catch (e) {
+				console.error(e);
+			}
 		}
 
 		loaded = true;
