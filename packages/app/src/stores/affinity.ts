@@ -53,7 +53,7 @@ const AffinityStore = new (class AffinityStore extends GenericStore {
 	}
 
 	sort(a: Repository, b: Repository): number {
-		return this.getWeight(b) || 0 - this.getWeight(a) || 0;
+		return (this.getWeight(b) || 0) - (this.getWeight(a) || 0);
 	}
 })();
 
