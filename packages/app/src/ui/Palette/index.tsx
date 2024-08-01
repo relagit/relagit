@@ -103,7 +103,7 @@ export const CommandPalette = () => {
 						<input
 							type="text"
 							class="palette__body__input__input"
-							placeholder="Search repositories..."
+							placeholder={t('sidebar.drawer.title')}
 							spellcheck={false}
 							value={filter()}
 							onKeyDown={(e) => {
