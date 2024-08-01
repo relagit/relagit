@@ -132,7 +132,7 @@ const LocationStore = new (class LocationStore extends GenericStore {
 			return;
 		}
 
-		AffinityStore.recordAccess(repository);
+		if (set) AffinityStore.recordAccess(repository);
 
 		this.#selectedFile = undefined;
 		this.#selectedCommit = undefined;

@@ -107,7 +107,7 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 		const name = path.split('/').pop()!;
 
 		const repository: Repository = {
-			id: Math.random().toString(16).split('.')[1],
+			id: Number(path.split('').reduce((a, b) => a + b.charCodeAt(0), 0)).toString(16) + name,
 			path,
 			name,
 			remote: '',

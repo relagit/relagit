@@ -236,12 +236,10 @@ export const getRepositoryStatus = async (
 				});
 			} else {
 				RepositoryStore.addRepository({
-					id: Number(
-						directory
-							.split('')
-							.map((c) => c.charCodeAt(0))
-							.join('')
-					).toString(16),
+					id:
+						Number(
+							directory.split('').reduce((a, b) => a + b.charCodeAt(0), 0)
+						).toString(16) + path.basename(directory),
 					path: directory,
 					name: path.basename(directory),
 					remote: info.remote,
@@ -263,11 +261,8 @@ export const getRepositoryStatus = async (
 					id:
 						useId ||
 						Number(
-							directory
-								.split('')
-								.map((c) => c.charCodeAt(0))
-								.join('')
-						).toString(16),
+							directory.split('').reduce((a, b) => a + b.charCodeAt(0), 0)
+						).toString(16) + path.basename(directory),
 					path: directory,
 					name: path.basename(directory),
 					remote: '',
