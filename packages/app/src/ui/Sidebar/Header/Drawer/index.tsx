@@ -66,8 +66,6 @@ export default (props: HeaderDrawerProps) => {
 				return name || path || remote;
 			})
 			.sort((a, b) => {
-				console.log(affinities()?.sort(a, b));
-
 				return affinities()?.sort(a, b) || 0;
 			});
 	});
