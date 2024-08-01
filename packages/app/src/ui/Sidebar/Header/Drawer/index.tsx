@@ -13,6 +13,7 @@ import { createStoreListener } from '@stores/index';
 import LocationStore from '@stores/location';
 import ModalStore from '@stores/modal';
 import RepositoryStore, { Repository } from '@stores/repository';
+import AffinityStore from '~/app/src/stores/affinity';
 
 import Icon from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
@@ -45,6 +46,7 @@ export default (props: HeaderDrawerProps) => {
 		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const files = createStoreListener([FileStore], () => FileStore.files);
+	const affinities = createStoreListener([AffinityStore], () => AffinityStore);
 
 	const filtered = createMemo((): Repository[] => {
 		const filterValue = filter().toLowerCase();
@@ -53,15 +55,21 @@ export default (props: HeaderDrawerProps) => {
 			a.name.localeCompare(b.name)
 		);
 
-		return searchable.filter((repository) => {
-			if (!filterValue) return true;
+		return searchable
+			.filter((repository) => {
+				if (!filterValue) return true;
 
-			const name = repository.name.toLowerCase().includes(filterValue);
-			const path = repository.path.toLowerCase().includes(filterValue);
-			const remote = repository.remote.toLowerCase().includes(filterValue);
+				const name = repository.name.toLowerCase().includes(filterValue);
+				const path = repository.path.toLowerCase().includes(filterValue);
+				const remote = repository.remote.toLowerCase().includes(filterValue);
 
-			return name || path || remote;
-		});
+				return name || path || remote;
+			})
+			.sort((a, b) => {
+				console.log(affinities()?.sort(a, b));
+
+				return affinities()?.sort(a, b) || 0;
+			});
 	});
 
 	return (

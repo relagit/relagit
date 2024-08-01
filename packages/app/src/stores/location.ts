@@ -3,6 +3,7 @@ import { GenericStore } from '.';
 import { LogCommit } from '@app/modules/git/log';
 import { PastCommit } from '@app/modules/git/show';
 
+import AffinityStore from './affinity';
 import FileStore, { GitFile } from './files';
 import type { Repository } from './repository';
 import RepositoryStore from './repository';
@@ -130,6 +131,8 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		if (!repository) {
 			return;
 		}
+
+		AffinityStore.recordAccess(repository);
 
 		this.#selectedFile = undefined;
 		this.#selectedCommit = undefined;
