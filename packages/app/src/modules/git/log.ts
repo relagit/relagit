@@ -139,7 +139,8 @@ export const Log = async (
 			message,
 			files,
 			insertions,
-			deletions
+			deletions,
+			parent: parent.substring(4)
 		};
 	});
 
