@@ -1,17 +1,19 @@
+import { JSX } from 'solid-js';
+
 export type Element = {
-	tagName: string;
+	tagName: keyof JSX.IntrinsicElements;
 	attributes: Record<string, string>;
 	children:
-		| ((DElement | string)[] | string | DElement)
-		| (() => (DElement | string)[] | string | DElement);
+		| ((Element | string)[] | string | Element)
+		| (() => (Element | string)[] | string | Element);
 };
 
 export type SettingsPane = {
 	name: string;
 	icon: keyof typeof import('@primer/octicons');
 	children:
-		| ((DElement | string)[] | string | DElement)
-		| (() => (DElement | string)[] | string | DElement);
+		| ((Element | string)[] | string | Element)
+		| (() => (Element | string)[] | string | Element);
 };
 
 export const USER_PANES: Record<string, SettingsPane> = {};

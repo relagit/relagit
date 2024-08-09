@@ -113,8 +113,8 @@ const copyDebugInfo = () => {
 
 const buildElements = (
 	children?:
-		| ((DElement | string)[] | string | DElement)
-		| (() => (DElement | string)[] | string | DElement)
+		| ((Element | string)[] | string | Element)
+		| (() => (Element | string)[] | string | Element)
 ): JSX.Element => {
 	if (!children) return null;
 
