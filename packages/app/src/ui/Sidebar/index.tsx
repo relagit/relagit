@@ -39,7 +39,7 @@ export default (props: SidebarProps) => {
 	createStoreListener([RepositoryStore, LocationStore], async () => {
 		if (!LocationStore.selectedRepository) return;
 
-		setCommits(await Git.Log(LocationStore.selectedRepository, 50));
+		setCommits(await Git.Log(LocationStore.selectedRepository, 50).catch(() => []));
 
 		try {
 			if (lastRepository === LocationStore.selectedRepository) return;
@@ -61,7 +61,7 @@ export default (props: SidebarProps) => {
 				LocationStore.selectedRepository,
 				50,
 				commits()[commits().length - 1]
-			);
+			).catch(() => []);
 
 			if (newItems.some((item) => commits().some((c) => c.hash === item.hash))) {
 				return; // we already have this item

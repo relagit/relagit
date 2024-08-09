@@ -10,10 +10,15 @@ import Tooltip from '@ui/Common/Tooltip';
 import Modal, { ModalBody, ModalFooter, ModalHeader } from '@ui/Modal';
 
 import pkj from '../../../../../package.json';
+import { createStoreListener } from '../../stores';
+import SettingsStore from '../../stores/settings';
+import { Switch } from '../Settings';
 
 import './index.scss';
 
 const OnboardingModal = () => {
+	const settings = createStoreListener([SettingsStore], () => SettingsStore.settings);
+
 	return (
 		<Modal size="small" dismissable confetti id="onboarding">
 			{(props) => {
@@ -65,6 +70,14 @@ const OnboardingModal = () => {
 									{t('onboarding.modal.issue')}
 								</a>
 							</div>
+							<Switch
+								label={t('settings.general.telemetry.metrics.label')}
+								note={t('settings.general.telemetry.metrics.description')}
+								value={settings()?.telemetry?.metrics || true}
+								onChange={(value) => {
+									SettingsStore.setSetting('telemetry.metrics', value);
+								}}
+							/>
 							<div class="onboarding-tooltip__steps">
 								<For each={[1, 2, 3, 4, 5]}>
 									{(i) => (

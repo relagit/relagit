@@ -12,7 +12,7 @@ export const PreviousCommit = async (
 		directory: repository.path,
 		command: 'rev-list',
 		args: ['--parents', '-n', '1', sha]
-	});
+	}).catch(() => '');
 
 	return (
 		res

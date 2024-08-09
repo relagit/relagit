@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/electron/main';
 import {
 	BrowserWindow,
 	Menu,
@@ -81,6 +82,10 @@ const updateCheck = () => {
 // });
 
 // setInterval(updateCheck, 60000);
+
+Sentry.init({
+	dsn: 'https://858276c018bc5509422b914a744efa98@o4507749705252864.ingest.de.sentry.io/4507749717442640'
+});
 
 const constructWindow = async () => {
 	const settings = await getSettings();

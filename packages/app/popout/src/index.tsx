@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/electron/renderer';
 import { render } from 'solid-js/web';
 import * as ipc from '~/shared/ipc';
 
@@ -6,6 +7,8 @@ import SettingsStore from '~/app/src/stores/settings';
 import Main from './app';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
+
+Sentry.init({});
 
 function App() {
 	console.log(

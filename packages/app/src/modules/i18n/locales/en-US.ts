@@ -153,6 +153,13 @@ export default {
 			},
 			debug: {
 				copy: 'Copy Debug Info'
+			},
+			telemetry: {
+				metrics: {
+					label: 'Report Anonymous Usage Metrics',
+					description:
+						'We will send anonymous usage data to help improve the client. No personal data is ever sent.'
+				}
 			}
 		},
 		appearance: {

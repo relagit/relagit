@@ -47,7 +47,7 @@
 		&__bugs {
 			display: flex;
 			gap: 5px;
-			margin-bottom: 2rem;
+			margin-bottom: 1rem;
 			align-items: flex-end;
 
 			a {
@@ -63,6 +63,10 @@
 					outline: none;
 					text-decoration: underline;
 				}
+			}
+
+			& + .switch {
+				margin-bottom: 2rem;
 			}
 		}
 	}

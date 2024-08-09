@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/electron/renderer';
 import { ErrorBoundary, render } from 'solid-js/web';
 import * as ipc from '~/shared/ipc';
 
@@ -15,6 +16,8 @@ loadThemes();
 checkForUpdates();
 setInterval(checkForUpdates, 1000 * 60 * 60);
 checkForOTANotifications();
+
+Sentry.init({});
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
@@ -34,21 +37,25 @@ DO NOT paste any code into this console that you have not written yourself or th
 
 	return (
 		<ErrorBoundary
-			fallback={
-				<EmptyState
-					// NOT using t() here as it may also throw
-					detail="Something went wrong while loading the app."
-					image={EmptyState.Images.Error}
-					hint="Try again or report the issue on GitHub."
-					actions={[
-						{
-							label: 'Reload',
-							type: 'brand',
-							onClick: () => ipcRenderer.invoke(ipc.RELOAD_CLIENT)
-						}
-					]}
-				/>
-			}
+			fallback={(e) => {
+				Sentry.captureException(new Error('Error rendering main app' + e));
+
+				return (
+					<EmptyState
+						// NOT using t() here as it may also throw
+						detail="Something went wrong while loading the app."
+						image={EmptyState.Images.Error}
+						hint="Try again or report the issue on GitHub."
+						actions={[
+							{
+								label: 'Reload',
+								type: 'brand',
+								onClick: () => ipcRenderer.invoke(ipc.RELOAD_CLIENT)
+							}
+						]}
+					/>
+				);
+			}}
 		>
 			<Main />
 		</ErrorBoundary>

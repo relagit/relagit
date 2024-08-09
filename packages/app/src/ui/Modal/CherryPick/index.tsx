@@ -28,7 +28,7 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 			await Git.Log(props.repository, 50, undefined, [
 				props.branch.gitName,
 				'^' + props.repository.branch
-			])
+			]).catch(() => [])
 		);
 	});
 
@@ -40,7 +40,7 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 			const newItems = await Git.Log(props.repository, 50, commits()[commits().length - 1], [
 				props.branch.gitName,
 				'^' + props.repository.branch
-			]);
+			]).catch(() => []);
 
 			if (newItems.some((item) => commits().some((c) => c.hash === item.hash))) {
 				return; // we already have this item

@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import dotenv from 'dotenv';
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 import { replaceCodePlugin } from 'vite-plugin-replace';
@@ -68,6 +69,11 @@ if (
 }
 
 const commonPlugins: import('vite').PluginOption = [
+	sentryVitePlugin({
+		org: 'relagit',
+		project: 'relagit',
+		authToken: process.env.SENTRY_AUTH_TOKEN
+	}),
 	tsconfig(),
 	replaceCodePlugin({
 		replacements: [

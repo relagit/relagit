@@ -13,6 +13,9 @@ export const __REPOSITORIES_PATH__ = path.join(__RELAGIT_PATH__, 'repositories.j
 export const __SETTINGS_PATH__ = path.join(__RELAGIT_PATH__, 'settings.json');
 
 export type Settings = {
+	telemetry: {
+		metrics: boolean;
+	};
 	commit: {
 		styles: Record<string, CommitStyle>;
 		enforceStyle: boolean;

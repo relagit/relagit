@@ -164,10 +164,14 @@ export default (props: CodeViewProps) => {
 
 	// only run these when needed
 	const issues = useLazy(repo, (r) =>
-		GitHub('repos/:username/:repo/issues').get(...repoParams(r?.remote || ''), 'open')
+		GitHub('repos/:username/:repo/issues')
+			.get(...repoParams(r?.remote || ''), 'open')
+			.catch(() => undefined)
 	);
 	const prs = useLazy(repo, (r) =>
-		GitHub('repos/:username/:repo/pulls').get(...repoParams(r?.remote || ''), 'open')
+		GitHub('repos/:username/:repo/pulls')
+			.get(...repoParams(r?.remote || ''), 'open')
+			.catch(() => undefined)
 	);
 
 	createStoreListener([LocationStore, FileStore], async () => {
