@@ -20,6 +20,17 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - uses: pnpm/action-setup@v3
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+
+            - name: Get package.json version
+              id: package
+              run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
             - name: Create Sentry release
               uses: getsentry/action-release@v1
               if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -29,13 +40,7 @@ jobs:
                   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
               with:
                   environment: production
-
-            - uses: pnpm/action-setup@v3
-
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: 'pnpm'
+                  version: ${{ steps.package.outputs.version }}
 
             - run: |
                   node -v
