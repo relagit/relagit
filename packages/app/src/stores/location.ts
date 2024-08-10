@@ -1,4 +1,5 @@
 import { GenericStore } from '.';
+import * as Sentry from '@sentry/electron/renderer';
 
 import { LogCommit } from '@app/modules/git/log';
 import { PastCommit } from '@app/modules/git/show';
@@ -142,6 +143,19 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		this.emit();
 
 		window._triggerWorkflow('navigate', repository, this.selectedFile);
+
+		Sentry.addBreadcrumb({
+			category: 'navigation',
+			message: 'Selected repository',
+			data: {
+				isDraft: repository.draft,
+				path:
+					// only send if telemetry is enabled
+					SettingsStore.getSetting('telemetry.metrics') !== false ?
+						repository.path
+					:	undefined
+			}
+		});
 
 		if (set) SettingsStore.setSetting('activeRepository', repository?.path);
 

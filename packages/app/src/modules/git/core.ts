@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/electron/renderer';
 import { createSignal } from 'solid-js';
 import * as ipc from '~/shared/ipc';
 
@@ -52,6 +53,12 @@ export const Git = async (params: GitParams): Promise<string> => {
 	const cmd = `git ${command} ${args
 		.map((a) => (a.startsWith('"') && a.endsWith('"') ? a : `"${escape(a)}"`))
 		.join(' ')}`;
+
+	Sentry.addBreadcrumb({
+		category: 'auth',
+		message: cmd,
+		level: 'info'
+	});
 
 	const result: string = await new Promise(async (resolve, reject) => {
 		const { error, stdout, stderr } = await ipcRenderer.invoke(ipc.GIT_EXEC, cmd, {
