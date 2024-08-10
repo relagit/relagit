@@ -622,6 +622,16 @@ const SettingsModal = () => {
 					}}
 				/>
 			</div>
+			<div class="settings-layer__setting">
+				<Switch
+					label={t('settings.general.telemetry.metrics.label')}
+					note={t('settings.general.telemetry.metrics.description')}
+					value={settings()?.telemetry?.metrics || true}
+					onChange={(value) => {
+						SettingsStore.setSetting('telemetry.metrics', value);
+					}}
+				/>
+			</div>
 			<div class="settings-layer__debug">
 				<Button
 					type="brand"
