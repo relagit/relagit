@@ -20,6 +20,7 @@ import TextArea from '@ui/Common/TextArea';
 import pkj from '../../../../../package.json';
 import { getOptionsProxy } from '../../modules/actions/settings';
 import { getAvailableEditors } from '../../modules/editor';
+import { safeURL } from '../../shared';
 import LayerStore from '../../stores/layer';
 import Button from '../Common/Button';
 import Dropdown from '../Common/Dropdown';
@@ -574,7 +575,7 @@ const SettingsModal = () => {
 							label: t(`settings.general.editor.${editor.exec}`),
 							value: editor.exec,
 							hint: editor.exec as string,
-							image: editor.image ? new URL(editor.image) : undefined
+							image: editor.image ? safeURL(editor.image) : undefined
 						}))
 						.concat([
 							{

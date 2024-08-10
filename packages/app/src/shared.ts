@@ -15,3 +15,11 @@ export type RecursiveRequired<T> = {
 	: T[P] extends object | undefined ? RecursiveRequired<T[P]>
 	: T[P];
 };
+
+export const safeURL = (url: string) => {
+	try {
+		return new URL(url);
+	} catch {
+		return null;
+	}
+};

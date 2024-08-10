@@ -20,6 +20,7 @@ import Dropdown from '@app/ui/Common/Dropdown';
 import EmptyState from '@app/ui/Common/EmptyState';
 import TextArea from '@app/ui/Common/TextArea';
 import { Switch } from '@app/ui/Settings';
+import { safeURL } from '~/app/src/shared';
 
 import { showOAuthModal } from '../OAuthModal';
 
@@ -107,14 +108,14 @@ const PublishModal = (props: { repo: Repository }) => {
 										{
 											value: AccountStore.getAccountFor('github')!,
 											label: AccountStore.getAccountFor('github')!.login,
-											image: new URL(
+											image: safeURL(
 												AccountStore.getAccountFor('github')!.avatar_url
 											)
 										},
 										...orgs().map((org) => ({
 											value: org,
 											label: org.login,
-											image: new URL(org.avatar_url)
+											image: safeURL(org.avatar_url)
 										}))
 									]}
 								/>

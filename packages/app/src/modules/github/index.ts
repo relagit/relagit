@@ -1,3 +1,5 @@
+import { safeURL } from '../../shared';
+
 export * from './types';
 export * from './oauth';
 export * from './http';
@@ -12,7 +14,7 @@ export const repoParams = (repoUrl: string): [string, string] => {
 };
 
 export const commitFormatsForProvider = (url: string, sha: string) => {
-	const hostname = new URL(url).hostname;
+	const hostname = safeURL(url)?.hostname || '';
 
 	if (hostname.includes('github')) return `/commit/${sha}`;
 	if (hostname.includes('gitlab')) return `/commit/${sha}`;
@@ -20,7 +22,7 @@ export const commitFormatsForProvider = (url: string, sha: string) => {
 };
 
 export const branchFormatsForProvider = (url: string, branch: string) => {
-	const hostname = new URL(url).hostname;
+	const hostname = safeURL(url)?.hostname || '';
 
 	if (hostname.includes('github')) return `/tree/${branch}`;
 	if (hostname.includes('gitlab')) return `/tree/${branch}`;
@@ -28,7 +30,7 @@ export const branchFormatsForProvider = (url: string, branch: string) => {
 };
 
 export const getProvider = (url: string) => {
-	const hostname = new URL(url).hostname;
+	const hostname = safeURL(url)?.hostname || '';
 
 	if (hostname.includes('github')) return 'github';
 	if (hostname.includes('gitlab')) return 'gitlab';
@@ -36,7 +38,7 @@ export const getProvider = (url: string) => {
 };
 
 export const issuesUrlForProvider = (url: string, repo: [string, string]) => {
-	const hostname = new URL(url).hostname;
+	const hostname = safeURL(url)?.hostname || '';
 
 	if (hostname.includes('github')) return `https://github.com/${repo[0]}/${repo[1]}/issues`;
 	if (hostname.includes('gitlab')) return `https://gitlab.com/${repo[0]}/${repo[1]}/issues`;
@@ -44,7 +46,7 @@ export const issuesUrlForProvider = (url: string, repo: [string, string]) => {
 };
 
 export const pullRequestsUrlForProvider = (url: string, repo: [string, string]) => {
-	const hostname = new URL(url).hostname;
+	const hostname = safeURL(url)?.hostname || '';
 
 	if (hostname.includes('github')) return `https://github.com/${repo[0]}/${repo[1]}/pulls`;
 	if (hostname.includes('gitlab'))
