@@ -1,6 +1,7 @@
 import { AnthropicProvider, createAnthropic } from '@ai-sdk/anthropic';
 import { GoogleGenerativeAIProvider, createGoogleGenerativeAI } from '@ai-sdk/google';
 import { OpenAIProvider, createOpenAI } from '@ai-sdk/openai';
+import * as Sentry from '@sentry/electron/renderer';
 import * as ai from 'ai';
 
 import NotificationStore from '@app/stores/notification';
@@ -22,6 +23,13 @@ export async function* generate(prompt: string): AsyncGenerator<{
 	body: string;
 	message: string;
 } | null> {
+	if (SettingsStore.getSetting('telemetry.metrics') !== false)
+		Sentry.metrics.increment('ai.generate', 1, {
+			tags: {
+				provider: SettingsStore.settings.ai?.provider
+			}
+		});
+
 	if (!SettingsStore.settings.ai?.termsAccepted) {
 		let url = '';
 
