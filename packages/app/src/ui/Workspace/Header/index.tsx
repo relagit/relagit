@@ -1,6 +1,6 @@
+import type { Commit, Oid, Reference, Repository, Stash } from 'nodegit';
 import { For, JSX, Show, createEffect, createSignal } from 'solid-js';
 
-import { Branch } from '@app/modules/git/branches';
 import { t } from '@app/modules/i18n';
 import { Reffable } from '@app/shared';
 import DraftStore from '@app/stores/draft';
@@ -110,14 +110,14 @@ export default () => {
 	const [hasNewBranchInput, setHasNewBranchInput] = createSignal(false);
 	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
-	const [branches, setBranches] = createSignal<Branch[] | null>(null);
-	const [stashes, setStashes] = createSignal<Record<number, string[]> | null>(null);
+	const [references, setReferences] = createSignal<Reference[] | undefined>(undefined);
+	const [stashes, setStashes] = createSignal<Array<[number, string, Oid]> | null>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind' | null>(
 		null
 	);
 	const [actioning, setActioning] = createSignal(false);
 	const [stashActioning, setStashActioning] = createSignal(false);
-	const [previous, setPrevious] = createSignal<string | undefined>('');
+	const [previous, setPrevious] = createSignal<Commit | undefined>(undefined);
 
 	const fetching = createStoreListener(
 		[LocationStore],
@@ -135,13 +135,9 @@ export default () => {
 	});
 
 	createEffect(async () => {
-		if (!repository()) return;
-
-		const previous = await Git.PreviousCommit(repository());
-
-		if (!previous) return setPrevious(undefined);
-
-		setPrevious(previous);
+		if (repository()) {
+			setPrevious(await repository()?.git?.getHeadCommit());
+		}
 	});
 
 	createEffect(() => {
@@ -150,7 +146,7 @@ export default () => {
 		}
 	});
 
-	createEffect(() => {
+	createEffect(async () => {
 		if (!repository()) return;
 
 		if (!repository()?.remote && !RemoteStore.getByRepoPath(repository()?.path || '').length) {
@@ -161,11 +157,11 @@ export default () => {
 		const behind = repository()?.behind || 0;
 
 		if (ahead === 0 && behind === 0) {
-			const current = branches()?.find((b) => b.gitName === repository()?.branch);
+			const current = references()?.find((b) => b.name() === repository()?.branch?.name());
 
 			if (!current) return setStatus(null);
 
-			if (!current.hasUpstream) {
+			if (!(await Git.nodegit.Branch.upstream(current).catch(() => null))) {
 				return setStatus('publish');
 			} else {
 				return setStatus(null);
@@ -184,11 +180,25 @@ export default () => {
 	createStoreListener([LocationStore, RepositoryStore], async () => {
 		if (!LocationStore.selectedRepository) {
 			setStashes(null);
-			setBranches(null);
+			setReferences(undefined);
 		}
 
 		try {
-			const res = await Git.ListStash(LocationStore.selectedRepository!);
+			const res = await Git.CbIterator<
+				[number, string, Oid],
+				Repository,
+				unknown,
+				[number, string, Oid]
+			>(
+				Git.nodegit.Stash.foreach,
+				LocationStore.selectedRepository?.git,
+				undefined,
+				(index, message, oid) => {
+					return [index, message, oid];
+				}
+			);
+
+			console.log(res);
 
 			setStashes(res);
 		} catch (e) {
@@ -198,9 +208,11 @@ export default () => {
 		}
 
 		try {
-			const res = await Git.ListBranches(LocationStore.selectedRepository);
+			const res = await (
+				await LocationStore.selectedRepository?.git?.getReferences()
+			)?.filter((b) => b.isBranch());
 
-			setBranches(res);
+			setReferences(res);
 		} catch (e) {
 			showErrorModal(e, 'error.fetching');
 
@@ -228,37 +240,32 @@ export default () => {
 					status() === 'ahead' &&
 						({
 							label: t('git.undo', {
-								sha: previous()?.substring(0, 7)
+								sha: previous()?.message().split('\n')[0]
 							}),
 							onClick: async () => {
 								if (!repository()) return;
 
 								try {
-									const previousDetails = await Git.Details(
-										repository()?.path,
-										previous() || 'HEAD^1'
-									);
-
-									// restore draft if it was removed
 									if (
 										!DraftStore.getDraft(repository()).message &&
-										previousDetails?.message
+										previous()?.message()
 									) {
-										const message = previousDetails.message.split('\n')[0];
-										const description = previousDetails.message
+										const message = previous()?.message().split('\n')[0];
+										const description = previous()
+											?.message()
 											.split('\n')
 											.slice(1)
 											.join('\n');
 
 										DraftStore.setDraft(repository(), {
-											message,
-											description
+											message: message || '',
+											description: description || ''
 										});
 									}
 
 									await Git.Reset(
 										LocationStore.selectedRepository,
-										await Git.PreviousCommit(repository(), previous())
+										(await previous()?.getParents(1))?.[0].sha()
 									);
 
 									refetchRepository(LocationStore.selectedRepository);
@@ -342,7 +349,11 @@ export default () => {
 								debug('Pushing changes');
 
 								try {
-									await Git.Push(LocationStore.selectedRepository);
+									const remote = repository()?.remote;
+
+									if (!remote) return debug('No remote');
+
+									Git.Push(LocationStore.selectedRepository);
 
 									triggerWorkflow('push', LocationStore.selectedRepository!);
 								} catch (e) {
@@ -413,7 +424,7 @@ export default () => {
 								try {
 									await Git.PushWithOrigin(
 										LocationStore.selectedRepository,
-										repository()?.branch
+										repository()?.branch?.name()
 									);
 
 									triggerWorkflow('push', LocationStore.selectedRepository!);
@@ -435,7 +446,7 @@ export default () => {
 					}}
 				/>
 			</Menu>
-			<Show when={Object.keys(stashes() || {}).length > 0}>
+			<Show when={stashes()?.length}>
 				<Menu
 					interfaceId="workspace-pop-stash"
 					items={[
@@ -451,7 +462,10 @@ export default () => {
 								setStashActioning(true);
 
 								try {
-									await Git.RemoveStash(LocationStore.selectedRepository, 0);
+									await Git.nodegit.Stash.drop(
+										LocationStore.selectedRepository!.git!,
+										0
+									);
 
 									setStashActioning(false);
 
@@ -477,7 +491,10 @@ export default () => {
 							setStashActioning(true);
 
 							try {
-								await Git.PopStash(LocationStore.selectedRepository, 0);
+								await Git.nodegit.Stash.pop(
+									LocationStore.selectedRepository!.git!,
+									0
+								);
 
 								triggerWorkflow('stash_pop', LocationStore.selectedRepository!);
 
@@ -499,9 +516,9 @@ export default () => {
 								count: t(
 									'git.files',
 									{
-										count: stashes()![0].length
+										count: stashes()![0][1]
 									},
-									stashes()![0].length
+									stashes()![0][0]
 								)
 							},
 							Object.keys(stashes()!).length
@@ -518,10 +535,10 @@ export default () => {
 				body={() => (
 					<div class="branches-picker">
 						<div class="branches-picker__label" tabIndex={0}>
-							{t('git.branches', undefined, branches()?.length)}
+							{t('git.branches', undefined, references()?.length)}
 						</div>
 						<div class="branches-picker__list">
-							<For each={branches()}>
+							<For each={references()}>
 								{(branch) => (
 									<Menu
 										interfaceId="workspace-branch"
@@ -534,7 +551,7 @@ export default () => {
 													try {
 														await Git.DeleteBranch(
 															LocationStore.selectedRepository,
-															branch.gitName
+															branch.name()
 														);
 
 														refetchRepository(
@@ -550,10 +567,11 @@ export default () => {
 											{
 												type: 'item',
 												label: t('git.cherryPick', {
-													current: repository()?.branch,
-													branch: branch.gitName
+													current: repository()?.branch?.shorthand(),
+													branch: branch.shorthand()
 												}),
-												disabled: branch.gitName === repository()?.branch,
+												disabled:
+													branch.name() === repository()?.branch?.name(),
 												onClick: () => {
 													showCherryPickModal(repository(), branch);
 												}
@@ -561,15 +579,16 @@ export default () => {
 											{
 												type: 'item',
 												label: t('git.mergeBranch', {
-													current: repository()?.branch,
-													branch: branch.gitName
+													current: repository()?.branch?.shorthand(),
+													branch: branch.shorthand()
 												}),
-												disabled: branch.gitName === repository()?.branch,
+												disabled:
+													branch.name() === repository()?.branch?.name(),
 												onClick: async () => {
 													try {
 														await Git.Merge(
 															LocationStore.selectedRepository,
-															branch.gitName
+															branch.name()
 														);
 
 														refetchRepository(
@@ -585,19 +604,15 @@ export default () => {
 											{
 												type: 'item',
 												label: t('sidebar.contextMenu.openRemote'),
-												disabled: !(branch.hasUpstream || branch.isRemote),
+												disabled: !branch.isRemote(),
 												onClick: () => {
 													const remote =
-														LocationStore.selectedRepository?.remote.replace(
-															/\.git$/,
-															''
-														);
+														LocationStore.selectedRepository?.remote
+															?.url()
+															.replace(/\.git$/, '');
 
-													if (
-														remote &&
-														(branch.hasUpstream || branch.isRemote)
-													) {
-														const url = `${remote}${branchFormatsForProvider(remote, branch.gitName.replace(/^origin\//, ''))}`;
+													if (remote && branch.isRemote()) {
+														const url = `${remote}${branchFormatsForProvider(remote, branch.name().replace(/^origin\//, ''))}`;
 
 														openExternal(url);
 													}
@@ -606,22 +621,31 @@ export default () => {
 										]}
 									>
 										<button
-											aria-selected={branch.gitName === repository()?.branch}
+											aria-selected={
+												branch.name() === repository()?.branch?.name()
+											}
 											role="option"
-											aria-label={branch.gitName}
+											aria-label={branch.shorthand()}
 											classList={{
 												'branches-picker__list__item': true,
-												active: branch.gitName === repository()?.branch
+												active:
+													branch.name() === repository()?.branch?.name()
 											}}
 											onClick={async () => {
 												try {
-													if (branch.gitName === repository()?.branch) {
+													if (
+														branch.name() ===
+														repository()?.branch?.name()
+													) {
 														return;
 													}
 
-													await Git.Checkout(
-														LocationStore.selectedRepository,
-														branch.gitName
+													await LocationStore.selectedRepository?.git?.checkoutBranch(
+														branch,
+														{
+															checkoutStrategy:
+																Git.nodegit.Checkout.STRATEGY.SAFE
+														}
 													);
 
 													refetchRepository(
@@ -636,17 +660,26 @@ export default () => {
 										>
 											<div class="branches-picker__list__item__name">
 												<div class="branches-picker__list__item__name__path">
-													{branch.path}
+													{branch
+														.shorthand()
+														.split('/')
+														.slice(0, -1)
+														.join('/')}
 												</div>
 												<div class="branches-picker__list__item__name__separator">
-													{branch.path ? '/' : ''}
+													{(
+														branch.shorthand().split('/').slice(0, -1)
+															.length > 0
+													) ?
+														'/'
+													:	''}
 												</div>
 												<div class="branches-picker__list__item__name__branch">
-													{branch.name}
+													{branch.shorthand().split('/').pop()}
 												</div>
 											</div>
 											<div class="branches-picker__list__item__info">
-												{branch.relativeDate}
+												{/* TODO */}
 											</div>
 										</button>
 									</Menu>
@@ -681,15 +714,15 @@ export default () => {
 											if (e.key === 'Enter') {
 												if (!newBranch()) return;
 
-												if (newBranch() === repository()?.branch) {
+												if (newBranch() === repository()?.branch?.name()) {
 													setNewBranch('');
 
 													return;
 												}
 
 												if (
-													branches()?.find(
-														(b) => b.gitName === newBranch()
+													references()?.find(
+														(b) => b.name() === newBranch()
 													)
 												) {
 													setNewBranch('');
@@ -726,14 +759,14 @@ export default () => {
 
 											if (!input?.value) return;
 
-											if (input.value === repository()?.branch) {
+											if (input.value === repository()?.branch?.name()) {
 												setNewBranch('');
 
 												return;
 											}
 
 											if (
-												branches()?.find((b) => b.gitName === input.value)
+												references()?.find((b) => b.name() === input.value)
 											) {
 												setNewBranch('');
 
@@ -780,7 +813,7 @@ export default () => {
 			>
 				{(p) => (
 					<PanelButton
-						disabled={!repository() || branches() === null}
+						disabled={!repository() || references() === null}
 						ref={p.ref}
 						icon="git-branch"
 						iconVariant={iconVariant()}

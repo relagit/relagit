@@ -121,8 +121,10 @@ export default (props: CreateRepositoryModalProps) => {
 						type="brand"
 						onClick={async () => {
 							if (SettingsStore.getSetting('telemetry.metrics') !== false) {
-								Sentry.metrics.increment('repository.created', 1);
-								Sentry.metrics.increment('repository.added', 1);
+								if (__NODE_ENV__ === 'production') {
+									Sentry.metrics.increment('repository.created', 1);
+									Sentry.metrics.increment('repository.added', 1);
+								}
 							}
 
 							props.modalProps.close();

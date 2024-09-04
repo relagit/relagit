@@ -120,7 +120,11 @@ export const Native = {
 
 			const random = Math.random().toString(36).substring(7);
 
-			contextBridge.exposeInMainWorld(random, res);
+			if (process.contextIsolated) {
+				contextBridge.exposeInMainWorld(random, res);
+			} else {
+				window[random] = res;
+			}
 
 			return random;
 		},
@@ -142,4 +146,8 @@ export const Native = {
 	platform: normalise(process.platform)
 };
 
-contextBridge.exposeInMainWorld('Native', Native);
+if (process.contextIsolated) {
+	contextBridge.exposeInMainWorld('Native', Native);
+} else {
+	window.Native = Native;
+}

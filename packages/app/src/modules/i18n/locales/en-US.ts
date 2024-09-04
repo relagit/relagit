@@ -349,6 +349,9 @@ export default {
 			view: 'View {{name}}',
 			issue: ['Issue', 'Issues'],
 			pull: ['Pull Request', 'Pull Requests']
+		},
+		signing: {
+			inputPassphrase: 'Enter your GPG passphrase to sign this commit.'
 		}
 	},
 	palette: {
@@ -473,6 +476,10 @@ export default {
 				codeberg: 'Codeberg',
 				url: 'URL'
 			}
+		},
+		input: {
+			title: 'Provide Input',
+			confirm: 'Confirm'
 		}
 	}
 } as const;

@@ -279,11 +279,11 @@ export const showErrorModal = (
 							</ModalHeader>
 							<ModalBody>
 								<p class="error-modal__message">
-									{(error as Error)['message'] || (error as string)}
+									{(error as Error)?.['message'] || (error as string)}
 								</p>
-								<Show when={(error as Error)['stack'] && !noStack}>
+								<Show when={(error as Error)?.['stack'] && !noStack}>
 									<pre class="error-modal__stack">
-										{(error as Error)['stack']}
+										{(error as Error)?.['stack']}
 									</pre>
 								</Show>
 							</ModalBody>

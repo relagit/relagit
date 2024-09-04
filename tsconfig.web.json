@@ -1,6 +1,7 @@
 {
 	"include": ["electron.vite.config.ts", "packages/app/**/*", "packages/popout/**/*"],
 	"compilerOptions": {
+		"composite": true,
 		"strict": true,
 		"target": "ESNext",
 		"module": "ESNext",

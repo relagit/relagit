@@ -108,14 +108,15 @@ const PublishModal = (props: { repo: Repository }) => {
 										{
 											value: AccountStore.getAccountFor('github')!,
 											label: AccountStore.getAccountFor('github')!.login,
-											image: safeURL(
-												AccountStore.getAccountFor('github')!.avatar_url
-											)
+											image:
+												safeURL(
+													AccountStore.getAccountFor('github')!.avatar_url
+												) || undefined
 										},
 										...orgs().map((org) => ({
 											value: org,
 											label: org.login,
-											image: safeURL(org.avatar_url)
+											image: safeURL(org.avatar_url) || undefined
 										}))
 									]}
 								/>

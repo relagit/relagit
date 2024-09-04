@@ -20,6 +20,7 @@ export const OPEN_CLONE = 'window:open-clone';
 export const OPEN_CREATE = 'window:open-create';
 export const OPEN_ADD = 'window:open-add';
 export const RELOAD_CLIENT = 'window:reload-client';
+export const GET_PASSPHRASE = 'winnativedow:get-passphrase';
 export const GET_ENCRYPTED = 'native:get-encrypted';
 export const GET_DECRYPTED = 'native:get-decrypted';
 export const GET_THUMBNAIL = 'native:get-thumbnail';

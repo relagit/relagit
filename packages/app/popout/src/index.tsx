@@ -8,7 +8,7 @@ import Main from './app';
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
-Sentry.init({});
+if (__NODE_ENV__ === 'production') Sentry.init({});
 
 function App() {
 	console.log(

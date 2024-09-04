@@ -17,7 +17,7 @@ checkForUpdates();
 setInterval(checkForUpdates, 1000 * 60 * 60);
 checkForOTANotifications();
 
-Sentry.init({});
+if (__NODE_ENV__ === 'production') Sentry.init({});
 
 const ipcRenderer = window.Native.DANGEROUS__NODE__REQUIRE('electron:ipcRenderer');
 
@@ -38,7 +38,10 @@ DO NOT paste any code into this console that you have not written yourself or th
 	return (
 		<ErrorBoundary
 			fallback={(e) => {
-				Sentry.captureException(new Error('Error rendering main app' + e));
+				if (__NODE_ENV__ === 'production')
+					Sentry.captureException(new Error('Error rendering main app' + e));
+
+				console.error(e);
 
 				return (
 					<EmptyState

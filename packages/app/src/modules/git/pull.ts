@@ -9,7 +9,7 @@ export const Pull = async (repository: Repository | undefined) => {
 		const res = await Git({
 			directory: repository.path,
 			command: 'pull',
-			args: ['origin', repository.branch]
+			args: ['origin', repository.branch!.name()]
 		});
 
 		return res;

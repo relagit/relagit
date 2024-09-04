@@ -4,7 +4,7 @@ export const Status = async (directory: string) => {
 	const result = await Git({
 		directory,
 		command: 'status',
-		args: ['--porcelain']
+		args: ['--porcelain', '--untracked-files=all']
 	});
 
 	return result;

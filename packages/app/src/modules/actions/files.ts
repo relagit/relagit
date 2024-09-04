@@ -1,5 +1,6 @@
+import type { Submodule } from 'nodegit';
+
 import * as Git from '@modules/git';
-import type { Submodule } from '@modules/git/submodule';
 import * as logger from '@modules/logger';
 import FileStore from '@stores/files';
 import LocationStore from '@stores/location';
@@ -12,6 +13,7 @@ import { showErrorModal } from '@ui/Modal';
 import { warn } from '../logger';
 import { remoteStatus } from './remote';
 
+const nodegit = window.Native.DANGEROUS__NODE__REQUIRE('nodegit');
 const promises = window.Native.DANGEROUS__NODE__REQUIRE('fs/promises');
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
 const fs = window.Native.DANGEROUS__NODE__REQUIRE('fs');
@@ -83,13 +85,13 @@ export const getFileStatus = async (
 			return;
 		}
 
-		if (submodules?.find((s) => s.relativePath === file)) {
+		if (submodules?.find((s) => s.path() === file)) {
 			FileStore.addFile(directory, {
 				id: Math.random().toString(16).split('.')[1],
 				name: path.basename(file),
 				path: file.replace(path.basename(file), '').replace(/[\/\\]$/, ''),
 				status: Git.statusFrom(stat),
-				submodule: submodules.find((s) => s.relativePath === file)
+				submodule: submodules.find((s) => s.path() === file)
 			});
 
 			return;
@@ -153,13 +155,13 @@ export const getFileStatus = async (
 	for (const file of files.sort(fileSort)) {
 		const { status, path: p } = file;
 
-		if (submodules?.find((s) => s.relativePath === p)) {
+		if (submodules?.find((s) => s.path() === p)) {
 			FileStore.addFile(directory, {
 				id: Math.random().toString(16).split('.')[1],
 				name: path.basename(p),
 				path: p.replace(path.basename(p), '').replace(/[\/\\]$/, ''),
 				status: Git.statusFrom(status),
-				submodule: submodules.find((s) => s.relativePath === p)
+				submodule: submodules.find((s) => s.path() === p)
 			});
 
 			continue;
@@ -227,7 +229,9 @@ export const getRepositoryStatus = async (
 		}
 
 		try {
-			const info = await Git.Analyse(directory);
+			const ng = await nodegit.Repository.open(directory);
+
+			const info = await Git.Analyse(ng);
 
 			if (exists) {
 				RepositoryStore.updateRepository(exists.id, {
@@ -243,11 +247,12 @@ export const getRepositoryStatus = async (
 					path: directory,
 					name: path.basename(directory),
 					remote: info.remote,
-					branch: info.branch,
+					branch: await ng.getCurrentBranch(),
 					commit: info.commit,
 					ahead: info.ahead,
 					behind: info.behind,
-					lastFetched: Date.now()
+					lastFetched: Date.now(),
+					git: ng
 				});
 			}
 		} catch (error) {
@@ -265,19 +270,31 @@ export const getRepositoryStatus = async (
 						).toString(16) + path.basename(directory),
 					path: directory,
 					name: path.basename(directory),
-					remote: '',
-					branch: '',
-					commit: '',
+					remote: null,
+					branch: null,
+					commit: null,
 					ahead: 0,
 					behind: 0,
-					lastFetched: Date.now()
+					lastFetched: Date.now(),
+					git: await nodegit.Repository.open(directory)
 				});
 			}
 		}
 
-		const submodules = await Git.SubmoduleStatus(directory);
+		const submodules = await Git.CbIterator<
+			[import('nodegit').Submodule],
+			import('nodegit').Repository,
+			unknown,
+			import('nodegit').Submodule
+		>(
+			Git.nodegit.Submodule.foreach,
+			RepositoryStore.getByPath(directory)!.git!,
+			undefined,
+			(s) => s
+		);
 
-		if (refetchFiles) await getFileStatus(directory, undefined, undefined, submodules);
+		if (refetchFiles)
+			await getFileStatus(directory, undefined, undefined, submodules as Submodule[]);
 		if (refetchRemotes) await remoteStatus(directory);
 
 		if (LocationStore.selectedRepository?.id === useId) {

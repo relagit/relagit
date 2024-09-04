@@ -22,6 +22,8 @@ import { showErrorModal } from '@ui/Modal';
 
 import './index.scss';
 
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
+
 export default (props: { showingSignal: Signal<boolean> }) => {
 	const [debouncedShowing, setDebouncedShowing] = props.showingSignal;
 	const [error, setError] = createSignal(false);
@@ -263,7 +265,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 						dedupe
 						rest={props}
 						label={t('sidebar.footer.commit', {
-							branch: selected()?.branch || 'Remote'
+							branch: selected()?.branch?.shorthand() || 'Remote'
 						})}
 						type={error() || dangerous() ? 'danger' : 'brand'}
 						onClick={async () => {
@@ -272,11 +274,77 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 							try {
 								triggerWorkflow('commit', selected()!, draft()!);
 
-								await Git.Commit(
-									selected()!,
-									draft()?.message,
-									draft()?.description
+								const signature = await Git.nodegit.Signature.default(
+									selected()!.git!
 								);
+
+								const committer =
+									SettingsStore.getSetting('commit.annotate') ?
+										await Git.nodegit.Signature.now(
+											'RelaGit',
+											'commit@rela.dev'
+										)
+									:	signature;
+
+								const index = await selected()!.git!.refreshIndex();
+
+								for (const file of changes()!) {
+									if (file.status === 'deleted') {
+										await index.removeByPath(path.join(file.path, file.name));
+									} else {
+										await index.addByPath(path.join(file.path, file.name));
+									}
+								}
+
+								await index.write();
+
+								const oid = await index.writeTree();
+
+								const parents = [await selected()!.git!.getHeadCommit()];
+
+								const sign = await (
+									await Git.nodegit.Config.openDefault()
+								).getBool('commit.gpgsign');
+
+								if (sign) {
+									try {
+										await selected()!.git!.createCommitWithSignature(
+											'HEAD',
+											signature,
+											committer,
+											draft()?.message + '\n\n' + draft()?.description,
+											oid,
+											parents,
+											(data) => {
+												try {
+													return Git.provideSignature(data, selected()!);
+												} catch (e) {
+													return {
+														code: Git.nodegit.Error.CODE.ERROR,
+														field: 'gpgsig',
+														signedData: ''
+													};
+												}
+											}
+										);
+									} catch (e) {
+										if (e === undefined) {
+											// do nothing
+											return;
+										}
+
+										throw e;
+									}
+								} else {
+									await selected()!.git!.createCommit(
+										'HEAD',
+										committer,
+										committer,
+										draft()?.message + '\n\n' + draft()?.description,
+										oid,
+										parents
+									);
+								}
 							} catch (e) {
 								showErrorModal(e, 'error.git');
 
@@ -295,7 +363,7 @@ export default (props: { showingSignal: Signal<boolean> }) => {
 						disabled={!draft()?.message.length}
 					>
 						{t('sidebar.footer.commit', {
-							branch: selected()?.branch || 'Remote'
+							branch: selected()?.branch?.shorthand() || 'Remote'
 						})}
 					</Button>
 				)}

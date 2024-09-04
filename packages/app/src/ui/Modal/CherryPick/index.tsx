@@ -1,11 +1,11 @@
 import Modal, { ModalBody, ModalCloseButton, ModalFooter, ModalHeader, showErrorModal } from '..';
+import type { Branch, Reference } from 'nodegit';
 import { For, Show, createEffect, createRoot, createSignal } from 'solid-js';
 import { useInfiniteScroll } from 'solidjs-use';
 
 import { t } from '@app/modules/i18n';
 import { refetchRepository } from '~/app/src/modules/actions';
 import * as Git from '~/app/src/modules/git';
-import { Branch } from '~/app/src/modules/git/branches';
 import { LogCommit } from '~/app/src/modules/git/log';
 import { commitFormatsForProvider } from '~/app/src/modules/github';
 import { renderDate } from '~/app/src/modules/time';
@@ -18,7 +18,7 @@ import EmptyState from '../../Common/EmptyState';
 
 import './index.scss';
 
-export const CherryPickModal = (props: { repository: Repository; branch: Branch }) => {
+export const CherryPickModal = (props: { repository: Repository; branch: Reference }) => {
 	const [commits, setCommits] = createSignal<LogCommit[]>([]);
 	const [commitsRef, setCommitsRef] = createSignal<HTMLElement | null>(null);
 	const [active, setActive] = createSignal<LogCommit | null>(null);
@@ -26,8 +26,8 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 	createEffect(async () => {
 		setCommits(
 			await Git.Log(props.repository, 50, undefined, [
-				props.branch.gitName,
-				'^' + props.repository.branch
+				props.branch.name(),
+				'^' + props.repository.branch?.name()
 			]).catch(() => [])
 		);
 	});
@@ -38,8 +38,8 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 			if (!props.repository) return;
 
 			const newItems = await Git.Log(props.repository, 50, commits()[commits().length - 1], [
-				props.branch.gitName,
-				'^' + props.repository.branch
+				props.branch.name(),
+				'^' + props.repository.branch.name()
 			]).catch(() => []);
 
 			if (newItems.some((item) => commits().some((c) => c.hash === item.hash))) {
@@ -60,8 +60,8 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 					<>
 						<ModalHeader
 							title={t('modal.cherryPick.title', {
-								current: props.repository.branch,
-								branch: props.branch.name
+								current: props.repository.branch?.name(),
+								branch: props.branch.name()
 							})}
 						>
 							<ModalCloseButton close={p.close} />
@@ -73,8 +73,8 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 									<EmptyState
 										detail={t('modal.cherryPick.noCommits')}
 										hint={t('modal.cherryPick.noCommitsHint', {
-											branch: props.branch.name,
-											current: props.repository.branch
+											branch: props.branch.name(),
+											current: props.repository.branch?.name()
 										})}
 										icon="git-merge-queue"
 									/>
@@ -109,7 +109,7 @@ export const CherryPickModal = (props: { repository: Repository; branch: Branch 
 													<div class="cherry-pick-modal__list__item__info">
 														<Anchor
 															class="cherry-pick-modal__list__item__info__hash"
-															href={`${props.repository.remote.replace(/\.git$/, '')}${commitFormatsForProvider(props.repository.remote || '', commit.hash)}`}
+															href={`${props.repository.remote?.url().replace(/\.git$/, '')}${commitFormatsForProvider(props.repository.remote || '', commit.hash)}`}
 														>
 															{commit.hash.substring(0, 7)}
 														</Anchor>

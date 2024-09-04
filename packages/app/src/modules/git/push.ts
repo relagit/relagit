@@ -11,7 +11,7 @@ export const Push = async (repository: Repository | undefined) => {
 	const res = await Git({
 		directory: repository.path,
 		command: 'push',
-		args: ['origin', repository.branch]
+		args: ['origin', repository.branch!.name()]
 	}).catch((e) => {
 		error('Failed to push', e);
 	});

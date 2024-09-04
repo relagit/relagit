@@ -1,22 +1,24 @@
 import { GenericStore } from '.';
+import { Commit, Reference, Remote } from 'nodegit';
 
 import { Fetch } from '@app/modules/git/fetch';
 import { debug } from '@app/modules/logger';
 
 import SettingsStore from './settings';
 
-export interface Repository {
+export type Repository = {
 	draft?: boolean;
 	id: string;
 	path: string;
 	name: string;
-	remote: string;
-	branch: string;
-	commit: string;
+	remote: Remote | null;
+	branch: Reference | null;
+	commit: Commit | null;
 	ahead: number;
 	behind: number;
 	lastFetched?: number;
-}
+	git: import('nodegit').Repository | null;
+};
 
 const RepositoryStore = new (class RepositoryStore extends GenericStore {
 	#record: Map<string, Repository> = new Map();
@@ -46,7 +48,10 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 
 	getByRemote(remote: string) {
 		return Array.from(this.repositories).find((f) => {
-			const fRemote = f[1].remote.replace(/^(https|http|git):\/\//, '').replace(/\.git$/, '');
+			const fRemote = f[1].remote
+				?.url()
+				.replace(/^(https|http|git):\/\//, '')
+				.replace(/\.git$/, '');
 			const remoteRemote = remote.replace(/^(https|http|git):\/\//, '').replace(/\.git$/, '');
 
 			return fRemote === remoteRemote;
@@ -110,13 +115,14 @@ const RepositoryStore = new (class RepositoryStore extends GenericStore {
 			id: Number(path.split('').reduce((a, b) => a + b.charCodeAt(0), 0)).toString(16) + name,
 			path,
 			name,
-			remote: '',
-			branch: '',
-			commit: '',
+			remote: null,
+			branch: null,
+			commit: null,
 			ahead: 0,
 			behind: 0,
 			draft: true,
-			lastFetched: Date.now()
+			lastFetched: Date.now(),
+			git: null
 		};
 
 		this.repositories.set(repository.id, repository);

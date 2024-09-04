@@ -1,5 +1,7 @@
 import { GenericStore } from '.';
 
+import type { Repository } from './repository';
+
 const nullish = {
 	message: '',
 	description: ''

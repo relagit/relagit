@@ -1,5 +1,5 @@
 type NodeBuiltIn = 'fs' | 'fs/promises' | 'path' | 'os' | 'child_process';
-type ExternalDependency = 'sucrase' | '@wooorm/starry-night';
+type ExternalDependency = 'sucrase' | '@wooorm/starry-night' | 'nodegit' | 'openpgp';
 type ElectronSubModule =
 	| keyof typeof import('electron/common')
 	| keyof typeof import('electron/renderer');
@@ -24,4 +24,6 @@ export type RequireResult<I extends RequireIdentifier> =
 	: I extends 'child_process' ? typeof import('child_process')
 	: I extends '@wooorm/starry-night' ? typeof import('@wooorm/starry-night')
 	: I extends 'sucrase' ? typeof import('sucrase')
+	: I extends 'nodegit' ? typeof import('nodegit')
+	: I extends 'openpgp' ? typeof import('openpgp')
 	: never;

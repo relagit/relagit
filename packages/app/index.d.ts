@@ -1,3 +1,4 @@
+import { Buf, Repository } from 'nodegit';
 import { Native as _Native } from '~/main/src/preload';
 
 import { getRepositoryStatus, refetchRepository, triggerWorkflow } from '@app/modules/actions';
@@ -26,4 +27,11 @@ declare global {
 	export const __AI_API_PASSWORD__: string;
 	export const __AI_API_URL__: string;
 	export const __COMMIT_HASH__: string;
+}
+
+// modify the 'nodegit' branch export types to include a method called upstreamName
+declare module 'nodegit' {
+	export namespace Branch {
+		function upstreamName(repository: Repository, refName: string): Promise<Buf>;
+	}
 }

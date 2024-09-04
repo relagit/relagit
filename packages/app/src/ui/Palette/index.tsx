@@ -222,8 +222,8 @@ export const CommandPalette = () => {
 											{repository.name}
 										</div>
 										<div class="palette__body__list__item__info">
-											<Show when={repository.branch}>
-												{repository.branch}
+											<Show when={repository.branch?.shorthand()}>
+												{repository.branch?.shorthand()}
 												<div class="palette__body__list__item__info__dot"></div>
 											</Show>
 											{relative(

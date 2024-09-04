@@ -26,9 +26,8 @@ export interface WorkspaceProps {
 }
 
 export default (props: WorkspaceProps) => {
-	const repo = createStoreListener(
-		[LocationStore, RepositoryStore],
-		() => RepositoryStore.getById(LocationStore.selectedRepository?.id)?.path
+	const selected = createStoreListener([LocationStore, RepositoryStore], () =>
+		RepositoryStore.getById(LocationStore.selectedRepository?.id)
 	);
 	const file = createStoreListener([LocationStore], () => {
 		const repo = LocationStore.selectedRepository;
@@ -139,11 +138,10 @@ export default (props: WorkspaceProps) => {
 											type: 'item',
 											onClick: () => {
 												openExternal(
-													LocationStore.selectedRepository?.remote.replace(
-														/\.git$/,
-														''
-													) +
-														`/blob/${LocationStore.selectedRepository?.branch}/` +
+													LocationStore.selectedRepository?.remote
+														?.url()
+														?.replace(/\.git$/, '') +
+														`/blob/${LocationStore.selectedRepository?.branch?.shorthand()}/` +
 														path.join(
 															commitFile.path,
 															commitFile.filename
@@ -283,7 +281,7 @@ export default (props: WorkspaceProps) => {
 					<CodeView
 						status={selectedCommitFile()?.status || selectedFile()?.status || 'unknown'}
 						file={file()?.path || ''}
-						repository={repo()!}
+						repository={selected()!}
 						fromFile={path.join(
 							selectedCommitFile()?.fromPath || '',
 							selectedCommitFile()?.from || ''

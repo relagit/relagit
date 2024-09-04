@@ -1,41 +1,28 @@
-import { Git } from './core';
+import { Repository } from 'nodegit';
 
-export const Analyse = async (directory: string) => {
-	const branch = await Git({
-		directory,
-		command: 'rev-parse',
-		args: ['--abbrev-ref', 'HEAD']
-	});
+const nodegit = window.Native.DANGEROUS__NODE__REQUIRE('nodegit');
 
-	const commit = await Git({
-		directory,
-		command: 'rev-parse',
-		args: ['HEAD']
-	});
+export const Analyse = async (repo: Repository) => {
+	const branch = await repo.getCurrentBranch();
+	const commit = await repo.getHeadCommit();
+	const remote = await repo.getRemote('origin');
+	const dirname = repo.workdir().split('/').pop();
 
-	const remote = await Git({
-		directory,
-		command: 'remote',
-		args: ['get-url', 'origin']
-	});
-
-	const status = await Git({
-		directory,
-		command: 'status',
-		args: ['-b', '--porcelain']
-	});
-
-	const ahead = status.match(/ahead (\d+)/);
-	const behind = status.match(/behind (\d+)/);
-
-	const dirname = directory.split('/').pop();
+	const aheadBehind = (await nodegit.Graph.aheadBehind(
+		repo,
+		branch.target(),
+		(await nodegit.Branch.upstream(branch)).target()
+	)) as unknown as {
+		ahead: number;
+		behind: number;
+	};
 
 	return {
-		branch: branch.trim(),
-		commit: commit.trim(),
+		branch: branch,
+		commit: commit,
 		dirname,
-		remote: remote.trim(),
-		ahead: ahead ? parseInt(ahead[1]) : 0,
-		behind: behind ? parseInt(behind[1]) : 0
+		remote: remote,
+		ahead: aheadBehind.ahead,
+		behind: aheadBehind.behind
 	};
 };

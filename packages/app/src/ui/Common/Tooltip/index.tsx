@@ -19,6 +19,7 @@ export interface Tooltip extends FloatingElement {
 	position?: 'top' | 'bottom' | 'auto';
 	delay?: number;
 	size?: 'small' | 'expanded';
+	matchCursorPos?: 'x' | 'y' | 'both';
 }
 
 export default (props: Tooltip) => {
@@ -52,6 +53,15 @@ export default (props: Tooltip) => {
 
 		setX(rect.left + rect.width / 2);
 		setY(rect.top + rect.height / 2);
+
+		if (props.matchCursorPos && e instanceof MouseEvent) {
+			if (props.matchCursorPos === 'x') setX(e.clientX);
+			if (props.matchCursorPos === 'y') setY(e.clientY);
+			if (props.matchCursorPos === 'both') {
+				setX(e.clientX);
+				setY(e.clientY);
+			}
+		}
 	};
 
 	const delay = (e: FocusEvent | MouseEvent, ms = 300) => {

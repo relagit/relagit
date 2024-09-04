@@ -24,11 +24,12 @@ export async function* generate(prompt: string): AsyncGenerator<{
 	message: string;
 } | null> {
 	if (SettingsStore.getSetting('telemetry.metrics') !== false)
-		Sentry.metrics.increment('ai.generate', 1, {
-			tags: {
-				provider: SettingsStore.settings.ai?.provider
-			}
-		});
+		if (__NODE_ENV__ === 'production')
+			Sentry.metrics.increment('ai.generate', 1, {
+				tags: {
+					provider: SettingsStore.settings.ai?.provider
+				}
+			});
 
 	if (!SettingsStore.settings.ai?.termsAccepted) {
 		let url = '';

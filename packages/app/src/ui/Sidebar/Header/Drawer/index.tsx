@@ -61,7 +61,7 @@ export default (props: HeaderDrawerProps) => {
 
 				const name = repository.name.toLowerCase().includes(filterValue);
 				const path = repository.path.toLowerCase().includes(filterValue);
-				const remote = repository.remote.toLowerCase().includes(filterValue);
+				const remote = repository.remote?.url()?.toLowerCase()?.includes(filterValue);
 
 				return name || path || remote;
 			})
@@ -173,7 +173,7 @@ export default (props: HeaderDrawerProps) => {
 												type: 'item',
 												label: t('sidebar.contextMenu.openRemote'),
 												onClick: () => {
-													openExternal(repository.remote);
+													openExternal(repository.remote?.url() || '');
 												}
 											},
 											{
@@ -241,8 +241,8 @@ export default (props: HeaderDrawerProps) => {
 											<div class="sidebar__drawer__body__content__item__text">
 												{repository.name}
 												<div class="sidebar__drawer__body__content__item__text__details">
-													<Show when={repository.branch}>
-														{repository.branch}
+													<Show when={repository.branch?.shorthand()}>
+														{repository.branch?.shorthand()}
 														{' • '}
 													</Show>
 													{renderDate(

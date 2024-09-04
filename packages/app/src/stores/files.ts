@@ -1,6 +1,6 @@
 import { GenericStore } from '.';
+import type { Submodule } from 'nodegit';
 
-import { Submodule } from '@app/modules/git/submodule';
 import { GitStatus } from '@modules/git/diff';
 
 const nodepath = window.Native.DANGEROUS__NODE__REQUIRE('path');

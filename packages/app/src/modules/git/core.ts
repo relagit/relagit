@@ -54,11 +54,12 @@ export const Git = async (params: GitParams): Promise<string> => {
 		.map((a) => (a.startsWith('"') && a.endsWith('"') ? a : `"${escape(a)}"`))
 		.join(' ')}`;
 
-	Sentry.addBreadcrumb({
-		category: 'auth',
-		message: cmd,
-		level: 'info'
-	});
+	if (__NODE_ENV__ === 'production')
+		Sentry.addBreadcrumb({
+			category: 'auth',
+			message: cmd,
+			level: 'info'
+		});
 
 	const result: string = await new Promise(async (resolve, reject) => {
 		const { error, stdout, stderr } = await ipcRenderer.invoke(ipc.GIT_EXEC, cmd, {

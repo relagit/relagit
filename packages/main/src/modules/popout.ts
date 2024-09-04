@@ -43,7 +43,7 @@ export default async () => {
 			preload: path.join(__dirname, '../preload/preload.mjs'),
 			scrollBounce: true,
 			nodeIntegration: true,
-			contextIsolation: true
+			contextIsolation: false
 		}
 	});
 

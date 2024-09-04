@@ -1,5 +1,6 @@
+import { Blame, BlameHunk, Commit } from 'nodegit';
 import type { AddedLine, DeletedLine, GitDiff } from 'parse-git-diff';
-import { For, JSX, Show, createSignal } from 'solid-js';
+import { For, JSX, Show, createResource, createSignal } from 'solid-js';
 
 import { GitStatus } from '@app/modules/git/diff';
 import { parseDiff } from '@app/modules/git/parse-diff';
@@ -24,6 +25,7 @@ import {
 	repoParams
 } from '~/app/src/modules/github';
 import { openExternal } from '~/app/src/modules/shell';
+import { Repository } from '~/app/src/stores/repository';
 import SettingsStore from '~/app/src/stores/settings';
 
 import EmptyState from '@ui/Common/EmptyState';
@@ -38,8 +40,6 @@ import './index.scss';
 const meta = window.Native.platform === 'win32' ? '⌃' : '⌘';
 
 const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
-
-type GitBlame = Awaited<ReturnType<(typeof Git)['Blame']>>;
 
 const extname = (file: string | undefined) => {
 	if (!file) return '';
@@ -75,7 +75,7 @@ const status = (e: 'UnchangedLine' | 'AddedLine' | 'DeletedLine') => {
 export interface CodeViewProps {
 	file: string;
 	status: GitStatus;
-	repository: string;
+	repository: Repository;
 	fromFile?: string;
 }
 
@@ -84,7 +84,8 @@ const dealWithTabs = (line: string) => {
 };
 
 const BlameIndicator = (props: {
-	blame?: GitBlame[number];
+	blame?: BlameHunk;
+	repo: Repository['git'];
 	children: (p: {
 		onMouseEnter: (e: MouseEvent) => void;
 		onMouseLeave: () => void;
@@ -93,51 +94,59 @@ const BlameIndicator = (props: {
 		tabIndex: number;
 		'aria-labelledby': string;
 	}) => JSX.Element;
-}) => (
-	<Tooltip
-		delay={1000}
-		text={
-			<Show when={props.blame}>
-				<div class="blame-tooltip">
-					<div class="blame-tooltip__commit">
-						<div class="blame-tooltip__commit__info">
-							{props.blame!.message}
-							<span class="blame-tooltip__commit__info__hash">
-								{props.blame!.hash?.slice(0, 7)}
-							</span>
+}) => {
+	const [commit] = createResource<Commit | null | undefined>(() => {
+		if (!props.blame) return null;
+
+		return props.repo?.getCommit(props.blame.finalCommitId());
+	});
+
+	return (
+		<Tooltip
+			matchCursorPos="x"
+			delay={1000}
+			text={
+				<Show when={props.blame}>
+					<div class="blame-tooltip">
+						<div class="blame-tooltip__commit">
+							<div class="blame-tooltip__commit__info">
+								{commit()?.message()?.split('\n')[0]}
+								<span class="blame-tooltip__commit__info__hash">
+									{commit()?.sha().slice(0, 7)}
+								</span>
+							</div>
 						</div>
-						<div class="blame-tooltip__commit__changes">{props.blame!.changes}</div>
+						<div class="blame-tooltip__footer">
+							<div class="blame-tooltip__footer__author">
+								<Show when={emailToIconURL(props.blame!.finalSignature().email())}>
+									<img
+										src={emailToIconURL(props.blame!.finalSignature().email())!}
+										alt={props.blame!.finalSignature().name()}
+										class="blame-tooltip__footer__author__icon"
+									/>
+								</Show>
+								{props.blame!.finalSignature().name()}
+							</div>
+							<div class="blame-tooltip__footer__date">
+								{relative(commit()?.date()?.getTime() || 0)}
+								{` (${commit()?.date()?.toLocaleString('en-US', {
+									month: 'long',
+									day: 'numeric',
+									year: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric'
+								})})`}
+							</div>
+						</div>
 					</div>
-					<div class="blame-tooltip__footer">
-						<div class="blame-tooltip__footer__author">
-							<Show when={emailToIconURL(props.blame!.email)}>
-								<img
-									src={emailToIconURL(props.blame!.email)!}
-									alt={props.blame!.author}
-									class="blame-tooltip__footer__author__icon"
-								/>
-							</Show>
-							{props.blame!.author}
-						</div>
-						<div class="blame-tooltip__footer__date">
-							{relative(new Date(props.blame!.date).getTime())}
-							{` (${new Date(props.blame!.date).toLocaleString('en-US', {
-								month: 'long',
-								day: 'numeric',
-								year: 'numeric',
-								hour: 'numeric',
-								minute: 'numeric'
-							})})`}
-						</div>
-					</div>
-				</div>
-			</Show>
-		}
-		size="expanded"
-	>
-		{props.children}
-	</Tooltip>
-);
+				</Show>
+			}
+			size="expanded"
+		>
+			{props.children}
+		</Tooltip>
+	);
+};
 
 export default (props: CodeViewProps) => {
 	const [showOverridden, setShowOverridden] = createSignal<boolean>(false);
@@ -146,31 +155,31 @@ export default (props: CodeViewProps) => {
 	const [threw, setThrew] = createSignal<Error | null>(null);
 	const [content, setContent] = createSignal<string>('');
 	const [contentLength, setContentLength] = createSignal<number>(0);
-	const [blame, setBlame] = createSignal<GitBlame | null>();
+	const [blame, setBlame] = createSignal<Blame | null>();
 	const [submodule, setSubmodule] = createSignal<boolean>(false);
 
 	const [switching, setSwitching] = createSignal<boolean>(false);
 	const [showCommit, setShowCommit] = createSignal<boolean>(false);
 
 	const changes = createStoreListener([FileStore], () =>
-		FileStore.getByRepositoryPath(props.repository)
+		FileStore.getByRepositoryPath(props.repository?.path)
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
 	const fileStatus = createStoreListener([FileStore, LocationStore], () =>
-		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
+		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository?.path, props.file)
 	);
 
 	// only run these when needed
 	const issues = useLazy(repo, (r) =>
 		GitHub('repos/:username/:repo/issues')
-			.get(...repoParams(r?.remote || ''), 'open')
+			.get(...repoParams(r?.remote?.name() || ''), 'open')
 			.catch(() => undefined)
 	);
 	const prs = useLazy(repo, (r) =>
 		GitHub('repos/:username/:repo/pulls')
-			.get(...repoParams(r?.remote || ''), 'open')
+			.get(...repoParams(r?.remote?.name() || ''), 'open')
 			.catch(() => undefined)
 	);
 
@@ -189,13 +198,16 @@ export default (props: CodeViewProps) => {
 				try {
 					if (LocationStore.selectedCommit?.hash)
 						setBlame(
-							await Git.Blame(
-								props.repository,
-								path.join(
-									LocationStore.selectedCommitFile.path,
-									LocationStore.selectedCommitFile.filename
-								),
-								LocationStore.selectedCommit?.hash
+							await Git.nodegit.Blame.file(
+								props.repository.git!,
+								props.file.replace(props.repository.path + path.sep, ''),
+								{
+									newestCommit: (
+										await props.repository.git?.getCommit(
+											LocationStore.selectedCommit.hash
+										)
+									)?.id()
+								}
 							)
 						);
 				} catch (e) {
@@ -220,7 +232,7 @@ export default (props: CodeViewProps) => {
 				return;
 			}
 
-			if (!props.file || !props.repository) {
+			if (!props.file || !props.repository?.path) {
 				return;
 			}
 
@@ -237,11 +249,11 @@ export default (props: CodeViewProps) => {
 			let contents: string | null = null;
 
 			try {
-				contents = await Git.Content(props.file, props.repository);
+				contents = await Git.Content(props.file, props.repository?.path);
 
 				setContentLength(contents!.split('\n').length);
 
-				_diff = await Git.Diff(props.file, props.repository);
+				_diff = await Git.Diff(props.file, props.repository?.path);
 			} catch (e) {
 				setThrew(e as Error);
 
@@ -252,7 +264,12 @@ export default (props: CodeViewProps) => {
 
 			try {
 				if (fileStatus() && fileStatus() !== 'added') {
-					setBlame(await Git.Blame(props.repository, props.file));
+					setBlame(
+						await Git.nodegit.Blame.file(
+							props.repository.git!,
+							props.file.replace(props.repository.path + path.sep, '')
+						)
+					);
 				} else {
 					setBlame(null);
 				}
@@ -342,11 +359,14 @@ export default (props: CodeViewProps) => {
 						}
 					>
 						<Show
-							when={(props.file && props.repository) || (historyOpen() && commit())}
+							when={
+								(props.file && props.repository?.path) ||
+								(historyOpen() && commit())
+							}
 							fallback={
 								<>
 									<Show
-										when={props.repository}
+										when={props.repository?.path}
 										fallback={
 											<EmptyState
 												detail="No repository selected."
@@ -421,7 +441,9 @@ export default (props: CodeViewProps) => {
 														<button
 															class="codeview__empty__actions__action"
 															onClick={() => {
-																openExternal(repo()?.remote || '');
+																openExternal(
+																	repo()?.remote?.url() || ''
+																);
 															}}
 														>
 															<div class="codeview__empty__actions__action__label">
@@ -438,7 +460,7 @@ export default (props: CodeViewProps) => {
 														<Show
 															when={
 																getProvider(
-																	repo()?.remote ||
+																	repo()?.remote?.url() ||
 																		'https://rela.dev'
 																) === 'github'
 															}
@@ -451,8 +473,7 @@ export default (props: CodeViewProps) => {
 																			issuesUrlForProvider(
 																				'https://github.com',
 																				repoParams(
-																					repo()
-																						?.remote ||
+																					repo()?.remote?.url() ||
 																						''
 																				)
 																			) || ''
@@ -486,8 +507,7 @@ export default (props: CodeViewProps) => {
 																			pullRequestsUrlForProvider(
 																				'https://github.com',
 																				repoParams(
-																					repo()
-																						?.remote ||
+																					repo()?.remote?.url() ||
 																						''
 																				)
 																			) || ''
@@ -548,7 +568,7 @@ export default (props: CodeViewProps) => {
 												)}
 											>
 												<ImageView
-													repository={props.repository}
+													repository={props.repository?.path}
 													fromPath={
 														historyOpen() ?
 															path.join(
@@ -560,7 +580,7 @@ export default (props: CodeViewProps) => {
 													path={
 														historyOpen() ?
 															path.join(
-																props.repository,
+																props.repository?.path,
 																commit()?.path || '',
 																commit()?.filename || ''
 															)
@@ -621,7 +641,10 @@ export default (props: CodeViewProps) => {
 															const status = () =>
 																diff() ? 'added' : 'deleted';
 
-															const lineBlame = blame()?.[index()];
+															const lineBlame =
+																blame()?.getHunkByLine(
+																	index() + 1 || 0
+																);
 
 															const numberWidth = Math.max(
 																35,
@@ -631,7 +654,10 @@ export default (props: CodeViewProps) => {
 															);
 
 															return (
-																<BlameIndicator blame={lineBlame}>
+																<BlameIndicator
+																	blame={lineBlame}
+																	repo={props.repository.git}
+																>
 																	{(p) => (
 																		<div
 																			{...(lineBlame && p)}
@@ -756,10 +782,10 @@ export default (props: CodeViewProps) => {
 																			return null;
 
 																		const lineBlame =
-																				blame()?.[
-																					line_number_two -
-																						1
-																				],
+																				blame()?.getHunkByLine(
+																					line_number_two ||
+																						0
+																				),
 																			lineStatus = status(
 																				change.type
 																			);
@@ -777,6 +803,10 @@ export default (props: CodeViewProps) => {
 																		return (
 																			<BlameIndicator
 																				blame={lineBlame}
+																				repo={
+																					props.repository
+																						.git
+																				}
 																			>
 																				{(p) => (
 																					<div

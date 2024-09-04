@@ -43,7 +43,7 @@ export const getOTAData = async (): Promise<
 	| null
 > => {
 	try {
-		const response = await fetch(otaApi);
+		const response = await fetch(otaApi).catch((_) => _);
 		const data = await response.json();
 
 		return data as Partial<NotificationProps>[];

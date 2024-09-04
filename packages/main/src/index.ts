@@ -83,9 +83,10 @@ const updateCheck = () => {
 
 // setInterval(updateCheck, 60000);
 
-Sentry.init({
-	dsn: 'https://858276c018bc5509422b914a744efa98@o4507749705252864.ingest.de.sentry.io/4507749717442640'
-});
+if (__NODE_ENV__ === 'production')
+	Sentry.init({
+		dsn: 'https://858276c018bc5509422b914a744efa98@o4507749705252864.ingest.de.sentry.io/4507749717442640'
+	});
 
 const constructWindow = async () => {
 	const settings = await getSettings();
@@ -131,7 +132,7 @@ const constructWindow = async () => {
 			devTools: __NODE_ENV__ === 'development' || process.argv.includes('--devtools'),
 			preload: path.join(__dirname, '../preload/preload.mjs'),
 			nodeIntegration: true,
-			contextIsolation: true
+			contextIsolation: false
 		}
 	});
 

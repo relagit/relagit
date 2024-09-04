@@ -12,6 +12,8 @@ import Anchor from '@ui/Common/Anchor';
 
 import './index.scss';
 
+const path = window.Native.DANGEROUS__NODE__REQUIRE('path');
+
 export interface SubmoduleViewProps {
 	repository: string;
 	path: string;
@@ -33,10 +35,15 @@ export default () => {
 						<code
 							tabIndex={0}
 							onClick={() => {
-								showItemInFolder(file()!.submodule!.path);
+								showItemInFolder(
+									path.join(
+										LocationStore.selectedRepository!.path!,
+										file()!.submodule!.path()
+									)
+								);
 							}}
 						>
-							{file()!.submodule!.relativePath}
+							{file()!.submodule!.path()}
 						</code>
 					</div>
 					<div class="submodule-view__info__item">
@@ -44,20 +51,21 @@ export default () => {
 						<Anchor
 							onClick={() => {
 								openExternal(
-									file()!.submodule!.remote ||
-										LocationStore.selectedRepository!.remote!
+									file()!.submodule!.url() ||
+										LocationStore.selectedRepository!.remote!.url()
 								);
 							}}
 						>
-							{file()!.submodule!.remote || 'origin'}
+							{file()!.submodule!.url() || 'origin'}
 						</Anchor>
 					</div>
 					<div class="submodule-view__info__item">
-						{t('codeview.submodule.revision')} <code>{file()!.submodule!.sha}</code>
+						{t('codeview.submodule.revision')}{' '}
+						<code>{file()!.submodule!.branch()}</code>
 					</div>
 				</div>
 				<Show
-					when={!RepositoryStore.getByRemote(file()!.submodule!.remote!)}
+					when={!RepositoryStore.getByRemote(file()!.submodule!.url()!)}
 					fallback={
 						<div class="submodule-view__clone">
 							<div class="submodule-view__clone__header">
@@ -65,18 +73,18 @@ export default () => {
 							</div>
 							<Button
 								label={t('codeview.submodule.open', {
-									name: RepositoryStore.getByRemote(file()!.submodule!.remote!)
+									name: RepositoryStore.getByRemote(file()!.submodule!.url()!)
 										?.name
 								})}
 								onClick={() => {
 									LocationStore.setSelectedRepository(
-										RepositoryStore.getByRemote(file()!.submodule!.remote!)
+										RepositoryStore.getByRemote(file()!.submodule!.url()!)
 									);
 								}}
 								type="brand"
 							>
 								{t('codeview.submodule.open', {
-									name: RepositoryStore.getByRemote(file()!.submodule!.remote!)
+									name: RepositoryStore.getByRemote(file()!.submodule!.url()!)
 										?.name
 								})}
 							</Button>
@@ -90,7 +98,7 @@ export default () => {
 						<Button
 							label={t('codeview.submodule.clone')}
 							onClick={() => {
-								showCloneModal('url', file()!.submodule!.remote || '');
+								showCloneModal('url', file()!.submodule!.url() || '');
 							}}
 							type="brand"
 						>

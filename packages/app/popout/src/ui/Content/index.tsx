@@ -95,7 +95,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 			setCommits(commits);
 		});
 
-		if (/^(https?|git):\/\/github\.com/.test(props.repo.remote)) {
+		if (/^(https?|git):\/\/github\.com/.test(props.repo.remote?.url() || '')) {
 			try {
 				GitHub('repos/:username/:repo/actions/runs')
 					.query({
@@ -104,7 +104,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 					.headers({
 						Accept: 'application/vnd.github.v3+json'
 					})
-					.get(...repoParams(props.repo.remote))
+					.get(...repoParams(props.repo.remote?.url() || ''))
 					.then((res) => {
 						setCommitRuns(sortRuns(res.workflow_runs));
 					});
@@ -192,7 +192,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 							{(repo) => <option value={repo.path}>{repo.name}</option>}
 						</For>
 					</select>
-					<div class="branch">{props.repo?.branch}</div>
+					<div class="branch">{props.repo?.branch?.shorthand()}</div>
 				</div>
 				<div class="scroller">
 					<For each={commits()}>
@@ -201,7 +201,7 @@ export default (props: { expanded?: boolean; repo: Repository | undefined }) => 
 								class="scroller-item"
 								title={commit.message}
 								onClick={() => {
-									const remote = props.repo?.remote.replace(/\.git$/, '');
+									const remote = props.repo?.remote?.url()?.replace(/\.git$/, '');
 
 									if (remote) {
 										const url = `${remote}${commitFormatsForProvider(remote, commit.sha)}`;

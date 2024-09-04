@@ -144,18 +144,19 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 		window._triggerWorkflow('navigate', repository, this.selectedFile);
 
-		Sentry.addBreadcrumb({
-			category: 'navigation',
-			message: 'Selected repository',
-			data: {
-				isDraft: repository.draft,
-				path:
-					// only send if telemetry is enabled
-					SettingsStore.getSetting('telemetry.metrics') !== false ?
-						repository.path
-					:	undefined
-			}
-		});
+		if (__NODE_ENV__ === 'production')
+			Sentry.addBreadcrumb({
+				category: 'navigation',
+				message: 'Selected repository',
+				data: {
+					isDraft: repository.draft,
+					path:
+						// only send if telemetry is enabled
+						SettingsStore.getSetting('telemetry.metrics') !== false ?
+							repository.path
+						:	undefined
+				}
+			});
 
 		if (set) SettingsStore.setSetting('activeRepository', repository?.path);
 

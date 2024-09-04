@@ -97,7 +97,7 @@ export default (props: ImageViewProps) => {
 					props.fromPath === '.' ?
 						props.path.replace(props.repository, '')
 					:	props.fromPath!.replace(props.repository, ''),
-					await Git.PreviousCommit(repository(), commit()?.hash), // this will return undefined if there is no commit passed, so we can use it here
+					(await repository()?.git?.getHeadCommit())?.sha(),
 					'binary'
 				);
 

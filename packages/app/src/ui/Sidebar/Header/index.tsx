@@ -83,11 +83,13 @@ export default () => {
 						},
 						type: 'item',
 						onClick: () => {
-							const url = selected()?.remote.replace(/\.git$/, '');
+							const url = selected()
+								?.remote?.url()
+								.replace(/\.git$/, '');
 
 							if (selected()?.branch && url)
 								return openExternal(
-									`${url}${branchFormatsForProvider(url, selected()!.branch!)}`
+									`${url}${branchFormatsForProvider(url, selected()!.branch!.shorthand())}`
 								);
 
 							if (url) openExternal(url);
@@ -179,7 +181,8 @@ export default () => {
 										fallback={<span>{t('sidebar.noRepoHint')}</span>}
 									>
 										<span class="sidebar__header__details__branch">
-											{selected()?.branch || t('sidebar.noBranch')}
+											{selected()?.branch?.shorthand() ||
+												t('sidebar.noBranch')}
 										</span>
 									</Show>
 								</div>
