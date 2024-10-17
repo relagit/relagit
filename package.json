@@ -3,7 +3,7 @@
 	"description": "Take back control over your git workflow.",
 	"main": "./dist/main/index.js",
 	"type": "module",
-	"version": "0.16.7",
+	"version": "0.16.8",
 	"packageManager": "pnpm@9.3.0",
 	"homepage": "https://rela.dev",
 	"repository": "https://github.com/relagit/relagit",
