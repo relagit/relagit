@@ -1,0 +1,7 @@
+authority: '@onlynv/cli'
+connection: 4d86p2oY70UnHJl9kv9r1
+apispec: 1
+exclude:
+  - '**/*.local'
+include:
+  - '**/.env*'
