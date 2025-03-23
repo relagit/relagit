@@ -35,6 +35,7 @@ app.setAboutPanelOptions({
 
 const listeners: ((window: BrowserWindow) => void)[] = [];
 let loaded = false;
+let windowShown = false;
 
 // TODO: Fix auto-updater
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -140,14 +141,20 @@ const constructWindow = async () => {
 	}
 
 	win.once('ready-to-show', () => {
-		win.show();
+		if (!windowShown) {
+			windowShown = true;
+			win.show();
+		}
 	});
 
 	win.webContents.once('did-finish-load', () => {
+		if (!windowShown) {
+			windowShown = true;
+			win.show();
+		}
+
 		if (loaded) return;
-
 		loaded = true;
-
 		for (const listener of listeners) {
 			listener(win);
 		}
