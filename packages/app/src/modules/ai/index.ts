@@ -84,11 +84,14 @@ export async function* generate(prompt: string): AsyncGenerator<{
 		return null;
 	}
 
-	let model: ai.LanguageModel | undefined = undefined;
+	let model: ai.LanguageModelV1 | undefined = undefined;
 
 	try {
-		let provider: OpenAIProvider | GoogleGenerativeAIProvider | AnthropicProvider | undefined =
-			undefined;
+		let provider:
+			| ReturnType<typeof createOpenAI>
+			| ReturnType<typeof createGoogleGenerativeAI>
+			| ReturnType<typeof createAnthropic>
+			| undefined = undefined;
 
 		const options = {
 			apiKey: SettingsStore.settings.ai.api_key
@@ -108,28 +111,38 @@ export async function* generate(prompt: string): AsyncGenerator<{
 
 		switch (SettingsStore.settings.ai.provider) {
 			case 'gpt-3.5':
-				model = (provider as OpenAIProvider)('gpt-3.5-turbo-0125');
+				model = (provider as OpenAIProvider)('gpt-3.5-turbo-0125') as ai.LanguageModelV1;
 				break;
 			case 'gpt-4':
-				model = (provider as OpenAIProvider)('gpt-4-turbo');
+				model = (provider as OpenAIProvider)('gpt-4-turbo') as ai.LanguageModelV1;
 				break;
 			case 'gpt-4o':
-				model = (provider as OpenAIProvider)('gpt-4o');
+				model = (provider as OpenAIProvider)('gpt-4o') as ai.LanguageModelV1;
 				break;
 			case 'gemini-pro':
-				model = (provider as GoogleGenerativeAIProvider)('models/gemini-pro');
+				model = (provider as GoogleGenerativeAIProvider)(
+					'gemini-2.0-flash-001'
+				) as ai.LanguageModelV1;
 				break;
 			case 'gemini-1.5-pro':
-				model = (provider as GoogleGenerativeAIProvider)('models/gemini-1.5-pro-latest');
+				model = (provider as GoogleGenerativeAIProvider)(
+					'gemini-1.5-flash-latest'
+				) as ai.LanguageModelV1;
 				break;
 			case 'claude-haiku':
-				model = (provider as AnthropicProvider)('claude-3-haiku-20240307');
+				model = (provider as AnthropicProvider)(
+					'claude-3-5-haiku-latest'
+				) as ai.LanguageModelV1;
 				break;
 			case 'claude-sonnet':
-				model = (provider as AnthropicProvider)('claude-3-5-sonnet-20240620');
+				model = (provider as AnthropicProvider)(
+					'claude-3-7-sonnet-20250219'
+				) as ai.LanguageModelV1;
 				break;
 			case 'claude-opus':
-				model = (provider as AnthropicProvider)('claude-3-opus-20240229');
+				model = (provider as AnthropicProvider)(
+					'claude-3-opus-latest'
+				) as ai.LanguageModelV1;
 				break;
 		}
 
