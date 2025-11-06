@@ -23,7 +23,7 @@ app.on('before-quit', () => {
 
 const preloadPathEnv = () => {
 	try {
-		const command = process.platform === 'win32' ? 'PATH' : 'echo $PATH';
+		const command = process.platform === 'win32' ? 'echo %PATH%' : 'echo $PATH';
 
 		const path = child_process.execSync(command).toString().trim();
 
