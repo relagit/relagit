@@ -81,7 +81,7 @@
 		"hast-util-to-html": "^9.0.1",
 		"parse-git-diff": "^0.0.9",
 		"prettier": "^3.3.3",
-		"rollup": "^4.24.0",
+		"rollup": "^4.59.0",
 		"rollup-plugin-esbuild": "^5.0.0",
 		"rollup-plugin-scss": "^4.0.0",
 		"rollup-plugin-serve": "^2.0.3",
