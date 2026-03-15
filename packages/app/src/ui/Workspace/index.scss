@@ -28,6 +28,35 @@
 		user-select: none;
 		border-bottom: 1px solid var(--separator-secondary);
 
+		&__top {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+		}
+
+		&__close {
+			background: none;
+			border: none;
+			color: var(--color-secondary);
+			cursor: pointer;
+			padding: 4px;
+			border-radius: 4px;
+			display: flex;
+			align-items: center;
+			flex-shrink: 0;
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
+
+			&:hover {
+				background-color: var(--bg-hover);
+				color: var(--color-primary);
+			}
+		}
+
 		&__message {
 			color: var(--color-primary);
 			font-size: 1.25rem;

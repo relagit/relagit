@@ -58,7 +58,23 @@ export default (props: WorkspaceProps) => {
 			<Header />
 			<Show when={diffOpen() && commit()}>
 				<div class="workspace__commit">
-					<div class="workspace__commit__message">{commit()!.message}</div>
+					<div class="workspace__commit__top">
+						<div class="workspace__commit__message">{commit()!.message}</div>
+						<Show when={stashOpen()}>
+							<button
+								class="workspace__commit__close"
+								aria-label={t('modal.close')}
+								onClick={() => {
+									LocationStore.setStashOpen(false);
+									LocationStore.setSelectedCommit(undefined);
+									LocationStore.setSelectedCommitFiles(undefined);
+									LocationStore.setSelectedCommitFile(undefined);
+								}}
+							>
+								<Icon name="x" />
+							</button>
+						</Show>
+					</div>
 					<div class="workspace__commit__details">
 						<div class="workspace__commit__details__author">{commit()!.author}</div>
 						<div class="workspace__commit__details__hash">
