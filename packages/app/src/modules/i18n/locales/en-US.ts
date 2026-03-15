@@ -329,6 +329,7 @@ export default {
 		deleteBranch: 'Delete Branch',
 		mergeBranch: 'Merge {{branch}} into {{current}}',
 		cherryPick: 'Cherry Pick from {{branch}} into {{current}}',
+		searchBranches: 'Search branches...',
 		newBranch: 'New branch',
 		createBranch: 'Create Branch',
 		pushChanges: 'Push Changes',
