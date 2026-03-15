@@ -202,6 +202,7 @@ export default {
 		publishHint: 'Veröffentliche diesen Branch auf Remote.',
 		branches: ['Branch', 'Branches'],
 		deleteBranch: 'Branch löschen',
+		searchBranches: 'Branches durchsuchen...',
 		newBranch: 'Neuer Branch',
 		createBranch: 'Erstelle Branch',
 		pushChanges: 'Änderungen pushen',

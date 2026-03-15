@@ -332,6 +332,7 @@ export default {
 		deleteBranch: 'Supprimer la branche',
 		mergeBranch: 'Fusionner {{branch}} dans {{current}}',
 		cherryPick: 'Cherry Pick depuis {{branch}} dans {{current}}',
+		searchBranches: 'Rechercher des branches...',
 		newBranch: 'Nouvelle branche',
 		createBranch: 'Créer une branche',
 		pushChanges: 'Pousser les modifications',

@@ -295,6 +295,7 @@ export default {
 		publishHint: 'Publica esta rama en el remoto.',
 		branches: ['Rama', 'Ramas'],
 		deleteBranch: 'Eliminar rama',
+		searchBranches: 'Buscar ramas...',
 		newBranch: 'Nueva rama',
 		createBranch: 'Crear rama',
 		pushChanges: 'Enviar cambios',

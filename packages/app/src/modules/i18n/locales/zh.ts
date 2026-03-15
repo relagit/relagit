@@ -314,6 +314,7 @@ export default {
 		deleteBranch: '删除分支',
 		mergeBranch: '将{{branch}}合并到{{current}}',
 		cherryPick: '从{{branch}}合并到{{current}}',
+		searchBranches: '搜索分支...',
 		newBranch: '新分支',
 		createBranch: '创建分支',
 		pushChanges: '推送更改',

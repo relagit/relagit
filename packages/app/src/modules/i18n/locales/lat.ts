@@ -196,6 +196,7 @@ export default {
 		publishHint: 'Hoc germen ad remotum mitte.',
 		branches: ['Germen', 'Germenes'],
 		deleteBranch: 'Germen Aufer',
+		searchBranches: 'Quaere germina...',
 		newBranch: 'Novum germen',
 		createBranch: 'Fac Germen',
 		pushChanges: 'Push Mutationes',
