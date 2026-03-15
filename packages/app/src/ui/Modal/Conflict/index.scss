@@ -1,0 +1,18 @@
+.conflict-modal {
+	&__message {
+		color: var(--color-primary);
+		margin-bottom: 8px;
+	}
+
+	&__hint {
+		color: var(--color-secondary);
+		font-size: 0.9rem;
+		margin-bottom: 16px;
+	}
+
+	&__abort-hint {
+		color: var(--color-secondary);
+		font-size: 0.85rem;
+		margin-top: 4px;
+	}
+}

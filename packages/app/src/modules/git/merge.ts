@@ -24,3 +24,15 @@ export const Merge = async (repository: Repository | undefined, branch: string |
 		throw error;
 	}
 };
+
+export const MergeAbort = async (repository: Repository | undefined) => {
+	if (!repository) return;
+
+	const res = await Git({
+		directory: repository.path,
+		command: 'merge',
+		args: ['--abort']
+	});
+
+	return res;
+};

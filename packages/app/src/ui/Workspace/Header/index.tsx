@@ -24,6 +24,7 @@ import { openExternal } from '~/app/src/modules/shell';
 import Icon, { IconName } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import { showCherryPickModal } from '@ui/Modal/CherryPick';
+import { showConflictModal } from '@ui/Modal/Conflict';
 import { showPublishModal } from '@ui/Modal/Publish';
 
 import './index.scss';
@@ -674,7 +675,23 @@ export default () => {
 														LocationStore.selectedRepository
 													);
 												} catch (e) {
-													showErrorModal(e, 'error.git');
+													const msg =
+														typeof e === 'string'
+															? e
+															: (e as Error)?.message || '';
+													if (
+														msg
+															.toLowerCase()
+															.includes(
+																'resolve your current index'
+															)
+													) {
+														showConflictModal(
+															LocationStore.selectedRepository
+														);
+													} else {
+														showErrorModal(e, 'error.git');
+													}
 
 													error(e);
 												}
