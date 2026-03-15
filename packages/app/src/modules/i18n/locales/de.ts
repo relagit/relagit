@@ -213,6 +213,8 @@ export default {
 		divergedHint: 'Änderungen stashen und pullen',
 		nothingToSee: 'Hier gibt es nichts zu sehen',
 		popStash: 'Pop Stash',
+		stashes: 'Stashes',
+		stashCount: ['{{count}} Stash', '{{count}} Stashes'],
 		commits: ['{{count}} commit', '{{count}} commits'],
 		stashedChanges: ['{{count}} Änderung stashed', '{{count}} Änderungen stashed']
 	},

@@ -158,8 +158,10 @@ export default (props: CodeViewProps) => {
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommitFile);
 	const repo = createStoreListener([LocationStore], () => LocationStore.selectedRepository);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const stashOpen = createStoreListener([LocationStore], () => LocationStore.stashOpen);
+	const diffOpen = () => historyOpen() || stashOpen();
 	const fileStatus = createStoreListener([FileStore, LocationStore], () =>
-		historyOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
+		diffOpen?.() ? commit()?.status : FileStore.getStatus(props.repository, props.file)
 	);
 
 	// only run these when needed
@@ -179,29 +181,31 @@ export default (props: CodeViewProps) => {
 		setThrew(null);
 
 		try {
-			if (LocationStore.historyOpen) {
+			if (LocationStore.historyOpen || LocationStore.stashOpen) {
 				setShowCommit(true);
 
 				if (!LocationStore.selectedCommitFile) {
 					return;
 				}
 
-				try {
-					if (LocationStore.selectedCommit?.hash)
-						setBlame(
-							await Git.Blame(
-								props.repository,
-								path.join(
-									LocationStore.selectedCommitFile.path,
-									LocationStore.selectedCommitFile.filename
-								),
-								LocationStore.selectedCommit?.hash
-							)
-						);
-				} catch (e) {
-					setBlame(null);
+				if (LocationStore.historyOpen) {
+					try {
+						if (LocationStore.selectedCommit?.hash)
+							setBlame(
+								await Git.Blame(
+									props.repository,
+									path.join(
+										LocationStore.selectedCommitFile.path,
+										LocationStore.selectedCommitFile.filename
+									),
+									LocationStore.selectedCommit?.hash
+								)
+							);
+					} catch (e) {
+						setBlame(null);
 
-					error(e);
+						error(e);
+					}
 				}
 
 				setDiff(LocationStore.selectedCommitFile?.diff);
@@ -342,7 +346,7 @@ export default (props: CodeViewProps) => {
 						}
 					>
 						<Show
-							when={(props.file && props.repository) || (historyOpen() && commit())}
+							when={(props.file && props.repository) || (diffOpen() && commit())}
 							fallback={
 								<>
 									<Show
@@ -550,7 +554,7 @@ export default (props: CodeViewProps) => {
 												<ImageView
 													repository={props.repository}
 													fromPath={
-														historyOpen() ?
+														diffOpen() ?
 															path.join(
 																commit()?.fromPath || '',
 																commit()?.from || ''
@@ -558,7 +562,7 @@ export default (props: CodeViewProps) => {
 														:	props.fromFile
 													}
 													path={
-														historyOpen() ?
+														diffOpen() ?
 															path.join(
 																props.repository,
 																commit()?.path || '',

@@ -325,6 +325,8 @@ export default {
 		divergedHint: '储藏更改并拉取',
 		nothingToSee: '这里没有任何内容',
 		popStash: '弹出储藏',
+		stashes: '储藏',
+		stashCount: ['{{count}}个储藏', '{{count}}个储藏'],
 		commits: ['{{count}}个提交', '{{count}}个提交'],
 		stashedChanges: [
 			'{{stashCount}}个储藏（{{count}}个）',

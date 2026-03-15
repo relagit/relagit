@@ -343,6 +343,8 @@ export default {
 		divergedHint: 'Mettez les modifications en réserve et tirez',
 		nothingToSee: 'Rien à voir ici',
 		popStash: 'Récupérer la réserve',
+		stashes: 'Réserves',
+		stashCount: ['{{count}} réserve', '{{count}} réserves'],
 		commits: ['{{count}} commit', '{{count}} commits'],
 		stashedChanges: [
 			'{{stashCount}} réserve ({{count}})',

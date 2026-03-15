@@ -306,6 +306,8 @@ export default {
 		divergedHint: 'Guarda los cambios y obtén',
 		nothingToSee: 'Nada que ver aquí',
 		popStash: 'Recuperar cambios guardados',
+		stashes: 'Cambios guardados',
+		stashCount: ['{{count}} cambio guardado', '{{count}} cambios guardados'],
 		commits: ['{{count}} confirmación', '{{count}} confirmaciones'],
 		stashedChanges: [
 			'{{stashCount}} cambio guardado ({{count}})',
