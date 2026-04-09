@@ -71,7 +71,7 @@ interface Context {
 		CreateBranch: (repository: Repository | undefined, branch: string) => Promise<void>;
 		PushWithOrigin: (repository: Repository | undefined, branch: string) => Promise<void>;
 		Stash: (repository: Repository | undefined) => Promise<void>;
-		ListStash: (repository: Repository | undefined) => Promise<Record<number, string[]>>;
+		ListStash: (repository: Repository | undefined) => Promise<import('../git/stash').StashEntry[]>;
 		PopStash: (repository: Repository | undefined, stash: GitFile) => Promise<void>;
 		RemoveStash: (repository: Repository | undefined, stash: GitFile) => Promise<void>;
 		PreviousCommit: (repository: Repository | undefined, sha?: string) => Promise<string>;

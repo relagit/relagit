@@ -119,6 +119,78 @@
 	}
 }
 
+.popout .stash-picker {
+	user-select: none;
+	max-width: 350px;
+	overflow: hidden;
+
+	&__label {
+		color: var(--color-secondary);
+		font-size: 0.85rem;
+		padding: 16px 16px 8px;
+		font-weight: 600;
+		outline: none;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		max-height: 400px;
+		overflow-y: auto;
+
+		&__item {
+			background: none;
+			display: flex;
+			padding: 10px 16px;
+			align-items: center;
+			color: var(--color-primary);
+			border-top: 1px solid var(--separator-secondary);
+			justify-content: space-between;
+			text-align: left;
+			min-width: 250px;
+			width: 100%;
+			gap: 12px;
+
+			@include mixins.focusable;
+
+			&:hover {
+				background-color: var(--bg-hover);
+			}
+
+			&__content {
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+
+				&__message {
+					color: var(--color-primary);
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					font-size: 0.9rem;
+				}
+
+				&__meta {
+					color: var(--color-secondary);
+					font-size: 0.8rem;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+
+			&__info {
+				color: var(--color-secondary);
+				font-size: 0.8rem;
+				white-space: nowrap;
+				flex-shrink: 0;
+			}
+		}
+	}
+}
+
 .popout .branches-picker {
 	user-select: none;
 	max-width: 300px;

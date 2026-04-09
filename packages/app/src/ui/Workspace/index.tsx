@@ -45,6 +45,8 @@ export default (props: WorkspaceProps) => {
 	);
 	const commit = createStoreListener([LocationStore], () => LocationStore.selectedCommit);
 	const historyOpen = createStoreListener([LocationStore], () => LocationStore.historyOpen);
+	const stashOpen = createStoreListener([LocationStore], () => LocationStore.stashOpen);
+	const diffOpen = () => historyOpen() || stashOpen();
 	const selectedCommitFile = createStoreListener(
 		[LocationStore],
 		() => LocationStore.selectedCommitFile
@@ -54,9 +56,25 @@ export default (props: WorkspaceProps) => {
 	return (
 		<div classList={{ workspace: true, 'sidebar-active': props.sidebar }}>
 			<Header />
-			<Show when={historyOpen() && commit()}>
+			<Show when={diffOpen() && commit()}>
 				<div class="workspace__commit">
-					<div class="workspace__commit__message">{commit()!.message}</div>
+					<div class="workspace__commit__top">
+						<div class="workspace__commit__message">{commit()!.message}</div>
+						<Show when={stashOpen()}>
+							<button
+								class="workspace__commit__close"
+								aria-label={t('modal.close')}
+								onClick={() => {
+									LocationStore.setStashOpen(false);
+									LocationStore.setSelectedCommit(undefined);
+									LocationStore.setSelectedCommitFiles(undefined);
+									LocationStore.setSelectedCommitFile(undefined);
+								}}
+							>
+								<Icon name="x" />
+							</button>
+						</Show>
+					</div>
 					<div class="workspace__commit__details">
 						<div class="workspace__commit__details__author">{commit()!.author}</div>
 						<div class="workspace__commit__details__hash">
@@ -95,7 +113,7 @@ export default (props: WorkspaceProps) => {
 				</div>
 			</Show>
 			<div class="workspace__container">
-				<Show when={historyOpen() && commitFiles()}>
+				<Show when={diffOpen() && commitFiles()}>
 					<div class="workspace__container__files">
 						<For each={commitFiles()?.files}>
 							{(commitFile) => (
@@ -263,21 +281,21 @@ export default (props: WorkspaceProps) => {
 					<div class="workspace__container__main__file">
 						<div class="workspace__container__main__file__path">
 							<Show
-								when={(historyOpen() ?
+								when={(diffOpen() ?
 									selectedCommitFile()?.path || ''
 								:	file()?.file?.path || ''
 								).endsWith('/')}
 								fallback={
-									((historyOpen() ?
+									((diffOpen() ?
 										selectedCommitFile()?.path
 									:	file()?.file?.path) || '') + '/'
 								}
 							>
-								{historyOpen() ? selectedCommitFile()?.path : file()?.file?.path}
+								{diffOpen() ? selectedCommitFile()?.path : file()?.file?.path}
 							</Show>
 						</div>
 						<div class="workspace__container__main__file__name">
-							{historyOpen() ? selectedCommitFile()?.filename : file()?.file?.name}
+							{diffOpen() ? selectedCommitFile()?.filename : file()?.file?.name}
 						</div>
 					</div>
 					<CodeView

@@ -15,6 +15,7 @@ const LocationStore = new (class LocationStore extends GenericStore {
 	#selectedFile: GitFile | undefined = undefined;
 	#selectedRepository: Repository | undefined = undefined;
 	#historyOpen = false;
+	#stashOpen = false;
 	#selectedCommit: LogCommit | undefined = undefined;
 	#selectedCommitFiles: PastCommit | undefined = undefined;
 	#selectedCommitFile: PastCommit['files'][number] | undefined = undefined;
@@ -71,6 +72,10 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		return this.#historyOpen;
 	}
 
+	get stashOpen() {
+		return this.#stashOpen;
+	}
+
 	get isRefetchingSelectedRepository() {
 		return this.#isRefetchingSelectedRepository;
 	}
@@ -108,6 +113,13 @@ const LocationStore = new (class LocationStore extends GenericStore {
 
 	setHistoryOpen(open: boolean) {
 		this.#historyOpen = open;
+		if (open) this.#stashOpen = false;
+		this.emit();
+	}
+
+	setStashOpen(open: boolean) {
+		this.#stashOpen = open;
+		if (open) this.#historyOpen = false;
 		this.emit();
 	}
 
@@ -139,6 +151,7 @@ const LocationStore = new (class LocationStore extends GenericStore {
 		this.#selectedCommit = undefined;
 		this.#selectedCommitFiles = undefined;
 		this.#selectedCommitFile = undefined;
+		this.#stashOpen = false;
 		this.#selectedRepository = repository;
 		this.emit();
 

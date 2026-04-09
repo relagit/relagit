@@ -207,6 +207,8 @@ export default {
 		divergedHint: 'Stash Mutationes et pull',
 		nothingToSee: 'Nihil hic videre',
 		popStash: 'Pop Stash',
+		stashes: 'Stashes',
+		stashCount: ['{{count}} stash', '{{count}} stashes'],
 		commits: ['{{count}} commit', '{{count}} commits'],
 		stashedChanges: ['{{count}} stashed mutatio', '{{count}} stashed mutationes']
 	},
