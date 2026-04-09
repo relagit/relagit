@@ -329,6 +329,7 @@ export default {
 		deleteBranch: 'Delete Branch',
 		mergeBranch: 'Merge {{branch}} into {{current}}',
 		cherryPick: 'Cherry Pick from {{branch}} into {{current}}',
+		searchBranches: 'Search branches...',
 		newBranch: 'New branch',
 		createBranch: 'Create Branch',
 		pushChanges: 'Push Changes',
@@ -390,6 +391,14 @@ export default {
 			noCommitsHint:
 				'There are no commits in {{branch}} that are not already in {{current}}.',
 			action: 'Cherry Pick'
+		},
+		conflict: {
+			title: 'Merge Conflicts Detected',
+			message:
+				'There are unresolved merge conflicts that need to be resolved before you can switch branches.',
+			hint: 'Resolve the conflicts in your files and commit, or abort the merge to discard all changes.',
+			abort: 'Abort Merge',
+			abortHint: 'This will discard all merge changes and return to the previous state.'
 		},
 		information: {
 			metadata: 'Metadata',

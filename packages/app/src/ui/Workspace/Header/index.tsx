@@ -24,6 +24,7 @@ import { openExternal } from '~/app/src/modules/shell';
 import Icon, { IconName } from '@ui/Common/Icon';
 import Tooltip from '@ui/Common/Tooltip';
 import { showCherryPickModal } from '@ui/Modal/CherryPick';
+import { showConflictModal } from '@ui/Modal/Conflict';
 import { showPublishModal } from '@ui/Modal/Publish';
 
 import './index.scss';
@@ -111,6 +112,35 @@ export default () => {
 	const [newBranch, setNewBranch] = createSignal('');
 	const [inputRef, setInputRef] = createSignal<HTMLElement>();
 	const [branches, setBranches] = createSignal<Branch[] | null>(null);
+	const [branchSearch, setBranchSearch] = createSignal('');
+
+	const filteredBranches = () => {
+		const search = branchSearch().toLowerCase().trim();
+		if (!search) return branches();
+		const filtered = branches()?.filter((b) =>
+			b.gitName.toLowerCase().includes(search) || b.name.toLowerCase().includes(search)
+		);
+		if (!filtered) return null;
+		return filtered.sort((a, b) => {
+			const aGit = a.gitName.toLowerCase();
+			const bGit = b.gitName.toLowerCase();
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			// exact match on name or gitName
+			const aExact = aName === search || aGit === search;
+			const bExact = bName === search || bGit === search;
+			if (aExact !== bExact) return aExact ? -1 : 1;
+			// name starts with search
+			const aNameStarts = aName.startsWith(search);
+			const bNameStarts = bName.startsWith(search);
+			if (aNameStarts !== bNameStarts) return aNameStarts ? -1 : 1;
+			// gitName starts with search
+			const aGitStarts = aGit.startsWith(search);
+			const bGitStarts = bGit.startsWith(search);
+			if (aGitStarts !== bGitStarts) return aGitStarts ? -1 : 1;
+			return aGit.indexOf(search) - bGit.indexOf(search);
+		});
+	};
 	const [stashes, setStashes] = createSignal<Record<number, string[]> | null>(null);
 	const [status, setStatus] = createSignal<'publish' | 'diverged' | 'ahead' | 'behind' | null>(
 		null
@@ -129,6 +159,12 @@ export default () => {
 	});
 
 	const branchPickerSignal = createSignal(false);
+
+	createEffect(() => {
+		if (!branchPickerSignal[0]()) {
+			setBranchSearch('');
+		}
+	});
 
 	window.Native.listeners.BRANCHES(() => {
 		branchPickerSignal[1]((b) => !b);
@@ -520,8 +556,19 @@ export default () => {
 						<div class="branches-picker__label" tabIndex={0}>
 							{t('git.branches', undefined, branches()?.length)}
 						</div>
+						<div class="branches-picker__search">
+							<Icon name="search" />
+							<input
+								type="text"
+								placeholder={t('git.searchBranches')}
+								spellcheck={false}
+								autocomplete="off"
+								value={branchSearch()}
+								onInput={(e) => setBranchSearch(e.currentTarget.value)}
+							/>
+						</div>
 						<div class="branches-picker__list">
-							<For each={branches()}>
+							<For each={filteredBranches()}>
 								{(branch) => (
 									<Menu
 										interfaceId="workspace-branch"
@@ -628,7 +675,23 @@ export default () => {
 														LocationStore.selectedRepository
 													);
 												} catch (e) {
-													showErrorModal(e, 'error.git');
+													const msg =
+														typeof e === 'string'
+															? e
+															: (e as Error)?.message || '';
+													if (
+														msg
+															.toLowerCase()
+															.includes(
+																'resolve your current index'
+															)
+													) {
+														showConflictModal(
+															LocationStore.selectedRepository
+														);
+													} else {
+														showErrorModal(e, 'error.git');
+													}
 
 													error(e);
 												}

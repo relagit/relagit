@@ -12,7 +12,7 @@ export { Status } from './status';
 export { Commit } from './commit';
 export { Branch } from './branch';
 export { Revert } from './revert';
-export { Merge } from './merge';
+export { Merge, MergeAbort } from './merge';
 export { Graph } from './graph';
 export { Clone } from './clone';
 export { Blame } from './blame';

@@ -132,10 +132,38 @@
 		outline: none;
 	}
 
+	&__search {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 4px 12px;
+		margin: 0 8px 4px;
+		border-radius: 6px;
+		background-color: var(--bg-tertiary);
+		border: 1px solid var(--separator-secondary);
+		color: var(--color-secondary);
+
+		input {
+			background: none;
+			border: none;
+			outline: none;
+			color: var(--color-primary);
+			font-size: 0.85rem;
+			width: 100%;
+			padding: 2px 0;
+
+			&::placeholder {
+				color: var(--color-secondary);
+			}
+		}
+	}
+
 	&__list {
 		display: flex;
 		flex-direction: column;
 		gap: 0;
+		max-height: 400px;
+		overflow-y: auto;
 
 		&__item {
 			background: none;
