@@ -66,14 +66,19 @@ export default {
 				openai: 'OpenAI',
 				gemini: 'Google Gemini',
 				anthropic: 'Anthropic',
+				'gpt-5-1-codex-mini': 'GPT 5.1 Codex Mini',
+				'gpt-5-4-nano': 'GPT 5.4 Nano',
+				'gpt-5-4-mini': 'GPT 5.4 Mini',
+				'gemini-flash-lite': 'Gemini Flash Lite',
+				'gemini-flash': 'Gemini Flash',
+				'claude-haiku': 'Claude Haiku',
+				'claude-sonnet': 'Claude Sonnet',
+				'claude-opus': 'Claude Opus',
 				'gpt-3-5': 'GPT 3.5 Turbo',
 				'gpt-4': 'GPT 4 Turbo',
 				'gpt-4o': 'GPT 4o',
 				'gemini-pro': 'Gemini Pro',
-				'gemini-1-5-pro': 'Gemini 1.5 Pro',
-				'claude-haiku': 'Claude 3 Haiku',
-				'claude-sonnet': 'Claude 3.5 Sonnet',
-				'claude-opus': 'Claude 3 Opus'
+				'gemini-1-5-pro': 'Gemini 1.5 Pro'
 			},
 			apiKey: {
 				label: 'API Key',

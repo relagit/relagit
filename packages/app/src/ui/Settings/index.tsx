@@ -575,7 +575,7 @@ const SettingsModal = () => {
 							label: t(`settings.general.editor.${editor.exec}`),
 							value: editor.exec,
 							hint: editor.exec as string,
-							image: editor.image ? safeURL(editor.image) : undefined
+							image: editor.image ? safeURL(editor.image) || undefined : undefined
 						}))
 						.concat([
 							{
@@ -665,28 +665,28 @@ const SettingsModal = () => {
 							name: t('settings.ai.model.openai')
 						},
 						{
-							label: t('settings.ai.model.gpt-3-5'),
-							value: 'gpt-3.5'
+							label: t('settings.ai.model.gpt-5-4-nano'),
+							value: 'gpt-5.4-nano'
 						},
 						{
-							label: t('settings.ai.model.gpt-4'),
-							value: 'gpt-4'
+							label: t('settings.ai.model.gpt-5-1-codex-mini'),
+							value: 'gpt-5.1-codex-mini'
 						},
 						{
-							label: t('settings.ai.model.gpt-4o'),
-							value: 'gpt-4o'
+							label: t('settings.ai.model.gpt-5-4-mini'),
+							value: 'gpt-5.4-mini'
 						},
 						{
 							type: 'divider',
 							name: t('settings.ai.model.gemini')
 						},
 						{
-							label: t('settings.ai.model.gemini-pro'),
-							value: 'gemini-pro'
+							label: t('settings.ai.model.gemini-flash'),
+							value: 'gemini-flash'
 						},
 						{
-							label: t('settings.ai.model.gemini-1-5-pro'),
-							value: 'gemini-1.5-pro'
+							label: t('settings.ai.model.gemini-flash-lite'),
+							value: 'gemini-flash-lite'
 						},
 						{
 							type: 'divider',

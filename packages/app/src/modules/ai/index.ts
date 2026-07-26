@@ -84,7 +84,7 @@ export async function* generate(prompt: string): AsyncGenerator<{
 		return null;
 	}
 
-	let model: ai.LanguageModelV1 | undefined = undefined;
+	let model: ai.LanguageModel | undefined = undefined;
 
 	try {
 		let provider:
@@ -110,39 +110,29 @@ export async function* generate(prompt: string): AsyncGenerator<{
 		}
 
 		switch (SettingsStore.settings.ai.provider) {
-			case 'gpt-3.5':
-				model = (provider as OpenAIProvider)('gpt-3.5-turbo-0125') as ai.LanguageModelV1;
+			case 'gpt-5.1-codex-mini':
+				model = (provider as OpenAIProvider)('gpt-5.1-codex-mini');
 				break;
-			case 'gpt-4':
-				model = (provider as OpenAIProvider)('gpt-4-turbo') as ai.LanguageModelV1;
+			case 'gpt-5.4-nano':
+				model = (provider as OpenAIProvider)('gpt-5.4-nano');
 				break;
-			case 'gpt-4o':
-				model = (provider as OpenAIProvider)('gpt-4o') as ai.LanguageModelV1;
+			case 'gpt-5.4-mini':
+				model = (provider as OpenAIProvider)('gpt-5.4-mini');
 				break;
-			case 'gemini-pro':
-				model = (provider as GoogleGenerativeAIProvider)(
-					'gemini-2.0-flash-001'
-				) as ai.LanguageModelV1;
+			case 'gemini-flash-lite':
+				model = (provider as GoogleGenerativeAIProvider)('gemini-flash-lite-latest');
 				break;
-			case 'gemini-1.5-pro':
-				model = (provider as GoogleGenerativeAIProvider)(
-					'gemini-1.5-flash-latest'
-				) as ai.LanguageModelV1;
+			case 'gemini-flash':
+				model = (provider as GoogleGenerativeAIProvider)('gemini-flash-latest');
 				break;
 			case 'claude-haiku':
-				model = (provider as AnthropicProvider)(
-					'claude-3-5-haiku-latest'
-				) as ai.LanguageModelV1;
+				model = (provider as AnthropicProvider)('claude-haiku-4-5');
 				break;
 			case 'claude-sonnet':
-				model = (provider as AnthropicProvider)(
-					'claude-3-7-sonnet-20250219'
-				) as ai.LanguageModelV1;
+				model = (provider as AnthropicProvider)('claude-sonnet-4-6');
 				break;
 			case 'claude-opus':
-				model = (provider as AnthropicProvider)(
-					'claude-3-opus-latest'
-				) as ai.LanguageModelV1;
+				model = (provider as AnthropicProvider)('claude-opus-5');
 				break;
 		}
 
@@ -150,7 +140,7 @@ export async function* generate(prompt: string): AsyncGenerator<{
 			throw new Error('Invalid AI provider');
 		}
 
-		const result = await ai.streamText({
+		const result = ai.streamText({
 			model,
 			prompt
 		});

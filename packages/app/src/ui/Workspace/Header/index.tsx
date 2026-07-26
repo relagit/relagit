@@ -117,8 +117,8 @@ export default () => {
 	const filteredBranches = () => {
 		const search = branchSearch().toLowerCase().trim();
 		if (!search) return branches();
-		const filtered = branches()?.filter((b) =>
-			b.gitName.toLowerCase().includes(search) || b.name.toLowerCase().includes(search)
+		const filtered = branches()?.filter(
+			(b) => b.gitName.toLowerCase().includes(search) || b.name.toLowerCase().includes(search)
 		);
 		if (!filtered) return null;
 		return filtered.sort((a, b) => {
@@ -676,15 +676,13 @@ export default () => {
 													);
 												} catch (e) {
 													const msg =
-														typeof e === 'string'
-															? e
-															: (e as Error)?.message || '';
+														typeof e === 'string' ? e : (
+															(e as Error)?.message || ''
+														);
 													if (
 														msg
 															.toLowerCase()
-															.includes(
-																'resolve your current index'
-															)
+															.includes('resolve your current index')
 													) {
 														showConflictModal(
 															LocationStore.selectedRepository

@@ -21,20 +21,12 @@ export const ConflictModal = (props: { repository: Repository }) => {
 							<ModalCloseButton close={p.close} />
 						</ModalHeader>
 						<ModalBody>
-							<p class="conflict-modal__message">
-								{t('modal.conflict.message')}
-							</p>
-							<p class="conflict-modal__hint">
-								{t('modal.conflict.hint')}
-							</p>
+							<p class="conflict-modal__message">{t('modal.conflict.message')}</p>
+							<p class="conflict-modal__hint">{t('modal.conflict.hint')}</p>
 						</ModalBody>
 						<ModalFooter>
 							<div class="modal__footer__buttons">
-								<Button
-									type="default"
-									label={t('modal.close')}
-									onClick={p.close}
-								>
+								<Button type="default" label={t('modal.close')} onClick={p.close}>
 									{t('modal.close')}
 								</Button>
 								<Button

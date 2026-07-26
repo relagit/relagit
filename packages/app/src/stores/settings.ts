@@ -28,11 +28,11 @@ export type Settings = {
 		api_key: string;
 		provider:
 			| 'none'
-			| 'gpt-3.5'
-			| 'gpt-4'
-			| 'gpt-4o'
-			| 'gemini-pro'
-			| 'gemini-1.5-pro'
+			| 'gpt-5.1-codex-mini'
+			| 'gpt-5.4-nano'
+			| 'gpt-5.4-mini'
+			| 'gemini-flash-lite'
+			| 'gemini-flash'
 			| 'claude-haiku'
 			| 'claude-sonnet'
 			| 'claude-opus';
