@@ -71,7 +71,7 @@
 		"electron": "^39.8.5",
 		"electron-builder": "^24.13.3",
 		"electron-vite": "^2.3.0",
-		"esbuild": "^0.17.19",
+		"esbuild": "^0.28.1",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^8.10.0",
 		"eslint-plugin-editorconfig": "^4.0.3",
