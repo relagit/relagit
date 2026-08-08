@@ -544,6 +544,11 @@ const SettingsModal = () => {
 							label: '中文',
 							image: '🇨🇳',
 							value: 'zh'
+						},
+						{
+							label: '한국어',
+							image: '🇰🇷',
+							value: 'ko'
 						}
 					]}
 					value={settings()?.locale || 'en-US'}

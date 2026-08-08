@@ -5,6 +5,7 @@ import de from './locales/de';
 import enUS from './locales/en-US';
 import es from './locales/es';
 import fr from './locales/fr';
+import ko from './locales/ko';
 import lat from './locales/lat';
 import zh from './locales/zh';
 
@@ -48,7 +49,8 @@ const ALL_LOCALES: Record<string, RecursivePartial<Unstrict<Locale>>> = {
 	de: de,
 	es: es,
 	zh: zh,
-	fr: fr
+	fr: fr,
+	ko: ko
 };
 
 export type ValidLocale = keyof typeof ALL_LOCALES;
